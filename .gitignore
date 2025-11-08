@@ -6,6 +6,6 @@ package-lock.json
 package.json
 
 # Screenshots and temporary files
-screenshot.js
+screenshot*.js
 take-screenshot.js
 *.log
