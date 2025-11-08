@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Package files
+package-lock.json
+package.json
+
+# Screenshots and temporary files
+screenshot.js
+*.log
