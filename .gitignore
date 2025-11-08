@@ -7,4 +7,5 @@ package.json
 
 # Screenshots and temporary files
 screenshot.js
+take-screenshot.js
 *.log
