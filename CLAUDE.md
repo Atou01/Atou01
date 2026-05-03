@@ -329,33 +329,67 @@ specialist-layer (10 ICs)
 
 ## ✅ Roadmap (sprints)
 
-### Sprint 1 — Fondations
-- Repo Next.js + Supabase + Vercel
-- Schemas DB (`agents`, `agent_status`, `ai_models`, `tasks`, `products`, `orders`, `reports`)
-- Page `/office` PixiJS avec 18 sprites idle à leur poste
-- Page `/chat` minimaliste (user ↔ Victor)
-- Endpoint `POST /api/agent/status`
+### ✅ Sprint 1 — Fondations (LIVRÉ)
+**Status :** committé sur `claude/marketing-mcp-skills-MPL6a`, PR #2 ouverte.
+- ✅ Repo Next.js 14 + TypeScript + Tailwind dans `dropforge/`
+- ✅ Catalogue des 25 agents (`lib/types/agents.ts`)
+- ✅ Page `/` landing — liste les 25 agents par niveau
+- ✅ Page `/chat` — Victor répond, Haiku classifie en 8 labels (research/content/growth/tech/ops/finance/strategy/clarify), routing affiché sous chaque réponse
+- ✅ Page `/office` — grille SVG 20×18, sprites placeholders aux bureaux, hover tooltip
+- ✅ Endpoint `/api/chat` (Victor orchestrator) + `/api/agent/status` (stub)
+- ✅ Migration SQL `0001_initial_schema.sql` prête (12 tables : agents, agent_status, tasks avec parent_task_id, ai_models, agent_skills, skill_executions, suppliers, products, orders, order_items, reports, customer_memory)
+- ✅ `.env.local` setup avec gitignore défense profondeur
+- **Test validé** : "SALUT" → routing `clarify` → Victor pose 1 question. ✅
 
-### Sprint 2 — The Router (Iris)
-- Service `router.ts` + table `ai_models` peuplée
-- Clés API Sprint 1 : Anthropic, Perplexity, Google AI (Gemini + Imagen). Plus tard : Exa, ElevenLabs free tier.
-- Logging décisions + feedback loop quality_score
+### 🟡 Sprint 1.5 — UI redesign via Claude.ai (en cours)
+- Brief envoyé à Claude (artifacts) avec 25 agents, 8 zones office, mantras, charte couleur (#e63946 rouge requin / #f5f1e8 papier)
+- Choix verrouillés : prototype interactif unique, top-down 2D Stardew Valley, sprites mix avatars + placeholders, ton mélange chiffres crédibles + mantras, FR, motif requin modéré, sortie HTML/JSX inline
+- Output attendu : 4 mocks (landing, chat, office, reports) que je porterai dans `dropforge/` en remplaçant les UIs basiques
+- Backend reste intact (Victor + agents + Anthropic SDK)
 
-### Sprint 3 — CEO Orchestrator (Victor)
-- Classifier Haiku
-- Task-spawner avec hiérarchie parent_task_id
-- Synthesizer Opus pour rapport final
-- Animations délégation (enveloppes volantes)
+### 🔵 Sprint 2 — Supabase + Iris (Router) + Aria vivante
+- [ ] Création projet Supabase (user manuel, 5 min) + appliquer migration
+- [ ] Brancher `/api/agent/status` au vrai upsert + Realtime sur `agent_status`
+- [ ] Service `lib/orchestrator/iris.ts` : choisit modèle optimal par tâche, log dans `ai_models`
+- [ ] Populator `lib/orchestrator/seed.ts` : insère les 25 agents au boot
+- [ ] **Aria Volkov** activée : son system prompt complet + skill `niche-selection-v1` + endpoint `/api/agents/aria/run` qui livre rapport de niche
+- [ ] Affichage rapport sur `/reports` (page à créer)
 
-### Sprint 4 — Premier agent vivant : Mia (Trend Scout)
-- Workflow n8n quotidien : Perplexity → Firecrawl → scoring → Notion
-- Sprite Mia animée bossant en temps réel
+### Sprint 3 — Pipeline produit
+- Mia (Trend Scout) workflow Perplexity quotidien
+- Diego (Supplier Hunter) scraping AliExpress/Alibaba
+- Yuki (Validator) gate avec marge ≥ 40% (organic) / 55% (paid)
+- Premier produit candidat scoré dans `products`
 
-### Sprints suivants
-- Activation progressive des autres specialists
-- Premier site e-commerce généré par Nora
-- Premières campagnes ads pilotées par Ravi/Jay
-- Boucles autonomes (autonomous-loops) sous supervision Victor
+### Sprint 4 — Premier site e-commerce généré par Nora
+- Branding via Maya (Brand Architect) en one-shot
+- Nora génère pages produits + checkout Stripe
+- Léa (SEO) écrit fiches produit avec schema.org
+
+### Sprint 5+
+- Activation Tom (vidéo UGC), Zoé (social), Noor (email)
+- Hana (CRO) avec PostHog
+- Kai génère visuels via Imagen 3
+- Sofia multi-canal customer support
+- Boucles autonomes sous supervision Victor
+
+---
+
+## 🛠️ État technique actuel (snapshot fin Sprint 1)
+
+```
+Repo        : Atou01/Atou01 (branche claude/marketing-mcp-skills-MPL6a)
+PR ouverte  : #2 (draft)
+Code prod   : dropforge/ (24 fichiers, 1294 lignes)
+Stack       : Next.js 14 App Router + TS + Tailwind + Anthropic SDK
+Pages live  : / (landing), /chat (Victor branché), /office (SVG stub)
+APIs live   : /api/chat (Victor), /api/agent/status (stub)
+DB          : migration prête, pas encore appliquée (Supabase à créer)
+Clés        : 3 dans .env.local (Anthropic, Perplexity, Google AI)
+                ⚠️ exposées dans l'historique chat → rotation après Sprint 2
+Spend caps  : recommandés mais à activer côté providers
+                (Anthropic $20/mo, Perplexity $10/mo)
+```
 
 ---
 
