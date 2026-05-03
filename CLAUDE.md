@@ -18,7 +18,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 
 ---
 
-## 🏢 Organigramme — DropForge Inc. (24 agents)
+## 🏢 Organigramme — DropForge Inc. (25 agents)
 
 ### C-Suite (6)
 | Nom | Rôle | LLM principal | Skills/Tools |
@@ -37,9 +37,10 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 | **Elena Park** 🎨 | Head of Content & Brand | CMO | Sonnet (content-engine, crosspost, design-shotgun, article-writing) |
 | **Ravi Mehta** 📈 | Head of Growth & Ads | CMO | Sonnet (competitive-ads-extractor, twitter-algorithm-optimizer, x-api) |
 
-### Specialists (16)
-**Conseil stratégique (advisor à Lina, output → Sam)**
+### Specialists (17)
+**Conseil stratégique (advisors à Lina)**
 - **Aria Volkov** 🌍 — **Strategic Niche Analyst** — Sonnet (rapports trimestriels) + Haiku (scraping) + Perplexity Sonar Pro. Choisit LE marché avant que Mia chasse les produits. Voir section dédiée.
+- **Maya Lindgren** 🎨 — **Brand Architect** — Sonnet (créa) + Opus 1× (manifesto) + fal.ai Flux. Crée et maintient identité marque end-to-end (nom, logo, voice, guidelines). Output one-shot J+1 après choix niche. Audits hebdo cohérence créas. Mantra : "Une marque mémorable se décide en 2h, pas 2 mois"
 
 **Équipe Sam (Research) — SOURCING**
 - **Mia Tanaka** 🕵️ — Trend Scout (TikTok/IG) — Perplexity Sonar Pro + Firecrawl + Exa
@@ -756,6 +757,138 @@ Si fournisseur refuse → demander 2 fournisseurs alternatifs en parallèle
 MOQ négocié à la baisse (commencer avec 50% du MOQ proposé)
 Échantillon obligatoire avant commande > €200
 Demander Trade Assurance Alibaba si applicable
+```
+
+---
+
+## 🔧 Extensions de rôles (cross-functional)
+
+```
+Théo (CFO) → AJOUT Compliance Watchdog
+  Audit trimestriel CGV/RGPD/cookies. Surveille DGCCRF/CNIL.
+  Génère docs légaux via templates LegalPlace/Legalstart.
+
+Théo + Hana → Co-ownership Pricing Strategy
+  Théo : floor marge. Hana : test prix psychos (€19 vs €17 vs €19.99).
+
+Mia (Scout) → AJOUT Competitive Intelligence continu
+  Monitor 5 concurrents directs. Alerte si baisse prix > 15% ou
+  produit similaire lancé. Hebdo : screenshots top ads concurrents.
+
+Sofia + Hugo → Co-ownership Returns/RMA Workflow
+  Templates emails refund/échange/litige.
+  Auto-refund si commande perdue 30j (sans demander client).
+
+Chen Wu → AJOUT Inventory & Stock Monitor
+  Surveille stock fournisseur via scraper.
+  Alerte rupture imminente → bascule fournisseur backup.
+
+Bea → AJOUT Influenceur Outreach Proactif
+  20 micro-influenceurs FR contactés/mois (gift + 10% commission).
+  Tracking conversions par code unique.
+
+Anna → AJOUT Attribution + Cohort + Forecasting
+  Multi-touch attribution (5 derniers touchpoints).
+  LTV/CAC par canal. Forecast CA simple.
+
+Iris → AJOUT Agent Performance Review mensuel
+  Track output quality par agent. Flag sous-performants à Victor.
+```
+
+---
+
+## 📜 Protocoles codifiés
+
+### 1. Crisis Playbook (Victor + Lina + Sofia)
+
+```
+NIVEAU 1 — Bad review/comment isolé
+  Sofia répond <2h, résolution privée. Pas résolu 48h → N2.
+
+NIVEAU 2 — Vague de plaintes (>5 en 48h sur même produit)
+  Théo PAUSE ventes. Yuki re-audit. Chen Wu re-source si défaut.
+  Sofia mass-reach refund pré-emptif si justifié.
+
+NIVEAU 3 — Crise virale (TikTok négatif >100k vues, presse)
+  Victor prend la main (user notifié immédiat). Lina rédige
+  communication transparente. Tom poste vidéo réponse honnête <24h.
+  Pas de gaslight, pas de censure commentaires.
+
+NIVEAU 4 — Légal (mise en demeure, contrefaçon, signal conso)
+  Théo + user humain immédiat. Pause ventes, conservation preuves.
+  Avocat externe contacté (budget urgence).
+```
+
+### 2. Definition of Done — Handoff entre agents
+
+```
+Aria → Sam     : top 3 niches + ICP + 5 produits spottés validés
+Mia → Diego    : produit candidat score >7/10 + 3 sources virales
+Diego → Yuki   : 5 fournisseurs scorés (prix, délai, MOQ, rating, Trade Assurance)
+Yuki → Chen Wu : produit validé + briefing négo (cible prix, MOQ, délai)
+Chen Wu → Ines : produit ordonné + dimensions/poids pour packaging
+Ines → Kai     : packaging validé + brief visuels
+Kai+Tom → Léa  : assets créés + nom produit final
+Léa → Nora     : fiche produit complète (titre, desc, FAQ, schema)
+Nora → Hana    : produit live + tracking conversion configuré
+Hana → Jay     : page produit ≥1.5% conversion → green light ads
+Jay → Anna     : campagnes lancées + objectifs ROAS/CAC
+```
+
+Aucun agent ne passe la balle sans cocher la checklist.
+
+### 3. Cadence produit (verrouillée)
+
+```
+Phase 1 (mois 1)         : 1 produit/semaine (4/mois)
+Phase 2 (€600 débloqué)  : 2 produits/semaine
+Phase 3 (€3k+ CA/mois)   : 3 produits/semaine + 1 hero/mois
+
+Audit kill : 0 vente J+30 → désactivé site automatiquement
+Hero rotation : 1 produit hero MAX scaled à la fois
+```
+
+### 4. ICP Definition (Aria + Lina, livré avec rapport niche)
+
+```
+Avatar primaire :
+  - Démographie : sexe, âge, CSP, localisation
+  - Psychographie : valeurs, frustrations, désirs
+  - Habitudes : où scrolle, créateurs suivis, prix acceptables
+  - Pain points : 3 principaux que la niche résout
+  - Trigger d'achat : impulse vs raisonné
+
+Tone of voice :
+  - Tutoiement vs vouvoiement
+  - Niveau d'humour
+  - Niveau d'expertise (vulgarisé vs technique)
+  - Mots à utiliser / à bannir
+```
+
+---
+
+## 🛠️ Tooling additionnel (free tiers exploités)
+
+```
+Observabilité
+  ✅ Sentry (5k errors/mois free) — error tracking site
+  ✅ Vercel Analytics (Hobby) — performance
+  ✅ UptimeRobot (free) — uptime 5min
+  ✅ PostHog (1M events free) — heatmaps + session replay (Hana)
+
+Sécurité
+  ✅ Doppler (5 users free) — secrets management
+  ✅ Bitwarden free — passwords
+  ✅ GitHub secret scanning
+
+Backups
+  ✅ Supabase auto-backup
+  ✅ Cron Vercel weekly export DB → Drive
+
+Légal
+  ✅ Templates LegalPlace/Legalstart (~€30 one-shot CGV)
+  ✅ Cookiebot free tier (RGPD banner)
+  ✅ INPI / EUIPO search (trademark check) — gratuit
 ```
 
 ---
