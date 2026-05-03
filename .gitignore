@@ -9,3 +9,12 @@ package.json
 screenshot*.js
 take-screenshot.js
 *.log
+
+# Secrets — JAMAIS commit
+.env
+.env.local
+.env.*.local
+.env.production
+*.key
+*.pem
+secrets/
