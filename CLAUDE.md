@@ -893,6 +893,19 @@ Légal
 
 ---
 
+## 🚫 Décision archi : Hermes Agent NON comme CEO
+
+Évalué et **rejeté** comme remplaçant de Victor :
+- Conçu pour 1 agent autonome standalone, pas pour orchestrer 24 spécialistes hiérarchisés
+- Lock-in écosystème Nous Research (3 mois maturité)
+- Infra self-host VPS (€5-30/mois) vs Vercel serverless (€0)
+- Notre IP = la hiérarchie + chain-of-command, à préserver
+- On a déjà copié les bonnes idées (Skill Library, mémoire persistante) sans la dette
+
+**Réutilisation potentielle Phase 2+** : Hermes comme **interface personnelle multi-canal** pour le user (Telegram/WhatsApp/Email) qui parle à Victor via API. Décision reportée — pas avant validation revenus.
+
+---
+
 ## 🧠 Skill Library — Système d'apprentissage continu (inspiré Hermes Agent)
 
 Chaque agent accumule un corpus de **skills appris** au fil du temps. Plus l'équipe tourne, plus elle devient performante — sans réintervention humaine.
