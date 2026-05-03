@@ -1,36 +1,50 @@
 "use client";
 
 import { useState } from "react";
-import { AGENTS, Agent } from "@/lib/types/agents";
+import { AGENTS, findAgent, TEAM_META, type Agent, type Team } from "@/lib/types/agents";
+import { AgentAvatar } from "@/components/ui/PixelSprite";
+import Drawer from "@/components/ui/Drawer";
+import AgentDetail from "@/components/ui/AgentDetail";
+import KPIStrip from "@/components/ui/KPIStrip";
 
-const COLS = 20;
-const ROWS = 18;
-const CELL = 36;
+const ZONES: Array<{ team: Team; label: string; x: number; y: number; w: number; h: number }> = [
+  { team: "C-Suite",   label: "C-SUITE",    x: 1,  y: 1,  w: 16, h: 5 },
+  { team: "Research",  label: "RESEARCH",   x: 5,  y: 7,  w: 5,  h: 9 },
+  { team: "Content",   label: "CONTENT",    x: 1,  y: 9,  w: 8,  h: 9 },
+  { team: "Growth",    label: "GROWTH",     x: 9,  y: 11, w: 5,  h: 5 },
+  { team: "Ops",       label: "OPS",        x: 11, y: 13, w: 5,  h: 5 },
+  { team: "Strategic", label: "STRATEGIC",  x: 1,  y: 11, w: 5,  h: 3 },
+];
 
-const DEPT_COLOR: Record<string, string> = {
-  executive: "#e63946",
-  research: "#52796f",
-  content: "#f4a261",
-  growth: "#2a9d8f",
-  ops: "#8d99ae",
-  finance: "#e9c46a",
-  tech: "#457b9d",
-  ai: "#9d4edd",
-};
+const COLS = 18;
+const ROWS = 20;
+const CELL = 40;
 
 export default function Office() {
-  const [hovered, setHovered] = useState<Agent | null>(null);
+  const [selected, setSelected] = useState<Agent | null>(null);
+  const [hover, setHover] = useState<Agent | null>(null);
 
   return (
-    <div className="space-y-4">
-      <div className="relative bg-ink border border-paper/20 rounded-lg overflow-x-auto">
+    <main className="page" style={{ paddingTop: 18 }}>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 12 }}>
+        <h2>Office <span aria-hidden>🏢</span></h2>
+        <span className="mono" style={{ color: "var(--fg-dim)", fontSize: 12 }}>
+          25 agents · vue top-down · click pour les détails
+        </span>
+      </div>
+
+      <div style={{ marginBottom: 18 }}><KPIStrip /></div>
+
+      <div className="card" style={{ padding: 0, overflow: "auto" }}>
         <svg
           width={COLS * CELL}
           height={ROWS * CELL}
           viewBox={`0 0 ${COLS * CELL} ${ROWS * CELL}`}
-          className="block"
+          role="img"
+          aria-label="Plan du bureau DropForge"
+          style={{ display: "block", background: "var(--bg-2)" }}
         >
-          {/* Floor grid */}
+          {/* floor checker */}
           {Array.from({ length: COLS }).map((_, x) =>
             Array.from({ length: ROWS }).map((_, y) => (
               <rect
@@ -39,104 +53,112 @@ export default function Office() {
                 y={y * CELL}
                 width={CELL}
                 height={CELL}
-                fill={(x + y) % 2 === 0 ? "#0e0e14" : "#11111a"}
+                fill={(x + y) % 2 === 0 ? "var(--bg-2)" : "var(--bg-3)"}
+                opacity={0.6}
               />
             ))
           )}
 
-          {/* Zone labels */}
-          <ZoneLabel x={1} y={0.4} label="C-SUITE" />
-          <ZoneLabel x={5} y={7.4} label="RESEARCH" />
-          <ZoneLabel x={1} y={9.4} label="CONTENT" />
-          <ZoneLabel x={9} y={9.4} label="GROWTH" />
-          <ZoneLabel x={11} y={13.4} label="OPS" />
-          <ZoneLabel x={15} y={3.4} label="SERVERS" />
-
-          {/* Agents */}
-          {AGENTS.map((a) => {
-            const cx = a.desk.x * CELL + CELL / 2;
-            const cy = a.desk.y * CELL + CELL / 2;
-            const color = DEPT_COLOR[a.department] ?? "#888";
+          {/* zones */}
+          {ZONES.map((z) => {
+            const meta = TEAM_META[z.team];
             return (
-              <g
-                key={a.id}
-                onMouseEnter={() => setHovered(a)}
-                onMouseLeave={() => setHovered(null)}
-                className="cursor-pointer"
-              >
+              <g key={z.team}>
                 <rect
-                  x={cx - 14}
-                  y={cy - 10}
-                  width={28}
-                  height={20}
-                  rx={2}
-                  fill="#1a1a24"
-                  stroke={color}
-                  strokeWidth={1}
+                  x={z.x * CELL}
+                  y={z.y * CELL}
+                  width={z.w * CELL}
+                  height={z.h * CELL}
+                  fill="transparent"
+                  stroke={`var(--${meta.color === "red" ? "shark" : meta.color === "gold" ? "gold" : meta.color === "violet" ? "violet" : meta.color === "green" || meta.color === "teal" ? "jade" : "border-2"})`}
+                  strokeDasharray="4 4"
+                  strokeOpacity={0.5}
                 />
-                <circle cx={cx} cy={cy - 16} r={8} fill={color} />
                 <text
-                  x={cx}
-                  y={cy - 13}
-                  textAnchor="middle"
+                  x={z.x * CELL + 8}
+                  y={z.y * CELL + 14}
                   fontSize={10}
-                  fill="#0b0b0f"
-                  fontWeight={700}
+                  fill="var(--fg-dim)"
+                  fontFamily="var(--font-mono)"
+                  letterSpacing={2}
                 >
-                  {a.name[0]}
+                  {z.label}
                 </text>
               </g>
             );
           })}
         </svg>
 
-        {hovered && (
-          <div className="absolute top-2 right-2 bg-ink/95 border border-shark/60 rounded p-3 text-xs max-w-[260px] shadow-xl">
-            <div className="font-bold text-paper">
-              {hovered.emoji} {hovered.name}
-            </div>
-            <div className="text-paper/70 text-[11px] mb-2">{hovered.role}</div>
-            <div className="font-mono text-paper/60 text-[11px] mb-1">
-              ↳ LLM : {hovered.defaultLLM}
-            </div>
-            <div className="italic text-moss text-[11px]">"{hovered.mantra}"</div>
-          </div>
-        )}
+        {/* HTML overlay for agents (more interactive than SVG) */}
+        <div style={{ position: "relative", marginTop: -ROWS * CELL, height: ROWS * CELL, pointerEvents: "none" }}>
+          {AGENTS.map((a) => {
+            const cx = a.desk.x * CELL + CELL / 2 - 24;
+            const cy = a.desk.y * CELL + CELL / 2 - 24;
+            return (
+              <button
+                key={a.id}
+                onClick={() => setSelected(a)}
+                onMouseEnter={() => setHover(a)}
+                onMouseLeave={() => setHover(null)}
+                aria-label={`${a.name} — ${a.role}`}
+                style={{
+                  position: "absolute",
+                  left: cx, top: cy,
+                  pointerEvents: "auto",
+                  background: "transparent",
+                  padding: 0,
+                  cursor: "pointer",
+                }}
+              >
+                <AgentAvatar agentId={a.id} skin={a.skin} size={32} idle ring={hover?.id === a.id} />
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <Legend />
-    </div>
-  );
-}
+      {/* Hover tooltip */}
+      {hover && (
+        <div
+          role="tooltip"
+          className="card"
+          style={{
+            position: "fixed", bottom: 80, right: 24,
+            padding: 14, maxWidth: 280, zIndex: 40,
+            borderColor: "var(--accent)",
+          }}
+        >
+          <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 4 }}>
+            <strong>{hover.name}</strong>
+            <span aria-hidden>{hover.emoji}</span>
+          </div>
+          <div className="mono" style={{ fontSize: 11, color: "var(--fg-dim)", marginBottom: 6 }}>
+            {hover.role} · {hover.llmLabel}
+          </div>
+          <div className="mono" style={{ fontSize: 11, fontStyle: "italic", color: "var(--fg-2)" }}>
+            « {hover.mantra} »
+          </div>
+        </div>
+      )}
 
-function ZoneLabel({ x, y, label }: { x: number; y: number; label: string }) {
-  return (
-    <text
-      x={x * CELL}
-      y={y * CELL}
-      fontSize={9}
-      fill="#f5f1e8"
-      opacity={0.25}
-      fontFamily="monospace"
-      letterSpacing={2}
-    >
-      {label}
-    </text>
-  );
-}
+      {/* Legend */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 14, fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--fg-dim)" }}>
+        {Object.entries(TEAM_META).map(([team, m]) => (
+          <span key={team} style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
+            <span style={{ width: 10, height: 10, background: `var(--${m.color === "red" ? "shark" : m.color === "gold" ? "gold" : m.color === "violet" ? "violet" : m.color === "green" || m.color === "teal" ? "jade" : "border-2"})` }} />
+            {m.label}
+          </span>
+        ))}
+      </div>
 
-function Legend() {
-  return (
-    <div className="flex flex-wrap gap-3 text-[11px] font-mono text-paper/60">
-      {Object.entries(DEPT_COLOR).map(([dept, color]) => (
-        <span key={dept} className="flex items-center gap-1">
-          <span
-            className="inline-block w-3 h-3 rounded-full"
-            style={{ background: color }}
-          />
-          {dept}
-        </span>
-      ))}
-    </div>
+      <Drawer
+        open={!!selected}
+        onClose={() => setSelected(null)}
+        title={selected ? `${selected.name}` : ""}
+        width={520}
+      >
+        {selected && <AgentDetail agent={selected} />}
+      </Drawer>
+    </main>
   );
 }
