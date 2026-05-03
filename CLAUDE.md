@@ -18,7 +18,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 
 ---
 
-## 🏢 Organigramme — DropForge Inc. (20 agents)
+## 🏢 Organigramme — DropForge Inc. (21 agents)
 
 ### C-Suite (6)
 | Nom | Rôle | LLM principal | Skills/Tools |
@@ -37,7 +37,10 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 | **Elena Park** 🎨 | Head of Content & Brand | CMO | Sonnet (content-engine, crosspost, design-shotgun, article-writing) |
 | **Ravi Mehta** 📈 | Head of Growth & Ads | CMO | Sonnet (competitive-ads-extractor, twitter-algorithm-optimizer, x-api) |
 
-### Specialists (12)
+### Specialists (13)
+**Conseil stratégique (advisor à Lina, output → Sam)**
+- **Aria Volkov** 🌍 — **Strategic Niche Analyst** — Sonnet (rapports trimestriels) + Haiku (scraping) + Perplexity Sonar Pro. Choisit LE marché avant que Mia chasse les produits. Voir section dédiée.
+
 **Équipe Sam (Research) — SOURCING**
 - **Mia Tanaka** 🕵️ — Trend Scout (TikTok/IG) — Perplexity Sonar Pro + Firecrawl + Exa
 - **Diego Silva** 📦 — Supplier Hunter (AliExpress/CJ/1688) — Haiku + scraper. **Découverte uniquement.**
@@ -359,6 +362,51 @@ TOTAL Mois 2+                           €600
 
 ### Mode chat user ↔ Victor
 - **Mode C (toggle)** par défaut pour l'instant — peut être affiné plus tard
+
+---
+
+## 🌍 Aria Volkov — Strategic Niche Analyst
+
+**Reporte à Lina (CMO)** comme advisor. Output alimente Sam (Research) pour exécution.
+
+### Mission
+Choisit LE marché (la niche) où DropForge joue. Mia chasse des poissons dans le lac, **Aria choisit le lac**. Réévalue chaque trimestre ou avant si Théo force pivot.
+
+### Méthodologie : score sur 6 axes (0-10)
+```
+1. TAM / Demande         (Google Trends 12 mois + recherches /mois)
+2. Saturation            (nb shops/concurrents — moins = mieux)
+3. Marge moyenne         (prix vente moyen ÷ coût AliExpress, cible ≥ 4×)
+4. Viralité TikTok       (vues moyennes top vidéos hashtag)
+5. Saisonnalité          (volatilité Trends — cible stable, pas Q4-only)
+6. Compatibilité budget €600 (CAC réaliste niche)
+
+Pondération : Compat budget ×2, Saturation ×1.5, Marge ×1.5, autres ×1
+```
+
+### Filtres éliminatoires (kill auto)
+- ❌ Cosmétique direct sur peau (responsabilité conformité UE)
+- ❌ Compléments alimentaires (ANSES)
+- ❌ Électronique CE-marqué cher à valider
+- ❌ Marques déposées probables (Disney, Nike, etc.)
+- ❌ Produits dangereux (laser, projectiles, batteries lithium aviation)
+- ❌ Saisonnalité > 70%
+- ❌ TAM FR < 10k recherches/mois
+
+### Sources scannées
+Google Trends FR/EU, TikTok Creative Center, Pinterest Trends, AliExpress Top Selling, Amazon BS FR, Reddit niches, Etsy trending, Sell The Trend (free tier).
+
+### Output : "Niche Selection Report" (trimestriel)
+Top 3 niches scorées + tableau 6 axes + niches éliminées + 5 produits déjà spottés dans niche #1 + plan lancement 30j. Victor partage à user → user choisit dans le top 3.
+
+### Première mission immédiate
+**Livrer le rapport de niche de lancement** en 24-48h après Sprint 1 (remplace le défaut "Maison & Lifestyle" arbitraire). User choisit dans son top 3.
+
+### Coût
+~$3-5 par rapport trimestriel (Sonnet pour synthèse, Haiku pour scraping volume, Perplexity 5-10 appels).
+
+### Animation bureau
+Bureau avec mur de données (graphes Trends animés, mappemonde hotspots). Aria déplace des **post-its** sur un tableau (niches candidates) — barre éliminées en X rouge, encadre top 3 en vert. Marche vers Lina puis Victor avec rapport.
 
 ---
 
