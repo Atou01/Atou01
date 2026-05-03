@@ -18,7 +18,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 
 ---
 
-## 🏢 Organigramme — DropForge Inc. (18 agents)
+## 🏢 Organigramme — DropForge Inc. (20 agents)
 
 ### C-Suite (6)
 | Nom | Rôle | LLM principal | Skills/Tools |
@@ -37,25 +37,27 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 | **Elena Park** 🎨 | Head of Content & Brand | CMO | Sonnet (content-engine, crosspost, design-shotgun, article-writing) |
 | **Ravi Mehta** 📈 | Head of Growth & Ads | CMO | Sonnet (competitive-ads-extractor, twitter-algorithm-optimizer, x-api) |
 
-### Specialists (10)
-**Équipe Sam (Research)**
+### Specialists (12)
+**Équipe Sam (Research) — SOURCING**
 - **Mia Tanaka** 🕵️ — Trend Scout (TikTok/IG) — Perplexity Sonar Pro + Firecrawl + Exa
-- **Diego Silva** 📦 — Supplier Hunter (AliExpress/CJ) — Haiku + Gmail
+- **Diego Silva** 📦 — Supplier Hunter (AliExpress/CJ/1688) — Haiku + scraper. **Découverte uniquement.**
 - **Yuki Brand** ✅ — Product Validator — Gemini 2.0 Flash (vision)
 
 **Équipe Elena (Content)**
 - **Léa Moreau** ✍️ — SEO Copywriter — Haiku 4.5 (content-research-writer, article-writing)
-- **Kai Foster** 📸 — Visual Designer — fal.ai Flux Pro + Canva
-- **Tom Nakamura** 🎬 — Video Producer (UGC ads) — Veo 3 + ElevenLabs (remotion, video-editing)
-- **Zoé Adler** 📱 — Social Media Manager — Haiku (crosspost, x-api, Slack)
+- **Kai Foster** 📸 — Visual Designer — fal.ai Flux **Schnell** (pas Pro, budget) + Canva
+- **Tom Nakamura** 🎬 — Video Producer (UGC ads) — **Capcut + ElevenLabs free tier** + reposts éthiques (PAS Veo 3 au lancement)
+- **Zoé Adler** 📱 — Social Media Manager — Haiku (crosspost, x-api, Pinterest API)
 
 **Équipe Ravi (Growth)**
-- **Jay Okafor** 🎯 — Paid Ads Specialist (Meta/TikTok) — Sonnet
+- **Jay Okafor** 🎯 — Paid Ads Specialist (Meta/TikTok) — Sonnet. **Inactif tant que budget < €500/mois ads.**
 - **Anna Reis** 📊 — Data Analyst — Sonnet (SQL Supabase, GA4)
 
-**Équipe Marc (Ops)**
+**Équipe Marc (Ops) — PROCUREMENT + LOGISTICS**
 - **Hugo Bernal** 🛒 — Order Ops — Haiku (workflow-automator, Stripe + Gmail)
 - **Sofia Ahmed** 💬 — Customer Support — Sonnet (Gmail + Slack, FAQ vector search)
+- **Chen Wu** 🐉 — **Senior Procurement Officer** — Sonnet (négo) + Haiku (suivi). Communique avec fournisseurs en ZH/EN/FR, négocie, commande, gère litiges. Voir seuils autonomie ci-dessous.
+- **Ines Larsen** 📦 — **Packaging & Unboxing Designer** — Sonnet + fal.ai Flux Schnell. Système modulaire (voir section Packaging).
 
 ---
 
@@ -270,10 +272,199 @@ specialist-layer (10 ICs)
 ## ❓ Décisions en attente
 
 - Mode transparence chat : A (debug live) / B (synthèse) / **C (toggle)** — *à confirmer*
-- Niche dropshipping de départ (généraliste / beauté / tech / maison / pets)
-- Fournisseurs : AliExpress vs TikTok Shop vs EU rapide
-- Branding : un seul magasin "marque" ou plusieurs niches ?
 - Confirmation pour ouvrir le repo `dropforge-office` et démarrer Sprint 1
+- Statut juridique en place ? (auto-entrepreneur / SASU / autre)
+
+## 🔒 Décisions verrouillées (rev. budget €300/mois)
+
+### Budget mensuel total : **€300/mois** (contrainte forte)
+
+```
+IA APIs (cap Iris)                €45  ($50)
+Hosting (Vercel + Supabase free)  €0
+Domaine .com                      €1
+Email (Brevo free)                €0
+n8n self-hosted (Railway)         €5
+Stock packaging initial (one-shot) €80
+Échantillons fournisseurs (test)  €50
+Ads test budget                   €80
+Buffer                            €39
+─────────────────────────────────────
+TOTAL                             €300
+```
+
+### Stratégie : ORGANIC-FIRST (pas de paid ads au lancement)
+
+- Trafic gratuit pendant 3-6 mois : TikTok organique + Pinterest + SEO blog
+- Réinvestir profits en ads uniquement après premières ventes
+- **Jay (Ads Manager) reste inactif** tant que budget ads < €500/mois disponible
+
+### Marché lancement
+- **Pays :** FR + BE + CH (FR) + Québec (zone francophone, 1 langue)
+- **Langue :** FR uniquement au lancement
+- **EN/ES :** phase 2 après €5k/mois CA prouvé
+- **Niche default MVP :** "Maison & Lifestyle" (déco, gadgets utiles, bien-être) — overrideable par user
+
+### Caps IA Iris (kill switches)
+- **Daily cap :** $2/jour (alerte $1.50)
+- **Monthly cap :** $50 ($45 ≈ €45)
+- **Auto-freeze** au-delà + ping Victor
+
+### Ratio modèles cible
+| Modèle | % appels | Usage |
+|---|---|---|
+| Haiku 4.5 | 70% | gros volume, routine |
+| Sonnet 4.6 | 25% | négo, créa, analyse |
+| Opus 4.7 | 5% MAX | synthèses CEO hebdo uniquement |
+| Perplexity Sonar Pro | 5 appels/jour max | Mia trend research |
+| fal.ai Flux **Schnell** (pas Pro) | visuels | -75% coût |
+| Gemini 2.0 Flash | vision | cheap |
+| ElevenLabs | free tier 10k chars/mois uniquement |
+
+### Modèles INTERDITS au lancement
+- ❌ Veo 3 (trop cher)
+- ❌ Runway Gen-3
+- ❌ ElevenLabs payant
+- ❌ Opus pour autre chose que synthèses Victor hebdo
+- ❌ Klaviyo (Brevo free à la place)
+
+### Mode chat user ↔ Victor
+- **Mode C (toggle)** par défaut pour l'instant — peut être affiné plus tard
+
+---
+
+## 🐉 Chen Wu — Seuils d'autonomie procurement
+
+```
+PAR COMMANDE :
+  < €100         → autonome (couvre 99% dropships solo)
+  €100-500       → autonome + notif Slack à Marc
+  €500-3000      → validation Marc requise
+  > €3000        → validation Victor (CEO) requise
+
+ÉCHANTILLONS :
+  < €50          → toujours autonome
+
+PREMIER ACHAT chez nouveau fournisseur :
+  → toujours validation Marc, peu importe montant
+  (anti-arnaque sur fournisseur jamais testé)
+
+CAP JOURNALIER GLOBAL :
+  €2000/jour total → freeze automatique + ping Victor
+  (kill switch anti-runaway / prompt-injection)
+```
+
+### Workflow Chen Wu
+1. Reçoit produit validé de Yuki
+2. Compare 5+ fournisseurs (Alibaba RFQ + scraping)
+3. Négocie MOQ / prix / lead time / packaging custom
+4. Commande échantillons (< €50, autonome)
+5. Valide qualité visuellement avec Yuki
+6. Place commandes clients via API/email selon volume
+7. Tracking 17track → notifs Slack
+8. Escalade litiges via templates standardisés
+9. Update DB `suppliers` avec scoring qualité
+
+### Distinction Diego vs Chen Wu
+| | **Diego (Sam's team)** | **Chen Wu (Marc's team)** |
+|---|---|---|
+| Mission | DÉCOUVERTE | RELATION + COMMANDES |
+| Output | Liste candidats scorés | Commandes passées + colis livrés |
+| Quand | Avant validation produit | Après validation produit |
+
+---
+
+## 📦 Ines Larsen — Système packaging modulaire (final)
+
+**Choix verrouillé : modulaire neutre + sticker custom.** ~5× moins cher qu'un packaging full custom, scale infini sur N magasins.
+
+### Architecture
+
+```
+3 BOÎTES NEUTRES kraft brun (stock permanent)
+  • S : 15×10×5cm   ~€0.18/unité bulk 1000
+  • M : 25×18×8cm   ~€0.32/unité
+  • L : 35×25×12cm  ~€0.55/unité
+
+1 POCHETTE poly mailer recyclé (produits souples)
+  • ~€0.08/unité bulk
+
+STICKERS CUSTOM (LA MARQUE VIT ICI)
+  • Logo magasin imprimé bulk : €0.03-0.05/unité
+  • Changement marque/niche = nouveau sticker uniquement
+
+INSERT UNIVERSEL A6 (recto/verso kraft)
+  • Template : "Merci 🙏 + QR review + code -10% next order"
+  • QR dynamique selon produit/magasin
+  • ~€0.04/unité
+
+EXTRAS conditionnels (déclencheurs auto)
+  • Thank-you card manuscrite : commande > €80
+  • Échantillon offert : panier > €120
+  • Sticker "Tag us @brand on TikTok for free gift" : commande > €100 (boucle UGC gratuite)
+```
+
+### Coût packaging moyen
+- **Modulaire : ~€0.40/commande**
+- vs Custom branded box : €1.80-2.50/commande
+- **Économie : ~€1.50 × volume**
+
+### Workflow Ines
+1. Nouveau produit validé → Ines décide format (S/M/L/pochette)
+2. Génère 5 variantes sticker via fal.ai Flux Schnell + Canva
+3. Choisit la meilleure avec Elena (CMO)
+4. Délègue commande sticker/insert à Chen Wu
+5. Update template "rules" déclencheurs (thank-you card, échantillon)
+6. A/B test impact sur reviews + UGC TikTok avec Anna
+
+---
+
+## 📊 Marges minimum imposées (règle Yuki)
+
+```
+Prix vente / Coût total ≥ 3.5x
+(produit + shipping + packaging + Stripe fees + ~10% future ads)
+
+Marge nette cible : 40% minimum
+Si marge < 40% → Yuki refuse de valider le produit (vetoé en sortie validation)
+```
+
+**Justification :** avec €300/mois budget, chaque commande doit financer la suivante. Marge < 40% = cale en 2 mois.
+
+---
+
+## 🌱 Stratégie Organic-First (3-6 mois lancement)
+
+### 3 piliers gratuits
+1. **TikTok organique** — Tom poste 3 vidéos UGC/jour
+   - Réutilisation éthique (repost créateurs avec watermark + tag)
+   - Affiliation créateurs : code promo 10% commission (€0 cash sortant)
+2. **Pinterest** — Zoé épingle 20 produits/jour (sous-exploité, marche très bien maison/déco)
+3. **SEO blog** — Léa publie 3-5 articles/semaine longue traîne
+
+### Targets honnêtes
+- **Mois 1-2** : site lancé, 0-5 ventes (test)
+- **Mois 3-4** : 20-100 ventes/mois organique
+- **Mois 4-6** : €1k-3k CA/mois si la niche prend
+- **Plan B mois 4** : si pas de traction → injection ads €500-1000 ponctuelle OU pivot niche
+
+---
+
+## 🎬 Workflow type "produit gagnant → livraison" (11 étapes)
+
+```
+1. Mia trouve produit tendance TikTok (Perplexity + scraping)
+2. Diego source 5 fournisseurs candidats (AliExpress + Alibaba + CJ + 1688)
+3. Yuki valide : pas de marque déposée, ads concurrents OK, marge ≥ 40%
+4. Chen Wu négocie : MOQ, prix, échantillons → choisit LE fournisseur
+5. Ines conçoit packaging modulaire + insert review
+6. Chen Wu commande échantillon + valide qualité
+7. Kai shoot photos, Tom monte vidéo TikTok/UGC
+8. Site mis à jour par Nora, fiches produit par Léa, social posts par Zoé
+9. Première commande client → Hugo passe la commande à Chen Wu
+10. Chen Wu commande au fournisseur + tracking 17track → Slack
+11. Sofia gère SAV si problème
+```
 
 ---
 
