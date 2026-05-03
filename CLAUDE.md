@@ -277,21 +277,50 @@ specialist-layer (10 ICs)
 
 ## 🔒 Décisions verrouillées (rev. budget €300/mois)
 
-### Budget mensuel total : **€300/mois** (contrainte forte)
+### Budget mensuel : **€300 → €600 conditionnel**
 
+Logique : **stop-loss automatique**, on ne débloque l'extra que si signaux positifs.
+
+#### Phase 1 — Mois 1 : €300 (cap dur, setup + organic uniquement)
 ```
-IA APIs (cap Iris)                €45  ($50)
-Hosting (Vercel + Supabase free)  €0
-Domaine .com                      €1
-Email (Brevo free)                €0
+IA APIs (cap Iris $50)            €45
+Hosting + tools                   €15
+Domaine + email pro               €10
+Stock packaging initial           €80
+Échantillons fournisseurs         €50
+Stickers + insert prints          €40
 n8n self-hosted (Railway)         €5
-Stock packaging initial (one-shot) €80
-Échantillons fournisseurs (test)  €50
-Ads test budget                   €80
-Buffer                            €39
+Buffer                            €55
 ─────────────────────────────────────
-TOTAL                             €300
+TOTAL Mois 1                      €300
 ```
+
+#### Critères déblocage Phase 2 (Anna check chaque dimanche)
+
+Au moins 1 doit être atteint en fin de mois 1 :
+- ≥ 3 ventes mois 1
+- ≥ 1 vidéo TikTok > 50k vues
+- ≥ 500 visiteurs uniques/semaine site
+- ≥ 100 emails capturés via popup pre-sale
+
+**Aucun atteint → reste €300 + pivot niche/produit obligatoire.**
+
+#### Phase 2 — Mois 2+ : €600 (si critères validés)
+```
+[Tout Phase 1 reconduit]                €300
++ TikTok Ads test (6 créas × €10/3j)    €180
++ Meta Ads retargeting visiteurs site   €60
++ Pinterest Ads boost                   €30
++ Micro-influenceurs (gift + 10% comm)  €30
+─────────────────────────────────────────────
+TOTAL Mois 2+                           €600
+```
+
+#### Phase 3 — Mois 3+ : Scale si ROAS ≥ 2
+- Réinvestir **profits uniquement** en ads
+- Cap sortant max €600/mois tant que CA < €3k/mois
+- Iris cap IA monte à $80/mois (Sonnet plus utilisé par Jay)
+- Jay (Ads Manager) **passe actif** uniquement à partir de Phase 3
 
 ### Stratégie : ORGANIC-FIRST (pas de paid ads au lancement)
 
@@ -422,14 +451,17 @@ EXTRAS conditionnels (déclencheurs auto)
 ## 📊 Marges minimum imposées (règle Yuki)
 
 ```
-Prix vente / Coût total ≥ 3.5x
-(produit + shipping + packaging + Stripe fees + ~10% future ads)
+Phase 1 (organic uniquement) : marge ≥ 40%
+Phase 2+ (avec paid ads)     : marge ≥ 55%
+  (les ads bouffent ~15-25% en CAC, marge doit absorber)
 
-Marge nette cible : 40% minimum
-Si marge < 40% → Yuki refuse de valider le produit (vetoé en sortie validation)
+Calcul marge = (Prix vente - coût produit - shipping - packaging
+                - Stripe fees - 10% ads future) / Prix vente
+
+Si marge < seuil → Yuki refuse le produit (vetoé en sortie validation)
 ```
 
-**Justification :** avec €300/mois budget, chaque commande doit financer la suivante. Marge < 40% = cale en 2 mois.
+**Justification :** chaque commande doit financer la suivante. Marge sous le seuil = cale en 2 mois.
 
 ---
 
