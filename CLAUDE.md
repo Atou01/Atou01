@@ -893,6 +893,101 @@ Légal
 
 ---
 
+## 🧠 Skill Library — Système d'apprentissage continu (inspiré Hermes Agent)
+
+Chaque agent accumule un corpus de **skills appris** au fil du temps. Plus l'équipe tourne, plus elle devient performante — sans réintervention humaine.
+
+### Principe
+Après chaque tâche réussie, l'agent **extrait le pattern** qui a marché et le stocke comme un skill réutilisable. Iris (Router) consulte la library **avant** de générer une réponse from scratch.
+
+### Format skill (compatible agentskills.io)
+```yaml
+id: detect-tiktok-virality-pattern-v3
+agent: mia
+trigger: "scan tiktok trending products"
+description: "Détecte virality pattern à 48h horizon"
+inputs: [hashtag, timeframe]
+method: |
+  1. Pull top 50 vidéos hashtag dernières 48h
+  2. Calc engagement rate (likes/views)
+  3. Filter > 8% + croissance vues > 200%/24h
+  4. Cross-check Reddit early signal
+outputs: [product_candidates, virality_score]
+success_rate: 0.73 (47/64 cases)
+last_updated: 2026-05-18
+version: 3
+```
+
+### Architecture
+```sql
+agent_skills (
+  id, agent_id, name, version,
+  trigger_pattern, description,
+  method_md, inputs_json, outputs_json,
+  success_count, failure_count, success_rate,
+  created_at, last_used_at, last_updated_at,
+  source         -- 'self_learned' | 'imported_agentskills_io' | 'human_authored'
+)
+
+skill_executions (
+  id, skill_id, task_id,
+  outcome,      -- 'success' | 'failure' | 'partial'
+  feedback_md,
+  created_at
+)
+```
+
+### Workflow d'apprentissage
+1. Agent reçoit tâche
+2. Iris cherche skill matching dans library (top-3 par similarity score)
+3. Si match → applique skill, mesure résultat
+4. Si pas de match → improvise, **et après succès** : Iris demande à l'agent d'écrire un nouveau skill
+5. Échec → `failure_count++`. Si success_rate < 50% sur 10 runs → skill **deprecated**
+
+### Ouverture
+- Format **agentskills.io compatible** → import/export libre
+- On peut **importer** des skills communautaires (ex : "négocier Alibaba")
+- On peut **exporter** les nôtres (asset partageable / vendable)
+
+---
+
+## 📞 Sofia multi-canal — Mémoire client unifiée
+
+Sofia opère sur **plusieurs canaux** depuis une seule mémoire :
+```
+Channels actifs Phase 1 :
+  ✅ Email (via Gmail MCP)
+  ✅ Instagram DM
+  ✅ TikTok DM
+
+Channels Phase 2+ :
+  ☐ WhatsApp Business
+  ☐ Messenger
+  ☐ Live chat site (Crisp free)
+```
+
+### Mémoire client unifiée (table `customer_memory`)
+```sql
+customer_memory (
+  customer_id,
+  unified_profile,        -- email, IG handle, TikTok handle, WA, phone
+  conversation_history,   -- tous canaux mergés en chronologique
+  last_orders[],
+  preferences,
+  sentiment_score,
+  vip_flag,
+  notes_md
+)
+```
+
+**Une seule "fiche client"** peu importe le canal d'entrée. Quand un client passe d'IG DM à email, Sofia a tout l'historique.
+
+### Routing entrant
+- Tous channels → webhook unique → enrichissement (lookup customer_memory) → Sofia répond avec contexte complet
+- Réponse < 2h objectif (mantra Bea/Sofia)
+
+---
+
 ## 🎬 Workflow type "produit gagnant → livraison" (11 étapes)
 
 ```
