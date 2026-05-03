@@ -40,7 +40,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 ### Specialists (17)
 **Conseil stratégique (advisors à Lina)**
 - **Aria Volkov** 🌍 — **Strategic Niche Analyst** — Sonnet (rapports trimestriels) + Haiku (scraping) + Perplexity Sonar Pro. Choisit LE marché avant que Mia chasse les produits. Voir section dédiée.
-- **Maya Lindgren** 🎨 — **Brand Architect** — Sonnet (créa) + Opus 1× (manifesto) + fal.ai Flux. Crée et maintient identité marque end-to-end (nom, logo, voice, guidelines). Output one-shot J+1 après choix niche. Audits hebdo cohérence créas. Mantra : "Une marque mémorable se décide en 2h, pas 2 mois"
+- **Maya Lindgren** 🎨 — **Brand Architect** — Sonnet (créa) + Opus 1× (manifesto) + **Google Imagen 3** (logos). Crée et maintient identité marque end-to-end (nom, logo, voice, guidelines). Output one-shot J+1 après choix niche. Audits hebdo cohérence créas. Mantra : "Une marque mémorable se décide en 2h, pas 2 mois"
 
 **Équipe Sam (Research) — SOURCING**
 - **Mia Tanaka** 🕵️ — Trend Scout (TikTok/IG) — Perplexity Sonar Pro + Firecrawl + Exa
@@ -49,7 +49,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 
 **Équipe Elena (Content)**
 - **Léa Moreau** ✍️ — SEO Copywriter — Haiku 4.5 (content-research-writer, article-writing)
-- **Kai Foster** 📸 — Visual Designer — fal.ai Flux **Schnell** (pas Pro, budget) + Canva
+- **Kai Foster** 📸 — Visual Designer — **Google Imagen 3** (free tier) + Canva
 - **Tom Nakamura** 🎬 — Video Producer (UGC ads) — **Capcut + ElevenLabs free tier** + reposts éthiques (PAS Veo 3 au lancement)
 - **Zoé Adler** 📱 — Social Media Manager — Haiku (crosspost, x-api, Pinterest API)
 - **Noor Hassan** ✉️ — **Lifecycle & Email Marketer** — Sonnet (séquences) + Haiku (broadcasts). Brevo free tier. 7 flows obligatoires.
@@ -64,7 +64,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 - **Hugo Bernal** 🛒 — Order Ops — Haiku (workflow-automator, Stripe + Gmail)
 - **Sofia Ahmed** 💬 — Customer Support — Sonnet (Gmail + Slack, FAQ vector search)
 - **Chen Wu** 🐉 — **Senior Procurement Officer** — Sonnet (négo) + Haiku (suivi). Communique avec fournisseurs en ZH/EN/FR, négocie, commande, gère litiges. Voir seuils autonomie ci-dessous.
-- **Ines Larsen** 📦 — **Packaging & Unboxing Designer** — Sonnet + fal.ai Flux Schnell. Système modulaire (voir section Packaging).
+- **Ines Larsen** 📦 — **Packaging & Unboxing Designer** — Sonnet + Google Imagen 3. Système modulaire (voir section Packaging).
 
 ---
 
@@ -196,8 +196,8 @@ Service `router.ts` qui choisit le LLM optimal par tâche.
 | Fiches produit SEO | **Claude Haiku 4.5** |
 | Copywriting ads viraux | **GPT-4o** |
 | Vision (analyse images concurrents) | **Gemini 2.0 Flash** |
-| Visuels produits | **fal.ai Flux Pro** |
-| Vidéos UGC | **Veo 3 / Runway via fal** |
+| Visuels produits | **Google Imagen 3** (Imagen 4 si haute qualité requise) |
+| Vidéos UGC | **Capcut + reposts éthiques** (Phase 1), Veo 3 banni jusqu'à Phase 3 |
 | Voix-off | **ElevenLabs v3** |
 | Embeddings catalogue | **Voyage-3** |
 | Classification rapide | **Haiku 4.5** |
@@ -242,7 +242,7 @@ Iris met à jour `quality_score` dans `ai_models` selon les retours (CTR, conver
 - **Déploiement :** Vercel
 - **Paiement :** Stripe (sur le futur site e-commerce généré)
 - **Orchestration agents :** n8n + workflows custom
-- **LLMs :** Anthropic, OpenAI, Google, Perplexity, fal.ai, ElevenLabs, Exa, Voyage
+- **LLMs :** Anthropic, Google (Gemini + Imagen), Perplexity, ElevenLabs (free tier), Exa
 
 ### Schéma Supabase (tables clés)
 ```sql
@@ -313,7 +313,7 @@ specialist-layer (10 ICs)
 
 ### Sprint 2 — The Router (Iris)
 - Service `router.ts` + table `ai_models` peuplée
-- Clés API : Perplexity, OpenAI, Anthropic, Google, fal, ElevenLabs, Exa
+- Clés API Sprint 1 : Anthropic, Perplexity, Google AI (Gemini + Imagen). Plus tard : Exa, ElevenLabs free tier.
 - Logging décisions + feedback loop quality_score
 
 ### Sprint 3 — CEO Orchestrator (Victor)
@@ -421,7 +421,7 @@ TOTAL Mois 2+                           €600
 | Sonnet 4.6 | 25% | négo, créa, analyse |
 | Opus 4.7 | 5% MAX | synthèses CEO hebdo uniquement |
 | Perplexity Sonar Pro | 5 appels/jour max | Mia trend research |
-| fal.ai Flux **Schnell** (pas Pro) | visuels | -75% coût |
+| Google Imagen 3 (free tier) | visuels logos/produits | $0 jusqu'à quota |
 | Gemini 2.0 Flash | vision | cheap |
 | ElevenLabs | free tier 10k chars/mois uniquement |
 
@@ -656,7 +656,7 @@ EXTRAS conditionnels (déclencheurs auto)
 
 ### Workflow Ines
 1. Nouveau produit validé → Ines décide format (S/M/L/pochette)
-2. Génère 5 variantes sticker via fal.ai Flux Schnell + Canva
+2. Génère 5 variantes sticker via Google Imagen 3 + Canva
 3. Choisit la meilleure avec Elena (CMO)
 4. Délègue commande sticker/insert à Chen Wu
 5. Update template "rules" déclencheurs (thank-you card, échantillon)
