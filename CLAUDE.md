@@ -283,6 +283,31 @@ specialist-layer (10 ICs)
 
 ---
 
+## 🔑 APIs configurées (Sprint 1)
+
+### Perplexity — 3 endpoints utilisés
+| Endpoint | Usage | Agent |
+|---|---|---|
+| `POST /search` | Recherche web rapide (tendances, sources) | **Mia** (trend scout daily) |
+| `POST /v1/responses` (preset `fast-search`) | Recherche profonde + raisonnement agent | **Aria** (rapport niche trimestriel) |
+| `POST /v1/embeddings` (modèle `pplx-embed-v1-4b`) | Vectorisation catalogue, FAQ, articles | **Sofia** (FAQ search), **Léa** (SEO related), **Iris** (skill matching) |
+
+### Anthropic
+- Modèles : `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`
+- Routing par Iris selon tâche
+
+### Google AI
+- `gemini-2.0-flash` — vision (Yuki) + classification rapide
+- `imagen-3.0-generate-002` — visuels Maya/Kai/Ines (free tier)
+
+### Sécurité
+- Toutes clés en `.env.local` (gitignored)
+- Production : Vercel Environment Variables (chiffré côté serveur)
+- Spend caps obligatoires : Anthropic $20/mo, Perplexity $10/mo, fal.ai N/A
+- **Rotation après chaque suspicion de fuite** (clé en chat, capture écran, repo public)
+
+---
+
 ## 🔌 MCPs disponibles (à brancher)
 
 **Confirmés en session :**
