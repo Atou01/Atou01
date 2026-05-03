@@ -1,9 +1,9 @@
 # Dependencies
 node_modules/
 
-# Package files
-package-lock.json
-package.json
+# Package files (legacy root-level only)
+/package.json
+/package-lock.json
 
 # Screenshots and temporary files
 screenshot*.js
