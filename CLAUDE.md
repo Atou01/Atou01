@@ -531,7 +531,19 @@ Google Trends FR/EU, TikTok Creative Center, Pinterest Trends, AliExpress Top Se
 Top 3 niches scorées + tableau 6 axes + niches éliminées + 5 produits déjà spottés dans niche #1 + plan lancement 30j. Victor partage à user → user choisit dans le top 3.
 
 ### Première mission immédiate
-**Livrer le rapport de niche de lancement** en 24-48h après Sprint 1 (remplace le défaut "Maison & Lifestyle" arbitraire). User choisit dans son top 3.
+**Livrer le rapport de niche de lancement** en 24-48h après Sprint 1 (remplace le défaut "Maison & Lifestyle" arbitraire). Aria scrute, **Victor tranche** et synthétise au user. L'utilisateur ne valide pas les niches — il peut override avec "Victor, on prend la #2" mais le défaut = Victor décide.
+
+### Workflow niche (verrouillé)
+```
+Aria (Sonnet)    → propose top 3 scoré sur 6 axes + ICP + plan 30j
+   ↓ rapport interne
+Victor (Opus)    → arbitre final selon stratégie + budget Théo + brand Lina
+   ↓ synthèse pour user
+User             → reçoit la niche choisie + "Override possible : dis-moi"
+                   (ne valide pas par défaut, peut override par message)
+```
+
+L'endpoint `/api/agents/aria/run` chaîne les 2 agents et retourne `victorPick`.
 
 ### Coût
 ~$3-5 par rapport trimestriel (Sonnet pour synthèse, Haiku pour scraping volume, Perplexity 5-10 appels).

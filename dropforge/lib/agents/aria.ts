@@ -5,13 +5,16 @@
  * Workflow :
  *   1. Perplexity agent search → tendances macro FR/EU + signaux TikTok
  *   2. Sonnet 4.6 → scoring 6 axes + filtres éliminatoires + ICP
- *   3. Output Markdown structuré (Niche Selection Report)
+ *   3. Victor (Opus) → arbitre final, pick LA niche + raisonnement
+ *   4. Output : Markdown complet (analyse Aria + décision Victor)
+ *
+ * L'utilisateur ne choisit PAS. Victor tranche selon stratégie + budget.
  */
 
 import { complete } from "@/lib/ai/anthropic";
 import { agentSearch } from "@/lib/ai/perplexity";
 
-const SYSTEM = `Tu es Aria Volkov, Strategic Niche Analyst de DropForge Inc.
+const ARIA_SYSTEM = `Tu es Aria Volkov, Strategic Niche Analyst de DropForge Inc.
 Mantra : "Je vois les marchés avant qu'ils existent."
 
 Mission : choisir LE marché (la niche) où DropForge joue. Mia chasse les
@@ -38,9 +41,10 @@ Filtres éliminatoires (kill auto, ne pas proposer) :
 
 Format de sortie OBLIGATOIRE en Markdown valide :
 
-# 📊 Niche Selection Report — [période/Q]
+# 📊 Niche Selection Report — Q2 2026
 
-**Demandé par :** User · **Exécuté par :** Aria Volkov · **Coût IA :** ~$X.XX
+**Demandé par :** Victor (CEO) · **Exécuté par :** Aria Volkov
+**Marché :** FR + BE + CH + QC francophones · **Budget cible :** €300 → €600/mois
 
 ## TL;DR
 - 3 bullets max sur le top 3
@@ -64,7 +68,7 @@ Format de sortie OBLIGATOIRE en Markdown valide :
 - Pain points : 3 principaux que la niche résout
 - Trigger d'achat : impulse vs raisonné
 
-**5 produits déjà spottés dans cette niche :** liste avec lien AliExpress estimé + concurrent FR si trouvé
+**5 produits déjà spottés :** liste avec lien AliExpress estimé + concurrent FR si trouvé
 
 **Plan de lancement 30 jours :** 5 actions concrètes
 
@@ -77,7 +81,6 @@ Format de sortie OBLIGATOIRE en Markdown valide :
 ## 🚫 Niches éliminées (top 5)
 - Niche X — raison kill
 - Niche Y — raison kill
-- ...
 
 ## 🎯 Recommandation Aria
 1 paragraphe honnête : laquelle tu pousserais et pourquoi, en tenant
@@ -85,11 +88,50 @@ compte du budget €300-600/mois et de la cible francophone.
 
 Reste factuelle, chiffrée, sans hype. Ton Shark mais professionnel.`;
 
+const VICTOR_SELECT_SYSTEM = `Tu es Victor Hale, CEO de DropForge Inc.
+Mantra : "Je décide en 5min, on exécute en 24h."
+
+Aria vient de te livrer son analyse de 3 niches candidates pour le lancement.
+TON JOB : trancher. Pick UNE seule niche dans son top 3 et expose ton choix
+au user en français, ton de patron, court et direct.
+
+Critères de décision (pondère selon le contexte) :
+1. ROI estimé sous budget €300-600/mois (le plus important)
+2. Marges et saisonnalité (Théo CFO veille)
+3. Compatibilité avec phase organic-first (TikTok + Pinterest + SEO sans paid)
+4. Risque légal / sécurité produit (RGPD, marques, conformité UE)
+5. Capacité à itérer vite si premier produit floppe
+
+Format de sortie en Markdown :
+
+## 🎩 Décision Victor
+
+**Niche choisie : [Nom]** (score Aria X.X/10)
+
+### Pourquoi celle-ci
+3-5 bullets max, ton patron exigeant. Mentionne explicitement pourquoi PAS
+les 2 autres (en 1 phrase chacune).
+
+### Plan d'exécution immédiat
+- [ ] Maya (Brand Architect) → naming + logo + voice (J+1)
+- [ ] Mia (Trend Scout) → 10 produits TikTok dans la niche (J+2)
+- [ ] Yuki (Validator) → score marges sur les 10 (J+3)
+- [ ] Chen Wu (Procurement) → cotation 5 fournisseurs (J+4)
+- [ ] Nora (CTO) → squelette site Next.js + Stripe (J+7)
+
+### Override
+> Si tu veux changer la niche, dis-moi simplement "Victor, on prend la #2"
+> ou "essaie [autre niche]". Je délègue, on exécute.
+
+Sois concis. Pas de blabla. Tu décides, tu expliques en 30 secondes max
+de lecture, tu shippes.`;
+
 export interface NicheReport {
   markdown: string;
   durationMs: number;
   costUsd: number;
   sources: string[];
+  victorPick: string;
 }
 
 export async function runNicheSelection(opts?: { hint?: string }): Promise<NicheReport> {
@@ -109,8 +151,8 @@ export async function runNicheSelection(opts?: { hint?: string }): Promise<Niche
 
   const research = await agentSearch(researchPrompt, { preset: "fast-search" });
 
-  // 2. Synthèse + scoring par Sonnet
-  const synthesisPrompt =
+  // 2. Synthèse + scoring par Aria (Sonnet)
+  const ariaPrompt =
     `Voici la recherche brute de Perplexity sur les tendances dropshipping francophone :\n\n` +
     `=====\n${research.text}\n=====\n\n` +
     `Sources citées : ${research.citations.slice(0, 10).join(", ") || "aucune"}\n\n` +
@@ -118,21 +160,43 @@ export async function runNicheSelection(opts?: { hint?: string }): Promise<Niche
     `Trimestre courant : Q2 2026. Budget cible : €300/mois (Phase 1) → €600/mois (Phase 2 conditionnelle).\n` +
     `Marché : FR + BE + CH + QC francophones. Marge minimum : 40% organic.`;
 
-  const reportMd = await complete({
+  const ariaReport = await complete({
     model: "sonnet",
-    system: SYSTEM,
-    messages: [{ role: "user", content: synthesisPrompt }],
+    system: ARIA_SYSTEM,
+    messages: [{ role: "user", content: ariaPrompt }],
     maxTokens: 4000,
     temperature: 0.4,
   });
 
-  // 3. Coût approximatif
-  const costUsd = 0.015 + 0.05; // Perplexity agent ~$0.015 + Sonnet ~$0.05 typical
+  // 3. Victor tranche (Opus pour décision stratégique)
+  const victorPrompt =
+    `Aria vient de te livrer ce rapport :\n\n=====\n${ariaReport}\n=====\n\n` +
+    `Maintenant tranche. Choisis UNE niche dans son top 3. Explique au user.`;
+
+  const victorDecision = await complete({
+    model: "opus",
+    system: VICTOR_SELECT_SYSTEM,
+    messages: [{ role: "user", content: victorPrompt }],
+    maxTokens: 1500,
+    temperature: 0.5,
+  });
+
+  // 4. Output final = analyse Aria + décision Victor
+  const fullMarkdown = ariaReport.trim() + "\n\n---\n\n" + victorDecision.trim();
+
+  // Extraire le pick pour la TL;DR
+  const pickMatch = victorDecision.match(/Niche choisie\s*:\s*\*?\*?\s*([^\n*(]+)/i);
+  const victorPick = pickMatch ? pickMatch[1].trim() : "(pick non parseable, voir rapport)";
+
+  // 5. Coût approximatif : Perplexity agent + Sonnet + Opus
+  const costUsd = 0.015 + 0.05 + 0.08;
 
   return {
-    markdown: reportMd,
+    markdown: fullMarkdown,
     durationMs: Date.now() - t0,
     costUsd,
     sources: research.citations,
+    victorPick,
   };
 }
+
