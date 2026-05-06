@@ -21,13 +21,19 @@ export interface CompleteOptions {
 }
 
 export async function complete(opts: CompleteOptions): Promise<string> {
-  const res = await client.messages.create({
+  const params: Anthropic.MessageCreateParamsNonStreaming = {
     model: MODEL_MAP[opts.model],
     system: opts.system,
     messages: opts.messages,
     max_tokens: opts.maxTokens ?? 1024,
-    temperature: opts.temperature ?? 0.7,
-  });
+  };
+  // Opus 4.7 a déprécié temperature ; ne pas le passer pour ce modèle.
+  if (opts.model !== "opus" && opts.temperature !== undefined) {
+    params.temperature = opts.temperature;
+  } else if (opts.model !== "opus") {
+    params.temperature = 0.7;
+  }
+  const res = await client.messages.create(params);
   const block = res.content[0];
   if (block.type !== "text") return "";
   return block.text;
