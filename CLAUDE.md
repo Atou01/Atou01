@@ -325,6 +325,16 @@ specialist-layer (10 ICs)
 - Yahoo Finance, Exa, Firecrawl
 - Perplexity (clé API à fournir)
 
+**Marketing/Ads (Phase 2+ uniquement, après signal positif) :**
+- **Meta Ads MCP officiel** (lancé 29 avril 2026, open beta) — `https://mcp.facebook.com/ads`
+  - 29 outils : campagnes, ad sets, reports ROAS/CPA, catalogue produits, pixel monitoring
+  - Activé pour Jay (Paid Ads Specialist) **uniquement à partir de Phase 2**
+  - Théo (Budget Gatekeeper) garde le veto : cap €15/jour/plateforme, kill ROAS<1.5 à 48h
+  - Setup : Claude → Connectors → Custom Connector → URL Meta + auth Business Manager
+  - Référence : Meta Business Help Center "Meta Ads AI Connectors"
+- TikTok Ads MCP (à surveiller, pas encore officiel à notre connaissance)
+- Google Ads (pas de MCP officiel, on utilisera l'API directement)
+
 ---
 
 ## ✅ Roadmap (sprints)
