@@ -29,7 +29,7 @@ export default function ReportsPage() {
   const [agentFilter, setAgentFilter] = useState<string>("all");
   const [open, setOpen] = useState<string | null>(null);
   const [live, setLive] = useState<LiveReport[]>([]);
-  const [running, setRunning] = useState(false);
+  const [running, setRunning] = useState<null | "aria" | "maya">(null);
   const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
@@ -44,19 +44,23 @@ export default function ReportsPage() {
 
   useEffect(() => { refresh(); }, []);
 
-  async function runAria() {
-    setRunning(true);
+  async function runAgent(agent: "aria" | "maya") {
+    setRunning(agent);
     setError(null);
     try {
-      const res = await fetch("/api/agents/aria/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
+      const res = await fetch(`/api/agents/${agent}/run`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Aria a crashé.");
+      if (!res.ok) throw new Error(data.error ?? `${agent} a crashé.`);
       await refresh();
       if (data.reportId) setOpen(data.reportId);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur inconnue.");
     } finally {
-      setRunning(false);
+      setRunning(null);
     }
   }
 
@@ -89,11 +93,18 @@ export default function ReportsPage() {
         </span>
         <div style={{ flex: 1 }} />
         <button
-          className="btn btn-primary"
-          disabled={running}
-          onClick={runAria}
+          className="btn"
+          disabled={running !== null}
+          onClick={() => runAgent("aria")}
         >
-          {running ? "🌍 Aria scanne…" : "🌍 Run Aria → Niche report"}
+          {running === "aria" ? "🌍 Aria scanne…" : "🌍 Aria → Niche"}
+        </button>
+        <button
+          className="btn btn-primary"
+          disabled={running !== null}
+          onClick={() => runAgent("maya")}
+        >
+          {running === "maya" ? "🎨 Maya brand…" : "🎨 Maya → Brand kit"}
         </button>
       </header>
 
