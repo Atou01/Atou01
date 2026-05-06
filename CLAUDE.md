@@ -18,7 +18,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 
 ---
 
-## 🏢 Organigramme — DropForge Inc. (25 agents)
+## 🏢 Organigramme — DropForge Inc. (26 agents)
 
 ### C-Suite (6)
 | Nom | Rôle | LLM principal | Skills/Tools |
@@ -37,7 +37,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 | **Elena Park** 🎨 | Head of Content & Brand | CMO | Sonnet (content-engine, crosspost, design-shotgun, article-writing) |
 | **Ravi Mehta** 📈 | Head of Growth & Ads | CMO | Sonnet (competitive-ads-extractor, twitter-algorithm-optimizer, x-api) |
 
-### Specialists (17)
+### Specialists (18)
 **Conseil stratégique (advisors à Lina)**
 - **Aria Volkov** 🌍 — **Strategic Niche Analyst** — Sonnet (rapports trimestriels) + Haiku (scraping) + Perplexity Sonar Pro. Choisit LE marché avant que Mia chasse les produits. Voir section dédiée.
 - **Maya Lindgren** 🎨 — **Brand Architect** — Sonnet (créa) + Opus 1× (manifesto) + **Google Imagen 3** (logos). Crée et maintient identité marque end-to-end (nom, logo, voice, guidelines). Output one-shot J+1 après choix niche. Audits hebdo cohérence créas. Mantra : "Une marque mémorable se décide en 2h, pas 2 mois"
@@ -65,6 +65,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 - **Sofia Ahmed** 💬 — Customer Support — Sonnet (Gmail + Slack, FAQ vector search)
 - **Chen Wu** 🐉 — **Senior Procurement Officer** — Sonnet (négo) + Haiku (suivi). Communique avec fournisseurs en ZH/EN/FR, négocie, commande, gère litiges. Voir seuils autonomie ci-dessous.
 - **Ines Larsen** 📦 — **Packaging & Unboxing Designer** — Sonnet + Google Imagen 3. Système modulaire (voir section Packaging).
+- **Wren Holloway** 🛂 — **Identity & Access Officer** — Haiku (volume) + Sonnet (planning). Gère le "Identity Stack" : checklist comptes (TikTok Biz, IG, Stripe, etc.), aliases email via Cloudflare Email Routing, vault credentials Bitwarden, monitoring breaches. NE crée PAS les comptes (CAPTCHA/KYC = humain), mais pré-charge tout pour que le user clique en 2min. Mantra : "Pas de compte sans plan de récupération"
 
 ---
 
