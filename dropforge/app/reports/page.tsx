@@ -29,7 +29,7 @@ export default function ReportsPage() {
   const [agentFilter, setAgentFilter] = useState<string>("all");
   const [open, setOpen] = useState<string | null>(null);
   const [live, setLive] = useState<LiveReport[]>([]);
-  const [running, setRunning] = useState<null | "aria" | "maya">(null);
+  const [running, setRunning] = useState<null | "aria" | "maya" | "mia">(null);
   const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
@@ -44,7 +44,7 @@ export default function ReportsPage() {
 
   useEffect(() => { refresh(); }, []);
 
-  async function runAgent(agent: "aria" | "maya") {
+  async function runAgent(agent: "aria" | "maya" | "mia") {
     setRunning(agent);
     setError(null);
     try {
@@ -100,11 +100,18 @@ export default function ReportsPage() {
           {running === "aria" ? "🌍 Aria scanne…" : "🌍 Aria → Niche"}
         </button>
         <button
-          className="btn btn-primary"
+          className="btn"
           disabled={running !== null}
           onClick={() => runAgent("maya")}
         >
           {running === "maya" ? "🎨 Maya brand…" : "🎨 Maya → Brand kit"}
+        </button>
+        <button
+          className="btn btn-primary"
+          disabled={running !== null}
+          onClick={() => runAgent("mia")}
+        >
+          {running === "mia" ? "🕵️ Mia scoute…" : "🕵️ Mia → 10 produits"}
         </button>
       </header>
 
