@@ -29,7 +29,7 @@ export default function ReportsPage() {
   const [agentFilter, setAgentFilter] = useState<string>("all");
   const [open, setOpen] = useState<string | null>(null);
   const [live, setLive] = useState<LiveReport[]>([]);
-  const [running, setRunning] = useState<null | "aria" | "maya" | "mia">(null);
+  const [running, setRunning] = useState<null | "aria" | "maya" | "mia" | "yuki" | "chen" | "wren">(null);
   const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
@@ -44,7 +44,7 @@ export default function ReportsPage() {
 
   useEffect(() => { refresh(); }, []);
 
-  async function runAgent(agent: "aria" | "maya" | "mia") {
+  async function runAgent(agent: "aria" | "maya" | "mia" | "yuki" | "chen" | "wren") {
     setRunning(agent);
     setError(null);
     try {
@@ -107,11 +107,32 @@ export default function ReportsPage() {
           {running === "maya" ? "🎨 Maya brand…" : "🎨 Maya → Brand kit"}
         </button>
         <button
-          className="btn btn-primary"
+          className="btn"
           disabled={running !== null}
           onClick={() => runAgent("mia")}
         >
           {running === "mia" ? "🕵️ Mia scoute…" : "🕵️ Mia → 10 produits"}
+        </button>
+        <button
+          className="btn"
+          disabled={running !== null}
+          onClick={() => runAgent("yuki")}
+        >
+          {running === "yuki" ? "✅ Yuki valide…" : "✅ Yuki → Validation"}
+        </button>
+        <button
+          className="btn"
+          disabled={running !== null}
+          onClick={() => runAgent("chen")}
+        >
+          {running === "chen" ? "🐉 Chen Wu négo…" : "🐉 Chen Wu → Procurement"}
+        </button>
+        <button
+          className="btn btn-primary"
+          disabled={running !== null}
+          onClick={() => runAgent("wren")}
+        >
+          {running === "wren" ? "🛂 Wren plan…" : "🛂 Wren → Identity Stack"}
         </button>
       </header>
 
