@@ -50,7 +50,7 @@ L'utilisateur **ne parle qu'au CEO**. La chaîne hiérarchique est respectée co
 **Équipe Elena (Content)**
 - **Léa Moreau** ✍️ — SEO Copywriter — Haiku 4.5 (content-research-writer, article-writing)
 - **Kai Foster** 📸 — Visual Designer — **Google Imagen 3** (free tier) + Canva
-- **Tom Nakamura** 🎬 — Video Producer (UGC ads) — **Capcut + ElevenLabs free tier** + reposts éthiques (PAS Veo 3 au lancement)
+- **Tom Nakamura** 🎬 — Video Producer (UGC ads) — **HyperFrames** (overlays/motion graphics, HTML→MP4 déterministe, Apache 2.0, $0/rendu) + **Capcut** (cas spécifiques) + **ElevenLabs free tier** + reposts éthiques. PAS Veo 3 au lancement.
 - **Zoé Adler** 📱 — Social Media Manager — Haiku (crosspost, x-api, Pinterest API)
 - **Noor Hassan** ✉️ — **Lifecycle & Email Marketer** — Sonnet (séquences) + Haiku (broadcasts). Brevo free tier. 7 flows obligatoires.
 - **Bea Ricci** 🌟 — **Reviews, UGC & Community Manager** — Sonnet + Haiku. Judge.me + UGC scrape éthique + micro-influenceurs.
@@ -198,7 +198,8 @@ Service `router.ts` qui choisit le LLM optimal par tâche.
 | Copywriting ads viraux | **GPT-4o** |
 | Vision (analyse images concurrents) | **Gemini 2.0 Flash** |
 | Visuels produits | **Google Imagen 3** (Imagen 4 si haute qualité requise) |
-| Vidéos UGC | **Capcut + reposts éthiques** (Phase 1), Veo 3 banni jusqu'à Phase 3 |
+| Vidéos UGC (motion graphics, overlays, hooks animés) | **HyperFrames** (HTML→MP4, agent-friendly, déterministe, $0) — défaut Tom |
+| Vidéos UGC (montage avancé, cas non couverts) | **Capcut** + reposts éthiques (Phase 1), Veo 3 banni jusqu'à Phase 3 |
 | Voix-off | **ElevenLabs v3** |
 | Embeddings catalogue | **Voyage-3** |
 | Classification rapide | **Haiku 4.5** |
@@ -244,6 +245,7 @@ Iris met à jour `quality_score` dans `ai_models` selon les retours (CTR, conver
 - **Paiement :** Stripe (sur le futur site e-commerce généré)
 - **Orchestration agents :** n8n + workflows custom
 - **LLMs :** Anthropic, Google (Gemini + Imagen), Perplexity, ElevenLabs (free tier), Exa
+- **Vidéo :** [HyperFrames](https://github.com/heygen-com/hyperframes) (HTML→MP4 via Puppeteer+FFmpeg, Node ≥22, Apache 2.0). ⚠️ **Pas serverless-compatible** : tourne sur worker dédié (container/VPS) ou job queue déclenchée depuis l'app Vercel — pas dans une route Next.js.
 
 ### Schéma Supabase (tables clés)
 ```sql
