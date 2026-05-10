@@ -13,6 +13,7 @@
 import type { ReportTag } from "@/lib/data/mock";
 import { consume as budgetConsume } from "@/lib/orchestrator/budget";
 import { logRun } from "@/lib/orchestrator/audit";
+import { getSupabase } from "@/lib/store/supabase";
 
 export interface StoredReport {
   id: string;
@@ -34,7 +35,7 @@ const STORE: StoredReport[] = [];
 export function addReport(r: Omit<StoredReport, "createdAt">): StoredReport {
   const stored = { ...r, createdAt: Date.now() };
   STORE.unshift(stored);
-  // Théo records the spend.
+  // Théo records the spend (in-memory always, optionally Supabase).
   budgetConsume(r.costUsd);
   // Audit trail : who ran, what type, how long, how much.
   logRun({
@@ -47,7 +48,37 @@ export function addReport(r: Omit<StoredReport, "createdAt">): StoredReport {
     durationMs: r.durationMs,
     reportId: r.id,
   });
+  // Fire-and-forget Supabase persistence : ne bloque pas la réponse,
+  // mais log l'erreur dans l'audit si fail.
+  void persistReport(stored);
   return stored;
+}
+
+async function persistReport(r: StoredReport): Promise<void> {
+  const sb = getSupabase();
+  if (!sb) return;
+  try {
+    const { error } = await sb.from("reports").insert({
+      title: r.title,
+      content_md: r.contentMd,
+      sources: r.sources,
+      created_by_agent: r.agents[0] ?? null,
+    });
+    if (error) {
+      logRun({
+        agentId: "system", caller: "store", taskKind: "supabase-insert",
+        inputDigest: `report ${r.id}`, outcome: "error",
+        costUsd: 0, durationMs: 0, errorMessage: error.message,
+      });
+    }
+  } catch (err) {
+    logRun({
+      agentId: "system", caller: "store", taskKind: "supabase-insert",
+      inputDigest: `report ${r.id}`, outcome: "error",
+      costUsd: 0, durationMs: 0,
+      errorMessage: err instanceof Error ? err.message : "unknown",
+    });
+  }
 }
 
 export function listReports(): StoredReport[] {

@@ -8,7 +8,10 @@
  *   - Tail capped at MAX_ENTRIES (no unbounded memory growth)
  *   - Inputs are length-clipped (no full prompt dump in audit)
  *   - Errors are recorded too — silent failures are forbidden
+ *   - Supabase persistence in fire-and-forget mode if configured
  */
+
+import { getSupabase } from "@/lib/store/supabase";
 
 const MAX_ENTRIES = 1000;
 const INPUT_CLIP = 280;
@@ -47,7 +50,30 @@ export function logRun(entry: Omit<AuditEntry, "id" | "createdAt">): AuditEntry 
   };
   LOG.unshift(stored);
   if (LOG.length > MAX_ENTRIES) LOG.length = MAX_ENTRIES;
+  // Fire-and-forget Supabase persistence (silent on failure to avoid
+  // recursion : an audit insert error shouldn't trigger another audit).
+  void persistAudit(stored);
   return stored;
+}
+
+async function persistAudit(e: AuditEntry): Promise<void> {
+  const sb = getSupabase();
+  if (!sb) return;
+  try {
+    await sb.from("audit_log").insert({
+      agent_id: e.agentId,
+      caller: e.caller,
+      task_kind: e.taskKind,
+      input_digest: e.inputDigest,
+      outcome: e.outcome,
+      cost_usd: e.costUsd,
+      duration_ms: e.durationMs,
+      report_id: e.reportId ?? null,
+      error_message: e.errorMessage ?? null,
+    });
+  } catch {
+    // Silent : pas de récursion (un échec audit ne doit pas re-loguer).
+  }
 }
 
 export function recent(limit = 50): AuditEntry[] {

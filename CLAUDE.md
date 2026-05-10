@@ -325,6 +325,75 @@ Spend safety :
   - Stores en mémoire (perdus au restart serverless cold) — sera Supabase Sprint 2.5.
   - Patterns prompt-injection couvrent les cas évidents, pas les attaques sophistiquées (multi-step, encoding). Pour ça : monitoring continu via /api/admin/audit + revue Wren mensuelle.
 
+### Pipelines layer (chaînes multi-agents)
+
+```
+lib/orchestrator/pipelines.ts     ─ orchestrations explicites (jamais auto)
+
+  runStrategyPipeline()  Aria → Maya             (~$0.30, Opus 2×)
+  runSamPipeline()       Mia → Diego[×N] → Yuki  → Chen Wu → Sam synthèse
+                                                 (~$0.15, Sonnet)
+  runElenaPipeline()     fan-out parallèle Léa/Kai/Tom/Zoé/Noor/Bea
+                         + Elena synthèse        (~$0.17)
+  runRaviPipeline()      Anna → Hana(uses Anna) → Jay → Ravi synthèse
+                                                 (~$0.14)
+
+Routes : POST /api/pipelines/{strategy|sam|elena|ravi}
+
+Chaque pipeline :
+  1. preflight Théo (refuse si freeze ou cap insuffisant pour le coût estimé)
+  2. exécute les sub-agents (chain ou parallel selon dépendance data)
+  3. addReport() pour CHAQUE sub-output (audit + budget consumed automatique)
+  4. synthèse finale du manager (Sam/Elena/Ravi) avec contexte des sous-rapports
+  5. retourne {finalReportId, subReportIds[], costUsd, durationMs}
+
+Victor n'auto-déclenche PAS les pipelines — il propose une suggestedPipeline
+dans sa réponse chat, l'UI affiche un bouton "Lancer la chaîne complète".
+```
+
+### Persistence layer (optionnelle)
+
+```
+SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY définis
+  → addReport() persiste dans public.reports (fire-and-forget)
+  → logRun() persiste dans public.audit_log (idem)
+  → /api/admin/seed (admin auth) seed les 26 agents
+
+SUPABASE_URL absent
+  → fallback in-memory (dev local, validation rapide)
+
+Migration 0002_controls_layer.sql ajoute :
+  - public.budget_state (singleton row, prêt pour bind ultérieur)
+  - public.audit_log (trigger trim auto à 10k entrées)
+  - RLS service_role uniquement
+```
+
+### Vidéo (HyperFrames worker)
+
+```
+lib/video/hyperframes.ts     stub submitRender / pollRender
+lib/video/README.md          architecture worker dédié + Dockerfile
+
+Mode actuel :
+  HYPERFRAMES_WORKER_URL absent → submitRender retourne stub "queued",
+                                    Tom livre quand même son brief.
+  HYPERFRAMES_WORKER_URL set    → POST vers worker externe (Railway/Fly).
+
+Worker à provisionner Sprint 4 (après premières ventes) :
+  Container Node 22 + FFmpeg + Chromium, poll Supabase.video_jobs.
+```
+
+### Smoke test
+
+```
+npm run smoke                     ─ teste les 20 agents single-shot
+npm run smoke -- --only theo,nora ─ filtre
+
+Coût total ≈ $0.50 par run complet. Ne teste PAS la qualité du contenu,
+seulement : pas d'erreur, Markdown bien formé (H1 + TL;DR), coût sous cap.
+À lancer en local, jamais en CI.
+```
+
 ---
 
 ## 🔑 APIs configurées (Sprint 1)

@@ -32,12 +32,29 @@ Format de réponse type quand tu délègues :
 Format quand tu poses une clarification :
 "Avant de déclencher la machine : [question précise sur 1 point seulement]."`;
 
+/** Victor expose les pipelines disponibles dans la réponse pour que
+ * l'UI puisse proposer un bouton "lancer la chaîne complète". */
+export type PipelineSuggestion = "sam" | "elena" | "ravi" | "strategy" | null;
+
+const LABEL_TO_PIPELINE: Record<string, PipelineSuggestion> = {
+  research: "sam",
+  content: "elena",
+  growth: "ravi",
+  strategy: "strategy",
+  // tech / ops / finance / clarify : pas de pipeline auto, Victor garde la main.
+  tech: null,
+  ops: null,
+  finance: null,
+  clarify: null,
+};
+
 export interface VictorTurn {
   reply: string;
   routing: {
     label: string;
     targetAgentId: string | null;
     rationale: string;
+    suggestedPipeline: PipelineSuggestion;
   };
   meta: {
     flagged: string[];
@@ -120,7 +137,12 @@ export async function victorRespond(
 
     return {
       reply,
-      routing: { label, targetAgentId: target.agentId, rationale: target.rationale },
+      routing: {
+        label,
+        targetAgentId: target.agentId,
+        rationale: target.rationale,
+        suggestedPipeline: LABEL_TO_PIPELINE[label] ?? null,
+      },
       meta: { flagged: clean.flagged, costUsd, durationMs },
     };
   } catch (err) {
