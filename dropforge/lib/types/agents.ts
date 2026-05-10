@@ -104,6 +104,7 @@ export const AGENTS: Agent[] = [
   { id: "sofia", name: "Sofia Ahmed", role: "Customer Support", emoji: "💬", level: "specialist", tier: "Specialist", team: "Ops", managerId: "marc", department: "ops", defaultLLM: "sonnet", llmLabel: "Haiku", mantra: "NPS 70+ ou je change quelque chose", skin: "pink", desk: { x: 14, y: 14 } },
   { id: "chen", name: "Chen Wu", role: "Procurement Officer", emoji: "🐉", level: "specialist", tier: "Specialist", team: "Ops", managerId: "marc", department: "ops", defaultLLM: "sonnet", llmLabel: "Sonnet", mantra: "-25% sur la 1ère cotation. Toujours.", skin: "red", desk: { x: 12, y: 16 } },
   { id: "ines", name: "Ines Larsen", role: "Packaging & Unboxing Designer", emoji: "📦", level: "specialist", tier: "Specialist", team: "Ops", managerId: "marc", department: "ops", defaultLLM: "sonnet", llmLabel: "Sonnet", mantra: "Le packaging fait 30% des reviews 5★", skin: "gold", desk: { x: 14, y: 16 } },
+  { id: "wren", name: "Wren Holloway", role: "Identity & Access Officer", emoji: "🛂", level: "specialist", tier: "Specialist", team: "Ops", managerId: "marc", department: "ops", defaultLLM: "haiku", llmLabel: "Haiku", mantra: "Pas de compte sans plan de récupération", skin: "gray", desk: { x: 16, y: 14 } },
 ];
 
 export function findAgent(id: string): Agent | undefined {

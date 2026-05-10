@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const niche = body.niche?.trim() || "Organisation & Productivité Bureau";
 
   try {
-    const kit = await runBrandArchitect(niche, body.icp);
+    const kit = await runBrandArchitect({ niche, voicehint: body.icp });
 
     const titleMatch = kit.markdown.match(/^#\s+🎨\s+Brand Kit\s*—\s*(.+)$/m);
     const brandName = titleMatch ? titleMatch[1].trim() : "(nom non parseable)";

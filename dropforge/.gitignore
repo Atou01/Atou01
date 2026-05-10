@@ -36,3 +36,7 @@ Thumbs.db
 # Tests / coverage
 coverage/
 *.lcov
+
+# TypeScript build cache
+tsconfig.tsbuildinfo
+*.tsbuildinfo
