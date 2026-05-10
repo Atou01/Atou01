@@ -284,6 +284,47 @@ specialist-layer (10 ICs)
   └─ exécutent concret via skills + MCPs
 ```
 
+### Controls layer (transverse, appliqué à TOUS les agents)
+
+```
+lib/orchestrator/budget.ts      Théo's purse — caps daily/monthly + freeze
+lib/orchestrator/audit.ts       trace 1000 derniers appels (qui/quoi/coût/résultat)
+lib/orchestrator/guards.ts      requireAdmin / requireBudget / sanitizeInput / rateLimited
+
+Hook automatique : addReport() → consume(budget) + logRun(audit) sans
+toucher les 25 routes individuelles.
+
+Wired dans :
+  - Iris.routeGuarded()  → refuse de router si freeze ou cap dépassé
+  - Victor.victorRespond → sanitize + budget pre-flight + audit start/end
+  - /api/chat            → rate limit per-IP (30 req/min)
+  - /api/admin/budget    → GET state, POST {freeze|unfreeze|set-caps}
+  - /api/admin/audit     → GET ?limit=N (défaut 50)
+
+Auth admin : header x-admin-key vs ADMIN_KEY env var.
+En prod sans ADMIN_KEY → routes admin renvoient 403.
+En dev sans ADMIN_KEY → mode permissif (warning logué).
+
+Sanitize input :
+  - Cap 8000 chars
+  - Patterns flagués (non-bloquants, transmis à Victor en note interne) :
+    "ignore previous instructions", "system prompt", "you are now",
+    "jailbreak", "pretend you", "act as a", "reveal your system", etc.
+
+Rate limit :
+  - 30 req/min par IP sur /api/chat
+  - Bucket en mémoire (sera Redis Phase 2 si abus détecté)
+
+Spend safety :
+  - Défaut Phase 1 : $2/jour, $50/mois (overridable via env)
+  - Auto-freeze si un appel unique dépasse le cap
+  - Manuel : POST /api/admin/budget {action:"freeze", reason:"..."}
+```
+
+⚠️ **Limites Sprint 2** :
+  - Stores en mémoire (perdus au restart serverless cold) — sera Supabase Sprint 2.5.
+  - Patterns prompt-injection couvrent les cas évidents, pas les attaques sophistiquées (multi-step, encoding). Pour ça : monitoring continu via /api/admin/audit + revue Wren mensuelle.
+
 ---
 
 ## 🔑 APIs configurées (Sprint 1)

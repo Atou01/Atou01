@@ -2,7 +2,12 @@
  * Iris Vega — Chief AI Officer / Router
  * Choisit le modèle optimal selon la nature de la tâche.
  * "Le bon modèle au bon prix au bon moment."
+ *
+ * Iris consulte le budget tracker (Théo) avant chaque décision : si freeze
+ * actif ou cap dépassé, elle refuse de router et l'appelant doit annuler.
  */
+
+import { checkBudget, getBudget, type BudgetSnapshot } from "@/lib/orchestrator/budget";
 
 export type ModelChoice =
   | { provider: "anthropic"; model: "claude-opus-4-7" | "claude-sonnet-4-6" | "claude-haiku-4-5-20251001" }
@@ -90,19 +95,28 @@ export function route(kind: TaskKind, hint?: string): RoutingDecision {
   }
 }
 
-export interface BudgetState {
-  dailyCapUsd: number;
-  monthlyCapUsd: number;
-  spentTodayUsd: number;
-  spentMonthUsd: number;
+/**
+ * Variant qui combine routing + check budget. À utiliser depuis tout
+ * agent-runner : si `allowed` est faux, ne PAS lancer l'appel IA.
+ */
+export interface RoutingDecisionGuarded extends RoutingDecision {
+  allowed: boolean;
+  blockedReason?: string;
+  budget: BudgetSnapshot;
 }
 
-export function shouldFreeze(state: BudgetState): { freeze: boolean; reason?: string } {
-  if (state.spentTodayUsd >= state.dailyCapUsd) {
-    return { freeze: true, reason: `Daily cap atteint ($${state.dailyCapUsd}). Théo freeze Iris.` };
-  }
-  if (state.spentMonthUsd >= state.monthlyCapUsd) {
-    return { freeze: true, reason: `Monthly cap atteint ($${state.monthlyCapUsd}). Théo freeze Iris.` };
-  }
-  return { freeze: false };
+export function routeGuarded(kind: TaskKind, hint?: string): RoutingDecisionGuarded {
+  const decision = route(kind, hint);
+  const guard = checkBudget(decision.estimatedCostUsd);
+  return {
+    ...decision,
+    allowed: guard.allowed,
+    blockedReason: guard.allowed ? undefined : guard.reason,
+    budget: guard.snapshot,
+  };
+}
+
+/** Ré-export pratique pour Théo / admin. */
+export function currentBudget(): BudgetSnapshot {
+  return getBudget();
 }

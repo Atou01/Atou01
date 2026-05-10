@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { victorRespond } from "@/lib/orchestrator/victor";
+import { victorRespond, VictorBlockedError } from "@/lib/orchestrator/victor";
+import { rateLimited, clientKey } from "@/lib/orchestrator/guards";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,6 +15,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { error: "ANTHROPIC_API_KEY missing in environment." },
       { status: 500 }
+    );
+  }
+
+  // Rate limit per IP : pas de spam Victor.
+  const rl = rateLimited(`chat:${clientKey(req)}`);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: rl.reason, retryAfterMs: rl.retryAfterMs },
+      { status: rl.status, headers: { "Retry-After": String(Math.ceil(rl.retryAfterMs / 1000)) } }
     );
   }
 
@@ -32,6 +42,9 @@ export async function POST(req: NextRequest) {
     const turn = await victorRespond(body.message, body.history ?? []);
     return NextResponse.json(turn);
   } catch (err) {
+    if (err instanceof VictorBlockedError) {
+      return NextResponse.json({ error: err.message, blocked: true }, { status: err.status });
+    }
     const message = err instanceof Error ? err.message : "Unknown orchestrator error.";
     return NextResponse.json({ error: message }, { status: 500 });
   }
