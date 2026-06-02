@@ -8,11 +8,22 @@ DRY_RUN="${DRY_RUN:-1}"
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$KIT_DIR"
 
+# Charge .env (pour TELEGRAM_HOME_CHANNEL, etc.) — fichier gitignoré.
+if [ -f "$KIT_DIR/.env" ]; then set -a; . "$KIT_DIR/.env"; set +a; fi
+
 PROFILES=(director chasseur sourceur)
+# Skills cœur-métier à ÉPINGLER (protégées du Curator — voir docs/evolution.md).
+CORE_SKILLS=(mission-hunter sourcing-strategy linkedin-sourcing)
 CRON_NAME="mission-report"
 CRON_SCHEDULE="0 8 * * 1-5"
 CRON_SKILL="mission-hunter"
 CRON_PROMPT_FILE="cron/morning-mission-report.prompt"
+# Cible de livraison du cron : telegram:<chat_id> si défini, sinon 'origin' (chat d'origine).
+if [ -n "${TELEGRAM_HOME_CHANNEL:-}" ]; then
+  CRON_DELIVER="telegram:${TELEGRAM_HOME_CHANNEL}"
+else
+  CRON_DELIVER="origin"
+fi
 
 note() { printf '\033[36m• %s\033[0m\n' "$*"; }
 run() {
@@ -85,8 +96,20 @@ for p in "${PROFILES[@]}"; do
   fi
 done
 
+# 2ter. Directeur = orchestrateur (peut déléguer/spawner le Sourceur via Kanban)
+note "Config orchestrateur (profil director)"
+run hermes -p director config set delegation.max_spawn_depth 2
+printf '  \033[36mℹ\033[0m Vérifie aussi que le profil director a "kanban" dans toolsets\n'
+printf '      (voir config.example.yaml ; `hermes -p director config edit` si besoin).\n'
+
+# 2bis. Épingler les skills cœur-métier (le Curator ne les archivera jamais)
+note "Pin des skills cœur (anti-Curator)"
+for s in "${CORE_SKILLS[@]}"; do
+  run hermes curator pin "$s"
+done
+
 # 3. Cron matinal (idempotent)
-note "Cron \"$CRON_NAME\" ($CRON_SCHEDULE → telegram, skill $CRON_SKILL)"
+note "Cron \"$CRON_NAME\" ($CRON_SCHEDULE → $CRON_DELIVER, skill $CRON_SKILL)"
 existing_cron=""
 command -v hermes >/dev/null 2>&1 && existing_cron="$(hermes cron list 2>/dev/null || true)"
 if printf '%s\n' "$existing_cron" | grep -qiw "$CRON_NAME"; then
@@ -97,12 +120,12 @@ else
     run hermes cron create \
       --name "$CRON_NAME" \
       --schedule "$CRON_SCHEDULE" \
-      --deliver telegram \
+      --deliver "$CRON_DELIVER" \
       --skill "$CRON_SKILL" \
       --prompt "$prompt_content"
   else
-    printf '  \033[33m[dry-run]\033[0m hermes cron create --name %s --schedule "%s" --deliver telegram --skill %s --prompt "$(cat %s)"\n' \
-      "$CRON_NAME" "$CRON_SCHEDULE" "$CRON_SKILL" "$CRON_PROMPT_FILE"
+    printf '  \033[33m[dry-run]\033[0m hermes cron create --name %s --schedule "%s" --deliver "%s" --skill %s --prompt "$(cat %s)"\n' \
+      "$CRON_NAME" "$CRON_SCHEDULE" "$CRON_DELIVER" "$CRON_SKILL" "$CRON_PROMPT_FILE"
   fi
 fi
 

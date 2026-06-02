@@ -63,8 +63,9 @@ Telegram → dashboard.
 ## Axe B — Piste de maturité capacitaire (M0→M4)
 
 *Cadence de l'agent « meilleur chasseur ». Détail + métriques :*
-[`architecture-self-improving.md`](architecture-self-improving.md). **Ordre non négociable :
-mémoire/rubrics/RAG d'abord, fine-tuning en dernier.**
+[`architecture-self-improving.md`](architecture-self-improving.md) ; mise en œuvre concrète +
+extensions futures : [`evolution.md`](evolution.md). **Ordre non négociable : mémoire/rubrics/RAG
+d'abord, fine-tuning en dernier.**
 
 | Étape | Contenu | Déclencheur de passage |
 |-------|---------|------------------------|

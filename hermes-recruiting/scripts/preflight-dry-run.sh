@@ -8,7 +8,7 @@ KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$KIT_DIR"
 
 REQUIRED_SKILLS=(mission-hunter sourcing-strategy linkedin-sourcing)
-REQUIRED_ENV=(TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID)
+REQUIRED_ENV=(TELEGRAM_BOT_TOKEN TELEGRAM_ALLOWED_USERS TELEGRAM_HOME_CHANNEL)
 
 fail=0
 ok()   { printf '  \033[32m✓\033[0m %s\n' "$1"; }
@@ -75,16 +75,12 @@ else
   ok "aucun secret en clair détecté dans les fichiers du kit"
 fi
 
-# 5. Gateway / Telegram joignable (best effort, non bloquant)
+# 5. Gateway Telegram en vie (best effort, non bloquant)
 echo "[5] Gateway Telegram (best effort)"
-if command -v hermes >/dev/null 2>&1; then
-  if hermes gateway status >/dev/null 2>&1; then
-    ok "gateway joignable"
-  else
-    warn "gateway non détectée — démarre-la (hermes gateway / systemd) avant le test end-to-end"
-  fi
+if pgrep -f 'hermes .*--gateway' >/dev/null 2>&1; then
+  ok "process gateway détecté"
 else
-  warn "hermes absent : check gateway sauté"
+  warn "gateway non détectée — démarre-la (hermes --gateway / systemd) avant le test end-to-end"
 fi
 
 echo

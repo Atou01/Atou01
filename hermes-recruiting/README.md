@@ -118,7 +118,7 @@ After=network-online.target
 [Service]
 Type=simple
 User=%i
-ExecStart=%h/.local/bin/hermes gateway
+ExecStart=%h/.local/bin/hermes --gateway
 Restart=on-failure
 RestartSec=5
 
@@ -130,7 +130,7 @@ WantedBy=default.target
 systemctl --user enable --now hermes-gateway   # ou en service système selon ton install
 ```
 
-**tmux (rapide)** : `tmux new -d -s hermes 'hermes gateway'`
+**tmux (rapide)** : `tmux new -d -s hermes 'hermes --gateway'`
 
 Le cron Hermes est interne au process — tant que la gateway tourne, le job `mission-report`
 se déclenche selon son `--schedule`.
@@ -153,10 +153,12 @@ hermes-recruiting/
 │   ├── vps-cdp-proxy.py      ← Phase 0 (VPS) : proxy réécriture Host (optionnel)
 │   ├── preflight-dry-run.sh  ← checks lecture seule
 │   └── setup-phase1.sh       ← wiring idempotent, DRY_RUN=1 par défaut
+├── config.example.yaml                 ← config Hermes DURCIE (sécurité+orchestrateur+curator)
 ├── docs/
 │   ├── roadmap.md                      ← 2 axes : déploiement (0→3) + maturité (M0→M4)
 │   ├── compliance.md                   ← cadre légal (AI Act haut risque, RGPD/CNIL) 🔒
 │   ├── architecture-self-improving.md  ← mémoire+rubrics+RAG+evals, FT en dernier
+│   ├── evolution.md                    ← axe évolutif + extensions futures (vérité terrain)
 │   ├── phase0-training.md              ← boucle d'entraînement + critère de sortie
 │   ├── phase0-tunnel.md                ← tunnel SSH + CDP + piège du header Host
 │   ├── phase1-flow.md

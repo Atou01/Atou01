@@ -5,16 +5,22 @@ l'ordre qui marche. **Mémoire/skills + rubrics + RAG d'abord ; fine-tuning RL e
 La conformité ([`compliance.md`](compliance.md)) prime sur tout ce qui suit.
 
 > Les briques d'auto-amélioration d'Hermes (skills = mémoire procédurale, **Curator** autonome,
-> export de trajectoires / RL **Atropos**) correspondent à l'état de l'art 2025-2026
-> (ReasoningBank, SkillOS, Reflexion).
+> export de trajectoires via `batch_runner` → RL **downstream**) correspondent à l'état de l'art
+> 2025-2026 (ReasoningBank, SkillOS, Reflexion).
+>
+> ⚠️ **Vérité terrain (code NousResearch vérifié)** : Hermes Core n'a **pas** de recherche
+> **FTS5** native ni d'outils `rl_*`, et **pas** de création de skill « automatique après N
+> appels ». La recherche sémantique cross-session = plugin **Honcho** (externe) ; la collecte
+> de trajectoires = `batch_runner` + flag `save_trajectories` (JSONL ShareGPT) ; le fine-tuning
+> RL (Atropos/TRL) est **en aval**, pas dans le core. Détail : [`evolution.md`](evolution.md).
 
 ## 1. Mémoire à 3 étages
 
 | Étage | Support Hermes | Contenu |
 |-------|----------------|---------|
-| **Procédurale** | **skills** (compat. agentskills.io) | Les 7 skills d'Atou converties. **Épingler (pin)** les skills cœur-métier → le Curator n'y touche pas. Le Curator ne gère que les skills **créés par l'agent** (tactiques apprises ; action max = archivage, jamais suppression). |
-| **Épisodique** | **FTS5 + RAG propriétaire** (Supabase) | Anciens CR, messages d'approche **labellisés converti/non**, candidats placés/recalés, missions gagnées/perdues. Servis en **few-shot dynamique** (3–5 cas les plus proches). |
-| **Sémantique / utilisateur** | **Honcho** | Modélise le **style et le goût de jugement d'Atou** — le vecteur pour apprendre « son » œil. |
+| **Procédurale** | **skills** Hermes (SKILL.md, frontmatter `name`/`description`) | Les 7 skills d'Atou converties. **Épingler** les skills cœur : `hermes curator pin <skill>` (pas un flag de frontmatter). Le Curator ne gère que les skills **créés par l'agent** (action max = **archivage**, jamais suppression ; restaurable). |
+| **Épisodique** | **RAG propriétaire (Supabase)** — *à construire par nous* | Anciens CR, messages d'approche **labellisés converti/non**, candidats placés/recalés, missions gagnées/perdues. Few-shot dynamique (3–5 cas proches). ⚠️ Pas de FTS5 natif Hermes — c'est **notre** RAG. |
+| **Sémantique / utilisateur** | **Honcho** (plugin externe, optionnel) | Modélise le **goût de jugement d'Atou** (dialectic 1-3 passes). Config dans `~/.hermes/honcho.json`. |
 
 **Règle ReasoningBank** : distiller des **stratégies de raisonnement transférables à partir
 des succès ET des échecs auto-évalués** — pas stocker des trajectoires brutes.
@@ -45,14 +51,16 @@ des succès ET des échecs auto-évalués** — pas stocker des trajectoires bru
 
 ## 4. Boucle d'apprentissage instrumentée
 
-1. Chaque mission = une **trajectoire** (`save_trajectories`), **reward = signal réel** :
-   réponse obtenue ? entretien ? placement ?
-2. Le **Learner** distille des *reasoning strategies* (succès **et** échecs) en skills/patchs
-   de rubric → **validés au checkpoint**.
+1. Chaque mission = une **trajectoire** (`save_trajectories=True` / `batch_runner.py` → JSONL
+   ShareGPT). ⚠️ Le **reward n'est pas natif** : on l'**annote en post-traitement** depuis le
+   signal réel (réponse ? entretien ? placement ?). Les trajectoires **sans raisonnement** sont
+   écartées (`<REASONING_SCRATCHPAD>` → `<think>`).
+2. Le **Learner** distille des *reasoning strategies* (succès **et** échecs) → patchs de
+   skill/rubric via `skill_manage` → **validés au checkpoint** (pas d'auto-création « magique »).
 3. **Cron hebdo** : rapport de métriques sur Telegram (cf. §5).
-4. Le **Curator** consolide/élague les skills tactiques (agent uniquement).
-5. **Plus tard** : quand le volume de trajectoires scorées est suffisant → Environnement
-   **Atropos** custom (`load_dataset`/`score_answer`) + **LoRA GRPO** sur petit modèle.
+4. Le **Curator** consolide/archive les skills tactiques (agent uniquement, jamais les pinned).
+5. **Plus tard seulement** : fine-tuning **en aval** (TRL/Atropos, hors core) — voir seuils en §6
+   et [`evolution.md`](evolution.md).
 
 ## 5. Evals — prouver l'« alpha » de l'agent
 
@@ -75,6 +83,9 @@ analytique ; revue **pipeline hebdo**, **outcome trimestriel**.
   poids → préférer RAG pour les données candidat.
 - Coûts indicatifs : RAG (jours, <5 $/1k req) ; LoRA (100-1000 $/run) ; full FT (5k-50k $+).
 - Risques RL : *catastrophic forgetting*, *reward hacking* sur les idiosyncrasies du juge.
+- **Seuil avant tout fine-tuning** (vérité terrain) : ≥ **500-1000 trajectoires**, couverture
+  raisonnement **> 80 %**, succès outils **> 90 %**, **variance de reward σ > 0,2**. Template
+  GRPO : `lora_r=16`, `lora_alpha=32`, `lr=5e-6`. Détail : [`evolution.md`](evolution.md).
 
 ## 7. Autonomie graduée — jamais 0 % de revue
 
