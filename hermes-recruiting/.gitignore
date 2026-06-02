@@ -1,0 +1,9 @@
+# Secrets — jamais commités
+.env
+*.env.local
+
+# État runtime local Hermes
+*.db
+*.local
+sessions/
+logs/
