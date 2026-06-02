@@ -1,12 +1,28 @@
-# Hermes × Recrutement Hunteed — Kit Phase 1
+# Hermes × Recrutement Hunteed — Kit Phases 0 & 1
 
 Industrialiser le travail répétitif du headhunting via un orchestrateur **Hermes Agent**
 (NousResearch) qui pilote des subagents spécialisés, en gardant l'humain (Atou) sur les
 décisions irremplaçables.
 
-> **Phase 1 uniquement** : ① Chasseur de missions + ② Sourceur + cron matinal + **CP1**
-> (choix des missions). Les phases 2/3 (③ Rédacteur/CP2, ④ Évaluateur/CP3, ⑤ Diffuseur,
-> ⑥ Post-mortem, connecteurs Gmail/Calendar/Notion/Supabase) ne sont **pas** construites ici.
+> **Périmètre construit ici : Phases 0 & 1.**
+> - **Phase 0** — entraînement d'Hermes via tunnel SSH + Chrome CDP, jusqu'à ce qu'il
+>   maîtrise le workflow Hunteed. → [`docs/phase0-training.md`](docs/phase0-training.md),
+>   [`docs/phase0-tunnel.md`](docs/phase0-tunnel.md)
+> - **Phase 1** — ① Chasseur + ② Sourceur + cron matinal + **CP1**.
+>
+> Les Phases 2/3 (③ Rédacteur/CP2, ④ Évaluateur/CP3, ⑤ Diffuseur, ⑥ Post-mortem,
+> connecteurs Gmail/Calendar/Notion/Supabase, **dashboard**) sont **décrites** dans
+> [`docs/roadmap.md`](docs/roadmap.md) mais **pas** construites ici.
+
+## Vue d'ensemble & ordre de construction
+
+1. **Provisionner un VPS** (France/Suisse, ≈ 2 vCPU / 2–4 Go) + installer Hermes + Telegram.
+2. **Monter le tunnel SSH + CDP** (Mac → VPS) et valider qu'Hermes lit le DOM en live.
+3. **Phase 0** : sessions d'entraînement jusqu'au critère de sortie.
+4. **Phase 1** : ① → CP1 → ②, puis ③/④.
+5. **Phases 2/3** : dashboard (Claude Design puis Claude Code).
+
+Détail complet (infra, subagents, HelloWork exclu, etc.) : [`docs/roadmap.md`](docs/roadmap.md).
 
 ## Ce que fait la Phase 1
 
@@ -41,7 +57,29 @@ Le kit est **agnostique à l'hôte**. Les commandes ci-dessous sont identiques s
 - Un bot Telegram (token) + le chat_id de destination.
 - Un provider LLM configuré (`hermes setup model`).
 
-## Mise en route
+## Phase 0 — entraînement (tunnel SSH + CDP)
+
+Avant les subagents, Hermes apprend le workflow Hunteed en **observant l'écran d'Atou en
+live**. Le Chrome du Mac expose le CDP en local ; un **reverse tunnel SSH** le rend visible
+au VPS (chiffré de bout en bout). Détail + sécurité : [`docs/phase0-tunnel.md`](docs/phase0-tunnel.md).
+
+```bash
+# Pré-requis : VPS_HOST renseigné dans .env (ex: VPS_HOST=hermes@IP)
+
+# Sur le MAC — lance Chrome (CDP, profil isolé) + le reverse tunnel
+DRY_RUN=0 ./scripts/mac-tunnel.sh
+
+# Sur le VPS — vérifie qu'Hermes voit bien le DOM du Mac
+./scripts/vps-cdp-check.sh
+#   → si 403 "Host header", lance le proxy puis vise localhost:9223 :
+#   python3 scripts/vps-cdp-proxy.py --listen 127.0.0.1:9223 --upstream 127.0.0.1:9222
+```
+
+Ensuite : sessions live jusqu'au **critère de sortie** ([`docs/phase0-training.md`](docs/phase0-training.md))
+— « source-moi cette mission » et Hermes exécute sans poser 50 questions. **Alors seulement**
+on passe à la Phase 1.
+
+## Phase 1 — mise en route
 
 ```bash
 # 1. Installer Hermes (sur le VPS ou le Mac)
@@ -110,9 +148,15 @@ hermes-recruiting/
 │   ├── morning-mission-report.prompt   ← prompt du job (lu par setup-phase1.sh)
 │   └── morning-mission-report.md       ← spec du job + mécanique CP1
 ├── scripts/
+│   ├── mac-tunnel.sh         ← Phase 0 (Mac) : Chrome CDP + reverse tunnel SSH
+│   ├── vps-cdp-check.sh      ← Phase 0 (VPS) : vérifie le DOM visible via tunnel
+│   ├── vps-cdp-proxy.py      ← Phase 0 (VPS) : proxy réécriture Host (optionnel)
 │   ├── preflight-dry-run.sh  ← checks lecture seule
 │   └── setup-phase1.sh       ← wiring idempotent, DRY_RUN=1 par défaut
 ├── docs/
+│   ├── roadmap.md            ← plan complet des phases 0→3 + infra
+│   ├── phase0-training.md    ← boucle d'entraînement + critère de sortie
+│   ├── phase0-tunnel.md      ← tunnel SSH + CDP + piège du header Host
 │   ├── phase1-flow.md
 │   ├── checkpoints.md
 │   └── guardrails.md

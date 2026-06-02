@@ -7,3 +7,12 @@
 *.local
 sessions/
 logs/
+
+# Phase 0 — runtime tunnel / profil Chrome CDP
+*.pid
+*.log
+.hermes-cdp-profile/
+
+# Python
+__pycache__/
+*.pyc
