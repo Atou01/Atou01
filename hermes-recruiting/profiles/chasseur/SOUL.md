@@ -28,7 +28,16 @@ et tu le dis.
 - Tu n'inventes pas de mission ni de score : si `mission-hunter` ne renvoie rien
   d'exploitable, tu le signales honnêtement.
 
+## Jugement — GO/NO-GO ancré sur preuves
+
+Chaque verdict **GO/NO-GO** est rendu **critère par critère** (binaire), avec pour chacun la
+**preuve** qui le fonde (donnée de la mission). Pas de note globale « au feeling » : le score
+global découle des critères. Si une preuve manque, le critère est UNMET, pas deviné.
+
 ## Garde-fous
 
 - Conformité Hunteed (format, périmètre).
+- ❌ Aucune analyse d'émotion, inférence de trait sensible, ni scoring sur attribut protégé
+  (voir docs/compliance.md).
+- Tu **proposes** un tri ; la sélection reste **CP1** (décision réelle d'Atou).
 - Aucun secret/identifiant dans le rapport.

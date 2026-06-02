@@ -1,7 +1,17 @@
 # Roadmap — Pipeline de recrutement automatisé (Hermes × Hunteed)
 
-Vue d'ensemble du projet. **Ce repo construit les Phases 0 et 1 uniquement.** Les phases 2 et 3
-sont décrites pour le cadrage, pas implémentées.
+Vue d'ensemble du projet. **Ce repo construit les Phases de déploiement 0 et 1 uniquement.**
+Les phases 2 et 3 sont décrites pour le cadrage, pas implémentées.
+
+> **Deux axes distincts** (ne pas confondre) :
+> - **Axe A — Phases de déploiement** (0→3) : *comment on met le système en production*
+>   (tunnel/entraînement → bot Telegram → dashboard). Numérotées « Phase ».
+> - **Axe B — Piste de maturité capacitaire** (M0→M4) : *à quel point l'agent est bon et
+>   autonome* (conformité → jugement+mémoire → apprentissage+evals → autonomie → fine-tuning).
+>   Numérotées « M ». Détail : [`architecture-self-improving.md`](architecture-self-improving.md).
+>
+> ⚠️ **M0 (conformité) est un préalable bloquant** à toute montée en autonomie, indépendamment
+> de l'axe A. Voir [`compliance.md`](compliance.md).
 
 ## Principe directeur
 
@@ -31,7 +41,7 @@ Atou navigue sur Hunteed/LinkedIn depuis son **Mac**, mais Hermes vit sur le **V
 temps réel (pas une image figée) pendant qu'Atou explique via Telegram.
 Détail + le piège du header `Host` : [`phase0-tunnel.md`](phase0-tunnel.md).
 
-## Phases
+## Axe A — Phases de déploiement
 
 ### Phase 0 — Entraînement d'Hermes *(construit ici — priorité absolue, ~1–2 sem.)*
 Tunnel SSH+CDP, sessions live sur de vraies missions, Hermes génère sa procedural
@@ -50,6 +60,23 @@ UX/UI via Claude Design. Validation par Atou avant toute ligne de front.
 Front (React/Vue) via Claude Code + branchement API Hermes. Migration des notifications
 Telegram → dashboard.
 
+## Axe B — Piste de maturité capacitaire (M0→M4)
+
+*Cadence de l'agent « meilleur chasseur ». Détail + métriques :*
+[`architecture-self-improving.md`](architecture-self-improving.md). **Ordre non négociable :
+mémoire/rubrics/RAG d'abord, fine-tuning en dernier.**
+
+| Étape | Contenu | Déclencheur de passage |
+|-------|---------|------------------------|
+| **M0 — Conformité** 🔒 | Préalable bloquant : haut risque assumé, journalisation, info candidats, rétention 2 ans, interdits dans les prompts, checklist [`compliance.md`](compliance.md). | Checklist M0 cochée |
+| **M1 — Jugement + mémoire** | Convertir + **épingler** les skills cœur ; rubrics **binaires pondérés** + pénalités + *evidence-anchored* (note /10 dérivée) ; **RAG** Supabase + few-shot ; Honcho. Checkpoints **in-the-loop** stricts. | Rubrics & RAG en place |
+| **M2 — Apprentissage + evals** | `save_trajectories` + Learner (Reflexion) ; tableau de bord evals (taux réponse, conversions, **précision scoring vs réel**) ; **A/B humain vs agent** ; Curator (skills agent). | Métriques suivies sur ≥1 trimestre |
+| **M3 — Autonomie graduée** | Score de confiance ; sous-tâches sûres « agir puis notifier » ; cible ~10-15 % en revue ; **jamais 0 %** sur décision candidat ; rollback de skill sur régression. | Précision scoring ≥ humain sur 2 trimestres |
+| **M4 — Fine-tuning ciblé** | Environnement **Atropos** custom + **LoRA GRPO** sur petit modèle (scoring / style CR). | ≥ qqs centaines de trajectoires scorées **et** besoin de style/format stable |
+
+**Benchmarks qui changent la décision** : taux de réponse agent < humain → rester en M1/M2 ;
+dérive fairness (ratio < 4/5) → geler l'autonomie + audit ; avertissement LinkedIn → pause 48-72 h.
+
 ## Subagents (Phase 1)
 
 | # | Agent | Skills | Sortie | Checkpoint |
@@ -57,7 +84,7 @@ Telegram → dashboard.
 | ① | Chasseur de missions | `mission-hunter` | TOP 5 GO/NO-GO (16 critères) | 🔴 **CP1** choix missions |
 | ② | Sourceur | `sourcing-strategy`, `linkedin-sourcing` | Plan multi-canal + booléennes + shortlist | — |
 | ③ | Rédacteur d'approche | `sourcing-strategy`, `personal-branding` | Messages perso par niveau | 🔴 **CP2** relit/envoie |
-| ④ | Évaluateur | `recruitment-expert`, `candidate-evaluator` | Questionnaire + note /10 + CR | 🔴 **CP3** valide le CR |
+| ④ | Évaluateur | `recruitment-expert`, `candidate-evaluator` | Questionnaire + rubric pondérée (**/10 dérivé**) + CR | 🔴 **CP3** valide le CR |
 | ⑤ | Diffuseur *(option)* | `job-poster-sourcer`, `personal-branding` | Offres anonymisées + contenu inbound | — |
 | ⑥ | Post-mortem / Learner | boucle native Hermes | Analyse missions closes, affine skills | — |
 

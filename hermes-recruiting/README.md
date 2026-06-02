@@ -154,9 +154,11 @@ hermes-recruiting/
 │   ├── preflight-dry-run.sh  ← checks lecture seule
 │   └── setup-phase1.sh       ← wiring idempotent, DRY_RUN=1 par défaut
 ├── docs/
-│   ├── roadmap.md            ← plan complet des phases 0→3 + infra
-│   ├── phase0-training.md    ← boucle d'entraînement + critère de sortie
-│   ├── phase0-tunnel.md      ← tunnel SSH + CDP + piège du header Host
+│   ├── roadmap.md                      ← 2 axes : déploiement (0→3) + maturité (M0→M4)
+│   ├── compliance.md                   ← cadre légal (AI Act haut risque, RGPD/CNIL) 🔒
+│   ├── architecture-self-improving.md  ← mémoire+rubrics+RAG+evals, FT en dernier
+│   ├── phase0-training.md              ← boucle d'entraînement + critère de sortie
+│   ├── phase0-tunnel.md                ← tunnel SSH + CDP + piège du header Host
 │   ├── phase1-flow.md
 │   ├── checkpoints.md
 │   └── guardrails.md
@@ -166,14 +168,16 @@ hermes-recruiting/
 
 ## Garde-fous (non négociables)
 
-- **Décision humaine** : choix mission (CP1), envoi d'approche (CP2, Phase 2), validation CR
-  (CP3, Phase 2) passent toujours par un checkpoint. Le LLM ne décide jamais d'embaucher.
-- **ToS LinkedIn** : pas de scraping massif, pas d'outreach automatisé de masse.
-- **RGPD** : consentement + rétention maîtrisés.
-- **Secrets** : dans `.env` (gitignoré), jamais dans le repo.
-- **Dry-run** par défaut sur tout script qui agit.
+- **Conformité = cadre directeur** : recrutement **haut risque** (AI Act), scoring = **profilage**
+  → la validation humaine ne déclasse pas le risque. Cadre complet : [`docs/compliance.md`](docs/compliance.md).
+- **Décision humaine substantielle** : CP1 / CP2 (Phase 2) / CP3 (Phase 2) — l'humain lit et
+  décide (pas de tampon). Le LLM ne décide jamais d'embaucher. **Jamais 0 %** de revue.
+- **Interdits** : analyse d'émotions, catégorisation biométrique, scoring sur attribut protégé.
+- **ToS LinkedIn** : pas de scraping massif ni d'outreach de masse (caps dans `guardrails.md`).
+- **RGPD** : info du tri algorithmique, rétention **2 ans**, droit d'effacement ; logs **≥ 6 mois**.
+- **Secrets** : dans `.env` (gitignoré), jamais dans le repo. **Dry-run** par défaut.
 
-Détail : [`docs/guardrails.md`](docs/guardrails.md).
+Détail : [`docs/guardrails.md`](docs/guardrails.md) · [`docs/compliance.md`](docs/compliance.md).
 
 ---
 
