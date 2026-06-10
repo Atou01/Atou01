@@ -18,6 +18,13 @@ lit le DOM en live.
 4. **Feedback loop** : quand Hermes se trompe, **Atou corrige**, Hermes intègre la correction
    dans sa mémoire/skill. On répète sur plusieurs missions variées.
 
+## Décision à prendre ENSEMBLE pendant ces sessions
+
+Le **corps de métier prioritaire** (le type de postes sur lequel Hermes se spécialise en
+premier) n'est **pas prédéterminé** : Atou et Hermes le choisissent **ensemble** au fil des
+sessions, en fonction de ce que les missions réelles révèlent (volume, honoraires,
+faisabilité, affinités d'Atou).
+
 ## Ce qu'Hermes doit assimiler
 
 - Le **workflow Hunteed de bout en bout** : lecture d'une mission, critères GO/NO-GO, parcours

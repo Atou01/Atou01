@@ -2,22 +2,27 @@
 
 Seuls ① Chasseur, ② Sourceur, le cron matinal et **CP1** sont actifs en Phase 1.
 
+> **Règle de départ : UNE mission à la fois.** L'agent recommande, Atou discute et tranche.
+
 ```
-08:00 (cron mission-report, j. ouvrés)
+08:00 (cron mission-report, j. ouvrés — profil director)
    │
    ▼
-┌─────────────────────────┐
-│ ① Chasseur              │  skill: mission-hunter
-│  → TOP 5 GO/NO-GO       │  (16 critères)
-└───────────┬─────────────┘
-            │  livraison Telegram
-            ▼
-   ╔═══════════════════════════════╗
-   ║ 🔴 CP1 — Atou choisit         ║  kanban_create + kanban_block
-   ║   (tâche Kanban "blocked")    ║  Atou répond "GO 1,3,4" → unblock
-   ╚═══════════════┬═══════════════╝
-                   │  pour chaque mission retenue
-                   ▼
+┌────────────────────────────────┐
+│ ① Évaluation des missions      │  skill: mission-hunter (16 critères)
+│  → LA mission recommandée      │  + 2-4 alternatives en 1 ligne
+│    (le POURQUOI argumenté)     │
+└───────────────┬────────────────┘
+                │  livraison Telegram (+ ID tâche CP1)
+                ▼
+   ╔════════════════════════════════════╗
+   ║ 🔴 CP1 — DIALOGUE + validation     ║  kanban_create(initial_status=blocked)
+   ║   Atou questionne / conteste,      ║  accord explicite d'Atou → unblock
+   ║   le Directeur argumente,          ║
+   ║   ATOU TRANCHE                     ║
+   ╚════════════════╤═══════════════════╝
+                    │  LA seule mission validée
+                    ▼
 ┌─────────────────────────┐
 │ ② Sourceur              │  skills: sourcing-strategy, linkedin-sourcing
 │  → plan multi-canal     │
@@ -31,14 +36,17 @@ Seuls ① Chasseur, ② Sourceur, le cron matinal et **CP1** sont actifs en Phas
 
 ## Étapes détaillées
 
-1. **Matin (cron `mission-report`)** — le Directeur lance le profil `chasseur`. Sortie : TOP 5
-   missions scoré GO/NO-GO. Livré sur Telegram.
-2. **🔴 CP1** — le Directeur crée une tâche Kanban bloquée. Atou choisit les missions (réponse
-   Telegram type « GO 1,3,4 »), ce qui débloque la tâche.
-3. **Sourcing** — pour chaque mission retenue, le Directeur assigne le profil `sourceur`.
+1. **Matin (cron `mission-report`, profil `director`)** — évaluation des missions Hunteed.
+   Sortie : **LA mission recommandée** (argumentée) + les alternatives en contexte court.
+2. **🔴 CP1 — dialogue** — la tâche Kanban est créée **déjà bloquée** ; le rapport part avec
+   son ID. Atou peut questionner ou contester ; le Directeur argumente ; **Atou tranche**.
+   Son accord explicite débloque la tâche.
+3. **Sourcing** — le Directeur assigne le profil `sourceur` sur **la seule mission validée**.
    Sortie : plan multi-canal + booléennes + shortlist scorée, livrée sur Telegram.
 4. **Suite** — l'approche (rédaction + envoi) relève de la **Phase 2** (③ Rédacteur + CP2) et
    n'est pas automatisée ici. Atou enchaîne manuellement.
+5. **Mission suivante** — on ne reprend une nouvelle mission que lorsque la mission en cours
+   est sous contrôle. (8-10 en parallèle = cible long terme, une fois la confiance établie.)
 
 ## Différé (Phases 2/3)
 

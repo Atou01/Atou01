@@ -20,15 +20,20 @@ Les phases 2 et 3 sont décrites pour le cadrage, pas implémentées.
 - **On entraîne Hermes AVANT de déployer les subagents** (Phase 0) : il doit maîtriser le
   workflow Hunteed de A à Z avant de guider les subagents.
 - **On valide sur Telegram d'abord, le dashboard vient après** (Phases 2/3).
-- Objectif business : passer de ~3 missions de front à 8–10. Chaque placement = revenu réel.
+- **UNE mission à la fois pour commencer** : l'agent recommande LA mission (argumentée),
+  Atou discute et tranche (CP1 = dialogue), et on ne prend la suivante que quand celle en
+  cours est sous contrôle.
+- Objectif business **long terme** : monter à 8–10 missions de front une fois la confiance
+  établie. Chaque placement = revenu réel.
 
 ## Décisions d'infrastructure
 
 | Sujet | Décision |
 |-------|----------|
-| Hôte Hermes | **VPS Linux** (pas de VPN — confusion écartée). ≈ 2 vCPU / 2–4 Go RAM (Hetzner / DigitalOcean / Linode / OVH). |
-| Localisation | **France ou Suisse** (latence + cohérence RGPD). |
-| 1ʳᵉ tâche concrète | **Provisionner le VPS** (Atou n'en a pas encore). |
+| Hôte Hermes | ✅ **Infomaniak VPS Lite** (choisi et provisionné) — 2 vCPU / 4 Go / 60 Go, Ubuntu 24.04, user `ubuntu`. L'IP vit dans le `.env` local, jamais dans ce repo public. |
+| Localisation | ✅ **Genève (Suisse)** — latence + cohérence RGPD/nLPD. |
+| 1ʳᵉ tâche concrète | ✅ **Fait** : VPS provisionné, durci (ufw, fail2ban, SSH clé-only), Hermes v0.15.1 installé. |
+| Métier prioritaire | **Choisi ENSEMBLE pendant la Phase 0** (sessions d'entraînement) — pas prédéterminé. |
 | Provider LLM | Nous Portal ou OpenRouter (via `hermes setup model`). |
 | Interface (Phases 0–1) | **Telegram.** |
 | Skills | **Réutiliser** celles d'Atou, ne pas les réécrire. |
@@ -82,7 +87,7 @@ dérive fairness (ratio < 4/5) → geler l'autonomie + audit ; avertissement Lin
 
 | # | Agent | Skills | Sortie | Checkpoint |
 |---|-------|--------|--------|------------|
-| ① | Chasseur de missions | `mission-hunter` | TOP 5 GO/NO-GO (16 critères) | 🔴 **CP1** choix missions |
+| ① | Chasseur de missions | `mission-hunter` | **LA mission recommandée** (16 critères) + alternatives | 🔴 **CP1** dialogue + validation |
 | ② | Sourceur | `sourcing-strategy`, `linkedin-sourcing` | Plan multi-canal + booléennes + shortlist | — |
 | ③ | Rédacteur d'approche | `sourcing-strategy`, `personal-branding` | Messages perso par niveau | 🔴 **CP2** relit/envoie |
 | ④ | Évaluateur | `recruitment-expert`, `candidate-evaluator` | Questionnaire + rubric pondérée (**/10 dérivé**) + CR | 🔴 **CP3** valide le CR |

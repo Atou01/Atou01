@@ -1,6 +1,8 @@
-# Secrets — jamais commités
+# Secrets — jamais commités (catch-all, sauf le modèle d'exemple)
 .env
+.env.*
 *.env.local
+!.env.example
 
 # État runtime local Hermes
 *.db

@@ -77,7 +77,8 @@ fi
 
 # 5. Gateway Telegram en vie (best effort, non bloquant)
 echo "[5] Gateway Telegram (best effort)"
-if pgrep -f 'hermes .*--gateway' >/dev/null 2>&1; then
+# couvre `hermes --gateway` ET `hermes gateway …` (la forme varie selon la version)
+if pgrep -f 'hermes.*gateway' >/dev/null 2>&1; then
   ok "process gateway détecté"
 else
   warn "gateway non détectée — démarre-la (hermes --gateway / systemd) avant le test end-to-end"

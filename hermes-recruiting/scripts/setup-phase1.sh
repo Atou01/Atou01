@@ -120,11 +120,12 @@ else
     run hermes cron create \
       --name "$CRON_NAME" \
       --schedule "$CRON_SCHEDULE" \
+      --profile director \
       --deliver "$CRON_DELIVER" \
       --skill "$CRON_SKILL" \
       --prompt "$prompt_content"
   else
-    printf '  \033[33m[dry-run]\033[0m hermes cron create --name %s --schedule "%s" --deliver "%s" --skill %s --prompt "$(cat %s)"\n' \
+    printf '  \033[33m[dry-run]\033[0m hermes cron create --name %s --schedule "%s" --profile director --deliver "%s" --skill %s --prompt "$(cat %s)"\n' \
       "$CRON_NAME" "$CRON_SCHEDULE" "$CRON_DELIVER" "$CRON_SKILL" "$CRON_PROMPT_FILE"
   fi
 fi
@@ -134,6 +135,6 @@ note "Prochaines étapes"
 cat <<'EOF'
   1. (VPS) garder la gateway always-on : service systemd ou tmux (voir README).
   2. Test end-to-end :  hermes cron run mission-report
-       → rapport TOP 5 sur Telegram + tâche CP1 "blocked".
+       → recommandation de LA mission sur Telegram + tâche CP1 "blocked".
   3. Débloque le CP1 (réponse Telegram ou: hermes kanban unblock <id>) → le Sourceur démarre.
 EOF

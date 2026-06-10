@@ -13,7 +13,7 @@ if [ -f "$KIT_DIR/.env" ]; then set -a; . "$KIT_DIR/.env"; set +a; fi
 
 DRY_RUN="${DRY_RUN:-1}"
 CDP_PORT="${CDP_PORT:-9222}"
-VPS_HOST="${VPS_HOST:-}"                 # ex: hermes@1.2.3.4
+VPS_HOST="${VPS_HOST:-}"                 # ex: ubuntu@<IP_DU_VPS> (Infomaniak: user ubuntu)
 SSH_PORT="${SSH_PORT:-22}"
 CHROME_PROFILE="${CHROME_PROFILE:-$HOME/.hermes-cdp-profile}"
 CHROME_BIN="${CHROME_BIN:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
@@ -21,7 +21,7 @@ CHROME_BIN="${CHROME_BIN:-/Applications/Google Chrome.app/Contents/MacOS/Google 
 run() { if [ "$DRY_RUN" = "1" ]; then echo "[dry-run] $*"; else "$@"; fi; }
 
 if [ -z "$VPS_HOST" ]; then
-  echo "VPS_HOST manquant — renseigne-le dans $KIT_DIR/.env (ex: VPS_HOST=hermes@IP)" >&2
+  echo "VPS_HOST manquant — renseigne-le dans $KIT_DIR/.env (ex: VPS_HOST=ubuntu@IP_DU_VPS)" >&2
   exit 1
 fi
 

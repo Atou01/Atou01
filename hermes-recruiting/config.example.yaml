@@ -5,8 +5,14 @@
 # Les SECRETS ne vont PAS ici → ~/.hermes/.env (voir .env.example).
 # =====================================================================
 
-# --- Modèle LLM ------------------------------------------------------
-model: "openrouter:anthropic/claude-opus-4"   # ou Nous Portal / autre
+# --- Modèle LLM : DeepSeek défaut (éco) + Claude en filet -------------
+# Stratégie 2 modèles : DeepSeek pas cher pour le travail courant ; Claude réservé
+# aux tâches clés (choix de mission, rédaction d'approches, évaluation/CR).
+model: "openrouter:deepseek/deepseek-chat"
+# ⚠️ Routage HORS CHINE : dans les préférences OpenRouter (Settings → Providers),
+#    restreindre DeepSeek aux hébergeurs occidentaux (les CV ne partent pas en Chine).
+# Claude pour une tâche/un profil donné (override par profil) :
+#   hermes -p <profil> config set model "openrouter:anthropic/claude-sonnet"
 # providers / fallback_providers : configurés via `hermes setup model`.
 
 # --- Sécurité (alignée sur nos garde-fous) ---------------------------
@@ -52,4 +58,7 @@ telegram:
 
 # --- Mémoire / modélisation utilisateur (optionnel, Phase évolutive) -
 # memory: { ... }                 # MEMORY.md / USER.md natifs (petits, snapshot figé)
-# honcho: voir docs/evolution.md pour la modélisation du "goût" d'Atou.
+# Honcho (plugin externe, modélise le "goût" d'Atou — voir docs/evolution.md §2).
+# Config dans ~/.hermes/honcho.json, ex. :
+# { "api_key": "${HONCHO_API_KEY}", "recall_mode": "hybrid",
+#   "dialecticCadence": 2, "dialecticReasoningLevel": "medium" }

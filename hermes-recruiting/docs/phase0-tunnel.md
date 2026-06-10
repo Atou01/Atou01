@@ -36,7 +36,7 @@ Le CDP applique une protection anti **DNS-rebinding** : les endpoints HTTP (`/js
 
 ### Côté Mac
 ```bash
-# Renseigne d'abord VPS_HOST dans ../.env (ex: VPS_HOST=hermes@1.2.3.4)
+# Renseigne d'abord VPS_HOST dans ../.env (ex: VPS_HOST=ubuntu@IP_DU_VPS)
 DRY_RUN=0 ./scripts/mac-tunnel.sh
 ```
 Le script lance Chrome avec `--remote-debugging-port=9222` sur un **profil isolé**
