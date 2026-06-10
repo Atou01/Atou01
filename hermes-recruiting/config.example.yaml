@@ -1,0 +1,64 @@
+# =====================================================================
+# Hermes config.yaml — exemple DURCI pour le recrutement (vérité terrain
+# vérifiée sur le code NousResearch/hermes-agent).
+# Copier vers ~/.hermes/config.yaml (profil par défaut/director) et adapter.
+# Les SECRETS ne vont PAS ici → ~/.hermes/.env (voir .env.example).
+# =====================================================================
+
+# --- Modèle LLM : DeepSeek défaut (éco) + Claude en filet -------------
+# Stratégie 2 modèles : DeepSeek pas cher pour le travail courant ; Claude réservé
+# aux tâches clés (choix de mission, rédaction d'approches, évaluation/CR).
+model: "openrouter:deepseek/deepseek-chat"
+# ⚠️ Routage HORS CHINE : dans les préférences OpenRouter (Settings → Providers),
+#    restreindre DeepSeek aux hébergeurs occidentaux (les CV ne partent pas en Chine).
+# Claude pour une tâche/un profil donné (override par profil) :
+#   hermes -p <profil> config set model "openrouter:anthropic/claude-sonnet"
+# providers / fallback_providers : configurés via `hermes setup model`.
+
+# --- Sécurité (alignée sur nos garde-fous) ---------------------------
+security:
+  redact_secrets: true            # redaction sk-*/ghp_*/hf_*/Bearer dans logs & messages
+  # allow_private_urls: false     # ne pas autoriser les URL privées sauf besoin
+
+# --- Approbations : aucune action irréversible sans humain -----------
+approvals:
+  mode: manual                    # manual | smart | off  → manual = on confirme les actions dangereuses
+  cron_mode: deny                 # un job CRON ne peut PAS auto-exécuter une commande dangereuse
+  timeout: 120                    # secondes pour répondre à une demande d'approbation
+
+# --- Terminal sandboxé (Hermes pilotera shell/Chrome) ----------------
+terminal:
+  backend: docker                 # local | docker | ssh | …  → docker = isolation
+  # docker_image: "hermes-recruiting:latest"
+  # docker_run_as_host_user: true
+  timeout: 300
+
+# --- Orchestration (Directeur délègue au Sourceur via Kanban) --------
+toolsets:
+  - kanban                        # REQUIS pour que le profil director orchestre
+delegation:
+  max_spawn_depth: 2              # 1=plat ; 2=orchestrateur→workers (notre cas)
+  max_concurrent_children: 3
+
+# --- Curator (maintenance autonome des skills) -----------------------
+curator:
+  enabled: true
+  interval_hours: 168             # 7 jours (défaut)
+  min_idle_hours: 2
+  stale_after_days: 30
+  archive_after_days: 180         # laisse plus de marge avant archivage (défaut 90)
+  prune_builtins: false           # ne pas toucher aux skills bundled
+  # Les skills cœur sont en plus ÉPINGLÉES : `hermes curator pin <skill>`
+  # (fait par scripts/setup-phase1.sh). Le Curator n'archive jamais une skill pinned,
+  # et n'efface jamais (archive seulement, restaurable).
+
+# --- Telegram (les secrets/IDs sont dans .env) -----------------------
+telegram:
+  unauthorized_dm_behavior: ignore   # ignore | pair  → ignore = drop silencieux des DM non autorisés
+
+# --- Mémoire / modélisation utilisateur (optionnel, Phase évolutive) -
+# memory: { ... }                 # MEMORY.md / USER.md natifs (petits, snapshot figé)
+# Honcho (plugin externe, modélise le "goût" d'Atou — voir docs/evolution.md §2).
+# Config dans ~/.hermes/honcho.json, ex. :
+# { "api_key": "${HONCHO_API_KEY}", "recall_mode": "hybrid",
+#   "dialecticCadence": 2, "dialecticReasoningLevel": "medium" }

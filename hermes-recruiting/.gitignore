@@ -1,0 +1,20 @@
+# Secrets — jamais commités (catch-all, sauf le modèle d'exemple)
+.env
+.env.*
+*.env.local
+!.env.example
+
+# État runtime local Hermes
+*.db
+*.local
+sessions/
+logs/
+
+# Phase 0 — runtime tunnel / profil Chrome CDP
+*.pid
+*.log
+.hermes-cdp-profile/
+
+# Python
+__pycache__/
+*.pyc
