@@ -1,0 +1,421 @@
+---
+// Rivage — paysagiste fictif : « Notre approche » (démonstration Atousy).
+import { Picture } from 'astro:assets';
+import RivageLayout from '../../../../components/demos/rivage/RivageLayout.astro';
+import PageIntro from '../../../../components/demos/rivage/PageIntro.astro';
+import ContactBand from '../../../../components/demos/rivage/ContactBand.astro';
+import Icon from '../../../../components/Icon.astro';
+import terraceImg from '../../../../assets/photos/rivage-2.jpg';
+import grassesImg from '../../../../assets/photos/rivage-3.jpg';
+
+const convictions = [
+  {
+    title: 'Observer avant de dessiner',
+    text: 'Nous commençons par marcher le terrain avec vous. Le sol, l’exposition, le vent, l’eau qui ruisselle, les vues à garder ou à cacher : tout cela dessine déjà le jardin.',
+  },
+  {
+    title: 'Composer avec le vivant',
+    text: 'Des plantes adaptées au sol et au climat, choisies pour se plaire là où elles sont. Elles demandent moins d’eau, moins de soins, et s’installent pour longtemps.',
+  },
+  {
+    title: 'Penser vos usages',
+    text: 'Où prendre le café du matin ? Où s’abriter du soleil de l’après-midi ? Où les enfants joueront-ils ? Le dessin suit votre rythme, pas l’inverse.',
+  },
+];
+
+const steps = [
+  {
+    title: 'La rencontre',
+    text: 'Nous venons sur place. Nous écoutons vos envies, vos contraintes, et nous prenons le temps d’observer le lieu.',
+  },
+  {
+    title: 'Les intentions',
+    text: 'Une première esquisse pose l’ambiance, les grands espaces et les circulations. On en discute, on ajuste.',
+  },
+  {
+    title: 'Le projet',
+    text: 'Plan détaillé, palette végétale, matériaux : chaque choix est expliqué et validé avec vous avant le chantier.',
+  },
+  {
+    title: 'La réalisation',
+    text: 'Terrassement, maçonnerie paysagère, plantations : le jardin prend forme, avec soin et dans le respect du terrain.',
+  },
+  {
+    title: 'Le suivi',
+    text: 'Un jardin met quelques saisons à trouver son équilibre. Nous restons à vos côtés pour l’accompagner.',
+  },
+];
+
+const commitments = [
+  {
+    title: 'L’eau',
+    text: 'Récupération des eaux de pluie, paillage, végétaux sobres : un jardin qui sait se passer d’arrosage la plupart du temps.',
+  },
+  {
+    title: 'Le sol',
+    text: 'Nous préservons la terre en place et la nourrissons plutôt que de la remplacer.',
+  },
+  {
+    title: 'Les matériaux',
+    text: 'Pierre naturelle, bois brut, réemploi quand c’est possible : des matériaux qui vieillissent bien.',
+  },
+  {
+    title: 'La vie du jardin',
+    text: 'Pas de traitement systématique. Des refuges pour les insectes, les oiseaux et la petite faune.',
+  },
+];
+---
+
+<RivageLayout
+  title="Notre approche — Rivage, démonstration fictive | Atousy"
+  description="L’approche de Rivage, paysagiste fictif : observer le lieu, composer avec le vivant, penser vos usages. Site de démonstration réalisé par Atousy."
+  current="approche"
+>
+  <PageIntro
+    title="Notre approche"
+    lead="Un jardin réussi ne se plaque pas sur un terrain. Il naît d’un lieu, d’une lumière, et de la façon dont vous aimez y vivre."
+    image={terraceImg}
+    imageAlt="Terrasse en pierre avec fauteuils en bois, entourée de lavandes et de rosiers, ouverte sur un lac et des montagnes."
+    imagePosition="50% 62%"
+  />
+
+  <!-- Convictions -->
+  <section class="rv-section" aria-labelledby="convictions-title">
+    <div class="rv-container">
+      <div class="split-head">
+        <p class="rv-eyebrow">Ce qui nous guide</p>
+        <h2 id="convictions-title" class="rv-h2">Trois convictions, pour chaque jardin.</h2>
+      </div>
+      <ol class="convictions">
+        {
+          convictions.map((c, i) => (
+            <li>
+              <span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Saisons -->
+  <section class="living" aria-labelledby="living-title">
+    <div class="rv-container living__grid">
+      <div class="living__media">
+        <Picture
+          src={grassesImg}
+          alt="Massif de graminées dorées, d’échinacées et de sauges dans la lumière du soir."
+          formats={['avif', 'webp']}
+          widths={[480, 800, 1200]}
+          sizes="(max-width: 56em) calc(100vw - 2.5rem), 40vw"
+        />
+      </div>
+      <div class="living__text">
+        <p class="rv-eyebrow">Un jardin vivant</p>
+        <h2 id="living-title" class="rv-h2">Pensé pour changer avec les saisons.</h2>
+        <p class="rv-lead">
+          Nous associons les plantes pour qu’elles se relaient : les bulbes au printemps, les vivaces en été, les
+          graminées et les feuillages colorés à l’automne, les silhouettes en hiver.
+        </p>
+        <p>
+          Le jardin n’est jamais figé. Il gagne en caractère d’année en année, et c’est précisément ce que nous
+          cherchons : un lieu qui vit, plutôt qu’un décor à entretenir.
+        </p>
+        <a class="rv-link" href="/exemples/rivage/savoir-faire/#plantation">Notre savoir-faire en plantation <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Déroulé -->
+  <section class="rv-section steps-section" aria-labelledby="steps-title">
+    <div class="rv-container">
+      <div class="split-head">
+        <p class="rv-eyebrow">Déroulé d’un projet</p>
+        <h2 id="steps-title" class="rv-h2">De la première visite au jardin qui s’installe.</h2>
+      </div>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li>
+              <span class="steps__num" aria-hidden="true">{i + 1}</span>
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Engagements -->
+  <section class="rv-section commitments rv-dark" aria-labelledby="commitments-title">
+    <div class="rv-container">
+      <div class="commitments__head">
+        <div>
+          <p class="rv-eyebrow">Nos engagements</p>
+          <h2 id="commitments-title" class="rv-h2">Un jardin sobre, qui respecte le lieu.</h2>
+        </div>
+        <p class="quote">Un beau jardin n’est jamais tout à fait fini. C’est ce qui le rend vivant.</p>
+      </div>
+      <ul class="commitments__grid">
+        {
+          commitments.map((c) => (
+            <li>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand
+    title="Et si l’on commençait par une visite ?"
+    text="Le plus simple est de nous montrer votre jardin. Nous viendrons l’observer avec vous, sans engagement."
+  />
+</RivageLayout>
+
+<style>
+  .split-head {
+    max-width: 44rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  /* Convictions */
+  .convictions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem clamp(1.5rem, 4vw, 3.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .convictions li {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rv-line);
+  }
+
+  .num {
+    display: block;
+    margin-bottom: 1.1rem;
+    font-family: var(--rv-serif);
+    font-style: italic;
+    color: var(--rv-green-3);
+  }
+
+  .convictions h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.75rem;
+  }
+
+  .convictions p {
+    color: var(--rv-ink-2);
+  }
+
+  /* Un jardin vivant */
+  .living {
+    padding-block: clamp(4.5rem, 9vw, 8rem);
+    background: var(--rv-ivory-2);
+  }
+
+  .living__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 2.5rem clamp(2.5rem, 7vw, 7rem);
+  }
+
+  .living__media {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--rv-radius);
+  }
+
+  .living__media :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  .living__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% 50%;
+  }
+
+  .living__text {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    color: var(--rv-ink-2);
+  }
+
+  .living__text .rv-eyebrow {
+    margin-bottom: 0;
+  }
+
+  /* Déroulé */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2rem clamp(1.25rem, 2.5vw, 2rem);
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .steps li {
+    position: relative;
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .steps li::before {
+    content: '';
+    position: absolute;
+    top: 1.375rem;
+    left: 3.25rem;
+    right: calc(-1 * clamp(1.25rem, 2.5vw, 2rem));
+    height: 1px;
+    background: var(--rv-line);
+  }
+
+  .steps li:last-child::before {
+    display: none;
+  }
+
+  .steps__num {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid rgb(30 51 40 / 0.3);
+    border-radius: 50%;
+    font-family: var(--rv-serif);
+    font-size: 1.25rem;
+    color: var(--rv-green);
+    background: var(--rv-ivory);
+  }
+
+  .steps h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .steps p {
+    font-size: 0.9688rem;
+    color: var(--rv-ink-2);
+  }
+
+  /* Engagements */
+  .commitments {
+    background: var(--rv-green);
+    color: var(--rv-ivory);
+  }
+
+  .commitments__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 2rem clamp(2rem, 7vw, 7rem);
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .commitments__head h2 {
+    max-width: 15ch;
+  }
+
+  .quote {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--rv-wheat);
+    font-family: var(--rv-serif);
+    font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.875rem);
+    font-style: italic;
+    font-weight: 350;
+    line-height: 1.35;
+    color: rgb(246 241 230 / 0.92);
+  }
+
+  .commitments__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem clamp(1.5rem, 3vw, 2.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .commitments__grid li {
+    padding-top: 1.25rem;
+    border-top: 1px solid rgb(216 197 154 / 0.4);
+  }
+
+  .commitments__grid h3 {
+    margin-bottom: 0.6rem;
+    font-size: 1.5rem;
+    color: var(--rv-wheat);
+  }
+
+  .commitments__grid p {
+    font-size: 0.9688rem;
+    color: rgb(246 241 230 / 0.8);
+  }
+
+  @media (max-width: 64em) {
+    .steps {
+      grid-template-columns: 1fr;
+      gap: 0;
+      max-width: 40rem;
+    }
+
+    .steps li {
+      grid-template-columns: auto 1fr;
+      gap: 1.25rem;
+      padding-bottom: 2rem;
+    }
+
+    .steps li::before {
+      top: 3.25rem;
+      bottom: 0.5rem;
+      left: 1.375rem;
+      right: auto;
+      width: 1px;
+      height: auto;
+    }
+
+    .steps h3 {
+      margin-top: 0.45rem;
+    }
+
+    .commitments__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 56em) {
+    .convictions {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .living__grid,
+    .commitments__head {
+      grid-template-columns: 1fr;
+    }
+
+    .living__media {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (max-width: 34em) {
+    .commitments__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

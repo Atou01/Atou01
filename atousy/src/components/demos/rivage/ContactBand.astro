@@ -1,0 +1,59 @@
+---
+// Bandeau d'appel final vers la page contact.
+import Icon from '../../Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'Parlons de votre jardin.',
+  text = 'Racontez-nous votre lieu, vos envies, vos habitudes. Nous viendrons le voir avant de dessiner quoi que ce soit.',
+} = Astro.props;
+---
+
+<section class="band" aria-labelledby="band-title">
+  <div class="rv-container band__inner">
+    <svg class="band__waves" viewBox="0 0 220 60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true" focusable="false">
+      <path d="M2 18c18-16 36-16 54 0s36 16 54 0 36-16 54 0 36 16 54 0" />
+      <path d="M2 42c18-16 36-16 54 0s36 16 54 0 36-16 54 0 36 16 54 0" />
+    </svg>
+    <h2 id="band-title" class="rv-h2">{title}</h2>
+    <p class="rv-lead">{text}</p>
+    <a class="rv-btn" href="/exemples/rivage/contact/">Nous contacter <Icon name="arrow" /></a>
+  </div>
+</section>
+
+<style>
+  .band {
+    padding-block: clamp(4.5rem, 9vw, 7.5rem);
+    background: linear-gradient(180deg, var(--rv-paper) 0%, #f8f3ea 100%);
+    border-top: 1px solid var(--rv-line);
+    text-align: center;
+  }
+
+  .band__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .band__waves {
+    width: 4.5rem;
+    color: var(--rv-green-3);
+    opacity: 0.6;
+  }
+
+  h2 {
+    max-width: 18ch;
+  }
+
+  .rv-lead {
+    max-width: 38rem;
+  }
+
+  .rv-btn {
+    margin-top: 0.75rem;
+  }
+</style>
