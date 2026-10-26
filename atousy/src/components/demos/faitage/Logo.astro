@@ -1,0 +1,62 @@
+---
+// Logo Faîtage : petit chevron de faîtage (la ligne de crête d'un toit) + mot-symbole en Newsreader.
+interface Props {
+  tone?: 'ink' | 'light' | 'inherit';
+  size?: 'md' | 'lg';
+}
+const { tone = 'ink', size = 'md' } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${tone}`, `logo--${size}`]}>
+  <svg class="logo__ridge" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false">
+    <path d="M2 12.5 13 2.5l11 10" />
+  </svg>
+  <span class="logo__word">Faîtage</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    line-height: 1;
+  }
+
+  .logo--ink {
+    color: var(--ft-ink);
+  }
+
+  .logo--light {
+    color: var(--ft-white);
+  }
+
+  .logo--inherit {
+    color: inherit;
+  }
+
+  .logo__ridge {
+    width: 1.35rem;
+    height: auto;
+    margin-bottom: 0.32em;
+    color: var(--logo-ridge, var(--ft-wood));
+  }
+
+  .logo--light .logo__ridge {
+    color: var(--ft-wood-light);
+  }
+
+  .logo__word {
+    font-family: var(--ft-serif);
+    font-size: 1.6rem;
+    font-weight: 520;
+    letter-spacing: -0.015em;
+  }
+
+  .logo--lg .logo__ridge {
+    width: 1.75rem;
+  }
+
+  .logo--lg .logo__word {
+    font-size: 2.1rem;
+  }
+</style>

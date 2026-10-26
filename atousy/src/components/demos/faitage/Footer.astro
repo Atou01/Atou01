@@ -1,0 +1,156 @@
+---
+// Pied de page Faîtage : marque, navigation, savoir-faire, encart « dans un vrai site », mention fictive.
+import Logo from './Logo.astro';
+import RealSiteNote from './RealSiteNote.astro';
+import { faitageNav } from './nav';
+
+const crafts = [
+  { label: 'Charpente traditionnelle', href: '/exemples/faitage/savoir-faire/#charpente' },
+  { label: 'Ossature bois', href: '/exemples/faitage/savoir-faire/#ossature' },
+  { label: 'Extensions bois', href: '/exemples/faitage/savoir-faire/#extensions' },
+  { label: 'Rénovation de charpente', href: '/exemples/faitage/savoir-faire/#renovation' },
+  { label: 'Couverture', href: '/exemples/faitage/savoir-faire/#couverture' },
+];
+---
+
+<footer class="footer ft-dark">
+  <div class="ft-container">
+    <div class="top">
+      <div class="brand">
+        <a class="brand__link" href="/exemples/faitage/" aria-label="Faîtage, accueil">
+          <Logo tone="light" size="lg" />
+        </a>
+        <p class="brand__tagline">Construire, rénover, transmettre.</p>
+        <p class="brand__text">Charpente, ossature bois et couverture : un savoir-faire local au service de vos projets.</p>
+      </div>
+
+      <nav class="col" aria-label="Pied de page">
+        <p class="col__title">Le site</p>
+        <ul>
+          {faitageNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="col">
+        <p class="col__title">Savoir-faire</p>
+        <ul>
+          {crafts.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="col col--info">
+        <p class="col__title">Nous trouver</p>
+        <RealSiteNote tone="dark">vos coordonnées, horaires d’atelier et zone d’intervention.</RealSiteNote>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <p>Faîtage est une entreprise fictive. Ce site est une démonstration conçue par Atousy, studio web &amp; design.</p>
+      <a href="/exemples/">Voir les autres démonstrations</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: clamp(3.5rem, 7vw, 5.5rem) 2rem;
+    color: var(--ft-white);
+  }
+
+  .top {
+    display: grid;
+    grid-template-columns: 1.35fr 0.7fr 0.95fr 1.15fr;
+    gap: 2.75rem clamp(2rem, 4vw, 4rem);
+  }
+
+  .brand__link {
+    display: inline-flex;
+    color: var(--ft-white);
+    text-decoration: none;
+  }
+
+  .brand__tagline {
+    margin-top: 1.4rem;
+    font-family: var(--ft-serif);
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ft-white);
+  }
+
+  .brand__text {
+    max-width: 34ch;
+    margin-top: 0.6rem;
+    font-size: 0.9375rem;
+    color: rgb(251 249 245 / 0.72);
+  }
+
+  .col__title {
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--ft-line-light);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ft-wood-light);
+  }
+
+  .col ul {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .col a {
+    display: inline-block;
+    padding-block: 0.2rem;
+    color: rgb(251 249 245 / 0.88);
+    text-decoration: none;
+  }
+
+  .col a:hover {
+    color: var(--ft-white);
+    text-decoration: underline;
+    text-decoration-color: var(--ft-wood-light);
+    text-underline-offset: 0.3em;
+  }
+
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ft-line-light);
+    font-size: 0.875rem;
+    color: rgb(251 249 245 / 0.72);
+  }
+
+  .bottom a {
+    color: var(--ft-white);
+    font-weight: 600;
+    text-decoration-color: var(--ft-wood-light);
+    text-underline-offset: 0.3em;
+  }
+
+  @media (max-width: 64em) {
+    .top {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .brand,
+    .col--info {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 32em) {
+    .top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

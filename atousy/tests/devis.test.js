@@ -684,6 +684,7 @@ describe('configuration du fournisseur d’e-mail', () => {
   const cases = {
     'EMAIL_PROVIDER absent': { EMAIL_PROVIDER: undefined },
     'EMAIL_PROVIDER inconnu': { EMAIL_PROVIDER: 'sendgrid' },
+    'EMAIL_PROVIDER = propriété héritée': { EMAIL_PROVIDER: 'constructor' },
     'BREVO_API_KEY absente': { BREVO_API_KEY: '' },
     'MAIL_TO absent': { MAIL_TO: undefined },
     'MAIL_TO invalide': { MAIL_TO: 'contact@atousy.com, pas-une-adresse' },

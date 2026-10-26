@@ -50,7 +50,7 @@ function isLoopbackBase(url) {
  */
 export function readEmailConfig(env) {
   const provider = String(env.EMAIL_PROVIDER ?? '').trim().toLowerCase();
-  const def = PROVIDERS[provider];
+  const def = Object.hasOwn(PROVIDERS, provider) ? PROVIDERS[provider] : null;
   if (!def) return { ok: false, missing: ['EMAIL_PROVIDER'] };
 
   const problems = [];
