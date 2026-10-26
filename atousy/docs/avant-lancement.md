@@ -14,6 +14,12 @@ réellement en ligne avec un compte configuré. Rien n'est publié ni raccordé 
 - [ ] Durée de conservation des demandes de devis (politique de confidentialité)
 - [ ] Crédits : visuels générés par IA (Genspark) — vérifier les conditions d'usage commercial
 - [ ] Décision HT / TTC : le site n'en affiche aucune, à trancher dans le devis
+- [ ] Mention suisse affichée près du prix en CHF (« sans TVA suisse… impôt sur les acquisitions »)
+      et mention « Offre réservée aux professionnels » : à faire valider par l'expert-comptable
+- [ ] Écart 1 990 CHF / 1 490 € : garder par écrit la justification (coûts propres aux clients
+      suisses), voir `docs/obligations-suisse.md` (règle contre la géodiscrimination). Ne jamais
+      présenter une société suisse qui n'existe pas : si une entité suisse est créée, les mentions
+      légales, les devis et la TVA suisse devront être revus
 
 ## 2. Raccordements (fondateur + Instinct)
 | Élément | État | Ce qui manque |
@@ -24,6 +30,7 @@ réellement en ligne avec un compte configuré. Rien n'est publié ni raccordé 
 | Formulaire `/api/devis` | Prêt, testé (tests + wrangler local) | Choix du service d'envoi (Brevo ou Resend), clé API, enregistrements SPF/DKIM sur atousy.com |
 | Anti-spam Turnstile | Prêt (clés de test officielles) | Création du widget Turnstile, clé publique au build, clé secrète en secret Cloudflare |
 | Boîte contact@atousy.com | Créée chez IONOS | Test d'envoi/réception de bout en bout |
+| Obligations suisses | Synthèse prête (`docs/obligations-suisse.md`) | Compléments de la politique de confidentialité, mention sous le formulaire, règles de prospection pour Instinct |
 | Aperçus privés prospects | Guide prêt (`docs/apercus-prospects.md`) | Projet Pages séparé + Cloudflare Access |
 
 ## 3. Validations (fondateur)

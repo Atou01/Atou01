@@ -4,18 +4,9 @@
 //   200 {"country":"FR"}  ou  {"country":null} si inconnu.
 
 import { json } from '../../server/http.js';
+import { countryOf } from '../../server/market.js';
 
-// XX : pays inconnu ; T1 : réseau Tor. Ni l'un ni l'autre n'est un pays.
-const NOT_A_COUNTRY = new Set(['XX', 'T1']);
-
-/** @param {Request & { cf?: { country?: unknown } }} request */
-export function countryOf(request) {
-  const raw = request.cf?.country ?? request.headers.get('cf-ipcountry');
-  if (typeof raw !== 'string') return null;
-  const code = raw.trim().toUpperCase();
-  if (!/^[A-Z]{2}$/.test(code) || NOT_A_COUNTRY.has(code)) return null;
-  return code;
-}
+export { countryOf };
 
 /** @param {{ request: Request }} context */
 export function onRequest({ request }) {

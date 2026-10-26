@@ -186,3 +186,18 @@ confirmation uniquement après un envoi accepté par le service d'e-mail, sinon 
 (champs à corriger, anti-spam qui nécessite JavaScript, service non raccordé, erreur technique)
 et un lien de retour au formulaire. Le script de la page continue de recevoir du JSON
 (`Accept: application/json`). Tests : `tests/html.test.js`.
+
+## Prix selon le pays, dès le premier affichage
+
+`functions/_middleware.js` pose `data-market="ch"` (Suisse, Liechtenstein) ou `data-market="fr"`
+(pays européens) sur la balise `<html>` de chaque page, d'après le pays fourni par Cloudflare
+(`server/market.js`, partagé avec le navigateur). Le CSS masque l'autre prix : un visiteur en
+Suisse ne voit que 1 990 CHF, même sans JavaScript et sans saut d'affichage. Hors Europe, la
+page n'est pas modifiée (Europe · EUR « par défaut »). Le choix fait dans le menu reste prioritaire.
+
+- Pages réécrites : `Cache-Control: private, no-cache`, sans ETag (la page dépend du pays).
+- `public/_routes.json` exclut les fichiers statiques : seules les pages HTML et `/api/*`
+  passent par les fonctions (offre gratuite Cloudflare : 100 000 requêtes de fonctions par jour,
+  à vérifier au moment du déploiement).
+- `/api/pays` reste le repli côté navigateur si une page arrive sans détection.
+- Tests : `tests/market.test.js` ; vérifié aussi dans `wrangler pages dev` (réécriture effective).

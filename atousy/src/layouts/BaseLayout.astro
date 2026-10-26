@@ -46,13 +46,16 @@ const ogImage = new URL('/og-image.jpg', site.url).href;
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
-        var m = null;
+        var choice = null;
+        var auto = null;
         try {
-          // Choix manuel en priorité, sinon pays déjà détecté pendant la session.
-          m = localStorage.getItem('atousy-market') || sessionStorage.getItem('atousy-market-auto');
+          choice = localStorage.getItem('atousy-market');
+          auto = sessionStorage.getItem('atousy-market-auto');
         } catch (e) {}
-        // Sans JavaScript, aucun marché n'est posé : les deux prix restent visibles.
-        d.setAttribute('data-market', m === 'ch' ? 'ch' : 'fr');
+        // 1. choix manuel ; 2. pays posé par Cloudflare (data-market déjà présent) ;
+        // 3. détection de la session ; 4. Europe · EUR par défaut.
+        if (choice === 'ch' || choice === 'fr') d.setAttribute('data-market', choice);
+        else if (!d.hasAttribute('data-market')) d.setAttribute('data-market', auto === 'ch' ? 'ch' : 'fr');
       })();
     </script>
     <slot name="head" />
