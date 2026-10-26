@@ -126,34 +126,6 @@ const { title, description, current } = Astro.props;
     padding-block: clamp(4.5rem, 9vw, 8rem);
   }
 
-  /* Lien d'évitement : placé dans l'en-tête (repère « banner »), masqué tant qu'il n'a pas le focus */
-  .ec-skip {
-    position: absolute;
-    left: var(--ec-gutter);
-    top: 0.75rem;
-    z-index: 200;
-    padding: 0.7rem 1.2rem;
-    background: var(--ec-slate-deep);
-    color: var(--ec-white);
-    border-radius: 999px;
-    font-weight: 650;
-    text-decoration: none;
-  }
-
-  .ec-skip:not(:focus) {
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  html[data-demo='ecluse'] .ec-skip:focus-visible {
-    outline: 2px solid var(--ec-brass);
-    outline-offset: 3px;
-  }
-
   /* Pastille de rubrique : point laiton + libellé */
   .ec-chip {
     display: inline-flex;

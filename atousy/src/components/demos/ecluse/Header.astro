@@ -15,7 +15,6 @@ const contact = ecluseNav.find((item) => item.key === 'contact')!;
 ---
 
 <header class="header" data-ec-header>
-  <a class="ec-skip" href="#contenu">Aller au contenu</a>
   <div class="bar ec-wide">
     <a class="brand" href="/exemples/ecluse/" aria-label="Écluse, accueil">
       <Logo />
@@ -79,14 +78,37 @@ const contact = ecluseNav.find((item) => item.key === 'contact')!;
     document.addEventListener('click', function (e) {
       if (isOpen() && !header.contains(e.target)) setOpen(false, false);
     });
+    // Élément de l'en-tête masqué alors qu'il avait le focus (changement de taille d'écran) :
+    // le focus passe à celui qui le remplace au même endroit (premier lien du menu à la place
+    // du bouton Menu en grand écran, bouton Menu à la place d'un lien du menu en petit écran).
+    function refocus(el) {
+      if (!el || el.getClientRects().length > 0) return;
+      var target = el === btn ? panel.querySelector('a') : btn;
+      if (target && target.getClientRects().length > 0) target.focus();
+    }
     header.addEventListener('focusout', function (e) {
-      if (isOpen() && e.relatedTarget && !header.contains(e.relatedTarget)) setOpen(false, false);
+      // Sans destination : le navigateur a retiré le focus d'un élément devenu invisible.
+      if (!e.relatedTarget) refocus(e.target);
+      else if (isOpen() && !header.contains(e.relatedTarget)) setOpen(false, false);
     });
+    // Clic sur un lien de l'en-tête (logo ou menu) : le menu se referme avant de quitter la page.
+    header.addEventListener('click', function (e) {
+      if (isOpen() && e.target.closest && e.target.closest('a')) setOpen(false, false);
+    });
+    // Retour arrière depuis le cache du navigateur : la page revient avec le menu fermé.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && isOpen()) setOpen(false, false);
+    });
+    // Changement de taille d'écran : le menu se referme. Les navigateurs qui laissent le focus
+    // sur l'élément masqué passent ici ; les autres le retirent et passent par « focusout ».
     var mq = window.matchMedia('(min-width: 60.01em)');
-    var onChange = function (e) {
-      if (e.matches) setOpen(false, false);
+    var onChange = function () {
+      var active = document.activeElement;
+      setOpen(false, false);
+      if (active && header.contains(active)) refocus(active);
     };
     if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
   })();
 </script>
 

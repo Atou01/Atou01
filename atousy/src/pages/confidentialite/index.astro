@@ -1,7 +1,7 @@
 ---
 // Modèle RGPD + nLPD à compléter (contenus/confidentialite.md, docs/obligations-suisse.md § 3).
 // Reste en noindex tant que des éléments [À COMPLÉTER] subsistent. Les libellés de marché
-// suivent src/data/site.ts.
+// suivent src/data/site.ts. Titre coupé après « Politique » : « de » ne finit jamais une ligne.
 import LegalPage from '../../components/pages/LegalPage.astro';
 import Todo from '../../components/pages/Todo.astro';
 import { markets } from '../../data/site';
@@ -32,7 +32,7 @@ const toc = [
 <LegalPage
   title="Politique de confidentialité | Atousy"
   description="Comment Atousy traite les données du formulaire de devis : finalité, base légale, conservation, destinataires, stockage et vos droits (RGPD et nLPD suisse)."
-  heading="Politique de confidentialité"
+  heading={'Politique\nde confidentialité'}
   crumb="Confidentialité"
   lead="Cette page explique quelles données nous recevons par le site atousy.com, pourquoi, et comment exercer vos droits. Elle s’appuie sur le Règlement général sur la protection des données (RGPD) et sur la loi fédérale suisse sur la protection des données (nLPD)."
   toc={toc}

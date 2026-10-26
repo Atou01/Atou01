@@ -4,15 +4,13 @@ import PageHero from '../../components/pages/PageHero.astro';
 import DemoStrip from '../../components/pages/DemoStrip.astro';
 import Section from '../../components/pages/Section.astro';
 import Icon from '../../components/Icon.astro';
-import { demos, demoHighlights, demoDescriptions } from '../../data/pages/demos';
+import { demoList, demoHighlights, demoDescriptions } from '../../data/pages/demos';
 import '@fontsource-variable/newsreader/wght.css';
-
-const cards = [demos.rivage, demos.faitage];
 ---
 
 <InnerLayout
   title="Exemples de sites vitrines, démos fictives | Atousy"
-  description="Deux sites de démonstration fictifs créés par Atousy : Rivage, paysagiste, et Faîtage, charpentier. Cinq pages, mobile, contact : voyez notre façon de faire."
+  description="Cinq sites de démonstration fictifs créés par Atousy : paysagiste, charpentier, plombier-chauffagiste, électricien et maçon. Voyez notre façon de faire."
   crumb="Exemples"
   ctaTitle="Et le vôtre ?"
   ctaText="Parlons de votre métier et de ce que votre site doit montrer."
@@ -20,54 +18,92 @@ const cards = [demos.rivage, demos.faitage];
   <PageHero
     crumb="Exemples"
     tag="Démonstrations fictives"
-    title="Deux métiers. Deux sites à part."
-    lead="Rivage et Faîtage n’existent pas. Ce sont deux entreprises fictives, imaginées pour montrer notre façon de travailler."
+    title={'Cinq métiers.\nCinq sites à part.'}
+    lead="Rivage, Faîtage, Écluse, Lueur et Moellon n’existent pas. Ce sont cinq entreprises fictives, imaginées pour montrer notre façon de travailler."
   />
 
   <DemoStrip />
 
-  <section class="demos" aria-label="Les deux démonstrations">
-    <div class="container demos__grid">
+  <section class="demos" aria-label="Les cinq démonstrations">
+    <div class="container">
       {
-        cards.map((d) => (
+        demoList.map((d) => (
           <article class:list={['demo', `demo--${d.id}`]} aria-labelledby={`demo-${d.id}`}>
-            <p class:list={['demo__mark', `demo__mark--${d.id}`]} aria-hidden="true">
-              {d.id === 'rivage' ? (
-                <>
-                  <span class="demo__wave">≈</span>rivage
-                </>
-              ) : (
-                <>
-                  <span class="demo__ridge" />
-                  Faîtage
-                </>
-              )}
-            </p>
-            <p class="demo__tag">Démonstration fictive</p>
-            <h2 id={`demo-${d.id}`}>
-              {d.name} — {d.trade}
-            </h2>
-            <p class="demo__desc">{demoDescriptions[d.id]}</p>
-
-            <h3>Ce que la démo illustre</h3>
-            <ul class="ip-list ip-list--compact demo__list">
-              <li>
-                5 pages :{' '}
-                {d.pages.map((p, i) => (
+            <div class="demo__id">
+              {/* Logo de chaque démo, redessiné d'après src/components/demos/<id>/Logo.astro */}
+              <p class:list={['demo__mark', `demo__mark--${d.id}`]} aria-hidden="true">
+                {d.id === 'rivage' && (
                   <>
-                    <a href={p.href}>{p.page}</a>
-                    {i < d.pages.length - 1 ? ', ' : ' ;'}
+                    <span class="demo__wave">≈</span>rivage
                   </>
-                ))}
-              </li>
-              {demoHighlights[d.id].map((h) => (
-                <li>{h}</li>
-              ))}
-            </ul>
+                )}
+                {d.id === 'faitage' && (
+                  <>
+                    <span class="demo__ridge" />
+                    Faîtage
+                  </>
+                )}
+                {d.id === 'ecluse' && (
+                  <>
+                    <svg class="demo__glyph" viewBox="0 0 28 28">
+                      <rect x="0.5" y="0.5" width="27" height="27" rx="8" fill="#2f4a5a" />
+                      <path d="M14 4.8c3.5 4.3 6.4 7.8 6.4 11.5a6.4 6.4 0 0 1-12.8 0c0-3.7 2.9-7.2 6.4-11.5z" fill="#fff" />
+                      <path d="M7.66 17.1H14v-3.3h6.27c.09.84.13 1.67.13 2.5a6.4 6.4 0 0 1-12.8 0c0-.43.02-.83.06-1.2z" fill="#b38f58" />
+                    </svg>
+                    écluse
+                  </>
+                )}
+                {d.id === 'lueur' && (
+                  <>
+                    <svg class="demo__glyph demo__filament" viewBox="0 0 28 28" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path class="demo__halo" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+                      <path class="demo__arc" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+                      <path class="demo__leads" d="M7.5 19.5v5M20.5 19.5v5" />
+                      <circle class="demo__spark" cx="14" cy="3.6" r="1.35" />
+                    </svg>
+                    <span class="demo__caps">Lueur</span>
+                  </>
+                )}
+                {d.id === 'moellon' && (
+                  <>
+                    <svg class="demo__glyph demo__stones" viewBox="0 0 31 28">
+                      <path fill="#a4532c" d="M10 2.2c3-.9 8.5-.8 11.6.2 1.4.5 1.9 1.7 1.6 3.1l-.5 2.3c-.3 1.1-1.2 1.7-2.3 1.7H9.7c-1.2 0-2.1-.8-2.2-2l-.2-2.2C7.2 3.9 8.3 2.7 10 2.2Z" />
+                      <path fill="#2b211a" d="M2.6 11.6c2.7-.7 7.6-.8 10.6-.2 1.2.3 1.8 1.2 1.8 2.4v3.4c0 1.2-.9 2.1-2.1 2.1H3c-1.3 0-2.3-1-2.2-2.3l.1-3.3c.1-1 .7-1.8 1.7-2.1Z" />
+                      <path fill="#b88a5e" d="M18.3 11.3c3-.5 7.4-.3 9.9.4 1.1.3 1.8 1.3 1.7 2.5l-.2 3.1c-.1 1.2-1 2.1-2.2 2.1h-9.2c-1.2 0-2.1-1-2-2.2l.2-3.6c.1-1.2.7-2.1 1.8-2.3Z" />
+                      <path fill="#2b211a" d="M1.9 21.5c4.1-.6 11.3-.6 15.3 0 1.2.2 2 1.1 2 2.3v1.3c0 1.3-1 2.3-2.3 2.3H2c-1.2 0-2-.9-2-2.1l.1-1.7c0-1.1.7-1.9 1.8-2.1Z" />
+                      <path fill="#a4532c" d="M23 21.4c2.1-.3 4.5-.2 6 .2 1 .3 1.6 1.1 1.6 2.1v1.6c0 1.2-1 2.2-2.2 2.2h-5.5c-1.2 0-2.1-1-2.1-2.2l.1-1.8c.1-1.1.9-1.9 2.1-2.1Z" />
+                    </svg>
+                    Moellon
+                  </>
+                )}
+              </p>
+              <p class="demo__tag">Démonstration fictive</p>
+              <h2 id={`demo-${d.id}`}>
+                {d.name} — <span class="demo__trade">{d.trade}</span>
+              </h2>
+              <p class="demo__desc">{demoDescriptions[d.id]}</p>
+              <a class="btn btn--dark demo__btn" href={d.href}>
+                Ouvrir la démo {d.name} <Icon name="arrow" />
+              </a>
+            </div>
 
-            <a class="btn btn--dark demo__btn" href={d.href}>
-              Ouvrir la démo {d.name} <Icon name="arrow" />
-            </a>
+            <div class="demo__body">
+              <h3>Ce que la démo illustre</h3>
+              <ul class="ip-list ip-list--compact demo__list">
+                <li>
+                  5 pages :{' '}
+                  {d.pages.map((p, i) => (
+                    <>
+                      <a href={p.href}>{p.page}</a>
+                      {i < d.pages.length - 1 ? ', ' : ' ;'}
+                    </>
+                  ))}
+                </li>
+                {demoHighlights[d.id].map((h) => (
+                  <li>{h}</li>
+                ))}
+              </ul>
+            </div>
           </article>
         ))
       }
@@ -95,24 +131,29 @@ const cards = [demos.rivage, demos.faitage];
     padding-block: clamp(3rem, 6vw, 6rem);
   }
 
-  .demos__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(2.5rem, 6vw, 6.5rem);
-  }
-
+  /* Une fiche par démo, l'une sous l'autre : identité et bouton à gauche, ce que la démo
+     illustre à droite. Sous 60em, tout s'empile. */
   .demo {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: clamp(1.75rem, 3vw, 2.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 2rem clamp(3rem, 7vw, 7rem);
+    align-items: start;
+    padding-block: clamp(2.25rem, 4vw, 3.5rem);
     border-top: 1px solid var(--line-strong);
   }
 
+  .demo__id {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* ---------- Logos des démos ---------- */
   .demo__mark {
     display: inline-flex;
     align-items: baseline;
     gap: 0.55rem;
+    min-height: 2.25rem;
     font-family: 'Newsreader Variable', Georgia, serif;
     font-size: clamp(1.75rem, 2.4vw, 2.25rem);
     font-weight: 420;
@@ -143,6 +184,84 @@ const cards = [demos.rivage, demos.faitage];
     transform: translateY(0.12em) rotate(45deg);
   }
 
+  .demo__glyph {
+    flex: none;
+    width: 1.15em;
+    height: 1.15em;
+  }
+
+  .demo__mark--ecluse {
+    align-items: center;
+    gap: 0.45rem;
+    color: #142430;
+    font-family: var(--font-sans);
+    font-size: clamp(1.6rem, 2.15vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .demo__mark--ecluse .demo__glyph {
+    width: 1.05em;
+    height: 1.05em;
+  }
+
+  /* Lueur vit sur fond nuit : sur l'ivoire, mot-symbole encre et filament ambre foncé,
+     comme dans les sections claires de la démo. */
+  .demo__mark--lueur {
+    align-items: center;
+    gap: 0.6rem;
+    color: #161d28;
+    font-family: var(--font-sans);
+  }
+
+  .demo__filament {
+    overflow: visible;
+  }
+
+  .demo__halo {
+    stroke: #f2b45a;
+    stroke-width: 5;
+    opacity: 0.35;
+    filter: blur(2.5px);
+  }
+
+  .demo__arc {
+    stroke: #d48a22;
+    stroke-width: 2.1;
+  }
+
+  .demo__leads {
+    stroke: currentColor;
+    stroke-width: 1.8;
+    opacity: 0.85;
+  }
+
+  .demo__spark {
+    fill: #d48a22;
+  }
+
+  .demo__caps {
+    margin-right: -0.34em;
+    font-size: 0.62em;
+    font-weight: 650;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+  }
+
+  .demo__mark--moellon {
+    align-items: center;
+    gap: 0.5rem;
+    color: #2b211a;
+    font-weight: 520;
+    letter-spacing: -0.02em;
+  }
+
+  .demo__stones {
+    width: 1.05em;
+    height: auto;
+  }
+
+  /* ---------- Texte ---------- */
   .demo__tag {
     margin-top: 1.75rem;
     padding: 0.3rem 0.75rem;
@@ -154,7 +273,13 @@ const cards = [demos.rivage, demos.faitage];
 
   h2 {
     margin-top: 1rem;
-    font-size: var(--fs-h2-sm);
+    font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+    text-wrap: balance;
+  }
+
+  /* « plombier-chauffagiste », « maçon / rénovation » : le métier ne se coupe pas */
+  .demo__trade {
+    white-space: nowrap;
   }
 
   .demo__desc {
@@ -163,10 +288,19 @@ const cards = [demos.rivage, demos.faitage];
     font-size: var(--fs-lead);
     line-height: 1.5;
     color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  .demo__btn {
+    margin-top: 2rem;
+  }
+
+  .demo__body {
+    /* Le titre « Ce que la démo illustre » s'aligne sur le logo de la colonne voisine */
+    padding-top: 0.35rem;
   }
 
   h3 {
-    margin-top: 2rem;
     font-size: 1.125rem;
     font-weight: 650;
     letter-spacing: -0.01em;
@@ -176,10 +310,11 @@ const cards = [demos.rivage, demos.faitage];
   .demo__list {
     width: 100%;
     margin-top: 0.85rem;
-    margin-bottom: 2.25rem;
   }
 
+  /* Un nom de page ne se coupe pas (« Savoir-faire », « Notre approche ») */
   .demo__list a {
+    white-space: nowrap;
     font-weight: 600;
     text-decoration-color: var(--coral);
     text-decoration-thickness: 2px;
@@ -191,14 +326,15 @@ const cards = [demos.rivage, demos.faitage];
     text-decoration-color: currentColor;
   }
 
-  /* Boutons alignés en bas des deux cartes */
-  .demo__btn {
-    margin-top: auto;
-  }
+  /* Empilé, dans l'ordre de lecture : identité, bouton, puis ce que la démo illustre */
+  @media (max-width: 60em) {
+    .demo {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2.25rem;
+    }
 
-  @media (max-width: 52em) {
-    .demos__grid {
-      grid-template-columns: 1fr;
+    .demo__body {
+      padding-top: 0;
     }
   }
 </style>

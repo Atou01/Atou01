@@ -58,8 +58,12 @@ const year = new Date().getFullYear();
     list-style: none;
   }
 
+  /* Cible d'au moins 24 px de haut (le texte, lui, garde sa taille). */
   .site-footer__nav a,
   .site-footer__legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
     text-decoration: none;
     font-size: 0.9375rem;
     font-weight: 500;
@@ -84,9 +88,12 @@ const year = new Date().getFullYear();
     color: var(--ink-3);
   }
 
+  /* Trois liens légaux : sur un téléphone, ils passent à la ligne entiers plutôt que de
+     couper « Mentions légales » ou « Conditions générales de vente » sur deux lignes. */
   .site-footer__legal ul {
     display: flex;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
     padding: 0;
     list-style: none;
   }

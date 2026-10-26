@@ -9,6 +9,9 @@ import Icon from '../Icon.astro';
 import heroImg from '../../assets/photos/hero-architecture.jpg';
 import rivage1 from '../../assets/photos/rivage-1.jpg';
 import faitage1 from '../../assets/photos/faitage-1.jpg';
+import ecluse1 from '../../assets/photos/ecluse-1.jpg';
+import lueur1 from '../../assets/photos/lueur-1.jpg';
+import moellon1 from '../../assets/photos/moellon-1.jpg';
 import { photoWidths } from './photo-widths';
 import '@fontsource-variable/newsreader/wght.css';
 
@@ -18,9 +21,14 @@ const pic = { formats: ['avif', 'webp'] as const, alt: '', widths: photoWidths, 
 
 // Une fenêtre par entreprise fictive. Le carrousel s'adapte au nombre de fenêtres
 // (compteur, boutons, annonces) : d'autres démos peuvent s'ajouter ici.
+// Seule la première image est chargée tout de suite ; les suivantes, hors champ, attendent
+// d'approcher de l'écran (chargement différé natif).
 const windows = [
   { id: 'rivage-accueil', shape: 'wide', href: '/exemples/rivage/', label: 'Rivage · Paysagiste' },
   { id: 'faitage-accueil', shape: 'wide', href: '/exemples/faitage/', label: 'Faîtage · Charpentier' },
+  { id: 'ecluse-accueil', shape: 'wide', href: '/exemples/ecluse/', label: 'Écluse · Plombier-chauffagiste' },
+  { id: 'lueur-accueil', shape: 'wide', href: '/exemples/lueur/', label: 'Lueur · Électricien' },
+  { id: 'moellon-accueil', shape: 'wide', href: '/exemples/moellon/', label: 'Moellon · Maçon / rénovation' },
 ];
 ---
 
@@ -70,7 +78,7 @@ const windows = [
                         </span>
                         <span class="m-hero">
                           <span class="m-title">Le jardin<br />vous appelle.</span>
-                          <span class="m-btn">Découvrir le projet <Icon name="arrow" /></span>
+                          <span class="m-btn">Entrer dans le jardin <Icon name="arrow" /></span>
                         </span>
                         <span class="m-aside">Des paysages pour<br />vivre dehors.<br />En toute saison.</span>
                       </>
@@ -90,6 +98,79 @@ const windows = [
                         </span>
                       </>
                     )}
+                    {w.id === 'ecluse-accueil' && (
+                      <>
+                        <span class="m-nav m-nav--ecluse">
+                          <span class="m-logo m-logo--ecluse">
+                            <svg class="m-glyph" viewBox="0 0 28 28">
+                              <rect x="0.5" y="0.5" width="27" height="27" rx="8" fill="#2f4a5a" />
+                              <path d="M14 4.8c3.5 4.3 6.4 7.8 6.4 11.5a6.4 6.4 0 0 1-12.8 0c0-3.7 2.9-7.2 6.4-11.5z" fill="#fff" />
+                              <path d="M7.66 17.1H14v-3.3h6.27c.09.84.13 1.67.13 2.5a6.4 6.4 0 0 1-12.8 0c0-.43.02-.83.06-1.2z" fill="#b38f58" />
+                            </svg>
+                            écluse
+                          </span>
+                          <span class="m-pills"><span class="is-on">Accueil</span><span>Services</span><span>Réalisations</span><span>Entretien</span></span>
+                          <span class="m-cta m-cta--ecluse">Contact <svg class="m-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6" /></svg></span>
+                        </span>
+                        <span class="m-ec-frame">
+                          <span class="m-ec-copy">
+                            <span class="m-title m-title--ecluse">La chaleur et l’eau, <span class="m-nowrap">bien installées.</span></span>
+                            <span class="m-text m-text--ecluse">Salles de bain, chauffage, pompes à chaleur et dépannage&nbsp;: un artisan qui explique avant d’intervenir.</span>
+                            <span class="m-btn m-btn--ecluse">Voir nos réalisations <span class="m-btn__dot"><svg class="m-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6" /></svg></span></span>
+                          </span>
+                          <span class="screen__img m-ec-photo"><Picture src={ecluse1} {...pic} /></span>
+                        </span>
+                      </>
+                    )}
+                    {w.id === 'lueur-accueil' && (
+                      <>
+                        <span class="screen__img screen__img--lueur"><Picture src={lueur1} {...pic} /></span>
+                        <span class="m-shade m-shade--lueur" />
+                        <span class="m-nav m-nav--lueur">
+                          <span class="m-logo m-logo--lueur">
+                            <svg class="m-filament" viewBox="0 0 28 28">
+                              <path class="m-filament__arc" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+                              <path d="M7.5 19.5v5M20.5 19.5v5" />
+                              <circle cx="14" cy="3.6" r="1.6" />
+                            </svg>
+                            Lueur
+                          </span>
+                          <span class="m-links m-links--lueur"><span class="is-on">Accueil</span><span>Prestations</span><span>Réalisations</span><span>Conseils</span></span>
+                          <span class="m-cta m-cta--lueur">Contact <Icon name="arrow" /></span>
+                        </span>
+                        <span class="m-hero m-hero--wide">
+                          <span class="m-title m-title--lueur">Une maison <span class="m-glow">bien éclairée</span>, une installation sûre.</span>
+                          <span class="m-text m-text--lueur">Rénovation électrique, tableaux, éclairage et bornes de recharge&nbsp;: un travail propre et expliqué.</span>
+                          <span class="m-btn m-btn--lueur">Découvrir nos prestations <Icon name="arrow" /></span>
+                        </span>
+                      </>
+                    )}
+                    {w.id === 'moellon-accueil' && (
+                      <>
+                        <span class="screen__img screen__img--below-nav screen__img--moellon"><Picture src={moellon1} {...pic} /></span>
+                        <span class="m-shade m-shade--below-nav m-shade--moellon" />
+                        <span class="m-nav m-nav--moellon">
+                          <span class="m-logo m-logo--moellon">
+                            <svg class="m-stones" viewBox="0 0 31 28">
+                              <path fill="#a4532c" d="M10 2.2c3-.9 8.5-.8 11.6.2 1.4.5 1.9 1.7 1.6 3.1l-.5 2.3c-.3 1.1-1.2 1.7-2.3 1.7H9.7c-1.2 0-2.1-.8-2.2-2l-.2-2.2C7.2 3.9 8.3 2.7 10 2.2Z" />
+                              <path fill="#2b211a" d="M2.6 11.6c2.7-.7 7.6-.8 10.6-.2 1.2.3 1.8 1.2 1.8 2.4v3.4c0 1.2-.9 2.1-2.1 2.1H3c-1.3 0-2.3-1-2.2-2.3l.1-3.3c.1-1 .7-1.8 1.7-2.1Z" />
+                              <path fill="#b88a5e" d="M18.3 11.3c3-.5 7.4-.3 9.9.4 1.1.3 1.8 1.3 1.7 2.5l-.2 3.1c-.1 1.2-1 2.1-2.2 2.1h-9.2c-1.2 0-2.1-1-2-2.2l.2-3.6c.1-1.2.7-2.1 1.8-2.3Z" />
+                              <path fill="#2b211a" d="M1.9 21.5c4.1-.6 11.3-.6 15.3 0 1.2.2 2 1.1 2 2.3v1.3c0 1.3-1 2.3-2.3 2.3H2c-1.2 0-2-.9-2-2.1l.1-1.7c0-1.1.7-1.9 1.8-2.1Z" />
+                              <path fill="#a4532c" d="M23 21.4c2.1-.3 4.5-.2 6 .2 1 .3 1.6 1.1 1.6 2.1v1.6c0 1.2-1 2.2-2.2 2.2h-5.5c-1.2 0-2.1-1-2.1-2.2l.1-1.8c.1-1.1.9-1.9 2.1-2.1Z" />
+                            </svg>
+                            Moellon
+                          </span>
+                          <span class="m-links m-links--moellon"><span class="is-on">Accueil</span><span>Savoir-faire</span><span>Chantiers</span><span>Notre approche</span></span>
+                          <span class="m-cta m-cta--moellon">Contact <svg class="m-arrow m-arrow--square" viewBox="0 0 24 24"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" /></svg></span>
+                        </span>
+                        <span class="m-hero m-hero--wide">
+                          <span class="m-kicker m-kicker--moellon">Maçonnerie &amp; rénovation</span>
+                          <span class="m-title m-title--moellon">Rénover la pierre, bâtir pour durer.</span>
+                          <span class="m-text m-text--moellon">Maçonnerie, extensions, ouvertures et rénovation de maisons anciennes, avec des matériaux qui respectent le bâti.</span>
+                          <span class="m-btn m-btn--moellon">Voir les chantiers <svg class="m-arrow m-arrow--square" viewBox="0 0 24 24"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" /></svg></span>
+                        </span>
+                      </>
+                    )}
                   </span>
                 </a>
               </li>
@@ -101,7 +182,7 @@ const windows = [
       <div class="showcase__bar">
         <p class="showcase__status">
           <span>Démonstrations fictives</span>
-          <span class="js-only showcase__current" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-label>{windows[0].label}</span> · <span data-showcase-count>1/{windows.length}</span></span>
+          <span class="js-only showcase__current" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-label>{windows[0].label}</span></span><span class="js-only showcase__count" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-count>1/{windows.length}</span></span>
         </p>
         <div class="showcase__nav js-only">
           <button type="button" class="showcase__btn" data-showcase-prev aria-label="Fenêtre précédente" aria-disabled="true"><Icon name="chevron" class="showcase__chev showcase__chev--prev" /></button>
@@ -128,6 +209,9 @@ const windows = [
     const next = root.querySelector<HTMLButtonElement>('[data-showcase-next]');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     let active = -1;
+    // Fenêtre visée par le défilement en cours : des clics rapprochés sur les boutons
+    // s'additionnent au lieu de repartir de la fenêtre encore active pendant l'animation.
+    let pending = -1;
 
     const clamp = (i: number) => Math.max(0, Math.min(total - 1, i));
     const centerOf = (el: HTMLElement) => el.offsetLeft + el.offsetWidth / 2;
@@ -135,6 +219,7 @@ const windows = [
     const snapMid = () => (track.clientWidth - (parseFloat(getComputedStyle(track).scrollPaddingRight) || 0)) / 2;
     const scrollToItem = (i: number, announce = false) => {
       const j = clamp(i);
+      pending = j;
       track.scrollTo({ left: centerOf(items[j]) - snapMid(), behavior: reduce.matches ? 'auto' : 'smooth' });
       // Annonce pour les lecteurs d'écran (le compteur visible est masqué pour eux).
       if (announce && live) live.textContent = `Fenêtre ${j + 1} sur ${total} : ${items[j].dataset.label ?? ''}`;
@@ -147,6 +232,7 @@ const windows = [
       items.forEach((el, i) => {
         if (Math.abs(centerOf(el) - mid) < Math.abs(centerOf(items[best]) - mid)) best = i;
       });
+      if (best === pending) pending = -1;
       if (best === active) return;
       active = best;
       items.forEach((el, i) => el.toggleAttribute('data-active', i === best));
@@ -161,12 +247,18 @@ const windows = [
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(update);
     }, { passive: true });
+    const from = () => (pending >= 0 ? pending : active);
     prev?.addEventListener('click', () => {
-      if (active > 0) scrollToItem(active - 1, true);
+      if (from() > 0) scrollToItem(from() - 1, true);
     });
     next?.addEventListener('click', () => {
-      if (active < total - 1) scrollToItem(active + 1, true);
+      if (from() < total - 1) scrollToItem(from() + 1, true);
     });
+    // Le visiteur reprend la main (souris, toucher, molette) : la destination en cours est oubliée.
+    const forget = () => (pending = -1);
+    track.addEventListener('pointerdown', forget);
+    track.addEventListener('touchstart', forget, { passive: true });
+    track.addEventListener('wheel', forget, { passive: true });
 
     // Flèches gauche/droite quand une fenêtre a le focus.
     track.addEventListener('keydown', (e) => {
@@ -375,6 +467,9 @@ const windows = [
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
     scrollbar-color: var(--line-strong) transparent;
+    /* Les fenêtres (win-z) restent sous la barre du carrousel : ni la mention
+       « Démonstrations fictives » ni les boutons ne sont jamais recouverts. */
+    isolation: isolate;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
     mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
   }
@@ -503,23 +598,24 @@ const windows = [
     }
   }
 
-  /* Téléphone et tablette : rotations plus douces, voisines plus petites, sans déplacement
-     latéral (aucun chevauchement entre fenêtres). Fenêtre active à 50 %. */
+  /* Téléphone et tablette : rotations plus douces, voisines plus petites. Fenêtre active à 50 %.
+     Les voisines sont ramenées vers le centre (--pull) juste assez pour dépasser au bord de
+     la scène, sans jamais toucher la fenêtre active (vérifié pas à pas de 360 à 834 px). */
   @keyframes win-tilt-sm {
     0% {
-      transform: perspective(150cqw) translateX(0) rotateY(-40deg) scale(0.72);
+      transform: perspective(150cqw) translateX(calc(-1 * var(--pull))) rotateY(-40deg) scale(0.72);
     }
     30% {
-      transform: perspective(150cqw) translateX(0) rotateY(-24deg) scale(0.86);
+      transform: perspective(150cqw) translateX(calc(-0.3 * var(--pull))) rotateY(-24deg) scale(0.86);
     }
     50% {
       transform: perspective(150cqw) translateX(0) rotateY(-6deg) scale(1);
     }
     70% {
-      transform: perspective(150cqw) translateX(0) rotateY(22deg) scale(0.86);
+      transform: perspective(150cqw) translateX(calc(0.3 * var(--pull))) rotateY(22deg) scale(0.86);
     }
     100% {
-      transform: perspective(150cqw) translateX(0) rotateY(38deg) scale(0.72);
+      transform: perspective(150cqw) translateX(var(--pull)) rotateY(38deg) scale(0.72);
     }
   }
 
@@ -827,6 +923,433 @@ const windows = [
     font-size: 1.8cqw;
   }
 
+  /* Flèches et pictogrammes dessinés en ligne (ceux des démos, simplifiés). */
+  .m-arrow {
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .m-arrow--square {
+    stroke-width: 1.8;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  .m-nowrap {
+    white-space: nowrap;
+  }
+
+  /* Variante plus large du bloc de texte (titres sur une seule colonne, comme sur les démos). */
+  .m-hero--wide {
+    max-width: 66cqw;
+    gap: 3cqw;
+  }
+
+  /* --- Écluse : en-tête blanc, navigation en pilule grise, ouverture en panneau clair « texte | photo » --- */
+  .screen--ecluse-accueil .screen__face {
+    background: #fff;
+  }
+
+  .m-nav--ecluse {
+    gap: 2.2cqw;
+    padding-inline: 3.8cqw;
+    background: #fff;
+    border-bottom: 0.15cqw solid rgb(29 50 64 / 0.12);
+    color: #142430;
+    font-size: 1.75cqw;
+    font-weight: 600;
+  }
+
+  .m-logo--ecluse {
+    gap: 1cqw;
+    font-family: var(--font-sans);
+    font-size: 4cqw;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .m-glyph {
+    flex: none;
+    width: 4.4cqw;
+    height: 4.4cqw;
+  }
+
+  .m-pills {
+    display: flex;
+    gap: 0.2cqw;
+    padding: 0.5cqw;
+    border: 0.15cqw solid rgb(29 50 64 / 0.12);
+    border-radius: 99cqw;
+    background: #f2f5f7;
+    color: #44535e;
+  }
+
+  .m-pills > span {
+    padding: 0.9cqw 1.45cqw;
+    border-radius: 99cqw;
+  }
+
+  .m-pills > .is-on {
+    background: #fff;
+    color: #142430;
+    box-shadow: 0 0 0 0.15cqw rgb(29 50 64 / 0.12);
+  }
+
+  .m-cta--ecluse {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    padding: 1.3cqw 2cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #2f4a5a;
+    color: #fff;
+    font-weight: 650;
+  }
+
+  .m-cta--ecluse .m-arrow {
+    width: 1.8cqw;
+    height: 1.8cqw;
+    color: #dcc394;
+  }
+
+  .m-ec-frame {
+    position: absolute;
+    inset: 13.5cqw 3.5cqw 3.5cqw;
+    border: 0.15cqw solid rgb(29 50 64 / 0.12);
+    border-radius: 3.6cqw;
+    background: #f2f5f7;
+  }
+
+  .screen__img.m-ec-photo {
+    inset: 1.3cqw 1.3cqw 1.3cqw 51%;
+    overflow: hidden;
+    border-radius: 2.4cqw;
+  }
+
+  .m-ec-photo :global(img) {
+    object-position: 60% 50%;
+  }
+
+  .m-ec-copy {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 4.2cqw;
+    width: calc(51% - 6.4cqw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3cqw;
+  }
+
+  .m-title--ecluse {
+    font-family: var(--font-sans);
+    font-size: 5.9cqw;
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.048em;
+    color: #142430;
+    text-wrap: balance;
+  }
+
+  .m-text--ecluse {
+    font-size: 1.85cqw;
+    color: #44535e;
+    opacity: 1;
+  }
+
+  .m-btn--ecluse {
+    gap: 1.6cqw;
+    padding: 0.7cqw 0.7cqw 0.7cqw 2.6cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #2f4a5a;
+    color: #fff;
+    font-size: 1.9cqw;
+    font-weight: 650;
+  }
+
+  .m-btn__dot {
+    display: grid;
+    place-items: center;
+    width: 4.4cqw;
+    height: 4.4cqw;
+    border-radius: 50%;
+    background: #dcc394;
+    color: #142430;
+  }
+
+  .m-btn .m-btn__dot .m-arrow {
+    width: 2cqw;
+    height: 2cqw;
+  }
+
+  /* --- Lueur : scène de nuit, photo pleine fenêtre sous un voile bleu nuit, accent ambré --- */
+  .screen--lueur-accueil .screen__face {
+    background: #141a24;
+  }
+
+  .screen__img--lueur :global(img) {
+    object-position: 62% 50%;
+  }
+
+  .m-shade--lueur {
+    background:
+      linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.8) 40%, rgb(14 19 27 / 0.45) 64%, rgb(14 19 27 / 0) 90%),
+      linear-gradient(0deg, rgb(14 19 27 / 0.7) 0%, rgb(14 19 27 / 0) 38%);
+  }
+
+  .m-nav--lueur {
+    gap: 3cqw;
+    background: linear-gradient(180deg, rgb(12 16 23 / 0.9) 0%, rgb(12 16 23 / 0.7) 60%, rgb(12 16 23 / 0) 100%);
+    color: rgb(245 239 228 / 0.86);
+    font-size: 1.85cqw;
+  }
+
+  .m-logo--lueur {
+    gap: 1.3cqw;
+    font-family: var(--font-sans);
+    font-size: 2.4cqw;
+    font-weight: 650;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: #f5efe4;
+  }
+
+  .m-filament {
+    flex: none;
+    width: 3.8cqw;
+    height: 3.8cqw;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  .m-filament__arc {
+    stroke: #f2b45a;
+    stroke-width: 2.3;
+    filter: drop-shadow(0 0 0.5cqw rgb(242 180 90 / 0.7));
+  }
+
+  .m-filament circle {
+    fill: #f2b45a;
+    stroke: none;
+  }
+
+  .m-links--lueur {
+    gap: 3cqw;
+  }
+
+  /* Page courante : un point ambré lumineux sous le libellé. */
+  .m-links--lueur > .is-on {
+    position: relative;
+    color: #f5efe4;
+  }
+
+  .m-links--lueur > .is-on::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -1.4cqw;
+    width: 0.6cqw;
+    height: 0.6cqw;
+    margin-left: -0.3cqw;
+    border-radius: 50%;
+    background: #f2b45a;
+    box-shadow: 0 0 1cqw 0.2cqw rgb(242 180 90 / 0.65);
+  }
+
+  .m-cta--lueur {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9cqw;
+    padding: 1.3cqw 2.2cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #f2b45a;
+    color: #141a24;
+    font-weight: 650;
+  }
+
+  .m-cta--lueur :global(svg) {
+    width: 1.8cqw;
+    height: 1.8cqw;
+  }
+
+  .m-title--lueur {
+    max-width: 7.3em;
+    font-family: var(--font-sans);
+    font-size: 6.6cqw;
+    font-weight: 340;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #f5efe4;
+  }
+
+  .m-glow {
+    white-space: nowrap;
+    color: #f2b45a;
+    font-weight: 420;
+    text-shadow:
+      0 0 1.4cqw rgb(242 180 90 / 0.45),
+      0 0 3.6cqw rgb(242 180 90 / 0.25);
+  }
+
+  .m-text--lueur {
+    max-width: 50cqw;
+    font-size: 1.9cqw;
+    line-height: 1.6;
+    color: rgb(245 239 228 / 0.9);
+    opacity: 1;
+  }
+
+  .m-btn--lueur {
+    gap: 1.6cqw;
+    padding: 1.6cqw 3cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #f2b45a;
+    color: #141a24;
+    font-weight: 650;
+    box-shadow: 0 1cqw 3cqw -1.2cqw rgb(242 180 90 / 0.6);
+  }
+
+  /* --- Moellon : en-tête calcaire à double trait, photo sous un voile clair, titres Newsreader --- */
+  .screen--moellon-accueil .screen__face {
+    background: #e9dfcf;
+  }
+
+  .screen__img--moellon :global(img) {
+    object-position: 62% 55%;
+  }
+
+  .m-shade--moellon {
+    background:
+      linear-gradient(90deg, rgb(233 223 207 / 0.97) 0%, rgb(233 223 207 / 0.93) 52%, rgb(233 223 207 / 0.55) 66%, rgb(233 223 207 / 0) 86%),
+      linear-gradient(0deg, rgb(233 223 207 / 0.35) 0%, rgb(233 223 207 / 0) 30%);
+  }
+
+  .m-nav--moellon {
+    gap: 2.6cqw;
+    padding-inline: 4cqw;
+    background: #e9dfcf;
+    color: #2b211a;
+    font-size: 1.75cqw;
+    font-weight: 560;
+    /* Double trait sous l'en-tête, comme un lit de mortier. */
+    box-shadow:
+      0 0.15cqw 0 rgb(43 33 26 / 0.3),
+      0 0.6cqw 0 #e9dfcf,
+      0 0.75cqw 0 rgb(43 33 26 / 0.14);
+  }
+
+  .m-logo--moellon {
+    gap: 1.1cqw;
+    font-size: 4.2cqw;
+    font-weight: 520;
+    letter-spacing: -0.02em;
+  }
+
+  .m-stones {
+    flex: none;
+    width: 4.4cqw;
+    height: auto;
+  }
+
+  .m-links--moellon {
+    gap: 2.6cqw;
+  }
+
+  .m-links--moellon > .is-on {
+    position: relative;
+    color: #2b211a;
+  }
+
+  /* Page courante : une petite pierre terre cuite sous le libellé. */
+  .m-links--moellon > .is-on::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -1.3cqw;
+    width: 2cqw;
+    height: 0.55cqw;
+    margin-left: -1cqw;
+    border-radius: 0.2cqw 0.3cqw 0.2cqw 0.3cqw;
+    background: #a4532c;
+  }
+
+  .m-cta--moellon {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    padding: 1.3cqw 2cqw;
+    border: 0;
+    border-radius: 0.15cqw;
+    background: #a4532c;
+    color: #faf6ef;
+    font-weight: 620;
+  }
+
+  .m-cta--moellon .m-arrow {
+    width: 1.8cqw;
+    height: 1.8cqw;
+  }
+
+  .m-kicker--moellon {
+    display: flex;
+    align-items: center;
+    gap: 1.2cqw;
+    font-size: 1.5cqw;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    color: #7f3b1d;
+  }
+
+  .m-kicker--moellon::before {
+    content: '';
+    flex: none;
+    width: 2.1cqw;
+    height: 0.9cqw;
+    border-radius: 0.2cqw 0.3cqw 0.2cqw 0.4cqw;
+    background: #a4532c;
+  }
+
+  .m-title--moellon {
+    max-width: 7.1em;
+    margin-top: -1cqw;
+    font-size: 7.4cqw;
+    font-weight: 370;
+    line-height: 0.97;
+    letter-spacing: -0.036em;
+    color: #2b211a;
+  }
+
+  .m-text--moellon {
+    max-width: 54cqw;
+    font-size: 1.9cqw;
+    color: #5a4a3d;
+    opacity: 1;
+  }
+
+  .m-btn--moellon {
+    gap: 1.8cqw;
+    padding: 1.6cqw 2.8cqw;
+    border: 0;
+    border-radius: 0.15cqw;
+    background: #a4532c;
+    color: #faf6ef;
+    font-weight: 620;
+    box-shadow: inset 0 -0.5cqw 0 rgb(43 33 26 / 0.22);
+  }
+
   /* ---------- Barre du carrousel ---------- */
   .showcase__bar {
     position: absolute;
@@ -866,8 +1389,8 @@ const windows = [
     cursor: pointer;
     transition:
       background-color 0.2s var(--ease),
-      color 0.2s var(--ease),
-      opacity 0.2s;
+      border-color 0.2s var(--ease),
+      color 0.2s var(--ease);
   }
 
   .showcase__btn:hover:not([aria-disabled='true']) {
@@ -875,8 +1398,12 @@ const windows = [
     color: var(--paper);
   }
 
+  /* Bouton en bout de course : estompé par ses couleurs et non par opacity,
+     pour que l'anneau de focus (le bouton garde le focus) reste net. */
   .showcase__btn[aria-disabled='true'] {
-    opacity: 0.35;
+    border-color: rgb(15 35 41 / 0.3);
+    background: rgb(255 253 250 / 0.4);
+    color: rgb(15 35 41 / 0.38);
     cursor: default;
   }
 
@@ -964,6 +1491,8 @@ const windows = [
       --peek: 0cqw;
       --gap: 9cqw;
       --floor: 9cqw;
+      /* Déplacement des voisines vers le centre (animation win-tilt-sm). */
+      --pull: 30%;
       -webkit-mask-image: none;
       mask-image: none;
     }
@@ -984,8 +1513,23 @@ const windows = [
       justify-content: space-between;
     }
 
+    /* Deux lignes au plus, même avec un long libellé (« Écluse · Plombier-chauffagiste ») :
+       le compteur rejoint la première ligne, le nom de la démo occupe la seconde. */
+    .showcase__status {
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      column-gap: 0.75rem;
+    }
+
     .showcase__current {
-      display: block;
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+
+    .showcase__count {
+      grid-row: 1;
+      grid-column: 2;
     }
 
     .showcase__sep {
@@ -1009,10 +1553,20 @@ const windows = [
       --w-wide: 52cqw;
       --w-tall: 22cqw;
       --floor: 6cqw;
+      --pull: 10%;
     }
 
     .showcase__bar {
       bottom: 2cqw;
+    }
+  }
+
+  /* Très petit écran (moins de 360 px) : le nom de la démo quitte la mention, qui reste sur
+     deux lignes au-dessous de la fenêtre. Il reste lisible sur la fenêtre (logo), dans le texte
+     du lien et dans l'annonce vocale. */
+  @media (max-width: 22.49em) {
+    .showcase__current {
+      display: none;
     }
   }
 

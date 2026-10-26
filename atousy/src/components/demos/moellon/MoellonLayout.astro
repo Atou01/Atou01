@@ -130,27 +130,6 @@ const { title, description, current } = Astro.props;
     background-color: var(--mo-paper);
   }
 
-  /* Lien d'évitement, placé dans l'en-tête (landmark) : masqué jusqu'à la prise de focus */
-  .mo-skip {
-    position: absolute;
-    left: 1rem;
-    top: 0.75rem;
-    z-index: 200;
-    padding: 0.7rem 1.1rem;
-    background: var(--mo-earth);
-    color: var(--mo-cream);
-    font-weight: 600;
-  }
-
-  .mo-skip:not(:focus) {
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
-
   /* Étiquette : petite pierre + libellé, chiffre romain facultatif */
   .mo-kicker {
     display: flex;

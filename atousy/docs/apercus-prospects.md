@@ -1,6 +1,6 @@
 # Aperçus personnalisés pour prospects — principe
 
-Les démonstrations publiques (Rivage, Faîtage) sont fictives et visibles par tous.
+Les démonstrations publiques (Rivage, Faîtage, Écluse, Lueur, Moellon) sont fictives et visibles par tous.
 Les futurs aperçus préparés pour un prospect réel sont autre chose : ils doivent rester privés.
 
 ## Ce qu'il faut (et pourquoi)

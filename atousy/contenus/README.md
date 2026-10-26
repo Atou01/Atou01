@@ -16,7 +16,7 @@ Les modèles légaux contiennent des `[À COMPLÉTER : …]` : aucun crochet ne 
 | `refonte.md` | /refonte/ | Signes, examen obligatoire du site actuel, ce qu’on garde / refait, redirections | Brouillon à valider |
 | `offre.md` | /offre/ | Tarif des deux marchés, socle détaillé, livrables SEO, non inclus, corrections, 30 jours, FAQ | Brouillon à valider |
 | `methode.md` | /methode/ | Les 3 étapes, ce dont nous avons besoin, ce que vous validez, délais au devis | Brouillon à valider |
-| `exemples.md` | /exemples/ | Démos fictives Rivage et Faîtage, fenêtres à faire défiler et cliquer | Brouillon à valider |
+| `exemples.md` | /exemples/ | Les cinq démos fictives (Rivage, Faîtage, Écluse, Lueur, Moellon), fenêtres à faire défiler et cliquer | Brouillon à valider |
 | `devis.md` | /devis/ | Libellés, aides, exemples de saisie, mentions et tous les messages du formulaire | Brouillon à valider |
 | `mentions-legales.md` | /mentions-legales/ | Modèle LCEN à compléter | Modèle à compléter |
 | `confidentialite.md` | /confidentialite/ | Modèle RGPD + nLPD à compléter | Modèle à compléter |
@@ -28,7 +28,7 @@ Titres SEO : 60 caractères au plus, terminés par « | Atousy ». Méta-descrip
 
 - Atousy n’a pas encore de client : aucun avis, témoignage, note, logo, chiffre, nombre d’années ou certification.
   Aucune promesse de positionnement dans Google.
-- Les démos Rivage et Faîtage sont présentées comme fictives à chaque mention ; leurs photos sont dites générées par IA.
+- Les cinq démos (Rivage, Faîtage, Écluse, Lueur, Moellon) sont présentées comme fictives à chaque mention ; leurs photos sont dites générées par IA.
 - Aucun nom de ville, de région ou de zone desservie. « France » et « Suisse » n’apparaissent que pour les deux
   tarifs et dans les textes légaux. La zone d’intervention est toujours celle du client.
 - Tarif : 1 490 € (Europe · EUR) et 1 990 CHF (Suisse · CHF), toujours suivi de « Tarif indicatif · Taxes et montant final à
@@ -55,8 +55,8 @@ Titres SEO : 60 caractères au plus, terminés par « | Atousy ». Méta-descrip
 12. Client sans logo ou sans photos : que propose-t-on (hors socle, sur devis, rien) ?
 
 **Exemples**
-13. Démo Faîtage : relire la liste « Ce que la démo illustre ».
-14. Vérifier qu’aucune entreprise proche n’utilise les noms « Rivage » ou « Faîtage ».
+13. Relire, pour chacune des cinq démos, la liste « Ce que la démo illustre ».
+14. Vérifier qu’aucune entreprise proche n’utilise les noms « Rivage », « Faîtage », « Écluse », « Lueur » ou « Moellon ».
 
 **Devis**
 15. « Gratuit et sans engagement » : à écrire seulement si c’est décidé.
@@ -82,7 +82,8 @@ Titres SEO : 60 caractères au plus, terminés par « | Atousy ». Méta-descrip
   et `/devis/?type=refonte`. À confirmer côté intégration (sinon lien simple vers /devis/).
 - **Fenêtres des exemples** : demande du fondateur — pouvoir faire défiler toutes les fenêtres et cliquer sur une fenêtre
   pour arriver sur la démo. `exemples.md` fournit les textes (aide au défilement, libellé de chaque fenêtre, textes pour
-  lecteurs d’écran, boutons précédent / suivant) et la liste des 10 pages visées (5 Rivage, 5 Faîtage, d’après la navigation des démos). L’accueil a déjà ce principe avec 5 fenêtres.
+  lecteurs d’écran, boutons précédent / suivant). La bande montre une fenêtre par démo (l’accueil de chacune, 5 fenêtres) ;
+  les cinq pages de chaque démo sont listées dans sa fiche. L’accueil suit le même principe avec ses 5 fenêtres.
 - **Stockage dans le navigateur** : le code utilise trois clés, toutes décrites dans `confidentialite.md` :
   `atousy-market` (stockage local, choix du pays), `atousy-market-auto` (stockage de session, résultat de la
   détection) et `atousy-devis-draft` (stockage de session, brouillon du formulaire de devis).

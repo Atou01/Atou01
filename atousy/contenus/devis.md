@@ -5,7 +5,11 @@ description: "Décrivez votre projet de création ou de refonte de site vitrine 
 statut: brouillon à valider
 ---
 
+*Fil d’Ariane :* Accueil / Demander un devis
+
 # Parlons de votre projet.
+
+*Sur la page, le titre passe à la ligne après « Parlons » : « de » ne finit jamais une ligne.*
 
 Quelques questions pour comprendre votre besoin. Nous revenons vers vous par e-mail avec les prochaines étapes.
 
@@ -48,6 +52,7 @@ Quelques questions pour comprendre votre besoin. Nous revenons vers vous par e-m
 - **Libellé :** Votre besoin
 - **Aide :** Ce que le site doit faire, les pages envisagées, vos questions.
 - **Exemple dans le champ :** Ex. : présenter mes services, montrer mes chantiers, recevoir des demandes de devis…
+- **Compteur sous le champ :** 0 / 2000 (caractères saisis, avec JavaScript)
 - **Erreurs :** Décrivez votre besoin en quelques mots. · Votre message doit faire entre 10 et 2000 caractères.
 
 ### 6. Votre nom — `nom` (obligatoire)
@@ -95,6 +100,7 @@ Les informations de ce formulaire (type de projet, activité, zone d’intervent
 
 - **Titre :** Merci, votre demande est envoyée.
 - **Texte :** Nous revenons vers vous par e-mail. Pensez à vérifier vos courriers indésirables si vous ne voyez rien arriver.
+- **Liens :** Voir les exemples · Retour à l’accueil
 
 > Règle : ce message ne s’affiche que si le serveur répond `{"ok":true}`, c’est-à-dire après acceptation réelle du message par le service d’envoi. Jamais avant, jamais par défaut.
 
@@ -129,10 +135,15 @@ Votre message est trop long. Raccourcissez-le, puis réessayez.
 - **Texte :** Un problème technique a empêché l’envoi. Vos réponses sont conservées : réessayez dans un instant. Si le problème continue, écrivez-nous à contact@atousy.com.
 - **Sans connexion :** Connexion impossible. Vérifiez votre connexion Internet, puis réessayez.
 
+### Pas de réponse du serveur après 15 secondes — à valider
+
+- **Titre :** Pas de confirmation d’envoi.
+- **Texte :** Le serveur n’a pas répondu à temps : nous ne pouvons pas confirmer que votre demande est partie. Vos réponses sont conservées, vous pouvez réessayer. Si le problème continue, écrivez-nous à contact@atousy.com.
+
 ### Service pas encore configuré (réponse `not_configured`)
 
 - **Titre :** Le formulaire n’est pas encore en service.
-- **Texte :** Votre demande n’a pas été envoyée. Écrivez-nous directement à contact@atousy.com.
+- **Texte :** Votre demande n’a pas été envoyée. Vos réponses restent sur cette page. Écrivez-nous directement à contact@atousy.com.
 
 ### JavaScript désactivé (en tête du formulaire, bouton d’envoi masqué)
 
@@ -147,6 +158,8 @@ Ce formulaire a besoin de JavaScript pour sa vérification anti-spam : sans Java
 3. **Vous recevez un devis clair et détaillé.** Nos [conditions générales de vente](/cgv/) y sont jointes.
 
 Aucun rendez-vous à réserver : tout commence par ce message.
+
+**Liens sous l’encart :** Le détail de l’offre (/offre/) · La méthode, étape par étape (/methode/)
 
 ---
 

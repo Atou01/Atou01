@@ -1,92 +1,60 @@
 ---
-// Aperçu d'une page de démonstration fictive, dessiné en HTML (pas une capture d'écran).
+// Aperçu de la page d'accueil d'une démonstration fictive, dessiné en HTML (pas une capture d'écran).
 // Purement décoratif (aria-hidden) : le lien et son libellé sont posés par le parent.
 // Toutes les mesures sont en cqw (largeur de la fenêtre), format 16:10.
+// Chaque aperçu reprend l'ouverture réelle de la démo (src/pages/exemples/<id>/index.astro) :
+// mêmes mots, mêmes couleurs, même logo, même photo, en grossissant un peu les textes.
 import { Picture } from 'astro:assets';
 import Icon from '../Icon.astro';
-import type { DemoWindowId } from '../../data/pages/demos';
+import EIcon from '../demos/ecluse/EIcon.astro';
+import MIcon from '../demos/moellon/MIcon.astro';
+import type { DemoId, DemoWindowId } from '../../data/pages/demos';
 import rivage1 from '../../assets/photos/rivage-1.jpg';
-import rivage2 from '../../assets/photos/rivage-2.jpg';
-import rivage3 from '../../assets/photos/rivage-3.jpg';
 import faitage1 from '../../assets/photos/faitage-1.jpg';
-import faitage3 from '../../assets/photos/faitage-3.jpg';
-import faitage4 from '../../assets/photos/faitage-4.jpg';
-import faitage5 from '../../assets/photos/faitage-5.jpg';
+import ecluse1 from '../../assets/photos/ecluse-1.jpg';
+import lueur1 from '../../assets/photos/lueur-1.jpg';
+import moellon1 from '../../assets/photos/moellon-1.jpg';
 import '@fontsource-variable/newsreader/wght.css';
 
 interface Props {
   id: DemoWindowId;
-  /** sizes de l'image pleine largeur de la fenêtre. */
+  /** sizes de l'image (elle occupe toute la largeur de la fenêtre). */
   sizes?: string;
-  /** sizes d'une image en demi-largeur. */
+  /** @deprecated Plus aucune image en demi-largeur : valeur ignorée. */
   halfSizes?: string;
   eager?: boolean;
   priority?: boolean;
 }
 
-const {
-  id,
-  sizes = '(max-width: 40em) 82vw, 36vw',
-  halfSizes = '(max-width: 40em) 44vw, 18vw',
-  eager = false,
-  priority = false,
-} = Astro.props;
+const { id, sizes = '(max-width: 40em) 82vw, 36vw', eager = false, priority = false } = Astro.props;
 
-const demo = id.startsWith('rivage') ? 'rivage' : 'faitage';
+const demo = id.replace(/-accueil$/, '') as DemoId;
 const loading = eager ? ('eager' as const) : ('lazy' as const);
 const prio = priority ? { fetchpriority: 'high' as const } : {};
 const full = { formats: ['avif', 'webp'] as const, alt: '', widths: [480, 720, 1080], sizes, loading, ...prio };
-const half = { formats: ['avif', 'webp'] as const, alt: '', widths: [280, 480, 640], sizes: halfSizes, loading, ...prio };
 
-const rivageLinks = [
-  { key: 'rivage-approche', label: 'Notre approche' },
-  { key: 'rivage-savoir-faire', label: 'Savoir-faire' },
-  { key: 'rivage-jardins', label: 'Votre jardin' },
-];
-const faitageLinks = [
-  { key: 'faitage-accueil', label: 'Accueil' },
-  { key: 'faitage-realisations', label: 'Réalisations' },
-  { key: 'faitage-savoir-faire', label: 'Savoir-faire' },
-  { key: 'faitage-atelier', label: 'L’atelier' },
-];
-const glassNav = id === 'faitage-realisations';
+const rivageLinks = ['Notre approche', 'Savoir-faire', 'Votre jardin'];
+const faitageLinks = ['Accueil', 'Réalisations', 'Savoir-faire', 'L’atelier'];
+const ecluseLinks = ['Accueil', 'Services', 'Réalisations', 'Entretien'];
+const lueurLinks = ['Accueil', 'Prestations', 'Réalisations', 'Conseils'];
+const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
 ---
 
-<span class:list={['w', `w--${demo}`, `w--${id}`]} aria-hidden="true">
+<span class:list={['w', `w--${demo}`]} aria-hidden="true">
   {
-    demo === 'rivage' ? (
-      <span class="rv-nav">
-        <span class="rv-logo">
-          <span class="rv-wave">≈</span>rivage
-        </span>
-        <span class="rv-links">
-          {rivageLinks.map((l) => (
-            <span class:list={{ 'is-on': l.key === id }}>{l.label}</span>
-          ))}
-        </span>
-        <span class="rv-cta">Nous contacter</span>
-      </span>
-    ) : (
-      <span class:list={['ft-nav', { 'ft-nav--glass': glassNav }]}>
-        <span class="ft-logo">
-          <span class="ft-ridge" />
-          Faîtage
-        </span>
-        <span class="ft-links">
-          {faitageLinks.map((l) => (
-            <span class:list={{ 'is-on': l.key === id }}>{l.label}</span>
-          ))}
-        </span>
-        <span class:list={['ft-cta', { 'ft-cta--wood': id === 'faitage-contact' }]}>
-          Contact <Icon name="arrow" />
-        </span>
-      </span>
-    )
-  }
-
-  {
-    id === 'rivage-accueil' && (
+    demo === 'rivage' && (
       <>
+        <span class="rv-nav">
+          <span class="rv-logo">
+            <span class="rv-wave">≈</span>rivage
+          </span>
+          <span class="rv-links">
+            {rivageLinks.map((l) => (
+              <span>{l}</span>
+            ))}
+          </span>
+          <span class="rv-cta">Nous contacter</span>
+        </span>
         <span class="w-img w-img--below-rv">
           <Picture src={rivage1} {...full} />
         </span>
@@ -112,108 +80,22 @@ const glassNav = id === 'faitage-realisations';
   }
 
   {
-    (id === 'rivage-approche' || id === 'rivage-savoir-faire' || id === 'rivage-jardins' || id === 'rivage-contact') && (
-      <span class="rv-crumbs">
-        Accueil <span>/</span>{' '}
-        {id === 'rivage-approche' ? 'Notre approche' : id === 'rivage-savoir-faire' ? 'Savoir-faire' : id === 'rivage-jardins' ? 'Votre jardin' : 'Nous contacter'}
-      </span>
-    )
-  }
-
-  {
-    id === 'rivage-approche' && (
+    demo === 'faitage' && (
       <>
-        <span class="rv-h1">Notre approche</span>
-        <span class="rv-lead w-text">Un jardin réussi ne se plaque pas sur un terrain. Il naît d’un lieu, d’une lumière, et de la façon dont vous aimez y vivre.</span>
-        <span class="rv-media rv-media--wide">
-          <Picture src={rivage2} {...full} />
-        </span>
-      </>
-    )
-  }
-
-  {
-    id === 'rivage-savoir-faire' && (
-      <>
-        <span class="rv-h1 rv-h1--low">Savoir-faire</span>
-        <span class="rv-lead w-text">De la conception à l’entretien, un seul interlocuteur pour faire naître votre jardin.</span>
-        <span class="rv-chips">
-          <span>Conception</span>
-          <span>Plantation</span>
-          <span>Pierre sèche</span>
-          <span>Bassins naturels</span>
-          <span>Terrasses</span>
-        </span>
-        <span class="rv-media rv-media--left">
-          <Picture src={rivage1} {...half} />
-        </span>
-        <span class="rv-service">
-          <span class="rv-service__num">01 / 06</span>
-          <span class="rv-service__title">Conception de jardin</span>
-          <span class="rv-service__text w-text">Relevé du terrain, esquisse d’ambiance, plan de plantation.</span>
-        </span>
-      </>
-    )
-  }
-
-  {
-    id === 'rivage-jardins' && (
-      <>
-        <span class="rv-h1 rv-h1--low">Votre jardin</span>
-        <span class="rv-lead w-text">Chaque jardin part d’un lieu et d’une façon de vivre. Ces projets types vous aident à imaginer le vôtre.</span>
-        <span class="rv-note w-text">Projets types illustrés : Rivage est une entreprise fictive.</span>
-        <span class="rv-media rv-media--g1">
-          <Picture src={rivage2} {...half} />
-        </span>
-        <span class="rv-media rv-media--g2">
-          <Picture src={rivage3} {...half} />
-        </span>
-      </>
-    )
-  }
-
-  {
-    id === 'rivage-contact' && (
-      <>
-        <span class="rv-h1">Nous contacter</span>
-        <span class="rv-lead w-text">Parlez-nous de votre jardin : ce que vous aimez, ce qui vous manque, la façon dont vous aimeriez y vivre.</span>
-        <span class="rv-form">
-          <span class="rv-form__notice">Formulaire désactivé : ceci est une démonstration.</span>
-          <span class="rv-form__title">Votre demande</span>
-          <span class="rv-form__row">
-            <span class="rv-field">
-              <span>Prénom et nom</span>
-              <span class="rv-field__box" />
-            </span>
-            <span class="rv-field">
-              <span>Adresse e-mail</span>
-              <span class="rv-field__box" />
-            </span>
+        <span class="ft-nav">
+          <span class="ft-logo">
+            <span class="ft-ridge" />
+            Faîtage
           </span>
-          <span class="rv-field">
-            <span>Téléphone (facultatif)</span>
-            <span class="rv-field__box" />
+          <span class="ft-links">
+            {faitageLinks.map((l, i) => (
+              <span class:list={{ 'is-on': i === 0 }}>{l}</span>
+            ))}
+          </span>
+          <span class="ft-cta">
+            Contact <Icon name="arrow" />
           </span>
         </span>
-        <span class="rv-next">
-          <span class="rv-next__title">Et ensuite ?</span>
-          <span class="rv-step">
-            <span class="rv-step__n">1</span>Nous lisons votre message
-          </span>
-          <span class="rv-step">
-            <span class="rv-step__n">2</span>Nous vous rappelons
-          </span>
-          <span class="rv-step">
-            <span class="rv-step__n">3</span>Nous venons voir le jardin
-          </span>
-        </span>
-      </>
-    )
-  }
-
-  {
-    id === 'faitage-accueil' && (
-      <>
         <span class="w-img w-img--below-ft">
           <Picture src={faitage1} {...full} />
         </span>
@@ -239,103 +121,138 @@ const glassNav = id === 'faitage-realisations';
   }
 
   {
-    id === 'faitage-realisations' && (
+    demo === 'ecluse' && (
       <>
-        <span class="w-img">
-          <Picture src={faitage4} {...full} />
-        </span>
-        <span class="w-shade w-shade--bottom" />
-        <span class="w-copy w-copy--ft w-copy--low">
-          <span class="ft-kicker">
-            <span class="ft-ridge" />
-            Projet type · Maison ossature bois
+        <span class="ec-nav">
+          <span class="ec-logo">
+            {/* Pictogramme repris de src/components/demos/ecluse/Logo.astro */}
+            <svg class="ec-glyph" viewBox="0 0 28 28">
+              <rect x="0.5" y="0.5" width="27" height="27" rx="8" fill="#2f4a5a" />
+              <path d="M14 4.8c3.5 4.3 6.4 7.8 6.4 11.5a6.4 6.4 0 0 1-12.8 0c0-3.7 2.9-7.2 6.4-11.5z" fill="#fff" />
+              <path d="M7.66 17.1H14v-3.3h6.27c.09.84.13 1.67.13 2.5a6.4 6.4 0 0 1-12.8 0c0-.43.02-.83.06-1.2z" fill="#b38f58" />
+            </svg>
+            écluse
           </span>
-          <span class="w-title">Nos réalisations</span>
-          <span class="w-text">Construction neuve, charpente, extension, ouvrage extérieur : quatre projets types.</span>
-        </span>
-      </>
-    )
-  }
-
-  {
-    id === 'faitage-savoir-faire' && (
-      <>
-        <span class="w-img w-img--below-ft">
-          <Picture src={faitage3} {...full} />
-        </span>
-        <span class="w-shade w-shade--wood w-img--below-ft" />
-        <span class="w-copy w-copy--ft w-copy--mid">
-          <span class="ft-kicker ft-kicker--wood">
-            <span class="ft-ridge" />
-            Savoir-faire
+          <span class="ec-links">
+            {ecluseLinks.map((l, i) => (
+              <span class:list={{ 'is-on': i === 0 }}>{l}</span>
+            ))}
           </span>
-          <span class="w-title">
-            Des structures
-            <br />
-            durables.
-          </span>
-          <span class="w-text">Charpente, ossature, extension, couverture : une seule équipe.</span>
-          <span class="w-btn w-btn--square">
-            Voir les réalisations <Icon name="arrow" />
+          <span class="ec-cta">
+            Contact <EIcon name="arrow" />
           </span>
         </span>
-      </>
-    )
-  }
-
-  {
-    id === 'faitage-atelier' && (
-      <>
-        <span class="ft-split">
-          <span class="ft-kicker ft-kicker--ink">L’atelier</span>
-          <span class="ft-split__title">
-            Là où le bois
-            <br />
-            prend forme.
-          </span>
-          <span class="ft-split__text w-text">Avant d’être levée sur votre chantier, chaque charpente passe par notre atelier.</span>
-        </span>
-        <span class="ft-split__img">
-          <Picture src={faitage5} {...half} />
-        </span>
-      </>
-    )
-  }
-
-  {
-    id === 'faitage-contact' && (
-      <>
-        <span class="ft-contact-head">
-          <span class="ft-kicker ft-kicker--ink">Contact</span>
-          <span class="ft-split__title">
-            Parlons de
-            <br />
-            votre projet.
-          </span>
-          <span class="ft-contact-lead w-text">Charpente neuve, maison bois, extension ou rénovation : décrivez-nous votre projet.</span>
-        </span>
-        <span class="ft-contact-body">
-          <span class="ft-form">
-            <span class="ft-form__title">Votre demande</span>
-            <span class="ft-form__notice">Formulaire désactivé : ceci est une démonstration.</span>
-            <span class="ft-form__row">
-              <span class="ft-field">
-                <span>Nom et prénom</span>
-                <span class="ft-field__box" />
-              </span>
-              <span class="ft-field">
-                <span>E-mail</span>
-                <span class="ft-field__box" />
+        <span class="ec-frame">
+          <Picture src={ecluse1} {...full} />
+          <span class="ec-veil" />
+          <span class="ec-copy">
+            <span class="ec-title">
+              La chaleur
+              <br />
+              et l’eau,
+              <br />
+              bien installées.
+            </span>
+            <span class="w-text ec-text">Salles de bain, chauffage, pompes à chaleur et dépannage : un artisan qui explique avant d’intervenir.</span>
+            <span class="ec-btn">
+              Voir nos réalisations
+              <span class="ec-btn__icon">
+                <EIcon name="arrow" />
               </span>
             </span>
           </span>
-          <span class="ft-prep">
-            <span class="ft-prep__title">Pour préparer notre échange</span>
-            <span class="ft-prep__item">Quelques photos du bâtiment</span>
-            <span class="ft-prep__item">Des plans ou un croquis</span>
-            <span class="ft-prep__item">Vos délais souhaités</span>
+          <span class="ec-caption">Projet type · Douche à l’italienne</span>
+        </span>
+      </>
+    )
+  }
+
+  {
+    demo === 'lueur' && (
+      <>
+        <span class="w-img">
+          <Picture src={lueur1} {...full} />
+        </span>
+        <span class="w-shade lu-scrim" />
+        <span class="lu-nav">
+          <span class="lu-logo">
+            {/* Filament repris de src/components/demos/lueur/Logo.astro */}
+            <svg class="lu-glyph" viewBox="0 0 28 28" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path class="lu-glyph__halo" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+              <path class="lu-glyph__arc" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+              <path class="lu-glyph__leads" d="M7.5 19.5v5M20.5 19.5v5" />
+              <circle class="lu-glyph__spark" cx="14" cy="3.6" r="1.35" />
+            </svg>
+            <span class="lu-word">Lueur</span>
+          </span>
+          <span class="lu-links">
+            {lueurLinks.map((l, i) => (
+              <span class:list={{ 'is-on': i === 0 }}>{l}</span>
+            ))}
+          </span>
+          <span class="lu-cta">
+            Contact <Icon name="arrow" />
           </span>
         </span>
+        <span class="lu-copy">
+          <span class="lu-title">
+            Une maison
+            <br />
+            <span class="lu-glow">bien éclairée</span>, une
+            <br />
+            installation sûre.
+          </span>
+          <span class="w-text lu-text">Rénovation électrique, tableaux, éclairage et bornes de recharge : un travail propre et expliqué.</span>
+          <span class="lu-btn">
+            Découvrir nos prestations <Icon name="arrow" />
+          </span>
+        </span>
+        <span class="lu-caption">Projet type · Séjour rénové, éclairage d’ambiance</span>
+      </>
+    )
+  }
+
+  {
+    demo === 'moellon' && (
+      <>
+        <span class="mo-nav">
+          <span class="mo-logo">
+            {/* Moellons repris de src/components/demos/moellon/Logo.astro */}
+            <svg class="mo-stones" viewBox="0 0 31 28">
+              <path fill="#a4532c" d="M10 2.2c3-.9 8.5-.8 11.6.2 1.4.5 1.9 1.7 1.6 3.1l-.5 2.3c-.3 1.1-1.2 1.7-2.3 1.7H9.7c-1.2 0-2.1-.8-2.2-2l-.2-2.2C7.2 3.9 8.3 2.7 10 2.2Z" />
+              <path fill="#2b211a" d="M2.6 11.6c2.7-.7 7.6-.8 10.6-.2 1.2.3 1.8 1.2 1.8 2.4v3.4c0 1.2-.9 2.1-2.1 2.1H3c-1.3 0-2.3-1-2.2-2.3l.1-3.3c.1-1 .7-1.8 1.7-2.1Z" />
+              <path fill="#b88a5e" d="M18.3 11.3c3-.5 7.4-.3 9.9.4 1.1.3 1.8 1.3 1.7 2.5l-.2 3.1c-.1 1.2-1 2.1-2.2 2.1h-9.2c-1.2 0-2.1-1-2-2.2l.2-3.6c.1-1.2.7-2.1 1.8-2.3Z" />
+              <path fill="#2b211a" d="M1.9 21.5c4.1-.6 11.3-.6 15.3 0 1.2.2 2 1.1 2 2.3v1.3c0 1.3-1 2.3-2.3 2.3H2c-1.2 0-2-.9-2-2.1l.1-1.7c0-1.1.7-1.9 1.8-2.1Z" />
+              <path fill="#a4532c" d="M23 21.4c2.1-.3 4.5-.2 6 .2 1 .3 1.6 1.1 1.6 2.1v1.6c0 1.2-1 2.2-2.2 2.2h-5.5c-1.2 0-2.1-1-2.1-2.2l.1-1.8c.1-1.1.9-1.9 2.1-2.1Z" />
+            </svg>
+            Moellon
+          </span>
+          <span class="mo-links">
+            {moellonLinks.map((l, i) => (
+              <span class:list={{ 'is-on': i === 0 }}>{l}</span>
+            ))}
+          </span>
+          <span class="mo-btn mo-cta">
+            Contact <MIcon name="arrow" />
+          </span>
+        </span>
+        <span class="w-img w-img--below-mo">
+          <Picture src={moellon1} {...full} />
+        </span>
+        <span class="w-shade mo-wash w-img--below-mo" />
+        <span class="mo-copy">
+          <span class="mo-kicker">Maçonnerie &amp; rénovation</span>
+          <span class="mo-title">
+            Rénover la pierre,
+            <br />
+            bâtir pour durer.
+          </span>
+          <span class="w-text mo-text">Maçonnerie, extensions, ouvertures et rénovation de maisons anciennes, avec des matériaux qui respectent le bâti.</span>
+          <span class="mo-btn">
+            Voir les chantiers <MIcon name="arrow" />
+          </span>
+        </span>
+        <span class="mo-caption">Projet type · Maison en pierre</span>
       </>
     )
   }
@@ -347,17 +264,28 @@ const glassNav = id === 'faitage-realisations';
     --rv-green: #1e3328;
     --rv-ivory: #f6f1e6;
     --rv-ink: #1b2620;
-    --rv-ink-2: #4c5a51;
     --rv-line: rgb(30 51 40 / 0.16);
     --ft-white: #fbf9f5;
-    --ft-sand: #f3eee6;
     --ft-ink: #2b2219;
-    --ft-ink-2: #5d5148;
     --ft-charcoal: #221f1c;
     --ft-wood: #b06d34;
-    --ft-wood-ink: #8f5426;
-    --ft-wood-light: #d9a66d;
     --ft-line: rgb(43 34 25 / 0.14);
+    /* Écluse, Lueur, Moellon : jetons repris de leur gabarit (src/components/demos/<id>/*Layout.astro) */
+    --ec-mist: #f2f5f7;
+    --ec-ink: #142430;
+    --ec-ink-2: #44535e;
+    --ec-slate: #2f4a5a;
+    --ec-brass-light: #dcc394;
+    --ec-line: rgb(29 50 64 / 0.12);
+    --lu-night: #141a24;
+    --lu-ivory: #f5efe4;
+    --lu-amber: #f2b45a;
+    --mo-lime: #e9dfcf;
+    --mo-cream: #faf6ef;
+    --mo-ink: #2b211a;
+    --mo-ink-2: #5a4a3d;
+    --mo-terra: #a4532c;
+    --mo-terra-ink: #7f3b1d;
     position: relative;
     display: block;
     aspect-ratio: 16 / 10;
@@ -382,6 +310,21 @@ const glassNav = id === 'faitage-realisations';
   .w--faitage {
     background: var(--ft-white);
     color: var(--ft-ink);
+  }
+
+  .w--ecluse {
+    background: #fff;
+    color: var(--ec-ink);
+  }
+
+  .w--lueur {
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+  }
+
+  .w--moellon {
+    background: var(--mo-lime);
+    color: var(--mo-ink);
   }
 
   .w :global(img) {
@@ -441,10 +384,6 @@ const glassNav = id === 'faitage-realisations';
     gap: 3.2cqw;
   }
 
-  .rv-links .is-on {
-    box-shadow: 0 0.35cqw 0 -0.2cqw currentColor;
-  }
-
   .rv-cta {
     padding: 1.1cqw 1.8cqw;
     border-radius: 0.4cqw;
@@ -469,12 +408,6 @@ const glassNav = id === 'faitage-realisations';
     white-space: nowrap;
   }
 
-  .ft-nav--glass {
-    border-bottom-color: rgb(255 255 255 / 0.28);
-    background: linear-gradient(180deg, rgb(20 28 40 / 0.45), transparent);
-    color: #fff;
-  }
-
   .ft-logo {
     display: inline-flex;
     align-items: center;
@@ -494,10 +427,6 @@ const glassNav = id === 'faitage-realisations';
     transform: translateY(0.45cqw) rotate(45deg);
   }
 
-  .ft-nav--glass .ft-ridge {
-    border-color: var(--ft-wood-light);
-  }
-
   .ft-links {
     display: flex;
     gap: 2.5cqw;
@@ -505,10 +434,6 @@ const glassNav = id === 'faitage-realisations';
 
   .ft-links .is-on {
     box-shadow: 0 0.35cqw 0 -0.15cqw var(--ft-wood);
-  }
-
-  .ft-nav--glass .ft-links .is-on {
-    box-shadow: 0 0.35cqw 0 -0.15cqw var(--ft-wood-light);
   }
 
   .ft-cta {
@@ -522,16 +447,7 @@ const glassNav = id === 'faitage-realisations';
     font-weight: 500;
   }
 
-  .ft-nav--glass .ft-cta {
-    border-color: rgb(255 255 255 / 0.85);
-    background: transparent;
-  }
-
-  .ft-cta--wood {
-    background: var(--ft-wood-ink);
-  }
-
-  /* ---------- Héros photo (commun) ---------- */
+  /* ---------- Héros photo (Rivage, Faîtage, Lueur, Moellon) ---------- */
   .w-img {
     position: absolute;
     inset: 0;
@@ -560,10 +476,6 @@ const glassNav = id === 'faitage-realisations';
     background: linear-gradient(90deg, rgb(28 20 12 / 0.68) 0%, rgb(28 20 12 / 0.28) 48%, transparent 72%);
   }
 
-  .w-shade--bottom {
-    background: linear-gradient(15deg, rgb(25 18 12 / 0.72) 0%, rgb(25 18 12 / 0.25) 42%, transparent 62%);
-  }
-
   .w-copy {
     position: absolute;
     z-index: 1;
@@ -579,16 +491,6 @@ const glassNav = id === 'faitage-realisations';
 
   .w-copy--ft {
     left: 4.5cqw;
-  }
-
-  .w-copy--low {
-    bottom: 5.5cqw;
-    gap: 1.8cqw;
-  }
-
-  .w-copy--mid {
-    bottom: auto;
-    top: 17cqw;
   }
 
   .w-title {
@@ -652,428 +554,552 @@ const glassNav = id === 'faitage-realisations';
     text-transform: uppercase;
   }
 
-  .ft-kicker {
+  /* ---------- Écluse : blanc, ardoise, laiton ; ouverture dans un cadre arrondi ---------- */
+  .ec-nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 1.6cqw;
+    height: 7.6cqw;
+    padding-inline: 3.4cqw;
+    border-bottom: max(1px, 0.1cqw) solid var(--ec-line);
+    background: #fff;
+    font-size: 1.35cqw;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ec-logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.9cqw;
-    font-size: 1.05cqw;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    gap: 0.8cqw;
+    margin-right: auto;
+    font-size: 2.5cqw;
+    font-weight: 800;
+    letter-spacing: -0.05em;
   }
 
-  .ft-kicker .ft-ridge {
-    width: 1cqw;
-    height: 1cqw;
-    border-width: 0.2cqw;
-    border-color: var(--ft-wood-light);
-    transform: translateY(0.3cqw) rotate(45deg);
+  .w .ec-glyph {
+    width: 2.6cqw;
+    height: 2.6cqw;
   }
 
-  .ft-kicker--wood {
-    color: var(--ft-wood-light);
+  .ec-links {
+    display: flex;
+    gap: 0.2cqw;
+    padding: 0.4cqw;
+    border: max(1px, 0.07cqw) solid var(--ec-line);
+    border-radius: 99px;
+    background: var(--ec-mist);
+    color: var(--ec-ink-2);
   }
 
-  .ft-kicker--ink {
-    color: var(--ft-ink);
+  .ec-links span {
+    padding: 0.85cqw 1.5cqw;
+    border-radius: 99px;
   }
 
-  /* ---------- Rivage : pages intérieures ---------- */
-  .rv-crumbs {
+  .ec-links .is-on {
+    background: #fff;
+    color: var(--ec-ink);
+    box-shadow:
+      0 0.07cqw 0.15cqw rgb(20 36 48 / 0.08),
+      0 0 0 max(1px, 0.07cqw) var(--ec-line);
+  }
+
+  .ec-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8cqw;
+    padding: 1.05cqw 1.7cqw;
+    border-radius: 99px;
+    background: var(--ec-slate);
+    color: #fff;
+    font-weight: 650;
+  }
+
+  .ec-cta :global(svg) {
+    color: var(--ec-brass-light);
+  }
+
+  .ec-frame {
     position: absolute;
-    top: 12.6cqw;
-    left: 7cqw;
-    font-size: 1.15cqw;
-    color: var(--rv-ink-2);
+    inset: 9cqw 3.4cqw 2.4cqw;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 2cqw;
+    background: var(--ec-mist);
   }
 
-  .rv-crumbs span {
-    display: inline;
-    margin-inline: 0.5cqw;
-    opacity: 0.6;
+  .ec-frame :global(img) {
+    object-position: 50% 30%;
   }
 
-  .rv-h1 {
+  .ec-veil {
     position: absolute;
-    left: 7cqw;
-    top: 17.5cqw;
-    color: var(--rv-green);
-    font-family: var(--serif);
-    font-size: 7.4cqw;
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.02em;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0.94) 0%,
+      rgb(255 255 255 / 0.9) 38%,
+      rgb(255 255 255 / 0.62) 49%,
+      rgb(255 255 255 / 0.18) 58%,
+      rgb(255 255 255 / 0) 66%
+    );
   }
 
-  .rv-h1--low {
-    top: 19.5cqw;
+  .ec-copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 5cqw;
   }
 
-  .rv-lead {
-    position: absolute;
-    left: 56cqw;
-    right: 7cqw;
-    top: 17.8cqw;
-    color: var(--rv-ink-2);
+  .ec-title {
+    display: block;
+    color: var(--ec-ink);
+    font-size: 6.2cqw;
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.048em;
+  }
+
+  .ec-text {
+    display: block;
+    max-width: 31cqw;
+    margin-top: 2.2cqw;
+    color: var(--ec-ink-2);
     font-size: 1.55cqw;
     line-height: 1.55;
   }
 
-  .rv-media {
-    position: absolute;
-    overflow: hidden;
-    border-radius: 0.5cqw;
-  }
-
-  .rv-media--wide {
-    left: 7cqw;
-    right: 7cqw;
-    top: 31.5cqw;
-    height: 40cqw;
-  }
-
-  .rv-media--left {
-    left: 7cqw;
-    width: 40cqw;
-    top: 35cqw;
-    height: 32cqw;
-  }
-
-  .rv-media--g1 {
-    left: 7cqw;
-    width: 48cqw;
-    top: 34cqw;
-    height: 34cqw;
-  }
-
-  .rv-media--g2 {
-    left: 58cqw;
-    right: 7cqw;
-    top: 34cqw;
-    height: 34cqw;
-  }
-
-  .rv-chips {
-    position: absolute;
-    left: 56cqw;
-    right: 5cqw;
-    top: 24.5cqw;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8cqw;
-  }
-
-  .rv-chips span {
-    padding: 0.6cqw 1.2cqw;
-    border: max(1px, 0.1cqw) solid rgb(30 51 40 / 0.3);
-    border-radius: 99px;
-    font-size: 1.1cqw;
-  }
-
-  .rv-service {
-    position: absolute;
-    left: 52cqw;
-    right: 7cqw;
-    top: 36cqw;
-  }
-
-  .rv-service__num {
-    display: block;
-    color: var(--rv-ink-2);
-    font-family: var(--serif);
-    font-size: 1.3cqw;
-    font-style: italic;
-  }
-
-  .rv-service__title {
-    display: block;
-    margin-top: 1cqw;
-    color: var(--rv-green);
-    font-family: var(--serif);
-    font-size: 3.7cqw;
-    line-height: 1.05;
-  }
-
-  .rv-service__text {
-    display: block;
-    margin-top: 1.6cqw;
-    color: var(--rv-ink-2);
-    font-size: 1.35cqw;
-    line-height: 1.55;
-  }
-
-  .rv-note {
-    position: absolute;
-    left: 56cqw;
-    right: 7cqw;
-    top: 26.4cqw;
-    padding-left: 1.2cqw;
-    border-left: max(1px, 0.12cqw) solid var(--rv-ink-2);
-    color: var(--rv-ink-2);
-    font-size: 1.1cqw;
-    line-height: 1.5;
-  }
-
-  .rv-form {
-    position: absolute;
-    left: 7cqw;
-    width: 47cqw;
-    top: 30cqw;
-    height: 40cqw;
-    padding: 3cqw;
-    border: max(1px, 0.1cqw) solid var(--rv-line);
-    border-radius: 0.5cqw;
-    background: #fbf8f1;
-    box-shadow: 0 1.5cqw 3cqw -2cqw rgb(30 51 40 / 0.25);
-  }
-
-  .rv-form__notice {
-    display: block;
-    padding: 1.2cqw 1.6cqw;
-    border: max(1px, 0.1cqw) solid rgb(30 51 40 / 0.3);
-    border-radius: 0.25cqw;
-    background: #e7ece2;
-    font-size: 1.1cqw;
-    font-weight: 600;
-  }
-
-  .rv-form__title {
-    display: block;
-    margin-top: 2.6cqw;
-    color: var(--rv-green);
-    font-family: var(--serif);
-    font-size: 2.5cqw;
-  }
-
-  .rv-form__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.6cqw;
-  }
-
-  .rv-field {
-    display: block;
-    margin-top: 2cqw;
-    font-size: 1.05cqw;
-    font-weight: 600;
-  }
-
-  .rv-field__box {
-    display: block;
-    height: 3.4cqw;
-    margin-top: 1cqw;
-    border: max(1px, 0.1cqw) dashed rgb(30 51 40 / 0.32);
-    border-radius: 0.2cqw;
-    background: #f4efe5;
-  }
-
-  .rv-next {
-    position: absolute;
-    left: 61cqw;
-    right: 6cqw;
-    top: 31cqw;
-  }
-
-  .rv-next__title {
-    display: block;
-    color: var(--rv-green);
-    font-family: var(--serif);
-    font-size: 3cqw;
-  }
-
-  .rv-step {
-    display: flex;
+  .ec-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 1.6cqw;
-    margin-top: 2.4cqw;
-    font-family: var(--serif);
-    font-size: 1.75cqw;
+    gap: 1.1cqw;
+    margin-top: 2.6cqw;
+    padding: 0.5cqw 0.55cqw 0.5cqw 1.9cqw;
+    border-radius: 99px;
+    background: var(--ec-slate);
+    color: #fff;
+    font-size: 1.4cqw;
+    font-weight: 650;
   }
 
-  .rv-step__n {
+  .ec-btn__icon {
     display: grid;
     place-items: center;
-    flex: none;
-    width: 3.2cqw;
-    height: 3.2cqw;
-    border: max(1px, 0.1cqw) solid rgb(30 51 40 / 0.35);
+    width: 3.1cqw;
+    height: 3.1cqw;
     border-radius: 50%;
-    font-size: 1.3cqw;
+    background: var(--ec-brass-light);
+    color: var(--ec-ink);
   }
 
-  /* ---------- Faîtage : atelier et contact ---------- */
-  .ft-split {
+  .ec-caption {
     position: absolute;
-    left: 4.5cqw;
-    width: 34cqw;
-    top: 22cqw;
+    right: 1.6cqw;
+    bottom: 1.6cqw;
+    padding: 0.6cqw 1.1cqw;
+    border-radius: 99px;
+    background: rgb(255 255 255 / 0.94);
+    color: var(--ec-ink);
+    font-size: 1cqw;
+    font-weight: 650;
   }
 
-  .ft-split__title {
-    display: block;
-    margin-top: 2cqw;
-    color: var(--ft-ink);
-    font-family: var(--serif);
-    font-size: 5.6cqw;
-    font-weight: 400;
-    line-height: 1.02;
-    letter-spacing: -0.02em;
+  /* ---------- Lueur : scène de nuit, ivoire et ambre ---------- */
+  .w--lueur :global(img) {
+    object-position: 62% 50%;
   }
 
-  .ft-split__text {
-    display: block;
-    margin-top: 2.6cqw;
-    color: var(--ft-ink-2);
-    font-size: 1.4cqw;
-    line-height: 1.55;
+  .lu-scrim {
+    background:
+      linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.82) 34%, rgb(14 19 27 / 0.5) 56%, rgb(14 19 27 / 0) 80%),
+      linear-gradient(0deg, rgb(14 19 27 / 0.7) 0%, rgb(14 19 27 / 0) 35%);
   }
 
-  .ft-split__img {
+  .lu-nav {
     position: absolute;
-    left: 42.5cqw;
-    right: 0;
-    top: 8.2cqw;
-    bottom: 0;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 2.4cqw;
+    height: 7.6cqw;
+    padding-inline: 5.6cqw;
+    background: linear-gradient(180deg, rgb(12 16 23 / 0.9) 0%, rgb(12 16 23 / 0.74) 60%, rgb(12 16 23 / 0) 100%);
+    font-size: 1.35cqw;
+    font-weight: 550;
+    white-space: nowrap;
   }
 
-  .ft-contact-head {
-    position: absolute;
-    inset: 8.2cqw 0 auto;
-    height: 27cqw;
-    padding: 5.5cqw 4.5cqw 0;
-    border-bottom: max(1px, 0.1cqw) solid var(--ft-line);
+  .lu-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9cqw;
+    margin-right: auto;
   }
 
-  .ft-contact-head .ft-split__title {
-    margin-top: 1.6cqw;
-    font-size: 5cqw;
+  .w .lu-glyph {
+    width: 2.5cqw;
+    height: 2.5cqw;
+    overflow: visible;
   }
 
-  .ft-contact-lead {
-    position: absolute;
-    left: 55cqw;
-    right: 6cqw;
-    top: 11cqw;
-    color: var(--ft-ink-2);
-    font-size: 1.4cqw;
-    line-height: 1.55;
+  .lu-glyph__halo {
+    stroke: var(--lu-amber);
+    stroke-width: 5;
+    opacity: 0.22;
+    filter: blur(0.18cqw);
   }
 
-  .ft-contact-body {
-    position: absolute;
-    inset: 35.2cqw 0 0;
-    background: var(--ft-sand);
+  .lu-glyph__arc {
+    stroke: var(--lu-amber);
+    stroke-width: 2.1;
   }
 
-  .ft-form {
-    position: absolute;
-    left: 4.5cqw;
-    width: 47cqw;
-    top: 4cqw;
-    height: 30cqw;
-    padding: 2.6cqw 3cqw;
-    border: max(1px, 0.1cqw) solid var(--ft-line);
-    border-top: 0.35cqw solid var(--ft-charcoal);
-    background: var(--ft-white);
+  .lu-glyph__leads {
+    stroke: currentColor;
+    stroke-width: 1.8;
+    opacity: 0.85;
   }
 
-  .ft-form__title {
-    display: block;
-    font-family: var(--serif);
-    font-size: 2.5cqw;
+  .lu-glyph__spark {
+    fill: var(--lu-amber);
   }
 
-  .ft-form__notice {
-    display: block;
-    margin-top: 1.6cqw;
-    padding: 1.1cqw 1.5cqw;
-    border: max(1px, 0.1cqw) solid #e8cfb0;
-    background: #f6e9da;
-    font-size: 1.05cqw;
-    font-weight: 600;
-  }
-
-  .ft-form__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.6cqw;
-  }
-
-  .ft-field {
-    display: block;
-    margin-top: 1.8cqw;
-    font-size: 1.05cqw;
-    font-weight: 600;
-  }
-
-  .ft-field__box {
-    display: block;
-    height: 3.2cqw;
-    margin-top: 0.9cqw;
-    border: max(1px, 0.1cqw) solid var(--ft-line);
-    background: repeating-linear-gradient(135deg, #f1ede6 0 0.6cqw, #f8f5f0 0.6cqw 1.2cqw);
-  }
-
-  .ft-prep {
-    position: absolute;
-    left: 57cqw;
-    right: 4.5cqw;
-    top: 4.6cqw;
-  }
-
-  .ft-prep__title {
-    display: block;
-    padding-bottom: 1.2cqw;
-    border-bottom: max(1px, 0.1cqw) solid var(--ft-line);
-    font-size: 1.05cqw;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+  .lu-word {
+    margin-right: -0.34em;
+    font-size: 1.7cqw;
+    font-weight: 650;
+    letter-spacing: 0.34em;
     text-transform: uppercase;
   }
 
-  .ft-prep__item {
-    display: block;
-    position: relative;
-    margin-top: 1.8cqw;
-    padding-left: 2.4cqw;
-    font-size: 1.4cqw;
+  .lu-links {
+    display: flex;
+    gap: 2.6cqw;
+    color: rgb(245 239 228 / 0.86);
   }
 
-  .ft-prep__item::before {
+  .lu-links span {
+    position: relative;
+  }
+
+  /* Page courante : point ambré lumineux sous le libellé */
+  .lu-links .is-on {
+    color: var(--lu-ivory);
+  }
+
+  .lu-links .is-on::after {
     content: '';
     position: absolute;
-    left: 0.3cqw;
-    top: 0.75cqw;
-    width: 0.9cqw;
-    height: 0.9cqw;
-    border-top: 0.2cqw solid var(--ft-wood);
-    border-left: 0.2cqw solid var(--ft-wood);
-    transform: rotate(45deg);
+    left: 50%;
+    top: 100%;
+    width: 0.42cqw;
+    height: 0.42cqw;
+    margin: 0.5cqw 0 0 -0.21cqw;
+    border-radius: 50%;
+    background: var(--lu-amber);
+    box-shadow: 0 0 0.7cqw 0.14cqw rgb(242 180 90 / 0.65);
   }
 
-  /* Petites fenêtres (téléphone) : on retire les textes devenus illisibles. */
+  .lu-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8cqw;
+    margin-left: 0.6cqw;
+    padding: 1cqw 1.6cqw;
+    border-radius: 99px;
+    background: var(--lu-amber);
+    color: var(--lu-night);
+    font-weight: 650;
+  }
+
+  .lu-copy {
+    position: absolute;
+    z-index: 1;
+    left: 5.6cqw;
+    top: 7.6cqw;
+    bottom: 6cqw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .lu-title {
+    display: block;
+    font-size: 7cqw;
+    font-weight: 340;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .lu-glow {
+    color: var(--lu-amber);
+    font-weight: 420;
+    text-shadow:
+      0 0 1.25cqw rgb(242 180 90 / 0.45),
+      0 0 3.3cqw rgb(242 180 90 / 0.25);
+  }
+
+  .lu-text {
+    display: block;
+    max-width: 38cqw;
+    margin-top: 2.2cqw;
+    color: rgb(245 239 228 / 0.9);
+    font-size: 1.55cqw;
+    line-height: 1.6;
+  }
+
+  .lu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    margin-top: 2.8cqw;
+    padding: 1.25cqw 2.2cqw;
+    border-radius: 99px;
+    background: var(--lu-amber);
+    color: var(--lu-night);
+    font-size: 1.4cqw;
+    font-weight: 650;
+    box-shadow: 0 0.7cqw 2cqw -0.8cqw rgb(242 180 90 / 0.55);
+  }
+
+  .lu-caption {
+    position: absolute;
+    z-index: 1;
+    right: 5.6cqw;
+    bottom: 3.8cqw;
+    display: flex;
+    align-items: center;
+    gap: 0.8cqw;
+    color: rgb(245 239 228 / 0.86);
+    font-size: 0.95cqw;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .lu-caption::before {
+    content: '';
+    width: 1.6cqw;
+    height: max(1px, 0.08cqw);
+    background: var(--lu-amber);
+    box-shadow: 0 0 0.55cqw rgb(242 180 90 / 0.8);
+  }
+
+  /* ---------- Moellon : calcaire, terre brune, terre cuite ---------- */
+  .mo-nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 2.6cqw;
+    height: 8cqw;
+    padding-inline: 4.2cqw;
+    background: var(--mo-lime);
+    /* Double trait, comme dans la démo : un lit de mortier sous l'assise */
+    box-shadow:
+      0 max(1px, 0.07cqw) 0 rgb(43 33 26 / 0.3),
+      0 0.28cqw 0 var(--mo-lime),
+      0 0.35cqw 0 rgb(43 33 26 / 0.14);
+    font-size: 1.35cqw;
+    font-weight: 560;
+    white-space: nowrap;
+  }
+
+  .mo-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85cqw;
+    margin-right: auto;
+    font-family: var(--serif);
+    font-size: 2.65cqw;
+    font-weight: 520;
+    letter-spacing: -0.02em;
+  }
+
+  .w .mo-stones {
+    width: 2.5cqw;
+    height: auto;
+  }
+
+  .mo-links {
+    display: flex;
+    gap: 2.6cqw;
+  }
+
+  .mo-links span {
+    position: relative;
+  }
+
+  /* Page courante : une petite pierre terre cuite sous le libellé */
+  .mo-links .is-on::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 1.5cqw;
+    height: 0.45cqw;
+    margin: 0.6cqw 0 0 -0.75cqw;
+    border-radius: 0.14cqw 0.2cqw 0.14cqw 0.2cqw;
+    background: var(--mo-terra);
+  }
+
+  .mo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.1cqw;
+    padding: 1.2cqw 2.1cqw;
+    border-radius: 1px;
+    background: var(--mo-terra);
+    color: var(--mo-cream);
+    font-size: 1.4cqw;
+    font-weight: 620;
+    box-shadow: inset 0 -0.21cqw 0 rgb(43 33 26 / 0.22);
+  }
+
+  .mo-cta {
+    margin-left: 0.6cqw;
+    padding: 1cqw 1.6cqw;
+    font-size: inherit;
+  }
+
+  .w-img--below-mo {
+    top: 8cqw;
+  }
+
+  .w--moellon :global(img) {
+    object-position: 62% 55%;
+  }
+
+  /* Voile calcaire : opaque sous le texte, il se fond dans la photo vers la droite */
+  .mo-wash {
+    background:
+      linear-gradient(
+        90deg,
+        rgb(233 223 207 / 0.97) 0,
+        rgb(233 223 207 / 0.93) 52cqw,
+        rgb(233 223 207 / 0.55) 59cqw,
+        rgb(233 223 207 / 0) 70cqw
+      ),
+      linear-gradient(0deg, rgb(233 223 207 / 0.35) 0%, rgb(233 223 207 / 0) 30%);
+  }
+
+  .mo-copy {
+    position: absolute;
+    z-index: 1;
+    left: 4.2cqw;
+    top: 8cqw;
+    bottom: 5cqw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .mo-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.95cqw;
+    color: var(--mo-terra-ink);
+    font-size: 1.05cqw;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .mo-kicker::before {
+    content: '';
+    width: 1.55cqw;
+    height: 0.68cqw;
+    border-radius: 0.14cqw 0.2cqw 0.14cqw 0.28cqw;
+    background: var(--mo-terra);
+  }
+
+  .mo-title {
+    display: block;
+    margin-top: 2.1cqw;
+    font-family: var(--serif);
+    font-size: 7cqw;
+    font-weight: 360;
+    line-height: 0.97;
+    letter-spacing: -0.036em;
+  }
+
+  .mo-text {
+    display: block;
+    max-width: 43cqw;
+    margin-top: 2.2cqw;
+    color: var(--mo-ink-2);
+    font-size: 1.55cqw;
+    line-height: 1.55;
+  }
+
+  .mo-copy .mo-btn {
+    margin-top: 2.8cqw;
+  }
+
+  .mo-caption {
+    position: absolute;
+    z-index: 1;
+    right: 4.2cqw;
+    bottom: 3cqw;
+    display: flex;
+    align-items: center;
+    gap: 0.9cqw;
+    padding: 0.6cqw 1.1cqw;
+    background: rgb(250 246 239 / 0.92);
+    color: var(--mo-ink);
+    font-size: 0.95cqw;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mo-caption::before {
+    content: '';
+    width: 1.6cqw;
+    height: max(1px, 0.14cqw);
+    background: var(--mo-terra);
+  }
+
+  /* Petites fenêtres (téléphone, tablette) : on retire les textes devenus illisibles. */
   @container (max-width: 25rem) {
     .w .w-text,
     .rv-links,
     .ft-links,
-    .rv-chips,
+    .ec-links,
+    .lu-links,
+    .mo-links,
     .rv-aside,
     .ft-caption,
-    .rv-form__row,
-    .ft-form__row,
-    .rv-step,
-    .ft-prep__item {
+    .ec-caption,
+    .lu-caption,
+    .mo-caption {
       display: none;
     }
 
     .rv-nav,
-    .ft-nav {
+    .ft-nav,
+    .ec-nav,
+    .lu-nav,
+    .mo-nav {
       height: 11cqw;
       font-size: 2.6cqw;
     }
 
     .rv-logo,
-    .ft-logo {
+    .ft-logo,
+    .mo-logo {
       font-size: 5.4cqw;
     }
 
@@ -1084,7 +1110,8 @@ const glassNav = id === 'faitage-realisations';
     }
 
     .w-img--below-rv,
-    .w-img--below-ft {
+    .w-img--below-ft,
+    .w-img--below-mo {
       top: 11cqw;
     }
 
@@ -1092,88 +1119,153 @@ const glassNav = id === 'faitage-realisations';
       font-size: 9cqw;
     }
 
+    /* Le titre garde ses deux lignes (« Des charpentes / pour demain. ») */
+    .w-copy {
+      max-width: 76cqw;
+    }
+
     .w-btn {
       padding: 2cqw 3cqw;
       font-size: 2.6cqw;
     }
 
-    .ft-kicker {
-      font-size: 2cqw;
+    /* Écluse */
+    .ec-logo {
+      gap: 1.4cqw;
+      font-size: 5cqw;
     }
 
-    .rv-crumbs {
-      top: 15cqw;
-      font-size: 2.2cqw;
+    .w .ec-glyph {
+      width: 5.2cqw;
+      height: 5.2cqw;
     }
 
-    .rv-h1,
-    .rv-h1--low {
-      top: 20cqw;
-      font-size: 9.5cqw;
+    .ec-cta {
+      padding: 1.6cqw 2.6cqw;
     }
 
-    .rv-media--wide,
-    .rv-media--g1,
-    .rv-media--g2,
-    .rv-media--left {
-      top: 34cqw;
+    .ec-frame {
+      top: 13cqw;
+      border-radius: 3cqw;
     }
 
-    .rv-media--left {
-      width: auto;
-      right: 7cqw;
+    .ec-veil {
+      background: linear-gradient(
+        90deg,
+        rgb(255 255 255 / 0.94) 0%,
+        rgb(255 255 255 / 0.9) 50%,
+        rgb(255 255 255 / 0.6) 64%,
+        rgb(255 255 255 / 0) 80%
+      );
     }
 
-    .rv-service {
-      display: none;
+    .ec-copy {
+      padding-left: 6cqw;
     }
 
-    .rv-form,
-    .ft-form {
-      width: auto;
-      right: 7cqw;
+    .ec-title {
+      font-size: 8.6cqw;
     }
 
-    .rv-form__notice,
-    .ft-form__notice {
-      font-size: 2cqw;
+    .ec-btn {
+      margin-top: 4cqw;
+      padding: 0.9cqw 1cqw 0.9cqw 3cqw;
+      font-size: 2.6cqw;
+      gap: 2cqw;
     }
 
-    .rv-form__title,
-    .ft-form__title {
-      font-size: 4cqw;
+    .ec-btn__icon {
+      width: 5.4cqw;
+      height: 5.4cqw;
     }
 
-    .rv-next,
-    .ft-prep,
-    .ft-contact-lead {
-      display: none;
+    /* Lueur */
+    .w .lu-glyph {
+      width: 4.6cqw;
+      height: 4.6cqw;
     }
 
-    .ft-split {
-      width: 36cqw;
-      top: 20cqw;
+    .lu-logo {
+      gap: 1.6cqw;
     }
 
-    .ft-split__title {
-      font-size: 6.4cqw;
+    .lu-word {
+      font-size: 3.2cqw;
     }
 
-    .ft-contact-head .ft-split__title {
-      font-size: 7cqw;
+    .lu-cta {
+      padding: 1.6cqw 2.6cqw;
     }
 
-    .ft-contact-head {
-      padding-top: 4.5cqw;
-      height: 30cqw;
+    .lu-scrim {
+      background:
+        linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.85) 50%, rgb(14 19 27 / 0.4) 80%, rgb(14 19 27 / 0.1) 100%),
+        linear-gradient(0deg, rgb(14 19 27 / 0.7) 0%, rgb(14 19 27 / 0) 35%);
     }
 
-    .ft-contact-body {
-      top: 38.2cqw;
+    .lu-copy {
+      top: 11cqw;
+      bottom: 4cqw;
     }
 
-    .w-copy--mid {
-      top: 19cqw;
+    .lu-title {
+      font-size: 8.6cqw;
+    }
+
+    .lu-btn {
+      margin-top: 4cqw;
+      padding: 2cqw 3.2cqw;
+      font-size: 2.6cqw;
+    }
+
+    /* Moellon */
+    .w .mo-stones {
+      width: 4.8cqw;
+    }
+
+    .mo-logo {
+      gap: 1.4cqw;
+    }
+
+    .mo-cta {
+      padding: 1.6cqw 2.6cqw;
+    }
+
+    .mo-wash {
+      background: linear-gradient(
+        90deg,
+        rgb(233 223 207 / 0.97) 0,
+        rgb(233 223 207 / 0.93) 62%,
+        rgb(233 223 207 / 0.5) 76%,
+        rgb(233 223 207 / 0) 92%
+      );
+    }
+
+    .mo-copy {
+      top: 11cqw;
+      bottom: 3cqw;
+    }
+
+    .mo-kicker {
+      font-size: 2.1cqw;
+      gap: 1.6cqw;
+    }
+
+    .mo-kicker::before {
+      width: 3cqw;
+      height: 1.3cqw;
+    }
+
+    .mo-title {
+      margin-top: 3cqw;
+      font-size: 9cqw;
+    }
+
+    .mo-copy .mo-btn {
+      margin-top: 4cqw;
+      padding: 2cqw 3.2cqw;
+      font-size: 2.6cqw;
+      gap: 2cqw;
     }
   }
 </style>

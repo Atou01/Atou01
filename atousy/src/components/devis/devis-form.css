@@ -182,9 +182,12 @@ textarea.dv-control {
   box-shadow: inset 0 0 0 1px var(--marine);
 }
 
+/* Focus clavier : l'anneau marine du site (:focus-visible, global.css) et son liseré clair,
+   ajouté ici à l'ombre intérieure du champ actif. */
 .dv-control:focus-visible {
-  outline: 2.5px solid var(--coral-text);
-  outline-offset: 2px;
+  box-shadow:
+    inset 0 0 0 1px var(--marine),
+    0 0 0 3px var(--paper);
 }
 
 .dv-control[aria-invalid='true'] {
@@ -294,9 +297,17 @@ textarea.dv-control {
     outline: none;
   }
 
+  /* L'anneau du site passe du bouton radio à toute la carte. */
   .dv-choice:has(input:focus-visible) {
-    outline: 2.5px solid var(--coral-text);
+    outline: 2.5px solid var(--marine);
     outline-offset: 3px;
+    box-shadow: 0 0 0 3px var(--paper);
+  }
+
+  .dv-choice:has(input:checked:focus-visible) {
+    box-shadow:
+      inset 0 0 0 1px var(--marine),
+      0 0 0 3px var(--paper);
   }
 }
 
@@ -341,9 +352,11 @@ textarea.dv-control {
   scroll-margin-block: 1.5rem;
 }
 
+/* Focus donné par le script après un envoi refusé : même anneau que le reste du site. */
 .dv-summary:focus {
-  outline: 2.5px solid var(--coral-text);
+  outline: 2.5px solid var(--marine);
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--paper);
 }
 
 .dv-summary__title {
@@ -548,8 +561,9 @@ textarea.dv-control {
   outline: none;
 }
 
+/* La règle :focus ci-dessus retire l'anneau global : on le remet pour le clavier. */
 .dv-success h2:focus-visible {
-  outline: 2.5px solid var(--coral-text);
+  outline: 2.5px solid var(--marine);
   outline-offset: 6px;
 }
 

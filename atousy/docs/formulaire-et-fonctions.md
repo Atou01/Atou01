@@ -1,12 +1,13 @@
 # Formulaire de devis et fonctions serveur
 
-Le site est un export statique (Astro, `dist/`). Les seules parties dynamiques sont deux
-**Cloudflare Pages Functions**, dans `functions/` :
+Le site est un export statique (Astro, `dist/`). Les seules parties dynamiques sont des
+**Cloudflare Pages Functions**, dans `functions/` : deux routes et un middleware.
 
 | Route | Fichier | Rôle |
 | --- | --- | --- |
 | `GET /api/pays` | `functions/api/pays.js` | Pays du visiteur, pour proposer le bon marché (Europe · EUR / Suisse · CHF) |
 | `POST /api/devis` | `functions/api/devis.js` → `server/devis.js` | Reçoit le formulaire de devis et l'envoie par e-mail |
+| Pages HTML du site | `functions/_middleware.js` | Pose le marché détecté sur `<html>` (voir « Prix selon le pays, dès le premier affichage ») |
 
 Le code partagé vit dans `server/`, hors de `functions/` : il ne devient jamais une route,
 wrangler l'embarque via les imports relatifs. Les deux routes répondent aussi avec une

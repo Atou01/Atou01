@@ -1,20 +1,21 @@
 ---
-// Bande des fenêtres de démonstration : une fenêtre par page de chaque démo, dans l'ordre
-// de demoWindows (src/data/pages/demos.ts). Ajouter une démo dans ces données suffit.
-// Chaque fenêtre est un vrai lien vers sa page de démo (même onglet).
+// Bande des fenêtres de démonstration : une fenêtre par démo (sa page d'accueil), dans l'ordre
+// de demoWindows (src/data/pages/demos.ts). Ajouter une démo : ses données dans ce fichier,
+// sa miniature dans DemoWindow.astro.
+// Chaque fenêtre est un vrai lien vers l'accueil de sa démo (même onglet).
 // Défilement : glisser à la souris, doigt, pavé tactile (geste horizontal), Maj + molette,
 // flèches du clavier, boutons précédent / suivant. La molette verticale fait toujours défiler
 // la page, jamais la bande. Un glisser n'ouvre jamais la démo sous le curseur.
 // Sans JavaScript : la bande défile nativement (barre de défilement visible), les liens marchent.
 import Icon from '../Icon.astro';
 import DemoWindow from './DemoWindow.astro';
-import { demos, demoWindows } from '../../data/pages/demos';
+import { demoWindows } from '../../data/pages/demos';
 
 interface Props {
   id?: string;
   title?: string;
 }
-const { id = 'parcourir', title = 'Parcourez les pages' } = Astro.props;
+const { id = 'parcourir', title = 'Parcourez les démos' } = Astro.props;
 const total = demoWindows.length;
 ---
 
@@ -22,8 +23,9 @@ const total = demoWindows.length;
   <div class="container dw__head">
     <h2 id={`${id}-title`}>{title}</h2>
     <p class="dw__help">
-      <span class="dw__help-mouse">Faites glisser la bande ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo.</span>
-      <span class="dw__help-touch">Glissez pour voir les autres pages. Touchez une fenêtre pour ouvrir la démo.</span>
+      <span class="dw__help-mouse js-only">Faites glisser la bande ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo.</span>
+      <span class="dw__help-mouse nojs-only">Faites défiler la bande pour voir les autres démos. Cliquez sur une fenêtre pour ouvrir la démo.</span>
+      <span class="dw__help-touch">Glissez pour voir les autres démos. Touchez une fenêtre pour ouvrir la démo.</span>
     </p>
   </div>
 
@@ -36,20 +38,14 @@ const total = demoWindows.length;
     <ul class="dw__track" data-dw-track>
       {
         demoWindows.map((w, i) => (
-          <li
-            class:list={['dw__item', `dw__item--${w.demo}`, { 'dw__item--group': i > 0 && demoWindows[i - 1].demo !== w.demo }]}
-            data-demo={w.demo}
-            data-label={w.label}
-          >
+          <li class="dw__item" data-label={w.label}>
             <a class="dw__link" href={w.href} draggable="false">
               <span class="visually-hidden">Ouvrir la démonstration fictive {w.label}</span>
               <span class="dw__frame">
-                <DemoWindow id={w.id} eager={i < 3} priority={i === 0} sizes="(max-width: 40em) 80vw, (max-width: 62.49em) 46vw, 36vw" halfSizes="(max-width: 40em) 40vw, (max-width: 62.49em) 23vw, 18vw" />
+                <DemoWindow id={w.id} eager={i < 3} priority={i === 0} sizes="(max-width: 40em) 80vw, (max-width: 62.49em) 46vw, 36vw" />
               </span>
               <span class="dw__caption" aria-hidden="true">
-                <span class="dw__label">
-                  <span class="dw__demo">{demos[w.demo].prefix}</span> — {w.page}
-                </span>
+                <span class="dw__label">{w.label}</span>
                 <span class="dw__meta">Démonstration fictive</span>
               </span>
             </a>
@@ -60,16 +56,7 @@ const total = demoWindows.length;
   </div>
 
   <div class="container dw__bar js-only">
-    <div class="dw__jumps">
-      {
-        Object.values(demos).map((d) => (
-          <button type="button" class="dw__jump" data-dw-jump={d.id}>
-            <span class="visually-hidden">Aller aux pages </span>
-            {d.name}
-          </button>
-        ))
-      }
-    </div>
+    <p class="dw__count" aria-hidden="true" data-dw-count>1 / {total}</p>
     <div class="dw__rail" aria-hidden="true"><span class="dw__thumb" data-dw-thumb></span></div>
     <div class="dw__nav">
       <button type="button" class="dw__btn" data-dw-prev aria-label="Fenêtre précédente" aria-disabled="true">
@@ -94,7 +81,7 @@ const total = demoWindows.length;
     const next = root.querySelector<HTMLButtonElement>('[data-dw-next]');
     const thumb = root.querySelector<HTMLElement>('[data-dw-thumb]');
     const live = root.querySelector<HTMLElement>('[data-dw-live]');
-    const jumps = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dw-jump]'));
+    const count = root.querySelector<HTMLElement>('[data-dw-count]');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     const total = items.length;
 
@@ -113,7 +100,7 @@ const total = demoWindows.length;
       if (live) live.textContent = `Fenêtre ${i + 1} sur ${total} : ${items[i].dataset.label ?? ''}`;
     };
 
-    // Fenêtre visée par le dernier déplacement demandé (bouton, clavier, saut de démo).
+    // Fenêtre visée par le dernier déplacement demandé (bouton, clavier).
     // Les clics rapprochés partent de cette cible, pas de la position en cours d'animation :
     // aucun pas n'est perdu. Elle est oubliée à l'arrivée ou dès que le visiteur fait
     // défiler la bande lui-même.
@@ -135,7 +122,19 @@ const total = demoWindows.length;
       freeTimer = window.setTimeout(() => setFree(false), reduce.matches ? 0 : 450);
     };
 
-    // Boutons et indicateur. Aux extrémités, les boutons sont marqués aria-disabled au lieu
+    // Fenêtres entièrement visibles (à 4 px près) quand la bande est à la position x.
+    const visibleAt = (x: number) => {
+      const w = track.clientWidth;
+      return links.flatMap((el, i) => (el.offsetLeft - x >= -4 && el.offsetLeft + el.offsetWidth - x <= w + 4 ? [i] : []));
+    };
+    // Compteur : « 1–2 / 5 » sur grand écran, « 3 / 5 » au téléphone.
+    // Pendant un défilement où aucune fenêtre n'est entière, la plus proche.
+    const shown = () => {
+      const on = visibleAt(track.scrollLeft);
+      return on.length ? [on[0], on[on.length - 1]] : [nearest(), nearest()];
+    };
+
+    // Boutons et indicateurs. Aux extrémités, les boutons sont marqués aria-disabled au lieu
     // de disabled : ils gardent le focus clavier (sinon il tomberait sur <body>).
     const setOff = (b: HTMLButtonElement | null, off: boolean) => b?.setAttribute('aria-disabled', String(off));
     const isOff = (b: HTMLButtonElement | null) => b?.getAttribute('aria-disabled') === 'true';
@@ -150,11 +149,10 @@ const total = demoWindows.length;
         thumb.style.width = `${(track.clientWidth / sw) * 100}%`;
         thumb.style.left = `${(x / sw) * 100}%`;
       }
-      const demo = items[nearest()].dataset.demo;
-      jumps.forEach((b) => {
-        if (b.dataset.dwJump === demo) b.setAttribute('aria-current', 'true');
-        else b.removeAttribute('aria-current');
-      });
+      if (count) {
+        const [a, b] = shown();
+        count.textContent = a === b ? `${a + 1} / ${total}` : `${a + 1}–${b + 1} / ${total}`;
+      }
     };
     let raf = 0;
     const schedule = () => {
@@ -164,28 +162,28 @@ const total = demoWindows.length;
     track.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
 
+    // Fin de bande : « suivant » va directement au bout dès que la dernière fenêtre est entière à la
+    // position visée, et c'est elle qu'il annonce (sur grand écran, les deux dernières partagent la
+    // même position). « Précédent » saute une position qui laisserait voir les mêmes fenêtres
+    // entières (sur tablette, elle n'est qu'à quelques pixels du bout).
     prev?.addEventListener('click', () => {
       if (isOff(prev)) return;
       const x = from();
+      const now = visibleAt(x).join();
       for (let i = total - 1; i >= 0; i--) {
-        if (posOf(i) < x - 4) {
+        if (posOf(i) < x - 4 && visibleAt(posOf(i)).join() !== now) {
           go(i, true);
           return;
         }
       }
+      if (x > 4) go(0, true);
     });
     next?.addEventListener('click', () => {
       if (isOff(next)) return;
       const x = from();
       const i = items.findIndex((_, k) => posOf(k) > x + 4);
-      if (i >= 0) go(i, true);
+      if (i >= 0) go(visibleAt(posOf(i)).includes(total - 1) ? total - 1 : i, true);
     });
-    jumps.forEach((b) =>
-      b.addEventListener('click', () => {
-        const i = items.findIndex((el) => el.dataset.demo === b.dataset.dwJump);
-        if (i >= 0) go(i, true);
-      }),
-    );
 
     // Clavier : flèches, Début, Fin quand une fenêtre a le focus.
     track.addEventListener('keydown', (e) => {
@@ -358,14 +356,6 @@ const total = demoWindows.length;
     width: var(--dw-w);
   }
 
-  /* Respiration et filet fin entre les deux démos */
-  .dw__item--group {
-    width: calc(var(--dw-w) + var(--dw-gap) * 1.25 + 1px);
-    margin-left: calc(var(--dw-gap) * 0.25);
-    padding-left: calc(var(--dw-gap) * 1.25);
-    border-left: 1px solid var(--line-strong);
-  }
-
   .dw__link {
     display: block;
     scroll-snap-align: start;
@@ -413,12 +403,8 @@ const total = demoWindows.length;
 
   .dw__label {
     font-size: 1.0625rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-
-  .dw__demo {
     font-weight: 650;
+    letter-spacing: -0.01em;
   }
 
   .dw__meta {
@@ -435,7 +421,7 @@ const total = demoWindows.length;
     background-size: 100% 2px;
   }
 
-  /* ---------- Barre : démos, indicateur, boutons ---------- */
+  /* ---------- Barre : compteur, indicateur, boutons ---------- */
   .dw__bar {
     display: flex;
     align-items: center;
@@ -443,34 +429,14 @@ const total = demoWindows.length;
     margin-top: 0.75rem;
   }
 
-  /* Passe à la ligne s'il y a beaucoup de démos (petits écrans) */
-  .dw__jumps {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.5rem;
-  }
-
-  .dw__jump {
-    padding: 0.4rem 0;
-    border: 0;
-    background: none;
+  /* Largeur fixe : la barre ne bouge pas quand le compteur passe de « 1 / 5 » à « 1–2 / 5 » */
+  .dw__count {
+    flex: none;
+    min-width: 4.5em;
     font-size: 0.9375rem;
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
     color: var(--ink-2);
-    cursor: pointer;
-    background: linear-gradient(var(--coral), var(--coral)) left bottom / 0 2px no-repeat;
-    transition:
-      background-size 0.25s var(--ease),
-      color 0.2s var(--ease);
-  }
-
-  .dw__jump:hover {
-    color: var(--ink);
-  }
-
-  .dw__jump[aria-current='true'] {
-    color: var(--ink);
-    background-size: 100% 2px;
   }
 
   .dw__rail {

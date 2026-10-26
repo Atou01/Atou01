@@ -2,7 +2,8 @@
 // Gabarit commun des démonstrations fictives (Rivage, Faîtage, Écluse, Lueur, Moellon).
 // Bandeau « démonstration fictive » non masquable, page exclue des moteurs de recherche.
 // Le lien « Aller au contenu » est fourni ici, avant le bandeau : c'est le premier arrêt
-// au clavier. Il vise <main id="contenu"> du gabarit de marque.
+// au clavier, et le seul (les gabarits de marque n'en ajoutent pas). Il vise
+// <main id="contenu"> du gabarit de marque.
 import '@fontsource-variable/figtree/wght.css';
 import '@fontsource-variable/newsreader/wght.css';
 import { site } from '../data/site';
@@ -49,7 +50,7 @@ const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à p
     <aside class="demo-banner" aria-label="Démonstration fictive">
       <p>
         <strong>Démonstration fictive réalisée par Atousy</strong>
-        <span> — cette entreprise n'existe pas.</span>
+        <span> — cette entreprise n’existe pas.</span>
       </p>
       <a href="/exemples/">Retour à Atousy</a>
     </aside>
@@ -115,13 +116,6 @@ const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à p
       scroll-behavior: auto !important;
     }
   }
-
-  /* Un seul lien d'évitement : celui de ce gabarit. Un lien « Aller au contenu » ajouté par un
-     gabarit de marque (après le bandeau, donc deuxième au clavier) ferait doublon. */
-  .demo-skip ~ a[href='#contenu'][class*='skip'],
-  .demo-skip ~ * a[href='#contenu'][class*='skip'] {
-    display: none !important;
-  }
 </style>
 
 <style>
@@ -152,9 +146,13 @@ const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à p
     white-space: nowrap;
   }
 
-  .demo-skip:focus-visible {
-    outline: 2px solid #f07a5f;
+  /* Focus : l'anneau du site Atousy, marine avec un liseré clair (l'un des deux contraste
+     toujours avec le fond, bandeau sombre ou page claire de la marque). */
+  .demo-skip:focus-visible,
+  .demo-banner a:focus-visible {
+    outline: 2.5px solid #0f2329;
     outline-offset: 3px;
+    box-shadow: 0 0 0 3px #fffdfa;
   }
 
   .demo-banner {
@@ -165,7 +163,7 @@ const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à p
     align-items: center;
     justify-content: center;
     gap: 0.25rem 1.25rem;
-    padding: 0.6rem 1.25rem;
+    padding: 0.45rem 1.25rem;
     background: #0f2329;
     color: #f8f4ee;
     font-family: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
@@ -178,18 +176,22 @@ const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à p
     font-weight: 650;
   }
 
+  /* Cible d'au moins 24 px de haut sans grossir le texte ; le bandeau garde sa hauteur
+     (marges verticales réduites d'autant). */
   .demo-banner a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
     color: #f8f4ee;
     font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
   }
 
+  /* Survol : soulignement corail plus épais, le texte reste ivoire (comme sur le site). */
   .demo-banner a:hover {
-    color: #f07a5f;
-  }
-
-  .demo-banner a:focus-visible {
-    outline: 2px solid #f07a5f;
-    outline-offset: 3px;
+    text-decoration-color: #f07a5f;
+    text-decoration-thickness: 2px;
   }
 </style>

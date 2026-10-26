@@ -5,7 +5,11 @@ description: "Comment Atousy traite les données du formulaire de devis : finali
 statut: modèle à compléter — ne pas publier avec des crochets (page en noindex tant qu’il en reste)
 ---
 
+*Fil d’Ariane :* Accueil / Confidentialité
+
 # Politique de confidentialité
+
+*Sur la page, le titre passe à la ligne après « Politique » : « de » ne finit jamais une ligne.*
 
 Cette page explique quelles données nous recevons par le site atousy.com, pourquoi, et comment exercer vos droits. Elle s’appuie sur le Règlement général sur la protection des données (RGPD) et sur la loi fédérale suisse sur la protection des données (nLPD).
 
@@ -65,6 +69,8 @@ Les demandes ne sont pas enregistrées dans une base de données du site : elles
 ## Destinataires et pays
 
 Vos données sont traitées par **Atousy**, uniquement pour répondre à votre demande, et par les prestataires ci-dessous, qui agissent pour notre compte.
+
+*Légende du tableau :* Prestataires qui reçoivent vos données ou peuvent y accéder
 
 | Prestataire | Rôle | Pays | Base du transfert |
 | --- | --- | --- | --- |
@@ -145,8 +151,9 @@ Voir aussi les mentions légales et les conditions générales de vente.
 ## Notes pour l’intégration (non affichées)
 
 - Aucun crochet [À COMPLÉTER] ne doit être publié. La page reste en noindex tant qu’il en reste.
+  Tant qu’il en reste, une ligne s’affiche sous l’introduction : « Page en cours de finalisation : les informations surlignées restent à compléter. »
 - Lien depuis la mention sous le formulaire de devis et depuis le pied de page.
 - Mention courte sous le bouton du formulaire de devis (premier niveau d’information, docs/obligations-suisse.md § 3.1) : voir `devis.md`, « Mention de confidentialité ».
 - À ne pas ajouter : aucun représentant en Suisse à mentionner.
-- Appel à l’action : bandeau standard du site « Parlons de votre projet. » + bouton « Demander un devis » → /devis/, ou aucun bandeau sur les pages légales (au choix du fondateur).
+- Appel à l’action : le bandeau standard des pages intérieures s’affiche en bas de page (« Parlons de votre projet. » · « Un site à votre image, pensé pour votre activité. » · bouton « Demander un devis » → /devis/). Le retirer des pages légales reste au choix du fondateur.
 - Liens internes : /devis/, /mentions-legales/, /cgv/.
