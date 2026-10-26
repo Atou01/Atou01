@@ -1,0 +1,92 @@
+---
+// Bandeau d'appel à l'action, en fin de page : un halo ambré, vers la page Contact de la démo.
+import Icon from '../../Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+  button?: string;
+}
+const {
+  title = 'Un projet électrique en tête ?',
+  text = 'Décrivez-nous votre besoin en quelques lignes : nous revenons vers vous pour en parler et, si besoin, organiser une visite.',
+  button = 'Décrire votre projet',
+} = Astro.props;
+---
+
+<section class="band" aria-labelledby="lu-band-title">
+  <div class="band__glow" aria-hidden="true"></div>
+  <svg class="band__arc" viewBox="0 0 400 220" fill="none" aria-hidden="true" focusable="false">
+    <path d="M40 220c0-118 71.6-200 160-200s160 82 160 200" />
+  </svg>
+  <div class="lu-container band__inner">
+    <p class="lu-label">Contact</p>
+    <h2 id="lu-band-title" class="band__title">{title}</h2>
+    <p class="band__text">{text}</p>
+    <a class="lu-btn" href="/exemples/lueur/contact/">
+      {button} <Icon name="arrow" />
+    </a>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    padding-block: clamp(4.5rem, 10vw, 8rem);
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+    text-align: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .band__glow {
+    position: absolute;
+    left: 50%;
+    bottom: -40%;
+    z-index: -1;
+    width: min(64rem, 140%);
+    aspect-ratio: 1.6;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgb(242 180 90 / 0.24), rgb(242 180 90 / 0.08) 55%, transparent 100%);
+  }
+
+  .band__arc {
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    z-index: -1;
+    width: min(46rem, 120%);
+    transform: translateX(-50%);
+    stroke: var(--lu-amber);
+    stroke-width: 1;
+    opacity: 0.32;
+  }
+
+  .band__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .band .lu-label {
+    justify-content: center;
+  }
+
+  .band__title {
+    max-width: 18ch;
+    font-size: clamp(2.2rem, 1.4rem + 3vw, 3.9rem);
+    color: var(--lu-ivory);
+  }
+
+  .band__text {
+    max-width: 46ch;
+    margin-top: 1.25rem;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    color: var(--lu-dim);
+  }
+
+  .band .lu-btn {
+    margin-top: 2.25rem;
+  }
+</style>

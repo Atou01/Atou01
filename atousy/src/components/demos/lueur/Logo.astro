@@ -1,0 +1,74 @@
+---
+// Logo Lueur : petit filament incandescent (arc lumineux sur deux fils) + mot-symbole en capitales espacées.
+interface Props {
+  size?: 'md' | 'lg';
+}
+const { size = 'md' } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${size}`]}>
+  <svg class="logo__glyph" viewBox="0 0 28 28" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path class="logo__halo" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+    <path class="logo__arc" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+    <path class="logo__leads" d="M7.5 19.5v5M20.5 19.5v5" />
+    <circle class="logo__spark" cx="14" cy="3.6" r="1.35" />
+  </svg>
+  <span class="logo__word">Lueur</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    line-height: 1;
+    color: var(--lu-ivory);
+  }
+
+  .logo__glyph {
+    width: 1.75rem;
+    height: 1.75rem;
+    overflow: visible;
+  }
+
+  .logo__halo {
+    stroke: var(--lu-amber);
+    stroke-width: 5;
+    opacity: 0.22;
+    filter: blur(2.5px);
+  }
+
+  .logo__arc {
+    stroke: var(--lu-amber);
+    stroke-width: 2.1;
+  }
+
+  .logo__leads {
+    stroke: currentColor;
+    stroke-width: 1.8;
+    opacity: 0.85;
+  }
+
+  .logo__spark {
+    fill: var(--lu-amber);
+  }
+
+  .logo__word {
+    font-family: var(--lu-sans);
+    font-size: 1.125rem;
+    font-weight: 650;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    /* compense l'espacement après la dernière lettre */
+    margin-right: -0.34em;
+  }
+
+  .logo--lg .logo__glyph {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .logo--lg .logo__word {
+    font-size: 1.4rem;
+  }
+</style>

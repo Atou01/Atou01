@@ -1,0 +1,116 @@
+---
+// Pictogrammes au trait de la démo Lueur (héritent de currentColor).
+import type { LueurIconName } from './icons';
+
+interface Props {
+  name: LueurIconName;
+  class?: string;
+}
+const { name, class: className } = Astro.props;
+---
+
+<svg class={className} width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  {
+    name === 'shield' && (
+      <>
+        <path d="M12 3.2 5 5.9v5.4c0 4.3 2.9 7.9 7 9.1 4.1-1.2 7-4.8 7-9.1V5.9l-7-2.7Z" />
+        <path d="m9 12 2.1 2.1L15.2 10" />
+      </>
+    )
+  }
+  {
+    name === 'sparkle' && (
+      <>
+        <path d="M11 3.5c.7 4.3 2.4 6 6.5 6.6-4.1.7-5.8 2.4-6.5 6.6-.7-4.2-2.4-5.9-6.5-6.6 4.1-.6 5.8-2.3 6.5-6.6Z" />
+        <path d="M18.5 15.5c.3 1.7 1 2.4 2.6 2.7-1.6.3-2.3 1-2.6 2.7-.3-1.7-1-2.4-2.6-2.7 1.6-.3 2.3-1 2.6-2.7Z" />
+      </>
+    )
+  }
+  {
+    name === 'chat' && (
+      <>
+        <path d="M5 5h14a1.5 1.5 0 0 1 1.5 1.5v8.5a1.5 1.5 0 0 1-1.5 1.5h-7.2l-4.3 3.3v-3.3H5A1.5 1.5 0 0 1 3.5 15V6.5A1.5 1.5 0 0 1 5 5Z" />
+        <path d="M8 9.6h8M8 12.6h5" />
+      </>
+    )
+  }
+  {
+    name === 'socket' && (
+      <>
+        <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+        <circle cx="12" cy="12" r="5" />
+        <path d="M9.9 12h.01M14.1 12h.01M12 7v1.6" />
+      </>
+    )
+  }
+  {
+    name === 'panel' && (
+      <>
+        <rect x="4" y="3" width="16" height="18" rx="1.5" />
+        <path d="M4 10h16M4 16h16" />
+        <path d="M7.5 5.6v2M10.5 5.6v2M13.5 5.6v2M16.5 5.6v2M7.5 11.9v2M10.5 11.9v2M13.5 11.9v2" />
+      </>
+    )
+  }
+  {
+    name === 'bulb' && (
+      <>
+        <path d="M9.2 17.5h5.6M10.2 20.5h3.6" />
+        <path d="M12 3a6 6 0 0 0-3.7 10.7c.7.6 1 1.3 1 2.2v.1h5.4v-.1c0-.9.3-1.6 1-2.2A6 6 0 0 0 12 3Z" />
+        <path d="M10.6 12.2c0-1.5.6-2.6 1.4-2.6s1.4 1.1 1.4 2.6" />
+      </>
+    )
+  }
+  {
+    name === 'charger' && (
+      <>
+        <rect x="4" y="3" width="10" height="18" rx="2" />
+        <path d="m9.6 7.5-2.1 3.6h3l-2.1 3.6" />
+        <path d="M14 8.5h2.2a1.8 1.8 0 0 1 1.8 1.8v6.2a1.5 1.5 0 0 0 3 0V11" />
+      </>
+    )
+  }
+  {
+    name === 'home' && (
+      <>
+        <path d="M4 10.8 12 4.3l8 6.5v8.4a1.3 1.3 0 0 1-1.3 1.3H5.3A1.3 1.3 0 0 1 4 19.2v-8.4Z" />
+        <path d="M9.6 14.6a3.4 3.4 0 0 1 4.8 0M8 12.8a5.7 5.7 0 0 1 8 0M12 17.2h.01" />
+      </>
+    )
+  }
+  {
+    name === 'alert' && (
+      <>
+        <path d="M10.6 4.6 3 18a1.6 1.6 0 0 0 1.4 2.4h15.2A1.6 1.6 0 0 0 21 18L13.4 4.6a1.6 1.6 0 0 0-2.8 0Z" />
+        <path d="M12 9.5v4.3M12 16.9h.01" />
+      </>
+    )
+  }
+  {
+    name === 'plug' && (
+      <>
+        <path d="M9 3v4.5M15 3v4.5" />
+        <path d="M6.5 7.5h11V11a5.5 5.5 0 0 1-11 0V7.5Z" />
+        <path d="M12 16.5V21" />
+      </>
+    )
+  }
+  {
+    name === 'info' && (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 11v5.2M12 7.9h.01" />
+      </>
+    )
+  }
+  {name === 'check' && <path d="m5 12.5 4.3 4.3L19 7.2" />}
+  {
+    name === 'lock' && (
+      <>
+        <rect x="5" y="10.5" width="14" height="10" rx="2" />
+        <path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3" />
+      </>
+    )
+  }
+  {name === 'upload' && <path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4.5 14.5v4a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4" />}
+</svg>

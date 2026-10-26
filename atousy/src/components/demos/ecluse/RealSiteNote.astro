@@ -1,0 +1,71 @@
+---
+// Encart honnête : ce qu'un vrai site afficherait à cet endroit (coordonnées, tarifs, qualifications…).
+import EIcon from './EIcon.astro';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+const { tone = 'light', class: className } = Astro.props;
+---
+
+<div class:list={['note', `note--${tone}`, className]} role="note">
+  <span class="note__icon" aria-hidden="true"><EIcon name="info" /></span>
+  <p><strong>Dans un vrai site :</strong> <slot /></p>
+</div>
+
+<style>
+  .note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.95rem 1.1rem;
+    border: 1.5px dashed var(--ec-line-strong);
+    border-radius: var(--ec-radius);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .note--light {
+    background: var(--ec-white);
+    color: var(--ec-ink-2);
+  }
+
+  .note--dark {
+    background: rgb(255 255 255 / 0.04);
+    border-color: rgb(255 255 255 / 0.32);
+    color: rgb(255 255 255 / 0.84);
+  }
+
+  .note strong {
+    font-weight: 700;
+    color: var(--ec-ink);
+  }
+
+  .note--dark strong {
+    color: var(--ec-white);
+  }
+
+  .note__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-top: -0.1rem;
+    border-radius: 50%;
+    background: var(--ec-brass-soft);
+    color: var(--ec-brass-ink);
+  }
+
+  .note--dark .note__icon {
+    background: rgb(220 195 148 / 0.16);
+    color: var(--ec-brass-light);
+  }
+
+  .note__icon :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+</style>

@@ -1,0 +1,375 @@
+---
+// Gabarit des pages Écluse (plombier-chauffagiste fictif) : DemoLayout + en-tête + pied de page
+// + jetons de couleur et utilitaires partagés, limités à html[data-demo='ecluse'].
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import type { EclusePage } from './nav';
+
+interface Props {
+  title: string;
+  description: string;
+  current: EclusePage;
+}
+const { title, description, current } = Astro.props;
+---
+
+<DemoLayout title={title} description={description} brand="ecluse">
+  <a class="ec-skip" href="#contenu">Aller au contenu</a>
+  <Header current={current} />
+  <main id="contenu" tabindex="-1">
+    <slot />
+  </main>
+  <Footer />
+</DemoLayout>
+
+<style is:global>
+  html[data-demo='ecluse'] {
+    --ec-white: #ffffff;
+    --ec-mist: #f2f5f7;
+    --ec-mist-2: #e6ecef;
+    --ec-mist-3: #d5dee3;
+    --ec-ink: #142430;
+    --ec-ink-2: #44535e;
+    --ec-ink-3: #5a6a74;
+    --ec-slate: #2f4a5a;
+    --ec-slate-2: #3d5c6e;
+    --ec-slate-deep: #1d3240;
+    --ec-brass: #b38f58;
+    --ec-brass-ink: #82622b;
+    --ec-brass-light: #dcc394;
+    --ec-brass-soft: #f4ecdd;
+    --ec-line: rgb(29 50 64 / 0.12);
+    --ec-line-strong: rgb(29 50 64 / 0.26);
+    --ec-line-light: rgb(255 255 255 / 0.16);
+    --ec-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    --ec-ease: cubic-bezier(0.25, 0.8, 0.25, 1);
+    --ec-radius-sm: 0.75rem;
+    --ec-radius: 1.125rem;
+    --ec-radius-lg: 1.75rem;
+    --ec-shadow: 0 1px 2px rgb(20 36 48 / 0.06), 0 12px 32px -12px rgb(20 36 48 / 0.18);
+    --ec-gutter: clamp(1rem, 4vw, 3rem);
+    --ec-max: 80rem;
+    --ec-wide: 90rem;
+    background: var(--ec-white);
+    scroll-padding-top: 6.5rem;
+  }
+
+  html[data-demo='ecluse'] body {
+    background: var(--ec-white);
+    color: var(--ec-ink-2);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+
+  html[data-demo='ecluse'] main:focus {
+    outline: none;
+  }
+
+  html[data-demo='ecluse'] ::selection {
+    background: var(--ec-brass-light);
+    color: var(--ec-ink);
+  }
+
+  html[data-demo='ecluse'] :focus-visible {
+    outline: 2px solid var(--ec-slate);
+    outline-offset: 3px;
+  }
+
+  html[data-demo='ecluse'] .ec-dark :focus-visible {
+    outline-color: var(--ec-brass-light);
+  }
+
+  html[data-demo='ecluse'] h1,
+  html[data-demo='ecluse'] h2,
+  html[data-demo='ecluse'] h3 {
+    font-family: var(--ec-sans);
+    color: var(--ec-ink);
+    text-wrap: balance;
+  }
+
+  html[data-demo='ecluse'] h1,
+  html[data-demo='ecluse'] h2 {
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+  }
+
+  html[data-demo='ecluse'] h3 {
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.018em;
+  }
+
+  html[data-demo='ecluse'] p {
+    text-wrap: pretty;
+  }
+
+  html[data-demo='ecluse'] .ec-dark,
+  html[data-demo='ecluse'] .ec-dark h2,
+  html[data-demo='ecluse'] .ec-dark h3 {
+    color: var(--ec-white);
+  }
+
+  /* ——— Utilitaires ——— */
+  .ec-container {
+    width: min(var(--ec-max), 100% - 2 * var(--ec-gutter));
+    margin-inline: auto;
+  }
+
+  .ec-wide {
+    width: min(var(--ec-wide), 100% - 2 * var(--ec-gutter));
+    margin-inline: auto;
+  }
+
+  .ec-section {
+    padding-block: clamp(4.5rem, 9vw, 8rem);
+  }
+
+  .ec-skip {
+    position: absolute;
+    left: 1rem;
+    top: 0.5rem;
+    z-index: 200;
+    padding: 0.7rem 1.2rem;
+    background: var(--ec-slate-deep);
+    color: var(--ec-white);
+    border-radius: 999px;
+    font-weight: 650;
+    transform: translateY(-200%);
+  }
+
+  .ec-skip:focus {
+    transform: none;
+  }
+
+  /* Pastille de rubrique : point laiton + libellé */
+  .ec-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 1.25rem;
+    padding: 0.4rem 0.85rem 0.4rem 0.7rem;
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    border-radius: 999px;
+    color: var(--ec-slate);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+
+  .ec-chip::before {
+    content: '';
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: var(--ec-brass);
+    box-shadow: 0 0 0 3px rgb(179 143 88 / 0.22);
+  }
+
+  .ec-dark .ec-chip {
+    background: rgb(255 255 255 / 0.08);
+    border-color: var(--ec-line-light);
+    color: var(--ec-white);
+  }
+
+  .ec-dark .ec-chip::before {
+    background: var(--ec-brass-light);
+  }
+
+  .ec-h2 {
+    font-size: clamp(2.05rem, 1.35rem + 2.3vw, 3.25rem);
+  }
+
+  .ec-lead {
+    font-size: clamp(1.125rem, 1.05rem + 0.3vw, 1.275rem);
+    line-height: 1.6;
+    color: var(--ec-ink-2);
+  }
+
+  .ec-dark .ec-lead {
+    color: rgb(255 255 255 / 0.82);
+  }
+
+  /* Boutons en pilule, flèche dans une pastille */
+  .ec-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 3.25rem;
+    padding: 0.4rem 0.45rem 0.4rem 1.4rem;
+    background: var(--ec-slate);
+    color: var(--ec-white);
+    border: 1px solid var(--ec-slate);
+    border-radius: 999px;
+    font-family: var(--ec-sans);
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      background-color 0.25s var(--ec-ease),
+      border-color 0.25s var(--ec-ease),
+      color 0.25s var(--ec-ease);
+  }
+
+  .ec-btn__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--ec-brass-light);
+    color: var(--ec-ink);
+    transition: transform 0.3s var(--ec-ease);
+  }
+
+  .ec-btn__icon svg {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .ec-btn:hover {
+    background: var(--ec-slate-deep);
+    border-color: var(--ec-slate-deep);
+  }
+
+  .ec-btn:hover .ec-btn__icon {
+    transform: translateX(3px);
+  }
+
+  .ec-btn--brass {
+    background: var(--ec-brass-light);
+    border-color: var(--ec-brass-light);
+    color: var(--ec-ink);
+  }
+
+  .ec-btn--brass .ec-btn__icon {
+    background: var(--ec-slate-deep);
+    color: var(--ec-white);
+  }
+
+  .ec-btn--brass:hover {
+    background: var(--ec-white);
+    border-color: var(--ec-white);
+  }
+
+  .ec-btn--ghost {
+    background: transparent;
+    border-color: var(--ec-line-strong);
+    color: var(--ec-ink);
+  }
+
+  .ec-btn--ghost .ec-btn__icon {
+    background: var(--ec-mist-2);
+  }
+
+  .ec-btn--ghost:hover {
+    background: var(--ec-mist);
+    border-color: var(--ec-slate);
+  }
+
+  .ec-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-block: 0.25rem;
+    color: var(--ec-slate);
+    font-weight: 650;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.35em;
+    text-decoration-color: var(--ec-brass);
+    transition: color 0.25s var(--ec-ease);
+  }
+
+  .ec-link svg {
+    width: 1.05em;
+    height: 1.05em;
+    flex: none;
+    transition: transform 0.3s var(--ec-ease);
+  }
+
+  .ec-link:hover {
+    color: var(--ec-ink);
+  }
+
+  .ec-link:hover svg {
+    transform: translateX(3px);
+  }
+
+  .ec-dark .ec-link {
+    color: var(--ec-white);
+    text-decoration-color: var(--ec-brass-light);
+  }
+
+  /* Légende « Projet type · … » */
+  .ec-caption {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+    color: var(--ec-ink-3);
+  }
+
+  .ec-caption::before {
+    content: '';
+    flex: none;
+    width: 1rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--ec-brass);
+  }
+
+  /* Liste à coches */
+  .ec-checks {
+    display: grid;
+    gap: 0.7rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ec-checks li {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .ec-checks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: var(--ec-brass-soft)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2382622b' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-8.5'/%3E%3C/svg%3E")
+      center / 0.8rem no-repeat;
+  }
+
+  .ec-visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ec-btn:hover .ec-btn__icon,
+    .ec-link:hover svg {
+      transform: none;
+    }
+  }
+</style>

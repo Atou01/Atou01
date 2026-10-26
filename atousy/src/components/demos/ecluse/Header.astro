@@ -1,0 +1,372 @@
+---
+// En-tête Écluse : logo à gauche, navigation en « pilule » segmentée, bouton Contact.
+// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
+// Sans JavaScript, la navigation reste visible (liens repliés sous le logo).
+import EIcon from './EIcon.astro';
+import Logo from './Logo.astro';
+import { ecluseNav, type EclusePage } from './nav';
+
+interface Props {
+  current: EclusePage;
+}
+const { current } = Astro.props;
+const links = ecluseNav.filter((item) => item.key !== 'contact');
+const contact = ecluseNav.find((item) => item.key === 'contact')!;
+---
+
+<header class="header" data-ec-header>
+  <div class="bar ec-wide">
+    <a class="brand" href="/exemples/ecluse/" aria-label="Écluse, accueil">
+      <Logo />
+    </a>
+
+    <button class="burger" type="button" aria-expanded="false" aria-controls="ec-menu" data-ec-toggle hidden>
+      <span class="burger__label">Menu</span>
+      <span class="burger__icon" aria-hidden="true">
+        <EIcon name="menu" class="i-open" />
+        <EIcon name="close" class="i-close" />
+      </span>
+    </button>
+
+    <nav id="ec-menu" class="nav" aria-label="Navigation principale">
+      <ul class="nav__list">
+        {
+          links.map((item) => (
+            <li>
+              <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                <span>{item.label}</span>
+                <EIcon name="arrow" class="nav__arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="nav__cta" href={contact.href} aria-current={current === 'contact' ? 'page' : undefined}>
+        {contact.label}
+        <EIcon name="arrow" />
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var header = document.querySelector('[data-ec-header]');
+    if (!header) return;
+    var btn = header.querySelector('[data-ec-toggle]');
+    var panel = document.getElementById('ec-menu');
+    if (!btn || !panel) return;
+
+    header.classList.add('is-enhanced');
+    btn.hidden = false;
+
+    function isOpen() {
+      return btn.getAttribute('aria-expanded') === 'true';
+    }
+    function setOpen(open, returnFocus) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      header.classList.toggle('is-open', open);
+      if (!open && returnFocus) btn.focus();
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(!isOpen(), false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) setOpen(false, true);
+    });
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !header.contains(e.target)) setOpen(false, false);
+    });
+    header.addEventListener('focusout', function (e) {
+      if (isOpen() && e.relatedTarget && !header.contains(e.relatedTarget)) setOpen(false, false);
+    });
+    var mq = window.matchMedia('(min-width: 60.01em)');
+    var onChange = function (e) {
+      if (e.matches) setOpen(false, false);
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+  })();
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(255 255 255 / 0.94);
+    border-bottom: 1px solid var(--ec-line);
+    color: var(--ec-ink);
+  }
+
+  @supports (backdrop-filter: blur(8px)) {
+    .header {
+      background: rgb(255 255 255 / 0.86);
+      backdrop-filter: saturate(1.4) blur(14px);
+    }
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    min-height: 4.75rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    margin-right: auto;
+    padding: 0.35rem 0.25rem 0.35rem 0;
+    border-radius: var(--ec-radius-sm);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin: 0;
+    padding: 0.3rem;
+    list-style: none;
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    border-radius: 999px;
+  }
+
+  .nav__list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.6rem;
+    padding: 0 1.05rem;
+    border-radius: 999px;
+    color: var(--ec-ink-2);
+    font-size: 0.9688rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color 0.2s var(--ec-ease),
+      color 0.2s var(--ec-ease),
+      box-shadow 0.2s var(--ec-ease);
+  }
+
+  .nav__list :global(.nav__arrow) {
+    display: none;
+  }
+
+  .nav__list a:hover {
+    color: var(--ec-ink);
+    background: rgb(255 255 255 / 0.7);
+  }
+
+  .nav__list a[aria-current='page'] {
+    background: var(--ec-white);
+    color: var(--ec-ink);
+    box-shadow:
+      0 1px 2px rgb(20 36 48 / 0.08),
+      0 0 0 1px var(--ec-line);
+  }
+
+  .nav__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.9rem;
+    padding: 0 1.25rem;
+    background: var(--ec-slate);
+    border-radius: 999px;
+    color: var(--ec-white);
+    font-size: 0.9688rem;
+    font-weight: 650;
+    text-decoration: none;
+    transition: background-color 0.2s var(--ec-ease);
+  }
+
+  .nav__cta :global(svg) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--ec-brass-light);
+    transition: transform 0.3s var(--ec-ease);
+  }
+
+  .nav__cta:hover,
+  .nav__cta[aria-current='page'] {
+    background: var(--ec-slate-deep);
+  }
+
+  .nav__cta:hover :global(svg) {
+    transform: translateX(2px);
+  }
+
+  .nav__cta[aria-current='page'] {
+    box-shadow:
+      0 0 0 2px var(--ec-white),
+      0 0 0 4px var(--ec-brass);
+  }
+
+  .burger {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    padding: 0.2rem 0.2rem 0.2rem 1rem;
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    border-radius: 999px;
+    color: var(--ec-ink);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .burger__icon {
+    display: grid;
+    place-items: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 50%;
+    background: var(--ec-slate);
+    color: var(--ec-white);
+  }
+
+  .burger__icon :global(svg) {
+    grid-area: 1 / 1;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .burger :global(.i-close),
+  .is-open .burger :global(.i-open) {
+    display: none;
+  }
+
+  .is-open .burger :global(.i-close) {
+    display: block;
+  }
+
+  @media (max-width: 60em) {
+    .bar {
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      min-height: 4.25rem;
+    }
+
+    /* Sans JavaScript : liens visibles, repliés sous le logo, en-tête non collant */
+    .header:not(.is-enhanced) {
+      position: relative;
+    }
+
+    .header:not(.is-enhanced) .bar {
+      padding-top: 0.6rem;
+    }
+
+    .nav {
+      flex-wrap: wrap;
+      width: 100%;
+      padding-bottom: 0.75rem;
+    }
+
+    .nav__list {
+      flex-wrap: wrap;
+      border-radius: var(--ec-radius);
+    }
+
+    /* Avec JavaScript : panneau déroulant */
+    .is-enhanced .burger:not([hidden]) {
+      display: inline-flex;
+    }
+
+    .is-enhanced .nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      width: auto;
+      max-height: calc(100svh - 4.25rem);
+      overflow-y: auto;
+      padding: 0.75rem var(--ec-gutter) 1.75rem;
+      background: var(--ec-white);
+      border-bottom: 1px solid var(--ec-line);
+      box-shadow: 0 30px 40px -30px rgb(20 36 48 / 0.4);
+    }
+
+    .is-enhanced.is-open .nav {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .is-enhanced .nav__list {
+      display: grid;
+      gap: 0;
+      padding: 0;
+      background: none;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .is-enhanced .nav__list li {
+      border-bottom: 1px solid var(--ec-line);
+    }
+
+    .is-enhanced .nav__list a {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+      min-height: 0;
+      padding: 1rem 0.25rem;
+      border-radius: 0;
+      font-size: 1.625rem;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      color: var(--ec-ink);
+      background: none;
+      box-shadow: none;
+    }
+
+    .is-enhanced .nav__list :global(.nav__arrow) {
+      display: block;
+      flex: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--ec-brass-ink);
+    }
+
+    .is-enhanced .nav__list a[aria-current='page'] span {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-decoration-color: var(--ec-brass);
+      text-underline-offset: 0.2em;
+    }
+
+    .is-enhanced .nav__list a:focus-visible {
+      outline-offset: -2px;
+    }
+
+    .is-enhanced .nav__cta {
+      justify-content: center;
+      min-height: 3.4rem;
+      font-size: 1.0625rem;
+    }
+  }
+
+  @media (max-width: 60em) and (prefers-reduced-motion: no-preference) {
+    .is-enhanced.is-open .nav {
+      animation: ec-drop 0.26s var(--ec-ease);
+    }
+  }
+
+  @keyframes ec-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-0.4rem);
+    }
+  }
+</style>

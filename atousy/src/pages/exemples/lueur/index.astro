@@ -1,0 +1,1210 @@
+---
+// Démonstration fictive « Lueur » (électricien) — page d'accueil.
+import { Picture } from 'astro:assets';
+import LueurLayout from '../../../components/demos/lueur/LueurLayout.astro';
+import ContactBand from '../../../components/demos/lueur/ContactBand.astro';
+import RealSiteNote from '../../../components/demos/lueur/RealSiteNote.astro';
+import LueurIcon from '../../../components/demos/lueur/LueurIcon.astro';
+import type { LueurIconName } from '../../../components/demos/lueur/icons';
+import Icon from '../../../components/Icon.astro';
+import lueur1 from '../../../assets/photos/lueur-1.jpg';
+import lueur2 from '../../../assets/photos/lueur-2.jpg';
+import lueur3 from '../../../assets/photos/lueur-3.jpg';
+import lueur4 from '../../../assets/photos/lueur-4.jpg';
+import lueur5 from '../../../assets/photos/lueur-5.jpg';
+import lueur6 from '../../../assets/photos/lueur-6.jpg';
+
+const pledges: { icon: LueurIconName; title: string; text: string }[] = [
+  {
+    icon: 'shield',
+    title: 'La sécurité d’abord',
+    text: 'Avant de proposer quoi que ce soit, nous regardons l’état de l’installation et nous vous disons clairement ce qui mérite d’être revu.',
+  },
+  {
+    icon: 'sparkle',
+    title: 'Un chantier propre',
+    text: 'Sols protégés, poussière aspirée, chutes de gaine ramassées : vous retrouvez votre intérieur comme vous l’avez laissé.',
+  },
+  {
+    icon: 'chat',
+    title: 'Un travail expliqué',
+    text: 'Circuits repérés, tableau étiqueté et quelques minutes pour vous montrer comment tout fonctionne avant de partir.',
+  },
+];
+
+const services: { id: string; icon: LueurIconName; title: string; text: string }[] = [
+  {
+    id: 'renovation',
+    icon: 'socket',
+    title: 'Rénovation électrique',
+    text: 'Remettre à niveau une installation vieillissante : circuits, prises et points lumineux là où vous en avez besoin.',
+  },
+  {
+    id: 'tableau',
+    icon: 'panel',
+    title: 'Tableau électrique',
+    text: 'Remplacement ou réorganisation du tableau : protections adaptées, circuits repérés, place pour la suite.',
+  },
+  {
+    id: 'eclairage',
+    icon: 'bulb',
+    title: 'Éclairage intérieur et extérieur',
+    text: 'Spots, suspensions, variateurs, éclairage de jardin : une lumière pensée pour chaque pièce et chaque moment.',
+  },
+  {
+    id: 'borne',
+    icon: 'charger',
+    title: 'Borne de recharge',
+    text: 'Étude de votre installation, choix de la borne et pose au garage ou sur votre place, avec une ligne dédiée.',
+  },
+  {
+    id: 'domotique',
+    icon: 'home',
+    title: 'Domotique simple',
+    text: 'Éclairages, volets et chauffage pilotés simplement — scénarios, programmation, commandes sans fil — sans complexité inutile.',
+  },
+];
+
+const steps = [
+  { title: 'Échange & visite', text: 'Vous nous décrivez votre besoin, puis nous venons voir l’installation et les lieux.' },
+  { title: 'Diagnostic & devis', text: 'Un état des lieux compréhensible et un devis détaillé, poste par poste.' },
+  { title: 'Travaux soignés', text: 'Un chantier protégé et rangé, avec des coupures de courant prévues à l’avance.' },
+  { title: 'Mise en service', text: 'Essais, repérage des circuits et tour du tableau avec vous avant notre départ.' },
+];
+
+const otherWorks = [
+  { title: 'Un séjour rénové, éclairé par couches', tag: 'Rénovation', href: '/exemples/lueur/realisations/#sejour' },
+  { title: 'Un tableau neuf, lisible et évolutif', tag: 'Tableau électrique', href: '/exemples/lueur/realisations/#tableau' },
+  { title: 'Un jardin mis en lumière', tag: 'Éclairage extérieur', href: '/exemples/lueur/realisations/#jardin' },
+];
+
+const tips = [
+  { title: 'Savoir reconnaître les signes d’alerte', href: '/exemples/lueur/conseils/#signes' },
+  { title: 'Ménager les multiprises', href: '/exemples/lueur/conseils/#multiprises' },
+  { title: 'Apprivoiser son tableau électrique', href: '/exemples/lueur/conseils/#tableau' },
+  { title: 'Un éclairage confortable, pièce par pièce', href: '/exemples/lueur/conseils/#confort' },
+];
+---
+
+<LueurLayout
+  title="Lueur — démonstration fictive | Atousy"
+  description="Lueur, électricien fictif : rénovation électrique, tableaux, éclairage intérieur et extérieur, bornes de recharge et domotique. Site de démonstration réalisé par Atousy."
+  current="accueil"
+  header="overlay"
+>
+  <!-- Ouverture -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <Picture
+        src={lueur1}
+        alt="Séjour rénové à la tombée de la nuit, éclairé par des suspensions en lin, des spots encastrés et un lampadaire"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600, 2000, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hero__scrim" aria-hidden="true"></div>
+    <div class="lu-container hero__inner">
+      <div class="hero__content">
+        <h1 id="hero-title">Une maison <span class="hero__glow">bien éclairée</span>, une installation sûre.</h1>
+        <p class="hero__text">Rénovation électrique, tableaux, éclairage et bornes de recharge : un travail propre et expliqué.</p>
+        <a class="lu-btn" href="/exemples/lueur/prestations/">Découvrir nos prestations <Icon name="arrow" /></a>
+      </div>
+      <p class="hero__caption lu-caption">Projet type · Séjour rénové, éclairage d’ambiance</p>
+    </div>
+  </section>
+
+  <!-- L'esprit Lueur -->
+  <section class="lu-section lu-light intro" aria-labelledby="intro-title">
+    <div class="lu-container intro__grid">
+      <div class="intro__copy">
+        <p class="lu-label">Électricien · Particuliers</p>
+        <h2 id="intro-title" class="lu-h2">Ce qui se cache dans les murs mérite autant de soin que ce qui se voit.</h2>
+        <p class="lu-lead">
+          Lueur rénove, sécurise et met en lumière les maisons et appartements autour de chez vous. Nous prenons le temps
+          de comprendre votre installation, de vous expliquer ce que nous faisons, et nous laissons derrière nous un
+          chantier net.
+        </p>
+      </div>
+      <figure class="intro__media">
+        <div class="lu-frame intro__frame">
+          <Picture
+            src={lueur6}
+            alt="Interrupteur double et prise murale en laiton brossé sur un mur clair, dans une lumière de fin de journée"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 60em) calc(100vw - 2rem), 36vw"
+          />
+        </div>
+        <figcaption class="lu-caption">Projet type · Appareillage laiton brossé</figcaption>
+      </figure>
+
+      <ul class="pledges">
+        {
+          pledges.map((p) => (
+            <li class="pledge">
+              <span class="pledge__icon">
+                <LueurIcon name={p.icon} />
+              </span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <RealSiteNote class="intro__note">vos qualifications, vos assurances et les avis de vos clients, avec des références vérifiables.</RealSiteNote>
+    </div>
+  </section>
+
+  <!-- Prestations -->
+  <section class="lu-section lu-dark services" aria-labelledby="services-title">
+    <div class="lu-container">
+      <div class="services__head">
+        <div>
+          <p class="lu-label">Prestations</p>
+          <h2 id="services-title" class="lu-h2">De la prise au tableau, toute l’électricité de la maison.</h2>
+        </div>
+        <div class="services__aside">
+          <p class="lu-lead">Cinq domaines d’intervention et un même interlocuteur, du premier rendez-vous à la mise en service.</p>
+          <a class="lu-link" href="/exemples/lueur/prestations/">Toutes les prestations <Icon name="arrow" /></a>
+        </div>
+      </div>
+
+      <ul class="bento">
+        {
+          services.map((s, i) => (
+            <li class:list={['svc', `svc--${i + 1}`]}>
+              <span class="svc__icon">
+                <LueurIcon name={s.icon} />
+              </span>
+              <h3 class="svc__title">
+                <a href={`/exemples/lueur/prestations/#${s.id}`}>{s.title}</a>
+              </h3>
+              <p class="svc__text">{s.text}</p>
+              <span class="svc__more" aria-hidden="true">
+                Voir la prestation <Icon name="arrow" />
+              </span>
+            </li>
+          ))
+        }
+        <li class="bento__photo">
+          <div class="lu-frame bento__frame">
+            <Picture
+              src={lueur2}
+              alt="Tableau électrique neuf encastré dans un mur blanc : rangées de disjoncteurs et câbles soigneusement peignés"
+              formats={['avif', 'webp']}
+              widths={[480, 720, 960, 1280]}
+              sizes="(max-width: 40em) calc(100vw - 2rem), (max-width: 64em) 92vw, 30vw"
+            />
+          </div>
+          <p class="lu-caption">Projet type · Tableau électrique neuf</p>
+        </li>
+        <li class="bento__cta">
+          <p class="bento__cta-title">Un besoin qui ne rentre dans aucune case ?</p>
+          <a class="bento__cta-link" href="/exemples/lueur/contact/">Parlons-en <Icon name="arrow" /></a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Bandeau jardin -->
+  <section class="night" aria-labelledby="night-title">
+    <div class="night__media">
+      <Picture
+        src={lueur5}
+        alt="Jardin et terrasse d’une maison en pierre à la nuit tombante : olivier éclairé par le bas, bornes lumineuses le long d’une allée dallée et appliques en façade"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600, 2000, 2400]}
+        sizes="100vw"
+      />
+    </div>
+    <div class="night__scrim" aria-hidden="true"></div>
+    <div class="lu-container night__inner">
+      <div class="night__content">
+        <p class="lu-label">Éclairage extérieur</p>
+        <h2 id="night-title" class="lu-h2">Quand le jour tombe, le jardin reste accueillant.</h2>
+        <p class="night__text">
+          Allées balisées, arbres mis en valeur, terrasse éclairée : une lumière chaude et bien placée, qui guide les pas
+          sans éblouir.
+        </p>
+        <a class="lu-link" href="/exemples/lueur/prestations/#eclairage">L’éclairage intérieur et extérieur <Icon name="arrow" /></a>
+      </div>
+      <p class="night__caption lu-caption">Projet type · Jardin et terrasse à la nuit tombante</p>
+    </div>
+  </section>
+
+  <!-- Méthode -->
+  <section class="lu-section lu-light method" aria-labelledby="method-title">
+    <div class="lu-container">
+      <div class="method__head">
+        <p class="lu-label">Méthode</p>
+        <h2 id="method-title" class="lu-h2">Quatre étapes claires, du premier échange à la mise en service.</h2>
+      </div>
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step">
+              <span class="step__dot" aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Réalisations -->
+  <section class="lu-section lu-dark works" aria-labelledby="works-title">
+    <div class="lu-container works__grid">
+      <figure class="works__media">
+        <div class="lu-frame works__frame">
+          <Picture
+            src={lueur3}
+            alt="Borne de recharge murale dans un garage ouvert sur un jardin au soleil couchant, câble enroulé sur son support et voiture blanche garée à côté"
+            formats={['avif', 'webp']}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(max-width: 60em) calc(100vw - 2rem), 56vw"
+          />
+        </div>
+        <figcaption class="lu-caption">Projet type · Borne de recharge en garage</figcaption>
+      </figure>
+
+      <div class="works__copy">
+        <p class="lu-label">Réalisations</p>
+        <h2 id="works-title" class="lu-h2">Des projets types, pour se projeter.</h2>
+        <p class="lu-lead">
+          Une ligne dédiée depuis le tableau, une borne fixée près de la porte, un câble rangé sur son support : la
+          recharge devient un geste du quotidien.
+        </p>
+        <ul class="works__list">
+          {
+            otherWorks.map((w) => (
+              <li>
+                <a href={w.href}>
+                  <span class="works__tag">{w.tag}</span>
+                  <span class="works__title">{w.title}</span>
+                  <Icon name="arrow" class="works__arrow" />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="lu-btn lu-btn--ghost works__cta" href="/exemples/lueur/realisations/">Voir les projets types <Icon name="arrow" /></a>
+        <p class="works__note">Projets types présentés à titre d’illustration.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conseils -->
+  <section class="lu-section lu-light tips" aria-labelledby="tips-title">
+    <div class="lu-container tips__grid">
+      <div class="tips__media">
+        <div class="lu-frame tips__frame">
+          <Picture
+            src={lueur4}
+            alt="Mains d’un électricien vérifiant une prise murale ouverte avec un testeur, tournevis et pince posés sur une bâche"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 60em) calc(100vw - 2rem), 40vw"
+          />
+        </div>
+      </div>
+      <div class="tips__copy">
+        <p class="lu-label">Conseils</p>
+        <h2 id="tips-title" class="lu-h2">Quelques repères pour vivre sereinement avec son électricité.</h2>
+        <ol class="tips__list">
+          {
+            tips.map((t, i) => (
+              <li>
+                <a href={t.href}>
+                  <span class="tips__num" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span class="tips__title">{t.title}</span>
+                  <Icon name="arrow" class="tips__arrow" />
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="tips__note">
+          <LueurIcon name="info" />
+          <span>Information générale : pour toute intervention sur votre installation, faites appel à un professionnel.</span>
+        </p>
+        <a class="lu-link" href="/exemples/lueur/conseils/">Lire les conseils <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand />
+</LueurLayout>
+
+<style>
+  /* ——— Ouverture ——— */
+  .hero {
+    position: relative;
+    display: flex;
+    min-height: clamp(36rem, calc(100svh - 2.6rem), 56rem);
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero__media :global(picture) {
+    height: 100%;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 50%;
+  }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.8) 30%, rgb(14 19 27 / 0.35) 55%, rgb(14 19 27 / 0) 75%),
+      linear-gradient(0deg, rgb(14 19 27 / 0.7) 0%, rgb(14 19 27 / 0) 35%);
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: calc(4.75rem + clamp(2.5rem, 6vw, 4rem)) clamp(2rem, 4vw, 3rem);
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 39rem;
+    margin-block: auto;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.75rem, 1.4rem + 4.6vw, 5.6rem);
+    font-weight: 340;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--lu-ivory);
+  }
+
+  .hero__glow {
+    color: var(--lu-amber);
+    font-weight: 420;
+    text-shadow:
+      0 0 18px rgb(242 180 90 / 0.45),
+      0 0 48px rgb(242 180 90 / 0.25);
+  }
+
+  .hero__text {
+    max-width: 32rem;
+    margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.0625rem, 1rem + 0.45vw, 1.3125rem);
+    line-height: 1.6;
+    color: rgb(245 239 228 / 0.9);
+  }
+
+  .hero .lu-btn {
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .hero__caption {
+    align-self: flex-end;
+    margin-top: 2.5rem;
+    color: rgb(245 239 228 / 0.86);
+  }
+
+  /* ——— L'esprit Lueur ——— */
+  .intro__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: 3rem clamp(2.5rem, 7vw, 7rem);
+    align-items: end;
+  }
+
+  .intro__copy .lu-h2 {
+    max-width: 17ch;
+  }
+
+  .intro__copy .lu-lead {
+    max-width: 40rem;
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .intro__media .lu-caption {
+    margin-top: 1rem;
+  }
+
+  .intro__frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .intro__frame :global(img) {
+    object-position: 58% 50%;
+  }
+
+  .pledges {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem clamp(1.5rem, 3vw, 3rem);
+    margin-top: clamp(0.5rem, 2vw, 1.5rem);
+    padding: clamp(2rem, 4vw, 2.75rem) 0 0;
+    border-top: 1px solid var(--lu-line-light);
+    list-style: none;
+  }
+
+  .pledge__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    background: var(--lu-night);
+    color: var(--lu-amber);
+    box-shadow: 0 10px 24px -10px rgb(242 180 90 / 0.65);
+  }
+
+  .pledge__icon :global(svg) {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .pledge h3 {
+    font-size: 1.25rem;
+  }
+
+  .pledge p {
+    max-width: 34ch;
+    margin-top: 0.6rem;
+    color: var(--lu-ink-2);
+  }
+
+  .intro__grid :global(.intro__note) {
+    grid-column: 1 / -1;
+    max-width: 48rem;
+  }
+
+  /* ——— Prestations ——— */
+  .services {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .services::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: -12rem;
+    left: -12rem;
+    width: 44rem;
+    aspect-ratio: 1;
+    background: radial-gradient(closest-side, rgb(242 180 90 / 0.1), transparent);
+  }
+
+  .services__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 1.5rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .services__head .lu-h2 {
+    max-width: 16ch;
+  }
+
+  .services__aside .lu-lead {
+    max-width: 30rem;
+    margin-bottom: 1rem;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      's1 s2 ph'
+      's3 s4 ph'
+      's5 s5 cta';
+    gap: clamp(0.85rem, 1.5vw, 1.25rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .svc--1 { grid-area: s1; }
+  .svc--2 { grid-area: s2; }
+  .svc--3 { grid-area: s3; }
+  .svc--4 { grid-area: s4; }
+  .svc--5 { grid-area: s5; }
+  .bento__photo { grid-area: ph; }
+  .bento__cta { grid-area: cta; }
+
+  .svc {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 16rem;
+    padding: clamp(1.5rem, 2.5vw, 2rem);
+    background:
+      radial-gradient(120% 90% at 0% 0%, rgb(242 180 90 / 0) 0%, transparent 60%),
+      var(--lu-night-2);
+    border: 1px solid var(--lu-line-dark);
+    border-radius: var(--lu-radius);
+    transition:
+      border-color 0.35s var(--lu-ease),
+      background-color 0.35s var(--lu-ease),
+      box-shadow 0.35s var(--lu-ease);
+  }
+
+  .svc:hover {
+    background:
+      radial-gradient(120% 90% at 0% 0%, rgb(242 180 90 / 0.12) 0%, transparent 60%),
+      var(--lu-night-2);
+    border-color: rgb(242 180 90 / 0.4);
+    box-shadow: 0 30px 60px -40px rgb(242 180 90 / 0.5);
+  }
+
+  .svc:focus-within {
+    border-color: rgb(242 180 90 / 0.6);
+  }
+
+  .svc__icon {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: rgb(242 180 90 / 0.1);
+    color: var(--lu-amber);
+    box-shadow: inset 0 0 0 1px rgb(242 180 90 / 0.25);
+  }
+
+  .svc__icon :global(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: drop-shadow(0 0 6px rgb(242 180 90 / 0.5));
+  }
+
+  .svc__title {
+    margin-top: auto;
+    padding-top: 2rem;
+    font-size: 1.3rem;
+  }
+
+  .svc__title a {
+    color: var(--lu-ivory);
+    text-decoration: none;
+  }
+
+  /* lien étiré : toute la carte est cliquable */
+  .svc__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--lu-radius);
+  }
+
+  .svc__title a:focus-visible {
+    outline: none;
+  }
+
+  .svc__title a:focus-visible::after {
+    outline: 2px solid var(--lu-amber);
+    outline-offset: 3px;
+  }
+
+  .svc__text {
+    max-width: 40ch;
+    margin-top: 0.6rem;
+    font-size: 0.9688rem;
+    color: var(--lu-dim);
+  }
+
+  .svc__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--lu-amber);
+  }
+
+  .svc__more :global(svg) {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.3s var(--lu-ease);
+  }
+
+  .svc:hover .svc__more :global(svg) {
+    transform: translate(2px, -2px);
+  }
+
+  .svc--5 .svc__text {
+    max-width: 52ch;
+  }
+
+  .bento__photo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .bento__frame {
+    flex: 1;
+    min-height: 18rem;
+  }
+
+  .bento__frame :global(img) {
+    object-position: 55% 50%;
+  }
+
+  .bento__cta {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: clamp(1.5rem, 2.5vw, 2rem);
+    background:
+      radial-gradient(90% 120% at 100% 100%, #f9d39a 0%, transparent 70%),
+      var(--lu-amber);
+    border-radius: var(--lu-radius);
+    color: var(--lu-night);
+  }
+
+  .bento__cta-title {
+    max-width: 16ch;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .bento__cta-link {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0 1.2rem;
+    background: var(--lu-night);
+    border-radius: 999px;
+    color: var(--lu-ivory);
+    font-weight: 650;
+    text-decoration: none;
+    transition: background-color 0.25s var(--lu-ease);
+  }
+
+  .bento__cta-link:hover {
+    background: var(--lu-night-3);
+  }
+
+  .bento__cta-link:focus-visible {
+    outline-color: var(--lu-night);
+  }
+
+  .bento__cta-link :global(svg) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* ——— Bandeau jardin ——— */
+  .night {
+    position: relative;
+    display: flex;
+    min-height: clamp(34rem, 80vh, 48rem);
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .night__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .night__media :global(picture) {
+    height: 100%;
+  }
+
+  .night__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+  }
+
+  .night__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgb(14 19 27 / 0.86) 0%, rgb(14 19 27 / 0.62) 35%, rgb(14 19 27 / 0.1) 65%, rgb(14 19 27 / 0) 100%),
+      linear-gradient(0deg, rgb(14 19 27 / 0.75) 0%, rgb(14 19 27 / 0) 45%);
+  }
+
+  .night__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-block: clamp(4rem, 8vw, 6rem) clamp(2rem, 4vw, 3rem);
+  }
+
+  .night__content {
+    max-width: 34rem;
+  }
+
+  .night .lu-h2 {
+    max-width: 14ch;
+    color: var(--lu-ivory);
+  }
+
+  .night__text {
+    max-width: 30rem;
+    margin: 1.25rem 0 1.5rem;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    color: rgb(245 239 228 / 0.9);
+  }
+
+  .night__caption {
+    align-self: flex-end;
+    margin-top: 2.5rem;
+    color: rgb(245 239 228 / 0.86);
+  }
+
+  /* ——— Méthode ——— */
+  .method__head {
+    max-width: 46rem;
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem clamp(1.25rem, 3vw, 2.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  /* le « fil » qui relie les étapes */
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 1.375rem;
+    left: 1.375rem;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #d48a22 0%, rgb(212 138 34 / 0.5) 70%, rgb(212 138 34 / 0) 100%);
+  }
+
+  .step {
+    position: relative;
+  }
+
+  .step__dot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    background: var(--lu-night);
+    color: var(--lu-amber);
+    font-size: 1rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    box-shadow:
+      0 0 0 6px var(--lu-paper),
+      0 0 0 7px rgb(212 138 34 / 0.45),
+      0 12px 26px -8px rgb(212 138 34 / 0.7);
+  }
+
+  .step h3 {
+    font-size: 1.2rem;
+  }
+
+  .step p {
+    max-width: 30ch;
+    margin-top: 0.55rem;
+    color: var(--lu-ink-2);
+  }
+
+  /* ——— Réalisations ——— */
+  .works__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.95fr);
+    gap: 3rem clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .works__frame {
+    aspect-ratio: 4 / 3.4;
+  }
+
+  .works__frame :global(img) {
+    object-position: 42% 50%;
+  }
+
+  .works__media .lu-caption {
+    margin-top: 1rem;
+  }
+
+  .works__copy .lu-lead {
+    margin-top: 1.5rem;
+  }
+
+  .works__list {
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--lu-line-dark);
+  }
+
+  .works__list li {
+    border-bottom: 1px solid var(--lu-line-dark);
+  }
+
+  .works__list a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1rem;
+    padding: 1rem 0.25rem;
+    color: var(--lu-ivory);
+    text-decoration: none;
+    transition: color 0.25s var(--lu-ease);
+  }
+
+  .works__tag {
+    grid-column: 1;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--lu-amber);
+  }
+
+  .works__title {
+    grid-column: 1;
+    margin-top: 0.15rem;
+    font-size: 1.0938rem;
+    font-weight: 500;
+  }
+
+  .works__list :global(.works__arrow) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    color: var(--lu-amber);
+    transition: transform 0.3s var(--lu-ease);
+  }
+
+  .works__list a:hover .works__title {
+    color: var(--lu-amber);
+  }
+
+  .works__list a:hover :global(.works__arrow) {
+    transform: translate(2px, -2px);
+  }
+
+  .works__cta {
+    margin-top: 2rem;
+  }
+
+  .works__note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--lu-dim);
+  }
+
+  /* ——— Conseils ——— */
+  .tips__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3rem clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .tips__frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .tips__frame :global(img) {
+    object-position: 55% 50%;
+  }
+
+  .tips__copy .lu-h2 {
+    max-width: 17ch;
+  }
+
+  .tips__list {
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--lu-line-light);
+  }
+
+  .tips__list li {
+    border-bottom: 1px solid var(--lu-line-light);
+  }
+
+  .tips__list a {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 0.25rem;
+    color: var(--lu-ink);
+    text-decoration: none;
+  }
+
+  .tips__num {
+    font-size: 0.875rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    color: var(--lu-amber-ink);
+  }
+
+  .tips__title {
+    font-size: 1.125rem;
+    font-weight: 550;
+  }
+
+  .tips__list :global(.tips__arrow) {
+    width: 1.15rem;
+    height: 1.15rem;
+    color: var(--lu-amber-ink);
+    transition: transform 0.3s var(--lu-ease);
+  }
+
+  .tips__list a:hover .tips__title {
+    color: var(--lu-amber-ink);
+  }
+
+  .tips__list a:hover :global(.tips__arrow) {
+    transform: translate(2px, -2px);
+  }
+
+  .tips__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    margin: 1.5rem 0 1.25rem;
+    font-size: 0.9375rem;
+    color: var(--lu-ink-2);
+  }
+
+  .tips__note :global(svg) {
+    flex: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.15rem;
+    color: var(--lu-amber-ink);
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 64em) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-areas:
+        's1 s2'
+        'ph ph'
+        's3 s4'
+        's5 cta';
+    }
+
+    .bento__frame {
+      aspect-ratio: 16 / 8;
+      min-height: 0;
+    }
+
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 3rem;
+    }
+
+    .steps::before {
+      display: none;
+    }
+
+    .step__dot {
+      box-shadow:
+        0 0 0 4px var(--lu-paper),
+        0 0 0 5px rgb(212 138 34 / 0.45),
+        0 12px 26px -8px rgb(212 138 34 / 0.7);
+    }
+  }
+
+  @media (max-width: 60em) {
+    .intro__grid,
+    .services__head,
+    .works__grid,
+    .tips__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .intro__frame {
+      aspect-ratio: 3 / 2;
+    }
+
+    .tips__frame {
+      aspect-ratio: 3 / 2;
+    }
+
+    .tips__media {
+      order: 2;
+    }
+
+    .pledges {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.75rem;
+    }
+
+    .pledge {
+      display: grid;
+      grid-template-columns: 3rem minmax(0, 1fr);
+      column-gap: 1.1rem;
+    }
+
+    .pledge__icon {
+      grid-row: 1 / span 2;
+      margin-bottom: 0;
+    }
+
+    .pledge p {
+      margin-top: 0.3rem;
+    }
+  }
+
+  @media (max-width: 40em) {
+    .hero {
+      min-height: calc(100svh - 3.5rem);
+    }
+
+    .hero__media :global(img) {
+      object-position: 68% 50%;
+    }
+
+    .hero__scrim {
+      background:
+        linear-gradient(0deg, rgb(14 19 27 / 0.95) 0%, rgb(14 19 27 / 0.86) 45%, rgb(14 19 27 / 0.35) 75%, rgb(14 19 27 / 0.15) 100%);
+    }
+
+    .hero__inner {
+      justify-content: flex-end;
+    }
+
+    .hero__content {
+      margin-block: auto 0;
+    }
+
+    .hero__caption {
+      align-self: flex-start;
+      margin-top: 2rem;
+    }
+
+    .bento {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        's1'
+        's2'
+        'ph'
+        's3'
+        's4'
+        's5'
+        'cta';
+    }
+
+    .bento__frame {
+      aspect-ratio: 4 / 3;
+    }
+
+    .svc {
+      min-height: 0;
+    }
+
+    .svc__title {
+      padding-top: 1.5rem;
+    }
+
+    .night {
+      min-height: 38rem;
+    }
+
+    .night__media :global(img) {
+      object-position: 30% 50%;
+    }
+
+    .night__scrim {
+      background: linear-gradient(0deg, rgb(14 19 27 / 0.95) 0%, rgb(14 19 27 / 0.82) 50%, rgb(14 19 27 / 0.2) 80%, rgb(14 19 27 / 0.1) 100%);
+    }
+
+    .night__caption {
+      align-self: flex-start;
+    }
+
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 0;
+    }
+
+    .steps::before {
+      display: block;
+      top: 1.375rem;
+      bottom: 2rem;
+      left: 1.3125rem;
+      right: auto;
+      width: 2px;
+      height: auto;
+      background: linear-gradient(180deg, #d48a22 0%, rgb(212 138 34 / 0.4) 100%);
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 2.75rem minmax(0, 1fr);
+      column-gap: 1.25rem;
+      padding-bottom: 2rem;
+    }
+
+    .step__dot {
+      grid-row: 1 / span 2;
+      margin-bottom: 0;
+    }
+
+    .step h3 {
+      align-self: center;
+    }
+
+    .step p {
+      margin-top: 0.3rem;
+    }
+  }
+</style>
