@@ -67,8 +67,11 @@ function extraOrigins(env) {
 
 async function parseBody(bytes, mediaType, contentTypeHeader) {
   const out = Object.create(null);
+  // Première valeur retenue pour un champ répété, sauf pour le pot de miel :
+  // une seule valeur non vide suffit à le déclencher.
   const take = (key, value) => {
-    if (KNOWN_FIELDS.includes(key) && !(key in out)) out[key] = value;
+    if (!KNOWN_FIELDS.includes(key)) return;
+    if (!(key in out) || (key === 'website' && !cleanLine(out[key]))) out[key] = value;
   };
 
   try {
@@ -97,8 +100,8 @@ async function parseBody(bytes, mediaType, contentTypeHeader) {
 
 // Caractères de contrôle C0/C1 (sauf \n, traité à part), marques et
 // surcharges bidirectionnelles, BOM.
-const CONTROL = /[\u0000-\u0009\u000B-\u001F\u007F-\u009F‎‏‪-‮⁦-⁩﻿]/g;
-const LINE_BREAKS = /\r\n?|[\u0085  ]/g;
+const CONTROL = /[\u0000-\u0009\u000B-\u001F\u007F-\u009F\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g;
+const LINE_BREAKS = /\r\n?|[\u0085\u2028\u2029]/g;
 
 function toStr(value) {
   if (typeof value === 'string') return value;
@@ -128,7 +131,7 @@ function cleanText(value) {
 }
 
 /** Retour à la ligne à l'intérieur de la valeur (risque d'injection d'en-têtes). */
-const hasInnerLineBreak = (value) => /[\r\n\u0085  ]/.test(toStr(value).trim());
+const hasInnerLineBreak = (value) => /[\r\n\u0085\u2028\u2029]/.test(toStr(value).trim());
 
 const LABEL = '[\\p{L}\\p{N}](?:[\\p{L}\\p{N}-]{0,61}[\\p{L}\\p{N}])?';
 const EMAIL_RE = new RegExp(
@@ -233,7 +236,7 @@ export function validateFields(raw) {
   else if (!EMAIL_RE.test(email)) set('email', MSG.emailInvalid);
 
   // Espaces insécables fréquents dans les numéros copiés-collés.
-  const telephone = cleanLine(toStr(raw.telephone).replace(/[   ]/g, ' '));
+  const telephone = cleanLine(toStr(raw.telephone).replace(/[\u00A0\u2007\u202F]/g, ' '));
   if (telephone && (!PHONE_RE.test(telephone) || (telephone.match(/\d/g) ?? []).length < 6)) {
     set('telephone', MSG.telephone);
   }

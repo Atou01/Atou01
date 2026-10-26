@@ -141,8 +141,8 @@ describe('chemin nominal — Brevo', () => {
 
   test('caractères de contrôle retirés, retours à la ligne du besoin conservés', async () => {
     const fields = validFields({
-      activite: 'Plom\u0007bier‮   chauffagiste\t',
-      besoin: 'Bonjour,\r\n\r\n\r\n\r\nRefaire le site\u0000 svp.‏',
+      activite: 'Plom\u0007bier\u202E   chauffagiste\t',
+      besoin: 'Bonjour,\r\n\r\n\r\n\r\nRefaire le site\u0000 svp.\u200F',
     });
     const { status, fetch } = await call(formRequest(fields));
     assert.equal(status, 200);
@@ -429,7 +429,6 @@ describe('validation des champs', () => {
     await expectFieldError('besoin', '', /Décrivez votre besoin/);
     await expectFieldError('besoin', ' \n\t\u0000 ', /Décrivez votre besoin/);
     await expectFieldError('besoin', '123456789', /entre 10 et 2000/);
-    await expectFieldError('besoin', '123456789', /entre 10 et 2000/);
     await expectFieldError('besoin', '12345678\u0000\u0007', /entre 10 et 2000/);
     await expectFieldError('besoin', 'x'.repeat(2001), /entre 10 et 2000/);
     await expectAccepted('besoin', '1234567890');
@@ -487,7 +486,7 @@ describe('validation des champs', () => {
     await expectAccepted('telephone', '061234');
     await expectAccepted('telephone', '+41 (0)22 123 45 67');
     await expectAccepted('telephone', '06.12.34.56.78');
-    await expectAccepted('telephone', '06 12 34 56 78'); // espaces insécables
+    await expectAccepted('telephone', '06\u00A012\u00A034\u00A056\u00A078'); // espaces insécables
   });
 
   test('plusieurs erreurs renvoyées ensemble, au format exact du contrat', async () => {
@@ -541,6 +540,19 @@ describe('anti-spam', () => {
   test('pot de miel rempli même si les autres champs sont invalides → 422', async () => {
     const { status } = await call(formRequest({ website: 'x' }));
     assert.equal(status, 422);
+  });
+
+  test('pot de miel répété : une seule valeur non vide suffit', async () => {
+    const params = new URLSearchParams(validFields());
+    params.append('website', 'https://spam.example');
+    const request = new Request(DEVIS_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded', origin: ORIGIN },
+      body: params.toString(),
+    });
+    const { status, fetch } = await call(request);
+    assert.equal(status, 422);
+    assert.equal(fetch.calls.length, 0);
   });
 
   test('pot de miel avec seulement des espaces → ignoré', async () => {

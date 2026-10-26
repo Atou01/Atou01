@@ -1,6 +1,6 @@
 ---
-// En-tête Rivage : logo, navigation, bouton contact.
-// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
+// En-tête Rivage : logo, navigation, bouton contact.
+// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
 // Sans JavaScript, la navigation reste visible (liens repliés sous le logo).
 import Icon from '../../Icon.astro';
 import Logo from './Logo.astro';
@@ -211,7 +211,7 @@ const { current } = Astro.props;
       min-height: 4rem;
     }
 
-    /* Sans JavaScript : liens visibles, repliés sous le logo */
+    /* Sans JavaScript : liens visibles, repliés sous le logo */
     .nav {
       flex-wrap: wrap;
       gap: 0.5rem 1.25rem;
@@ -224,7 +224,7 @@ const { current } = Astro.props;
       gap: 0.25rem 1.25rem;
     }
 
-    /* Avec JavaScript : panneau déroulant */
+    /* Avec JavaScript : panneau déroulant */
     .is-enhanced .burger:not([hidden]) {
       display: inline-flex;
     }

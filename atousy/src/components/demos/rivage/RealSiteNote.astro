@@ -1,5 +1,5 @@
 ---
-// Encart honnête : ce qu'un vrai site afficherait à cet endroit (coordonnées, réalisations…).
+// Encart honnête : ce qu'un vrai site afficherait à cet endroit (coordonnées, réalisations…).
 interface Props {
   tone?: 'light' | 'dark';
   class?: string;
@@ -12,7 +12,7 @@ const { tone = 'light', class: className } = Astro.props;
     <rect x="3.5" y="4.5" width="17" height="15" rx="2" />
     <path d="M3.5 9h17M7 6.8h.01M9.5 6.8h.01" />
   </svg>
-  <p><strong>Dans un vrai site :</strong> <slot /></p>
+  <p><strong>Dans un vrai site :</strong> <slot /></p>
 </div>
 
 <style>

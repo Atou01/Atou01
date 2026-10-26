@@ -1,6 +1,6 @@
 ---
-// Rivage — paysagiste fictif : « Votre jardin », galerie de projets types (démonstration Atousy).
-// Projets types illustrés : aucun client, aucun lieu réel.
+// Rivage — paysagiste fictif : « Votre jardin », galerie de projets types (démonstration Atousy).
+// Projets types illustrés : aucun client, aucun lieu réel.
 import { Picture } from 'astro:assets';
 import RivageLayout from '../../../../components/demos/rivage/RivageLayout.astro';
 import PageIntro from '../../../../components/demos/rivage/PageIntro.astro';
@@ -74,29 +74,29 @@ const projects = [
 const starts = [
   {
     title: 'Un jardin à créer',
-    text: 'Maison neuve, terrain nu ou remué par les travaux : tout est à imaginer, et c’est une belle page blanche.',
+    text: 'Maison neuve, terrain nu ou remué par les travaux : tout est à imaginer, et c’est une belle page blanche.',
   },
   {
     title: 'Un jardin à transformer',
-    text: 'Un jardin existant qui ne vous ressemble plus : on garde ce qui a du caractère, on repense le reste.',
+    text: 'Un jardin existant qui ne vous ressemble plus : on garde ce qui a du caractère, on repense le reste.',
   },
   {
     title: 'Un jardin à entretenir',
-    text: 'Votre jardin vous plaît, mais le temps manque : nous prenons le relais, au rythme des saisons.',
+    text: 'Votre jardin vous plaît, mais le temps manque : nous prenons le relais, au rythme des saisons.',
   },
 ];
 ---
 
 <RivageLayout
   title="Votre jardin — Rivage, démonstration fictive | Atousy"
-  description="Projets types de Rivage, paysagiste fictif : terrasse et massifs, bassin naturel, muret en pierre sèche, jardin d’hiver. Démonstration réalisée par Atousy."
+  description="Projets types de Rivage, paysagiste fictif : terrasse et massifs, bassin naturel, muret en pierre sèche, jardin d’hiver. Démonstration réalisée par Atousy."
   current="jardins"
 >
   <PageIntro
     title="Votre jardin"
     lead="Chaque jardin part d’un lieu et d’une façon de vivre. Ces projets types vous aident à imaginer le vôtre."
   >
-    <p class="disclaimer">Projets types illustrés : Rivage est une entreprise fictive, ces images ne montrent pas de vrais chantiers.</p>
+    <p class="disclaimer">Projets types illustrés : Rivage est une entreprise fictive, ces images ne montrent pas de vrais chantiers.</p>
   </PageIntro>
 
   <section class="gallery-section" aria-labelledby="gallery-title">
@@ -148,7 +148,7 @@ const starts = [
   <section class="rv-section starts" aria-labelledby="starts-title">
     <div class="rv-container">
       <div class="starts__head">
-        <p class="rv-eyebrow">Par où commencer ?</p>
+        <p class="rv-eyebrow">Par où commencer ?</p>
         <h2 id="starts-title" class="rv-h2">Votre jardin, aujourd’hui.</h2>
       </div>
       <ul class="starts__grid">
@@ -182,12 +182,23 @@ const starts = [
     padding-bottom: clamp(4.5rem, 9vw, 7.5rem);
   }
 
+  /* Chaque projet occupe deux rangées (image, légende) partagées via subgrid :
+     images et légendes s'alignent d'une colonne à l'autre. */
   .gallery {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 2.5vw, 2.25rem);
+    column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
+    row-gap: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .item,
+  .item figure {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 0;
   }
 
   .item--wide {
@@ -207,17 +218,6 @@ const starts = [
     grid-column: 1 / span 5;
   }
 
-  /* La colonne « haute » s'étire à la hauteur de sa voisine : légendes alignées */
-  .item,
-  .item figure {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .item figure {
-    flex: 1;
-  }
-
   .item__media {
     position: relative;
     overflow: hidden;
@@ -230,7 +230,6 @@ const starts = [
   }
 
   .item--tall .item__media {
-    flex: 1;
     min-height: 22rem;
   }
 
@@ -256,8 +255,9 @@ const starts = [
 
   figcaption {
     display: grid;
+    align-content: start;
     gap: 0.4rem;
-    margin-top: 1.1rem;
+    padding: 1.1rem 0 clamp(2.5rem, 5vw, 4rem);
   }
 
   .item__head {
@@ -301,7 +301,7 @@ const starts = [
   }
 
   :global(.gallery-note) {
-    margin-top: clamp(3rem, 6vw, 4.5rem);
+    margin-top: 0.5rem;
     max-width: 44rem;
   }
 
@@ -367,7 +367,6 @@ const starts = [
     .item--wide .item__media,
     .item--tall .item__media,
     .item--half .item__media {
-      flex: none;
       min-height: 0;
       aspect-ratio: 3 / 2;
     }

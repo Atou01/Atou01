@@ -1,6 +1,6 @@
 ---
-// Rivage — paysagiste fictif : « Nous contacter » (démonstration Atousy).
-// Formulaire volontairement désactivé : aucun envoi, aucun script.
+// Rivage — paysagiste fictif : « Nous contacter » (démonstration Atousy).
+// Formulaire volontairement désactivé : aucun envoi, aucun script.
 import { Picture } from 'astro:assets';
 import RivageLayout from '../../../../components/demos/rivage/RivageLayout.astro';
 import PageIntro from '../../../../components/demos/rivage/PageIntro.astro';
@@ -24,12 +24,12 @@ const next = [
 
 <RivageLayout
   title="Nous contacter — Rivage, démonstration fictive | Atousy"
-  description="Contacter Rivage, paysagiste fictif. Page de démonstration réalisée par Atousy : le formulaire est volontairement désactivé."
+  description="Contacter Rivage, paysagiste fictif. Page de démonstration réalisée par Atousy : le formulaire est volontairement désactivé."
   current="contact"
 >
   <PageIntro
     title="Nous contacter"
-    lead="Parlez-nous de votre jardin : ce que vous aimez, ce qui vous manque, la façon dont vous aimeriez y vivre."
+    lead="Parlez-nous de votre jardin : ce que vous aimez, ce qui vous manque, la façon dont vous aimeriez y vivre."
   />
 
   <section class="contact" aria-label="Formulaire et informations de contact">
@@ -40,7 +40,7 @@ const next = [
             <circle cx="12" cy="12" r="9" />
             <path d="M12 11v5M12 8h.01" />
           </svg>
-          <span><strong>Formulaire désactivé :</strong> ceci est une démonstration.</span>
+          <span><strong>Formulaire désactivé :</strong> ceci est une démonstration.</span>
         </p>
 
         <fieldset class="form__fields" disabled>
@@ -93,7 +93,7 @@ const next = [
       </form>
 
       <aside class="side" aria-labelledby="side-title">
-        <h2 id="side-title" class="side__title">Et ensuite ?</h2>
+        <h2 id="side-title" class="side__title">Et ensuite ?</h2>
         <ol class="next">
           {
             next.map((n, i) => (
@@ -108,7 +108,7 @@ const next = [
           }
         </ol>
 
-        <RealSiteNote>vos coordonnées, horaires et zone d’intervention.</RealSiteNote>
+        <RealSiteNote>votre téléphone et votre e-mail cliquables, vos horaires, votre zone d’intervention et un plan d’accès.</RealSiteNote>
 
         <div class="side__media">
           <Picture
@@ -183,7 +183,7 @@ const next = [
   }
 
   .form__legend {
-    margin-bottom: 0.4rem;
+    margin-bottom: 1.1rem;
     padding: 0;
     font-family: var(--rv-serif);
     font-size: 1.75rem;
