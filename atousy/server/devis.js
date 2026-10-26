@@ -18,6 +18,7 @@
 import { json, readBodyLimited, BodyTooLargeError } from './http.js';
 import { verifyTurnstile } from './turnstile.js';
 import { readEmailConfig, buildMessage, sendEmail } from './email.js';
+import { wantsHtml, toHtmlResponse } from './html.js';
 
 export const MAX_BODY_BYTES = 20 * 1024;
 export const MIN_FILL_MS = 3000;
@@ -270,13 +271,16 @@ function parseStarted(value) {
  */
 export async function handleDevis(request, env = {}, options = {}) {
   const logger = options.logger ?? console;
+  let response;
   try {
-    return await handle(request, env ?? {}, options, logger);
+    response = await handle(request, env ?? {}, options, logger);
   } catch (err) {
     // Erreur inattendue : rien n'a été envoyé, on ne prétend jamais le contraire.
     logger.error(`[devis] unexpected ${err && err.name ? err.name : 'error'}`);
-    return fail(502, 'delivery_failed');
+    response = fail(502, 'delivery_failed');
   }
+  // Envoi sans JavaScript : même résultat, présenté comme une page lisible.
+  return wantsHtml(request) ? toHtmlResponse(response) : response;
 }
 
 async function handle(request, env, options, logger) {

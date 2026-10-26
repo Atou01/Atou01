@@ -25,13 +25,13 @@ const { title, description, brand } = Astro.props;
     <slot name="head" />
   </head>
   <body>
-    <div class="demo-banner" role="note">
+    <aside class="demo-banner" aria-label="Démonstration fictive">
       <p>
         <strong>Démonstration fictive réalisée par Atousy</strong>
         <span> — cette entreprise n'existe pas.</span>
       </p>
       <a href="/exemples/">Retour à Atousy</a>
-    </div>
+    </aside>
     <slot />
   </body>
 </html>

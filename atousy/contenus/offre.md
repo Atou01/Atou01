@@ -11,7 +11,7 @@ Un tarif affiché, un contenu détaillé, des limites écrites. Vous savez ce qu
 
 ## Le tarif
 
-| France · EUR | Suisse · CHF |
+| Europe · EUR | Suisse · CHF |
 | --- | --- |
 | **1 490 €** | **1 990 CHF** |
 

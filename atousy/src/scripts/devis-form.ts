@@ -188,8 +188,8 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
 
   function setSending(on: boolean) {
     sending = on;
+    // Pas d'aria-busy sur le formulaire : il retarderait l'annonce de la zone role="status".
     form.toggleAttribute('data-sending', on);
-    form.setAttribute('aria-busy', String(on));
     if (submit) {
       if (on) submit.setAttribute('aria-disabled', 'true');
       else submit.removeAttribute('aria-disabled');
@@ -208,7 +208,8 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
     if (done) return;
     try {
       const values = readValues();
-      if (Object.values(values).some((v) => v.trim() !== '')) {
+      // Le type seul (souvent pré-coché par ?type=) ne suffit pas à faire un brouillon.
+      if (FIELD_NAMES.some((n) => n !== 'type' && values[n].trim() !== '')) {
         sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ v: 1, values }));
       } else {
         sessionStorage.removeItem(DRAFT_KEY);

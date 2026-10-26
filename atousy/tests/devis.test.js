@@ -82,7 +82,7 @@ describe('chemin nominal — Brevo', () => {
     assert.match(mail.body.textContent, /Activité : Plombier chauffagiste/);
     assert.match(mail.body.textContent, /Zone d'intervention : Ma commune et 20 km autour/);
     assert.match(mail.body.textContent, /Site actuel : https:\/\/exemple\.fr/);
-    assert.match(mail.body.textContent, /Marché affiché : France · EUR/);
+    assert.match(mail.body.textContent, /Marché affiché : Europe · EUR/);
     assert.match(mail.body.textContent, /Téléphone : 06 12 34 56 78/);
     assert.match(mail.body.textContent, /Reçue le 2026-10-26 14:42 UTC/);
     assert.match(mail.body.htmlContent, /^<!doctype html>/);

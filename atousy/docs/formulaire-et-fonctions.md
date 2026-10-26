@@ -5,7 +5,7 @@ Le site est un export statique (Astro, `dist/`). Les seules parties dynamiques s
 
 | Route | Fichier | Rôle |
 | --- | --- | --- |
-| `GET /api/pays` | `functions/api/pays.js` | Pays du visiteur, pour proposer le bon marché (France · EUR / Suisse · CHF) |
+| `GET /api/pays` | `functions/api/pays.js` | Pays du visiteur, pour proposer le bon marché (Europe · EUR / Suisse · CHF) |
 | `POST /api/devis` | `functions/api/devis.js` → `server/devis.js` | Reçoit le formulaire de devis et l'envoie par e-mail |
 
 Le code partagé vit dans `server/`, hors de `functions/` : il ne devient jamais une route,
@@ -177,3 +177,12 @@ npm test          # tests unitaires et de routes
 npm run build     # génère dist/
 npm run cf:dev    # sert dist/ + functions/ comme Cloudflare Pages (lit .dev.vars)
 ```
+
+## Envoi sans JavaScript
+
+Si le navigateur poste le formulaire directement (JavaScript désactivé), `/api/devis` répond par
+une **page HTML lisible** au lieu du JSON, avec le même code HTTP (`server/html.js`) :
+confirmation uniquement après un envoi accepté par le service d'e-mail, sinon l'explication
+(champs à corriger, anti-spam qui nécessite JavaScript, service non raccordé, erreur technique)
+et un lien de retour au formulaire. Le script de la page continue de recevoir du JSON
+(`Accept: application/json`). Tests : `tests/html.test.js`.

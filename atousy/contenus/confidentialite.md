@@ -29,7 +29,7 @@ Dernière mise à jour : [À COMPLÉTER : date]
 - votre nom ;
 - votre adresse e-mail ;
 - votre téléphone, si vous le donnez ;
-- le tarif affiché au moment de l’envoi (France · EUR ou Suisse · CHF) ;
+- le tarif affiché au moment de l’envoi (Europe · EUR ou Suisse · CHF) ;
 - la date et l’heure de l’envoi.
 
 Nous ne demandons aucune donnée sensible. Merci de ne pas en indiquer dans votre message.
@@ -90,7 +90,7 @@ Si un outil de mesure est ajouté plus tard, cette page sera mise à jour avant 
 
 Le site n’utilise que des éléments strictement nécessaires à son fonctionnement.
 
-- **`atousy-market`** (stockage local du navigateur) : retient le pays et la devise que vous avez choisis (France · EUR ou Suisse · CHF), pour afficher le bon tarif à votre prochaine visite. Il reste sur votre appareil.
+- **`atousy-market`** (stockage local du navigateur) : retient le pays et la devise que vous avez choisis (Europe · EUR ou Suisse · CHF), pour afficher le bon tarif à votre prochaine visite. Il reste sur votre appareil.
 - **`atousy-market-auto`** (stockage de session) : garde le pays détecté pendant votre visite, pour éviter de le redemander à chaque page. Il s’efface à la fermeture de l’onglet.
 - **Cookies techniques de Cloudflare** : ils peuvent être déposés pour la sécurité du site et lors de la vérification anti-spam.
 

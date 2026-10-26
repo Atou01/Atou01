@@ -1,5 +1,5 @@
 // GET /api/pays : pays du visiteur, déduit par Cloudflare de son adresse IP.
-// Sert uniquement à proposer le bon marché (France · EUR / Suisse · CHF) ;
+// Sert uniquement à proposer le bon marché (Europe · EUR / Suisse · CHF) ;
 // le choix manuel du visiteur prime toujours côté client.
 //   200 {"country":"FR"}  ou  {"country":null} si inconnu.
 

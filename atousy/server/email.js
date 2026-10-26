@@ -89,7 +89,7 @@ export function readEmailConfig(env) {
 }
 
 const TYPE_LABEL = { creation: 'Création', refonte: 'Refonte' };
-const MARKET_LABEL = { fr: 'France · EUR', ch: 'Suisse · CHF' };
+const MARKET_LABEL = { fr: 'Europe · EUR', ch: 'Suisse · CHF' };
 
 function truncate(s, n) {
   return s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s;

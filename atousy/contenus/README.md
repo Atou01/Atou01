@@ -72,9 +72,7 @@ Titres SEO : 60 caractères au plus, terminés par « | Atousy ». Méta-descrip
 
 ## Questions ouvertes et écarts relevés
 
-- **Libellé du marché euro** : le brief parle de « France · EUR », mais `src/data/site.ts` affiche
-  « Europe · EUR » (et le pays « Europe »). Les textes suivent le brief (« France · EUR »). À trancher, puis aligner le code
-  ou les textes. L’e-mail de devis (`server/email.js`) utilise déjà « France · EUR ».
+- **Libellé du marché euro** : décision du fondateur — le prix suit le pays du visiteur (Suisse → CHF, Europe → EUR). Libellé retenu partout : « Europe · EUR » / « Suisse · CHF » (site, e-mail de devis, textes).
 - **Messages d’erreur du formulaire** : ceux de `devis.md` reprennent mot pour mot `server/devis.js`. Toute modification
   doit être faite aux deux endroits.
 - **Pré-sélection du type de projet** : les boutons des pages Création et Refonte pointent vers `/devis/?type=creation`

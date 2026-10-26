@@ -5,8 +5,16 @@ import Icon from './Icon.astro';
 interface Props {
   title?: string;
   text?: string;
+  /** Destination et libellé du bouton (par défaut : la page Devis). */
+  href?: string;
+  label?: string;
 }
-const { title = 'Parlons de votre projet.', text = 'Un site à votre image, pensé pour votre activité.' } = Astro.props;
+const {
+  title = 'Parlons de votre projet.',
+  text = 'Un site à votre image, pensé pour votre activité.',
+  href = '/devis/',
+  label = 'Demander un devis',
+} = Astro.props;
 ---
 
 <section class="cta" aria-labelledby="cta-title">
@@ -15,7 +23,7 @@ const { title = 'Parlons de votre projet.', text = 'Un site à votre image, pens
       <h2 id="cta-title">{title}</h2>
       <p>{text}</p>
     </div>
-    <a class="btn btn--light" href="/devis/">Demander un devis <Icon name="arrow" /></a>
+    <a class="btn btn--light" href={href}>{label} <Icon name="arrow" /></a>
   </div>
 </section>
 
