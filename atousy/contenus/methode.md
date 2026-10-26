@@ -48,7 +48,6 @@ Ils dépendent de votre projet et du rythme des échanges. Ils sont à définir 
 Tout commence par un message.
 
 **Bouton :** Demander un devis → /devis/
-**Lien secondaire :** Voir l’offre en détail → /offre/
 
 ---
 

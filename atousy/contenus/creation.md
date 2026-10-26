@@ -49,7 +49,7 @@ Une mise en page soignée, des photos légères, une lecture confortable.
 
 ## Le tarif
 
-**1 490 €** (Europe · EUR) · **1 990 CHF** (Suisse · CHF) — le site affiche le tarif du pays choisi.
+**1 490 €** (Europe · EUR) · **1 990 CHF** (Suisse · CHF) — un seul montant affiché, selon le pays (modifiable dans le menu).
 
 Tarif indicatif · Taxes et montant final à confirmer au devis
 
@@ -62,9 +62,6 @@ Domaine, hébergement et demandes supplémentaires non inclus, chiffrés à part
 Dites-nous ce que vous faites et ce que votre site doit apporter.
 
 **Bouton :** Demander un devis → /devis/?type=creation
-**Lien secondaire :** Voir les exemples → /exemples/
-
-> À valider : pré-sélection « Création » dans le formulaire via `?type=creation` (sinon lien simple vers /devis/).
 
 ---
 

@@ -32,6 +32,7 @@ const steps = ['Le devis', 'La maquette', 'La livraison'];
   crumb="Création de site"
   ctaTitle="Parlons de votre projet."
   ctaText="Dites-nous ce que vous faites et ce que votre site doit apporter."
+  ctaHref="/devis/?type=creation"
 >
   <PageHero
     crumb="Création de site"
@@ -50,7 +51,6 @@ const steps = ['Le devis', 'La maquette', 'La livraison'];
           eager
           priority
           sizes="(max-width: 62.49em) 92vw, 50vw"
-          halfSizes="(max-width: 62.49em) 46vw, 25vw"
         />
       </span>
       <span class="preview__caption" aria-hidden="true">
@@ -110,7 +110,7 @@ const steps = ['Le devis', 'La maquette', 'La livraison'];
     </ul>
   </Section>
 
-  <Section id="tarif" title="Le tarif" lead="Le site affiche le tarif du pays choisi." tone="marine">
+  <Section id="tarif" title="Le tarif" tone="marine">
     <Price />
     <p class="ip-exclusions">{offerExclusions} Ils sont chiffrés à part.</p>
     <ul class="ip-links">

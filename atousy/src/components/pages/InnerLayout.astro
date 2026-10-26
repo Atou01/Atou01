@@ -13,9 +13,12 @@ interface Props {
   noindex?: boolean;
   ctaTitle?: string;
   ctaText?: string;
+  /** Bouton du bandeau corail (par défaut : « Demander un devis » vers /devis/). */
+  ctaHref?: string;
+  ctaLabel?: string;
 }
 
-const { title, description, crumb, noindex = false, ctaTitle, ctaText } = Astro.props;
+const { title, description, crumb, noindex = false, ctaTitle, ctaText, ctaHref, ctaLabel } = Astro.props;
 const pageUrl = new URL(Astro.url.pathname, site.url).href;
 
 // Données structurées : seulement le fil d'Ariane (rien d'invérifiable).
@@ -32,5 +35,5 @@ const breadcrumb = {
 <BaseLayout title={title} description={description} noindex={noindex}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />
   <slot />
-  <CtaBand title={ctaTitle} text={ctaText} />
+  <CtaBand title={ctaTitle} text={ctaText} href={ctaHref} label={ctaLabel} />
 </BaseLayout>

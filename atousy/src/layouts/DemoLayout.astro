@@ -19,7 +19,7 @@ const { title, description, brand } = Astro.props;
 const ogTitle = /fictiv/i.test(title) ? title : `${title} (démonstration fictive)`;
 const ogUrl = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL('/og-image.jpg', site.url).href;
-const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à part. » Création et refonte de sites pour artisans, TPE et PME.';
+const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à part. » Création et refonte de sites pour artisans, TPE et PME.';
 ---
 
 <!doctype html>

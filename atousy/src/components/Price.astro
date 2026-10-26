@@ -14,20 +14,20 @@ const { tone = 'dark' } = Astro.props;
     {
       Object.values(markets).map((m) => (
         <span class="price__amount" data-price-market={m.id}>
-          <span class="price__country nojs-only">{m.country} : </span>
+          <span class="price__country nojs-only">{m.country} : </span>
           {m.price}
         </span>
       ))
     }
   </p>
   <p class="price__note">{priceNote}</p>
-  <p class="price__audience">Offre réservée aux professionnels : entreprises et indépendants.</p>
+  <p class="price__audience">Offre réservée aux professionnels : entreprises et indépendants.</p>
   <p class="price__tax" data-price-market="ch">
-    Prix en CHF, sans TVA suisse : prestataire établi en France, non inscrit au registre suisse de la TVA.
-    Le cas échéant, l'impôt sur les acquisitions est déclaré par le client.
+    Prix en CHF, sans TVA suisse : prestataire établi en France, non inscrit au registre suisse de la TVA.
+    Le cas échéant, l’impôt sur les acquisitions est déclaré par le client.
   </p>
   <p class="price__market js-only">
-    Tarif affiché : <strong data-market-country>Europe · EUR</strong>{' '}
+    Tarif affiché : <strong data-market-country>Europe · EUR</strong>{' '}
     (<span data-market-status>par défaut</span>). Pays modifiable dans le menu.
   </p>
 </div>

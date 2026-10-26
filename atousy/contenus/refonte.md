@@ -60,7 +60,6 @@ Tarif indicatif · Taxes et montant final à confirmer au devis
 Indiquez son adresse dans le formulaire. Nous l’examinons avant le devis.
 
 **Bouton :** Demander une refonte → /devis/?type=refonte
-**Lien secondaire :** Découvrir la méthode → /methode/
 
 ---
 

@@ -18,7 +18,7 @@ const { title, description, overlayHeader = false, noindex = false } = Astro.pro
 const isNotFound = /^\/404(\.html|\/)?$/.test(Astro.url.pathname);
 const canonical = isNotFound ? undefined : new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL('/og-image.jpg', site.url).href;
-const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à part. » Création et refonte de sites pour artisans, TPE et PME.';
+const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à part. » Création et refonte de sites pour artisans, TPE et PME.';
 ---
 
 <!doctype html>
@@ -67,7 +67,7 @@ const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à p
   <body>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
     <Header overlay={overlayHeader} />
-    <main id="contenu">
+    <main id="contenu" tabindex="-1">
       <slot />
     </main>
     <Footer />

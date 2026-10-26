@@ -18,7 +18,7 @@ export const mainNav: NavItem[] = [
     ],
   },
   { label: 'Exemples', href: '/exemples/' },
-  { label: "L'offre", href: '/offre/' },
+  { label: 'L’offre', href: '/offre/' },
   { label: 'Méthode', href: '/methode/' },
 ];
 
@@ -26,7 +26,7 @@ export const footerNav: NavItem[] = [
   { label: 'Création', href: '/creation/' },
   { label: 'Refonte', href: '/refonte/' },
   { label: 'Exemples', href: '/exemples/' },
-  { label: "L'offre", href: '/offre/' },
+  { label: 'L’offre', href: '/offre/' },
   { label: 'Méthode', href: '/methode/' },
   { label: 'Devis', href: '/devis/' },
 ];
@@ -52,7 +52,7 @@ export const defaultMarket: MarketId = 'fr';
 export const priceNote = 'Tarif indicatif · Taxes et montant final à confirmer au devis';
 
 export const offerHighlights = [
-  "Jusqu'à 5 pages",
+  'Jusqu’à 5 pages',
   'Adaptation aux smartphones',
   'Bases du référencement local',
   'Deux séries de corrections groupées',

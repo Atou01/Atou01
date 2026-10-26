@@ -83,7 +83,7 @@ describe('chemin nominal — Brevo', () => {
     assert.equal(mail.body.subject, 'Demande de devis — Refonte — Plombier chauffagiste');
     assert.match(mail.body.textContent, /Type de projet : Refonte/);
     assert.match(mail.body.textContent, /Activité : Plombier chauffagiste/);
-    assert.match(mail.body.textContent, /Zone d'intervention : Ma commune et 20 km autour/);
+    assert.match(mail.body.textContent, /Zone d’intervention : Ma commune et 20 km autour/);
     assert.match(mail.body.textContent, /Site actuel : https:\/\/exemple\.fr\/\n/);
     assert.match(mail.body.textContent, /Marché affiché : Europe · EUR/);
     assert.match(mail.body.textContent, /Téléphone : 06 12 34 56 78/);
@@ -441,7 +441,7 @@ describe('validation des champs', () => {
   });
 
   test('zone requise, texte libre de 2 à 120 caractères', async () => {
-    await expectFieldError('zone', '', /zone d'intervention/);
+    await expectFieldError('zone', '', /zone d’intervention/);
     await expectFieldError('zone', 'Z', /entre 2 et 120/);
     await expectFieldError('zone', 'Z'.repeat(121), /entre 2 et 120/);
     await expectAccepted('zone', 'Ma commune');
@@ -449,7 +449,7 @@ describe('validation des champs', () => {
   });
 
   test('site facultatif : URL http(s) valide, « exemple.fr » complété, 300 caractères max', async () => {
-    await expectFieldError('site', 'pas un site', /n'est pas valide/);
+    await expectFieldError('site', 'pas un site', /n’est pas valide/);
     await expectFieldError('site', 'javascript:alert(1)');
     await expectFieldError('site', 'mailto:moi@exemple.fr');
     await expectFieldError('site', 'ftp://exemple.fr');
@@ -524,9 +524,9 @@ describe('validation des champs', () => {
       'camille@exemple.fr,autre@exemple.fr',
       'camille@192.168.0.1',
     ]) {
-      await expectFieldError('email', bad, /n'est pas valide/);
+      await expectFieldError('email', bad, /n’est pas valide/);
     }
-    await expectFieldError('email', 'camille@exemple.fr\r\nBcc: victime@example.org', /n'est pas valide/);
+    await expectFieldError('email', 'camille@exemple.fr\r\nBcc: victime@example.org', /n’est pas valide/);
     await expectFieldError('email', 'a'.repeat(64) + '@' + 'b'.repeat(140) + '.fr', /200 caractères/);
     await expectAccepted('email', 'camille.martin+devis@exemple.fr');
     await expectAccepted('email', "o'brien@sous-domaine.exemple.co.uk");
@@ -557,7 +557,7 @@ describe('validation des champs', () => {
       fields: {
         type: 'Choisissez le type de projet : création ou refonte.',
         besoin: 'Votre message doit faire entre 10 et 2000 caractères.',
-        email: "L'adresse e-mail n'est pas valide.",
+        email: "L’adresse e-mail n’est pas valide.",
         telephone: 'Le numéro de téléphone doit comporter 6 à 25 caractères : chiffres, espaces et + . ( ) - uniquement.',
       },
     });

@@ -56,7 +56,7 @@ describe('POST /api/devis sans JavaScript', () => {
     assert.equal(res.status, 502);
     const html = await res.text();
     assert.doesNotMatch(html, /Demande envoyée/);
-    assert.match(html, /n&#39;a pas pu être envoyée/);
+    assert.match(html, /n’a pas pu être envoyée/);
   });
 
   test('service non configuré → page honnête, 503', async () => {
@@ -72,7 +72,7 @@ describe('POST /api/devis sans JavaScript', () => {
     assert.equal(res.status, 400);
     const html = await res.text();
     assert.match(html, /Quelques informations sont à compléter/);
-    assert.match(html, /<li>L&#39;adresse e-mail n&#39;est pas valide\.<\/li>/);
+    assert.match(html, /<li>L’adresse e-mail n’est pas valide\.<\/li>/);
   });
 
   test('captcha refusé → explique que JavaScript est nécessaire, 400', async () => {

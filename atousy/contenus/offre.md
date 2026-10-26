@@ -17,8 +17,6 @@ Un tarif affiché, un contenu détaillé, des limites écrites. Vous savez ce qu
 
 **Tarif indicatif · Taxes et montant final à confirmer au devis**
 
-Le site affiche le tarif du pays choisi, modifiable avec le sélecteur.
-
 > À valider : prix de travail (1 490 € et 1 990 CHF) avant la mise en ligne.
 
 ## Ce que comprend le socle
@@ -120,7 +118,6 @@ Oui. À la mise en ligne, nous vous remettons tous les accès.
 Un échange suffit pour savoir si l’offre vous convient.
 
 **Bouton :** Demander un devis → /devis/
-**Lien secondaire :** Découvrir la méthode → /methode/
 
 ---
 

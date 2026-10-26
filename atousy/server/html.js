@@ -22,23 +22,23 @@ const BACK = 'Revenez au formulaire avec le bouton « Retour » de votre navigat
 const MESSAGES = {
   validation: { title: 'Quelques informations sont à compléter.', text: BACK },
   captcha: {
-    title: "La vérification anti-spam n'a pas pu se faire.",
+    title: "La vérification anti-spam n’a pas pu se faire.",
     text: `Elle a besoin de JavaScript : activez-le, puis renvoyez le formulaire. ${BACK}`,
   },
   spam: {
-    title: "L'envoi a été bloqué par la protection anti-spam.",
-    text: `Patientez quelques secondes avant d'envoyer, puis réessayez. ${BACK}`,
+    title: "L’envoi a été bloqué par la protection anti-spam.",
+    text: `Patientez quelques secondes avant d’envoyer, puis réessayez. ${BACK}`,
   },
   not_configured: {
-    title: "Le formulaire n'est pas encore raccordé.",
-    text: "Votre demande n'a pas été envoyée. Merci de réessayer plus tard.",
+    title: "Le formulaire n’est pas encore raccordé.",
+    text: "Votre demande n’a pas été envoyée. Merci de réessayer plus tard.",
   },
   delivery_failed: {
-    title: "Votre demande n'a pas pu être envoyée.",
-    text: `Un problème technique a empêché l'envoi. Réessayez dans quelques minutes. ${BACK}`,
+    title: "Votre demande n’a pas pu être envoyée.",
+    text: `Un problème technique a empêché l’envoi. Réessayez dans quelques minutes. ${BACK}`,
   },
 };
-const GENERIC = { title: "Votre demande n'a pas pu être envoyée.", text: BACK };
+const GENERIC = { title: "Votre demande n’a pas pu être envoyée.", text: BACK };
 
 // Les règles de public/_headers ne s'appliquent pas aux réponses construites par une
 // fonction : cette page porte donc ses propres en-têtes. Elle n'a ni script, ni image,

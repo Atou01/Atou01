@@ -18,7 +18,7 @@ const titleLines = title.split('\n');
 <section class:list={['ph', hasMedia ? 'ph--media' : 'ph--split']} aria-labelledby="page-title">
   <div class="container ph__inner">
     <div class="ph__main">
-      <nav class="ph__crumbs" aria-label="Fil d'Ariane">
+      <nav class="ph__crumbs" aria-label="Fil d’Ariane">
         <ol>
           <li><a href="/">Accueil</a></li>
           <li aria-current="page">{crumb}</li>
@@ -80,7 +80,9 @@ const titleLines = title.split('\n');
     opacity: 0.6;
   }
 
+  /* Marge intérieure verticale : cible tactile d'au moins 24 px, sans décaler la ligne (lien en ligne) */
   .ph__crumbs a {
+    padding-block: 0.25rem;
     color: var(--ink-2);
     text-decoration: none;
   }

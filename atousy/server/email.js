@@ -88,7 +88,7 @@ const TYPE_LABEL = { creation: 'Création', refonte: 'Refonte' };
 const MARKET_LABEL = { fr: 'Europe · EUR', ch: 'Suisse · CHF' };
 
 // Le contenu vient d'un formulaire public : rien n'en est vérifié (identité, adresse du site).
-const NOT_VERIFIED = "Informations saisies par le visiteur, non vérifiées : contrôlez l'adresse du site avant de l'ouvrir.";
+const NOT_VERIFIED = "Informations saisies par le visiteur, non vérifiées : contrôlez l’adresse du site avant de l’ouvrir.";
 
 function truncate(s, n) {
   return s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s;
@@ -106,7 +106,7 @@ export function buildMessage(data, receivedAt = new Date()) {
   const rows = [
     ['Type de projet', type],
     ['Activité', data.activite],
-    ["Zone d'intervention", data.zone],
+    ["Zone d’intervention", data.zone],
     ['Site actuel', data.site || '—'],
     ['Marché affiché', data.market ? MARKET_LABEL[data.market] : 'non précisé'],
     ['Nom', data.nom],

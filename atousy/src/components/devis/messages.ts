@@ -12,18 +12,18 @@ export const FIELD_MSG = {
   type: 'Choisissez le type de projet : création ou refonte.',
   activiteMissing: 'Indiquez votre activité.',
   activiteLength: 'Votre activité doit faire entre 2 et 120 caractères.',
-  zoneMissing: "Indiquez votre zone d'intervention (par exemple votre commune).",
-  zoneLength: "La zone d'intervention doit faire entre 2 et 120 caractères.",
-  siteInvalid: "L'adresse du site n'est pas valide (exemple : www.votre-site.fr).",
-  siteLength: "L'adresse du site ne doit pas dépasser 300 caractères.",
+  zoneMissing: "Indiquez votre zone d’intervention (par exemple votre commune).",
+  zoneLength: "La zone d’intervention doit faire entre 2 et 120 caractères.",
+  siteInvalid: "L’adresse du site n’est pas valide (exemple : www.votre-site.fr).",
+  siteLength: "L’adresse du site ne doit pas dépasser 300 caractères.",
   besoinMissing: 'Décrivez votre besoin en quelques mots.',
   besoinLength: 'Votre message doit faire entre 10 et 2000 caractères.',
   nomMissing: 'Indiquez votre nom.',
   nomLength: 'Votre nom doit faire entre 2 et 100 caractères.',
   nomLine: 'Votre nom doit tenir sur une seule ligne.',
   emailMissing: 'Indiquez votre adresse e-mail.',
-  emailInvalid: "L'adresse e-mail n'est pas valide.",
-  emailLength: "L'adresse e-mail ne doit pas dépasser 200 caractères.",
+  emailInvalid: "L’adresse e-mail n’est pas valide.",
+  emailLength: "L’adresse e-mail ne doit pas dépasser 200 caractères.",
   telephone: 'Le numéro de téléphone doit comporter 6 à 25 caractères : chiffres, espaces et + . ( ) - uniquement.',
 } as const;
 
@@ -36,42 +36,42 @@ export const NOTICE = {
   sending: 'Envoi de votre demande, merci de patienter.',
   summary: 'Certains champs sont à corriger. Vos réponses ont été conservées.',
   captcha: {
-    text: "La vérification anti-spam n'a pas abouti. Refaites-la, puis envoyez à nouveau votre demande.",
+    text: "La vérification anti-spam n’a pas abouti. Refaites-la, puis envoyez à nouveau votre demande.",
   },
   // À valider : textes ajoutés à l'intégration (cas non couverts par contenus/devis.md).
   captchaPending: {
-    text: "La vérification anti-spam n'est pas encore terminée. Patientez un instant ou terminez-la, puis envoyez votre demande.",
+    text: "La vérification anti-spam n’est pas encore terminée. Patientez un instant ou terminez-la, puis envoyez votre demande.",
   },
   captchaError: {
     text: "La vérification anti-spam a rencontré une erreur et réessaie automatiquement. Patientez un instant ; si elle reste bloquée, rechargez la page : vos réponses seront conservées.",
   },
   captchaUnavailable: {
-    text: "La vérification anti-spam n'a pas pu se charger. Vérifiez votre connexion ou votre bloqueur de contenus, puis rechargez la page : vos réponses seront conservées.",
+    text: "La vérification anti-spam n’a pas pu se charger. Vérifiez votre connexion ou votre bloqueur de contenus, puis rechargez la page : vos réponses seront conservées.",
   },
   spam: {
-    text: "Votre demande n'a pas pu être envoyée. Patientez quelques secondes, puis réessayez.",
+    text: "Votre demande n’a pas pu être envoyée. Patientez quelques secondes, puis réessayez.",
   },
   tooLarge: {
     text: 'Votre message est trop long. Raccourcissez-le, puis réessayez.',
   },
   technical: {
-    title: "Votre demande n'est pas partie.",
-    text: "Un problème technique a empêché l'envoi. Vos réponses sont conservées : réessayez dans un instant.",
+    title: "Votre demande n’est pas partie.",
+    text: "Un problème technique a empêché l’envoi. Vos réponses sont conservées : réessayez dans un instant.",
     contact: 'Si le problème continue, écrivez-nous à {email}.',
   },
   offline: {
-    title: "Votre demande n'est pas partie.",
+    title: "Votre demande n’est pas partie.",
     text: 'Connexion impossible. Vérifiez votre connexion Internet, puis réessayez.',
   },
   // À valider : délai de 15 s dépassé, l'envoi n'est ni confirmé ni infirmé.
   timeout: {
-    title: "Pas de confirmation d'envoi.",
-    text: "Le serveur n'a pas répondu à temps : nous ne pouvons pas confirmer que votre demande est partie. Vos réponses sont conservées, vous pouvez réessayer.",
+    title: "Pas de confirmation d’envoi.",
+    text: "Le serveur n’a pas répondu à temps : nous ne pouvons pas confirmer que votre demande est partie. Vos réponses sont conservées, vous pouvez réessayer.",
     contact: 'Si le problème continue, écrivez-nous à {email}.',
   },
   notConfigured: {
-    title: "Le formulaire n'est pas encore en service.",
-    text: "Votre demande n'a pas été envoyée. Vos réponses restent sur cette page.",
+    title: "Le formulaire n’est pas encore en service.",
+    text: "Votre demande n’a pas été envoyée. Vos réponses restent sur cette page.",
     contact: 'Écrivez-nous directement à {email}.',
   },
 } satisfies Record<string, string | Notice>;
@@ -83,6 +83,6 @@ export const SUCCESS = {
 
 /** Sans JavaScript : la vérification anti-spam ne peut pas s'afficher, le bouton d'envoi est masqué. */
 export const NOJS = {
-  text: "Ce formulaire a besoin de JavaScript pour sa vérification anti-spam : sans JavaScript, il ne peut pas être envoyé.",
+  text: "Ce formulaire a besoin de JavaScript pour sa vérification anti-spam : sans JavaScript, il ne peut pas être envoyé.",
   contact: 'Écrivez-nous directement à {email}.',
 };

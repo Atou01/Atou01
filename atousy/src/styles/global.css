@@ -79,6 +79,12 @@ body > main {
   flex: 1 0 auto;
 }
 
+/* Cible du lien « Aller au contenu » : reçoit le focus, sans anneau (ce n'est pas une commande). */
+body > main:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 img,
 svg,
 picture {
