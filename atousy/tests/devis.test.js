@@ -1,14 +1,17 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { handleDevis, MAX_BODY_BYTES, MIN_FILL_MS } from '../server/devis.js';
+import { handleDevis, normalizeSite, cleanText, MAX_BODY_BYTES, MIN_FILL_MS } from '../server/devis.js';
 import { EMAIL_TIMEOUT_MS } from '../server/email.js';
+import { DEFAULT_DAILY_LIMIT, dailyLimit } from '../server/limit.js';
 import {
   ORIGIN,
   DEVIS_URL,
   SITEVERIFY,
   BREVO_URL,
   RESEND_URL,
+  LOCAL_ORIGIN,
+  LOCAL_DEVIS_URL,
   PASS_SECRET,
   FAIL_SECRET,
   BREVO_ENV,
@@ -27,7 +30,7 @@ const NOW = Date.UTC(2026, 9, 26, 14, 42, 0);
 
 /** Appelle la logique avec fetch simulé, horloge et UUID fixes. */
 async function call(request, { env = BREVO_ENV, fetch = createFetch(), logger = createLogger(), ...options } = {}) {
-  const response = await handleDevis(request, env, { fetch, logger, now: () => NOW, uuid: () => 'uuid-1', ...options });
+  const response = await handleDevis(request, env, { fetch, logger, now: () => NOW, ...options });
   const result = await read(response);
   return { ...result, fetch, logger };
 }
@@ -62,10 +65,10 @@ describe('chemin nominal — Brevo', () => {
 
     assert.equal(ts.url, SITEVERIFY);
     assert.equal(ts.init.method, 'POST');
+    // Pas d'idempotency_key : Siteverify n'est jamais rappelé avec le même jeton.
     assert.deepEqual(ts.body, {
       secret: 'ts-secret-prod',
       response: 'token-abc',
-      idempotency_key: 'uuid-1',
       remoteip: '203.0.113.7',
     });
 
@@ -74,14 +77,14 @@ describe('chemin nominal — Brevo', () => {
     assert.equal(mail.headers.get('api-key'), 'xkeysib-test-key');
     assert.equal(mail.headers.get('content-type'), 'application/json');
     assert.equal(mail.headers.get('authorization'), null);
-    assert.deepEqual(mail.body.sender, { email: 'devis@atousy.com', name: 'Atousy' });
+    assert.deepEqual(mail.body.sender, { email: 'contact@atousy.com', name: 'Atousy' });
     assert.deepEqual(mail.body.to, [{ email: 'contact@atousy.com' }]);
     assert.deepEqual(mail.body.replyTo, { email: 'camille@example.org', name: 'Camille Martin' });
     assert.equal(mail.body.subject, 'Demande de devis — Refonte — Plombier chauffagiste');
     assert.match(mail.body.textContent, /Type de projet : Refonte/);
     assert.match(mail.body.textContent, /Activité : Plombier chauffagiste/);
     assert.match(mail.body.textContent, /Zone d'intervention : Ma commune et 20 km autour/);
-    assert.match(mail.body.textContent, /Site actuel : https:\/\/exemple\.fr/);
+    assert.match(mail.body.textContent, /Site actuel : https:\/\/exemple\.fr\/\n/);
     assert.match(mail.body.textContent, /Marché affiché : Europe · EUR/);
     assert.match(mail.body.textContent, /Téléphone : 06 12 34 56 78/);
     assert.match(mail.body.textContent, /Reçue le 2026-10-26 14:42 UTC/);
@@ -110,10 +113,10 @@ describe('chemin nominal — Brevo', () => {
   });
 
   test('MAIL_FROM sans nom', async () => {
-    const env = { ...BREVO_ENV, MAIL_FROM: 'devis@atousy.com' };
+    const env = { ...BREVO_ENV, MAIL_FROM: 'contact@atousy.com' };
     const { status, fetch } = await call(formRequest(validFields()), { env });
     assert.equal(status, 200);
-    assert.deepEqual(fetch.providerCalls()[0].body.sender, { email: 'devis@atousy.com' });
+    assert.deepEqual(fetch.providerCalls()[0].body.sender, { email: 'contact@atousy.com' });
   });
 
   test('toutes les valeurs sont échappées dans le HTML', async () => {
@@ -149,6 +152,23 @@ describe('chemin nominal — Brevo', () => {
     const mail = fetch.providerCalls()[0].body;
     assert.equal(mail.subject, 'Demande de devis — Refonte — Plombier chauffagiste');
     assert.ok(mail.textContent.includes('Besoin :\nBonjour,\n\nRefaire le site svp.\n'));
+  });
+
+  test('caractères invisibles retirés (largeur nulle, trait d’union conditionnel, marques)', async () => {
+    const invisible = '\u00AD\u061C\u180E\u200B\u200C\u200D\u2060\u2061\u2062\u2063\u2064';
+    const fields = validFields({ activite: `Plom${invisible}bier chauffagiste`, besoin: `Refaire${invisible} le site vitrine.` });
+    const { status, fetch } = await call(formRequest(fields));
+    assert.equal(status, 200);
+    const mail = fetch.providerCalls()[0].body;
+    assert.equal(mail.subject, 'Demande de devis — Refonte — Plombier chauffagiste');
+    assert.ok(mail.textContent.includes('Besoin :\nRefaire le site vitrine.\n'));
+  });
+
+  test('l’e-mail rappelle que le contenu n’est pas vérifié', async () => {
+    const { fetch } = await call(formRequest(validFields()));
+    const mail = fetch.providerCalls()[0].body;
+    assert.match(mail.textContent, /Informations saisies par le visiteur, non vérifiées/);
+    assert.match(mail.htmlContent, /Informations saisies par le visiteur, non vérifiées/);
   });
 
   test('sujet tronqué pour une activité longue', async () => {
@@ -204,7 +224,7 @@ describe('chemin nominal — Resend', () => {
     assert.equal(mail.headers.get('authorization'), 'Bearer re_test_key');
     assert.equal(mail.headers.get('api-key'), null);
     assert.equal(mail.headers.get('content-type'), 'application/json');
-    assert.equal(mail.body.from, 'Atousy <devis@atousy.com>');
+    assert.equal(mail.body.from, 'Atousy <contact@atousy.com>');
     assert.deepEqual(mail.body.to, ['contact@atousy.com']);
     assert.equal(mail.body.reply_to, 'camille@example.org');
     assert.equal(mail.body.subject, 'Demande de devis — Refonte — Plombier chauffagiste');
@@ -216,11 +236,11 @@ describe('chemin nominal — Resend', () => {
   });
 
   test('nom d’expéditeur avec ponctuation : mis entre guillemets', async () => {
-    const env = { ...RESEND_ENV, MAIL_FROM: '"Atousy, studio" <devis@atousy.com>' };
+    const env = { ...RESEND_ENV, MAIL_FROM: '"Atousy, studio" <contact@atousy.com>' };
     const fetch = createFetch({ provider: { status: 200, body: { id: 'x' } } });
     const { status } = await call(formRequest(validFields()), { env, fetch });
     assert.equal(status, 200);
-    assert.equal(fetch.providerCalls()[0].body.from, '"Atousy, studio" <devis@atousy.com>');
+    assert.equal(fetch.providerCalls()[0].body.from, '"Atousy, studio" <contact@atousy.com>');
   });
 
   test('EMAIL_PROVIDER insensible à la casse', async () => {
@@ -340,7 +360,7 @@ describe('origine', () => {
 
   test('Origin listée dans ALLOWED_ORIGINS (casse et / final tolérés) → acceptée', async () => {
     const env = { ...BREVO_ENV, ALLOWED_ORIGINS: ' https://WWW.atousy.com/ , https://preview.atousy.pages.dev' };
-    const fetch = createFetch({ turnstile: { success: true, hostname: 'www.atousy.com' } });
+    const fetch = createFetch({ turnstile: { success: true, hostname: 'www.atousy.com', action: 'devis' } });
     const { status } = await call(formRequest(validFields(), { headers: { origin: 'https://www.atousy.com' } }), { env, fetch });
     assert.equal(status, 200);
   });
@@ -353,6 +373,32 @@ describe('origine', () => {
     });
     const { status } = await call(request);
     assert.equal(status, 200);
+  });
+
+  test('sans Origin mais Sec-Fetch-Site « cross-site » ou « same-site » → 403, rien n’est appelé', async () => {
+    for (const site of ['cross-site', 'same-site']) {
+      const request = new Request(DEVIS_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'sec-fetch-site': site },
+        body: JSON.stringify(validFields()),
+      });
+      const { status, body, fetch } = await call(request);
+      assert.equal(status, 403, site);
+      assert.deepEqual(body, { ok: false, error: 'origin' });
+      assert.equal(fetch.calls.length, 0);
+    }
+  });
+
+  test('sans Origin, Sec-Fetch-Site « same-origin » ou « none » → accepté', async () => {
+    for (const site of ['same-origin', 'none']) {
+      const request = new Request(DEVIS_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'sec-fetch-site': site },
+        body: JSON.stringify(validFields()),
+      });
+      const { status } = await call(request);
+      assert.equal(status, 200, site);
+    }
   });
 });
 
@@ -420,9 +466,21 @@ describe('validation des champs', () => {
     await expectAccepted('site', 'boulangerie-élise.fr');
   });
 
-  test('site : « exemple.fr » devient « https://exemple.fr » dans l’e-mail', async () => {
+  test('site : forme lue par un navigateur, sans ambiguïté (URL.href)', () => {
+    assert.equal(normalizeSite('exemple.fr'), 'https://exemple.fr/');
+    assert.equal(normalizeSite('HTTPS://Exemple.FR'), 'https://exemple.fr/');
+    assert.equal(normalizeSite('http://exemple.fr/page?x=1'), 'http://exemple.fr/page?x=1');
+    assert.equal(normalizeSite('exemple.fr:8080/accueil'), 'https://exemple.fr:8080/accueil');
+    // La barre oblique inverse est lue comme « / » : l'hôte réel est evil.example.
+    assert.equal(normalizeSite('https://evil.example\\@exemple.fr'), 'https://evil.example/@exemple.fr');
+    // Domaine accentué : forme xn--, qui ne peut pas imiter un autre domaine.
+    assert.equal(normalizeSite('boulangerie-élise.fr'), 'https://xn--boulangerie-lise-mqb.fr/');
+    assert.equal(normalizeSite('exаmple.fr'), 'https://xn--exmple-4nf.fr/'); // « а » cyrillique
+  });
+
+  test('site : « exemple.fr » devient « https://exemple.fr/ » dans l’e-mail', async () => {
     const { fetch } = await call(formRequest(validFields({ site: ' www.exemple.fr ' })));
-    assert.match(fetch.providerCalls()[0].body.textContent, /Site actuel : https:\/\/www\.exemple\.fr\n/);
+    assert.match(fetch.providerCalls()[0].body.textContent, /Site actuel : https:\/\/www\.exemple\.fr\/\n/);
   });
 
   test('besoin requis, 10 à 2000 caractères (après nettoyage)', async () => {
@@ -505,6 +563,33 @@ describe('validation des champs', () => {
     });
   });
 
+  test('20 Ko d’espaces dans le besoin : traité en temps linéaire', async () => {
+    let started = performance.now();
+    assert.equal(cleanText(' '.repeat(20_000) + 'x'), 'x');
+    assert.equal(cleanText('a' + ' '.repeat(20_000) + '\nb'), 'a\nb');
+    assert.ok(performance.now() - started < 100, `cleanText : ${performance.now() - started} ms`);
+
+    const body = new URLSearchParams(validFields({ besoin: ' '.repeat(MAX_BODY_BYTES - 600) + 'x' })).toString();
+    assert.ok(body.length <= MAX_BODY_BYTES);
+    const request = new Request(DEVIS_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded', origin: ORIGIN },
+      body,
+    });
+    started = performance.now();
+    const { status, body: res, fetch } = await call(request);
+    assert.ok(performance.now() - started < 100, `requête : ${performance.now() - started} ms`);
+    assert.equal(status, 400);
+    assert.deepEqual(res.fields, { besoin: 'Votre message doit faire entre 10 et 2000 caractères.' });
+    assert.equal(fetch.calls.length, 0);
+  });
+
+  test('besoin brut de plus de 4000 caractères refusé, même s’il se réduit après nettoyage', async () => {
+    const { status, body } = await call(formRequest(validFields({ besoin: 'Refaire le site.' + ' '.repeat(4000) })));
+    assert.equal(status, 400);
+    assert.match(body.fields.besoin, /entre 10 et 2000/);
+  });
+
   test('valeurs JSON non textuelles traitées comme vides', async () => {
     const { status, body } = await call(jsonRequest(validFields({ nom: { $gt: '' }, activite: ['a', 'b'], zone: true })));
     assert.equal(status, 400);
@@ -581,11 +666,27 @@ describe('anti-spam', () => {
     }
   });
 
-  test('« started » dans le futur (horloge client décalée) ou illisible → ignoré', async () => {
-    for (const started of [NOW + 3_600_000, 'abc', '12', '']) {
+  test('« started » dans le futur ou très ancien (horloge client décalée) → contrôle ignoré', async () => {
+    for (const started of [NOW + 3_600_000, '12', 0]) {
       const { status } = await call(formRequest(validFields({ started })));
       assert.equal(status, 200, `started=${started}`);
     }
+  });
+
+  test('jeton Turnstile sans « started » lisible → 422 spam, rien n’est appelé', async () => {
+    for (const started of [undefined, '', 'abc', '-5', '1.5e12']) {
+      const { status, body, fetch, logger } = await call(formRequest(validFields({ started })));
+      assert.equal(status, 422, `started=${started}`);
+      assert.deepEqual(body, { ok: false, error: 'spam' });
+      assert.equal(fetch.calls.length, 0);
+      assert.match(logger.lines.join('\n'), /missing started/);
+    }
+  });
+
+  test('sans jeton ni « started » (envoi sans JavaScript) → 400 captcha, pas 422', async () => {
+    const { status, body } = await call(formRequest(validFields({ started: undefined, 'cf-turnstile-response': undefined })));
+    assert.equal(status, 400);
+    assert.deepEqual(body, { ok: false, error: 'captcha' });
   });
 });
 
@@ -629,16 +730,53 @@ describe('Turnstile', () => {
     assert.equal(fetch.providerCalls().length, 0);
   });
 
-  test('clé secrète de test « toujours valide » : hostname factice accepté', async () => {
-    const fetch = createFetch({ turnstile: { success: true, hostname: 'example.com' } });
-    const { status } = await call(formRequest(validFields()), { env: { ...BREVO_ENV, TURNSTILE_SECRET_KEY: PASS_SECRET }, fetch });
+  const local = (fields) => formRequest(fields, { url: LOCAL_DEVIS_URL, headers: { origin: LOCAL_ORIGIN } });
+
+  test('en local (localhost), clé secrète de test « toujours valide » : hostname factice accepté', async () => {
+    const fetch = createFetch({ turnstile: { success: true, hostname: 'example.com', action: '' } });
+    const { status } = await call(local(validFields()), { env: { ...BREVO_ENV, TURNSTILE_SECRET_KEY: PASS_SECRET }, fetch });
     assert.equal(status, 200);
   });
 
-  test('clé secrète de test « toujours en échec » → 400 captcha', async () => {
+  test('en local, clé secrète de test « toujours en échec » → 400 captcha', async () => {
     const fetch = createFetch({ turnstile: { success: false, 'error-codes': ['invalid-input-response'] } });
-    const { status } = await call(formRequest(validFields()), { env: { ...BREVO_ENV, TURNSTILE_SECRET_KEY: FAIL_SECRET }, fetch });
+    const { status } = await call(local(validFields()), { env: { ...BREVO_ENV, TURNSTILE_SECRET_KEY: FAIL_SECRET }, fetch });
     assert.equal(status, 400);
+  });
+
+  test('clé secrète de test en ligne (Production, Preview) → 503, ni Siteverify ni e-mail', async () => {
+    const hosts = ['https://atousy.com', 'https://atousy.pages.dev', 'https://1a2b3c4d.atousy.pages.dev', 'https://localhost.example'];
+    for (const secret of [PASS_SECRET, FAIL_SECRET, '3x0000000000000000000000000000000AA']) {
+      for (const origin of hosts) {
+        const request = formRequest(validFields(), { url: `${origin}/api/devis`, headers: { origin } });
+        const { status, body, fetch, logger } = await call(request, { env: { ...BREVO_ENV, TURNSTILE_SECRET_KEY: secret } });
+        assert.equal(status, 503, `${secret} ${origin}`);
+        assert.deepEqual(body, { ok: false, error: 'not_configured' });
+        assert.equal(fetch.calls.length, 0);
+        assert.match(logger.lines.join('\n'), /turnstile test secret outside localhost/);
+        assertCleanLogs(logger, { ...BREVO_ENV, TURNSTILE_SECRET_KEY: secret });
+      }
+    }
+  });
+
+  test('clé de test acceptée sur 127.0.0.1 et [::1]', async () => {
+    for (const origin of ['http://127.0.0.1:8788', 'http://[::1]:8788']) {
+      const request = formRequest(validFields(), { url: `${origin}/api/devis`, headers: { origin } });
+      const fetch = createFetch({ turnstile: { success: true, hostname: 'example.com' } });
+      const { status } = await call(request, { env: { ...BREVO_ENV, TURNSTILE_SECRET_KEY: PASS_SECRET }, fetch });
+      assert.equal(status, 200, origin);
+    }
+  });
+
+  test('jeton émis pour une autre action que « devis » → 400 captcha, aucun e-mail', async () => {
+    for (const action of ['autre', '', undefined, 'DEVIS']) {
+      const fetch = createFetch({ turnstile: { success: true, hostname: 'atousy.com', action } });
+      const { status, body, logger } = await call(formRequest(validFields()), { fetch });
+      assert.equal(status, 400, `action=${action}`);
+      assert.deepEqual(body, { ok: false, error: 'captcha' });
+      assert.equal(fetch.providerCalls().length, 0);
+      assert.match(logger.lines.join('\n'), /action-mismatch/);
+    }
   });
 
   test('TURNSTILE_SECRET_KEY absente → 503 not_configured (fermé par défaut), aucun appel', async () => {
@@ -680,6 +818,80 @@ describe('Turnstile', () => {
 
 // ---------------------------------------------------------------------------
 
+describe('plafond quotidien (KV DEVIS_COUNTER, facultatif)', () => {
+  /** Espace KV simulé : Map + enregistrement des écritures. */
+  function fakeKv(initial = {}) {
+    const store = new Map(Object.entries(initial));
+    const puts = [];
+    return {
+      store,
+      puts,
+      async get(key) {
+        return store.has(key) ? store.get(key) : null;
+      },
+      async put(key, value, options) {
+        puts.push({ key, value, options });
+        store.set(key, value);
+      },
+    };
+  }
+  const KEY = 'devis:2026-10-26';
+
+  test('sans KV lié : aucun plafond (comportement par défaut)', async () => {
+    const { status } = await call(formRequest(validFields()), { env: { ...BREVO_ENV, DEVIS_DAILY_LIMIT: '1' } });
+    assert.equal(status, 200);
+  });
+
+  test('sous le plafond : compteur du jour incrémenté, e-mail envoyé', async () => {
+    const kv = fakeKv({ [KEY]: '3' });
+    const { status, fetch } = await call(formRequest(validFields()), { env: { ...BREVO_ENV, DEVIS_COUNTER: kv } });
+    assert.equal(status, 200);
+    assert.equal(fetch.providerCalls().length, 1);
+    assert.deepEqual(kv.puts, [{ key: KEY, value: '4', options: { expirationTtl: 172800 } }]);
+  });
+
+  test('plafond atteint → 429 rate_limited, aucun e-mail, journal sans donnée personnelle', async () => {
+    const kv = fakeKv({ [KEY]: String(DEFAULT_DAILY_LIMIT) });
+    const { status, body, headers, fetch, logger } = await call(formRequest(validFields()), { env: { ...BREVO_ENV, DEVIS_COUNTER: kv } });
+    assert.equal(status, 429);
+    assert.deepEqual(body, { ok: false, error: 'rate_limited' });
+    assertJsonNoStore(headers);
+    assert.equal(fetch.providerCalls().length, 0);
+    assert.equal(kv.puts.length, 0);
+    assert.match(logger.lines.join('\n'), /rate_limited: daily cap 50/);
+    assertCleanLogs(logger);
+  });
+
+  test('DEVIS_DAILY_LIMIT personnalisé', async () => {
+    const kv = fakeKv({ [KEY]: '2' });
+    const env = { ...BREVO_ENV, DEVIS_COUNTER: kv, DEVIS_DAILY_LIMIT: '2' };
+    assert.equal((await call(formRequest(validFields()), { env })).status, 429);
+    assert.equal(dailyLimit({ DEVIS_DAILY_LIMIT: ' 10 ' }), 10);
+    for (const bad of ['0', '-1', 'abc', '1e3', '', undefined]) assert.equal(dailyLimit({ DEVIS_DAILY_LIMIT: bad }), DEFAULT_DAILY_LIMIT, String(bad));
+  });
+
+  test('compteur consulté seulement après un jeton Turnstile valide', async () => {
+    const kv = fakeKv();
+    const fetch = createFetch({ turnstile: { success: false, 'error-codes': ['invalid-input-response'] } });
+    const { status } = await call(formRequest(validFields()), { env: { ...BREVO_ENV, DEVIS_COUNTER: kv }, fetch });
+    assert.equal(status, 400);
+    assert.equal(kv.puts.length, 0);
+  });
+
+  test('KV en erreur : la demande part quand même, incident journalisé', async () => {
+    const kv = {
+      async get() {
+        throw new Error('KV down');
+      },
+      async put() {},
+    };
+    const { status, fetch, logger } = await call(formRequest(validFields()), { env: { ...BREVO_ENV, DEVIS_COUNTER: kv } });
+    assert.equal(status, 200);
+    assert.equal(fetch.providerCalls().length, 1);
+    assert.match(logger.lines.join('\n'), /daily cap unavailable/);
+  });
+});
+
 describe('configuration du fournisseur d’e-mail', () => {
   const cases = {
     'EMAIL_PROVIDER absent': { EMAIL_PROVIDER: undefined },
@@ -690,7 +902,7 @@ describe('configuration du fournisseur d’e-mail', () => {
     'MAIL_TO invalide': { MAIL_TO: 'contact@atousy.com, pas-une-adresse' },
     'MAIL_FROM absent': { MAIL_FROM: undefined },
     'MAIL_FROM invalide': { MAIL_FROM: 'Atousy' },
-    'MAIL_FROM avec retour à la ligne': { MAIL_FROM: 'Atousy <devis@atousy.com>\r\nBcc: x@y.fr' },
+    'MAIL_FROM avec retour à la ligne': { MAIL_FROM: 'Atousy <contact@atousy.com>\r\nBcc: x@y.fr' },
     'clé Resend absente avec EMAIL_PROVIDER=resend': { EMAIL_PROVIDER: 'resend' },
     'EMAIL_API_BASE vers un hôte distant (refusé)': { EMAIL_API_BASE: 'https://collecte.example' },
     'EMAIL_API_BASE illisible': { EMAIL_API_BASE: 'pas une url' },

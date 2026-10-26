@@ -23,7 +23,7 @@ const services: { id: string; icon: EIconName; title: string; text: string; feat
     id: 'depannage',
     icon: 'wrench',
     title: 'Dépannage',
-    text: 'Fuite, robinet qui goutte, chasse d’eau, chauffe-eau en panne : on cherche l’origine avant de réparer.',
+    text: 'Fuite, robinet qui goutte, chasse d’eau, chauffe-eau en panne : on cherche l’origine avant de réparer.',
     featured: true,
   },
   {
@@ -53,7 +53,7 @@ const services: { id: string; icon: EIconName; title: string; text: string; feat
 ];
 
 const steps = [
-  { title: 'Vous décrivez la situation', text: 'Quelques lignes, une photo de la fuite ou de la plaque de l’appareil : c’est un bon début.' },
+  { title: 'Vous décrivez la situation', text: 'Quelques lignes, une photo de la fuite ou de la plaque de l’appareil : c’est un bon début.' },
   { title: 'Diagnostic sur place', text: 'Nous cherchons la cause, pas seulement le symptôme, et vérifions l’installation autour.' },
   { title: 'Options et devis expliqués', text: 'Réparer ou remplacer, les avantages de chaque solution, et un devis détaillé.' },
   { title: 'Intervention et essais', text: 'Travail soigné, mise en service devant vous et conseils pour la suite.' },
@@ -62,7 +62,7 @@ const steps = [
 
 <EcluseLayout
   title="Écluse — démonstration fictive | Atousy"
-  description="Écluse, plombier-chauffagiste fictif : salles de bain, chauffage, pompes à chaleur, dépannage et entretien. Site de démonstration réalisé par Atousy."
+  description="Écluse, plombier-chauffagiste fictif : salles de bain, chauffage, pompes à chaleur, dépannage et entretien. Site de démonstration réalisé par Atousy."
   current="accueil"
 >
   <!-- Ouverture -->
@@ -72,7 +72,7 @@ const steps = [
         <div class="hero__content">
           <h1 id="hero-title">La chaleur et l’eau, <span class="hero__nowrap">bien installées.</span></h1>
           <p class="hero__text">
-            Salles de bain, chauffage, pompes à chaleur et dépannage : un artisan qui explique avant d’intervenir.
+            Salles de bain, chauffage, pompes à chaleur et dépannage : un artisan qui explique avant d’intervenir.
           </p>
           <a class="ec-btn hero__btn" href="/exemples/ecluse/realisations/">
             Voir nos réalisations
@@ -82,10 +82,10 @@ const steps = [
         <figure class="hero__media">
           <Picture
             src={ecluse1}
-            alt="Salle de bain rénovée et lumineuse : douche à l’italienne vitrée, robinetterie noire mate, meuble vasque gris-bleu et olivier en pot près de la fenêtre"
+            alt="Salle de bain rénovée et lumineuse : douche à l’italienne vitrée, robinetterie noire mate, meuble vasque gris-bleu et olivier en pot près de la fenêtre"
             formats={['avif', 'webp']}
             widths={[640, 960, 1280, 1600, 2000, 2400]}
-            sizes="(max-width: 60em) calc(100vw - 2rem), min(90rem, 100vw - 6rem)"
+            sizes="(max-width: 48em) calc(100vw - 2rem), (max-width: 75em) 52vw, min(90rem, 100vw - 6rem)"
             loading="eager"
             fetchpriority="high"
           />
@@ -127,7 +127,7 @@ const steps = [
         </div>
         <div class="head__side">
           <p>
-            Un seul interlocuteur pour l’eau et la chaleur de la maison : réparer ce qui fuit, rénover ce qui a fait son
+            Un seul interlocuteur pour l’eau et la chaleur de la maison : réparer ce qui fuit, rénover ce qui a fait son
             temps, installer ce qui chauffera mieux demain.
           </p>
           <a class="ec-link" href="/exemples/ecluse/services/">Tous nos services <EIcon name="arrow" /></a>
@@ -213,7 +213,7 @@ const steps = [
           <h2 id="works-title" class="ec-h2">Des chantiers pensés pour durer.</h2>
         </div>
         <div class="head__side">
-          <p>Projets types présentés à titre d’illustration : salles de bain, cuisines, chauffage et pompes à chaleur.</p>
+          <p>Projets types présentés à titre d’illustration : salles de bain, cuisines, chauffage et pompes à chaleur.</p>
         </div>
       </div>
 
@@ -263,10 +263,11 @@ const steps = [
       <div class="care">
         <div class="care__body">
           <p class="ec-chip">Entretien</p>
-          <h2 id="care-title" class="ec-h2">Chaudière ou pompe à chaleur&#8239;: un entretien régulier est recommandé.</h2>
+          <h2 id="care-title" class="ec-h2">L’entretien, ça se prévoit.</h2>
           <p class="ec-lead">
-            Un appareil vérifié et bien réglé fonctionne dans de meilleures conditions. Nous vous aidons à savoir quand
-            prévoir une visite et ce qu’elle comprend.
+            L’entretien régulier est recommandé, pour une chaudière comme pour une pompe à chaleur : un appareil
+            vérifié et bien réglé fonctionne dans de meilleures conditions. Nous vous aidons à savoir quand prévoir une
+            visite et ce qu’elle comprend.
           </p>
           <ul class="ec-checks">
             <li>Contrôle des organes de sécurité et des réglages</li>
@@ -292,7 +293,9 @@ const steps = [
 </EcluseLayout>
 
 <style>
-  /* ——— Ouverture ——— */
+  /* ——— Ouverture ———
+     ≥ 75em : texte posé sur la zone calme (mur blanc) de la photo, sous un voile clair borné à la colonne.
+     48–75em : panneau partagé texte | photo.  < 48em : texte puis photo. */
   .hero {
     padding-top: clamp(0.75rem, 1.5vw, 1.25rem);
   }
@@ -301,7 +304,7 @@ const steps = [
     position: relative;
     display: flex;
     align-items: center;
-    min-height: clamp(34rem, calc(100svh - 8.5rem), 46rem);
+    min-height: clamp(36rem, calc(100svh - 8.5rem), 46rem);
     border-radius: var(--ec-radius-lg);
     overflow: hidden;
     isolation: isolate;
@@ -325,17 +328,17 @@ const steps = [
     object-position: 50% 30%;
   }
 
-  /* Voile clair sur la zone calme (mur blanc) à gauche de la photo */
   .hero__media::after {
     content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(
       90deg,
-      rgb(255 255 255 / 0.9) 0%,
-      rgb(255 255 255 / 0.78) 30%,
-      rgb(255 255 255 / 0.35) 46%,
-      rgb(255 255 255 / 0) 60%
+      rgb(255 255 255 / 0.94) 0%,
+      rgb(255 255 255 / 0.9) 38%,
+      rgb(255 255 255 / 0.62) 49%,
+      rgb(255 255 255 / 0.18) 58%,
+      rgb(255 255 255 / 0) 66%
     );
   }
 
@@ -343,12 +346,12 @@ const steps = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 40rem;
+    width: min(46%, 40rem);
     padding: clamp(2.5rem, 5vw, 4.5rem);
   }
 
   .hero h1 {
-    font-size: clamp(2.6rem, 1.3rem + 3.3vw, 4.1rem);
+    font-size: clamp(2.6rem, 4.4vw, 4.1rem);
     line-height: 0.98;
     letter-spacing: -0.048em;
   }
@@ -380,6 +383,85 @@ const steps = [
     font-size: 0.8125rem;
     font-weight: 650;
     line-height: 1.3;
+  }
+
+  @media (max-width: 75em) {
+    .hero__frame {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      align-items: center;
+      gap: clamp(1rem, 3vw, 2.5rem);
+      min-height: clamp(30rem, 72svh, 38rem);
+      padding: clamp(0.6rem, 1vw, 0.75rem);
+      border: 1px solid var(--ec-line);
+    }
+
+    .hero__content {
+      width: auto;
+      padding: clamp(1.5rem, 3.5vw, 3rem) 0 clamp(1.5rem, 3.5vw, 3rem) clamp(1rem, 3.5vw, 3rem);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 0.6rem + 3.6vw, 3.4rem);
+    }
+
+    .hero__nowrap {
+      white-space: normal;
+    }
+
+    .hero__media {
+      position: relative;
+      inset: auto;
+      z-index: auto;
+      align-self: stretch;
+      border-radius: calc(var(--ec-radius-lg) - 0.6rem);
+      overflow: hidden;
+    }
+
+    .hero__media::after {
+      display: none;
+    }
+
+    .hero__media :global(picture) {
+      position: absolute;
+      inset: 0;
+    }
+
+    .hero__media :global(img) {
+      object-position: 60% 50%;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .hero__frame {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      min-height: 0;
+      padding: 0;
+      background: none;
+      border: 0;
+      border-radius: 0;
+      overflow: visible;
+    }
+
+    .hero__content {
+      padding: clamp(1.75rem, 6vw, 3rem) 0.25rem clamp(1.75rem, 5vw, 2.5rem);
+    }
+
+    .hero__media {
+      border-radius: var(--ec-radius-lg);
+    }
+
+    .hero__media :global(picture) {
+      position: static;
+    }
+
+    .hero__media :global(img) {
+      aspect-ratio: 4 / 3;
+      object-position: 62% 50%;
+    }
   }
 
   /* ——— Engagements ——— */
@@ -491,7 +573,6 @@ const steps = [
     place-items: center;
     width: 3rem;
     height: 3rem;
-    margin-bottom: auto;
     border-radius: var(--ec-radius-sm);
     background: var(--ec-mist);
     color: var(--ec-slate);
@@ -503,7 +584,7 @@ const steps = [
   }
 
   .card__title {
-    margin-top: 2.25rem;
+    margin-top: 2rem;
     font-size: 1.375rem;
     font-weight: 750;
     letter-spacing: -0.03em;
@@ -539,7 +620,8 @@ const steps = [
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 1.25rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
     color: var(--ec-slate);
     font-size: 0.9375rem;
     font-weight: 650;
@@ -698,7 +780,7 @@ const steps = [
     display: grid;
     grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
     gap: 2rem clamp(1rem, 2.5vw, 2rem);
-    align-items: end;
+    align-items: start;
     margin-top: clamp(2.5rem, 5vw, 3.75rem);
   }
 
@@ -719,13 +801,9 @@ const steps = [
 
   .work__img :global(img) {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    height: clamp(20rem, 32vw, 28rem);
     object-fit: cover;
     transition: transform 0.8s var(--ec-ease);
-  }
-
-  .work--main .work__img :global(img) {
-    aspect-ratio: 4 / 3;
   }
 
   .work:hover .work__img :global(img) {
@@ -827,37 +905,6 @@ const steps = [
   }
 
   @media (max-width: 60em) {
-    .hero__frame {
-      flex-direction: column;
-      align-items: stretch;
-      min-height: 0;
-      background: none;
-      border-radius: 0;
-      overflow: visible;
-    }
-
-    .hero__content {
-      max-width: 40rem;
-      padding: clamp(1.75rem, 6vw, 3rem) 0.25rem clamp(1.75rem, 5vw, 2.5rem);
-    }
-
-    .hero__media {
-      position: relative;
-      inset: auto;
-      z-index: auto;
-      border-radius: var(--ec-radius-lg);
-      overflow: hidden;
-    }
-
-    .hero__media::after {
-      display: none;
-    }
-
-    .hero__media :global(img) {
-      aspect-ratio: 4 / 3;
-      object-position: 62% 50%;
-    }
-
     .head,
     .method__grid,
     .care {
@@ -865,7 +912,7 @@ const steps = [
     }
 
     .method__media :global(img) {
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 2;
     }
 
     .care__body {
@@ -874,7 +921,7 @@ const steps = [
 
     .care__media {
       min-height: 0;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 2;
     }
   }
 
@@ -883,8 +930,8 @@ const steps = [
       grid-template-columns: 1fr;
     }
 
-    .work__img :global(img),
-    .work--main .work__img :global(img) {
+    .work__img :global(img) {
+      height: auto;
       aspect-ratio: 4 / 3;
     }
   }
@@ -905,12 +952,42 @@ const steps = [
       bottom: 0.85rem;
     }
 
+    /* Cartes plus compactes : pictogramme et titre sur une même ligne */
     .card {
+      display: grid;
+      grid-template-columns: 2.75rem minmax(0, 1fr);
+      align-items: center;
+      column-gap: 1rem;
       min-height: 0;
+      padding: 1.35rem 1.25rem 1.25rem;
+    }
+
+    .card__icon {
+      width: 2.75rem;
+      height: 2.75rem;
     }
 
     .card__title {
-      margin-top: 1.5rem;
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+
+    .card__text,
+    .card__more {
+      grid-column: 1 / -1;
+    }
+
+    .card__text {
+      margin-top: 0.85rem;
+    }
+
+    .card__more {
+      padding-top: 0.9rem;
+    }
+
+    .method__media :global(img),
+    .care__media {
+      aspect-ratio: 4 / 3;
     }
   }
 

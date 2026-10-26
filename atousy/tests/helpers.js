@@ -1,6 +1,9 @@
 // Outils communs aux tests (node:test). Aucun appel réseau réel : fetch est simulé.
 
 export const ORIGIN = 'https://atousy.com';
+// Poste local (wrangler pages dev) : seul endroit où les clés de test Turnstile sont acceptées.
+export const LOCAL_ORIGIN = 'http://localhost:8788';
+export const LOCAL_DEVIS_URL = `${LOCAL_ORIGIN}/api/devis`;
 export const DEVIS_URL = `${ORIGIN}/api/devis`;
 export const SITEVERIFY = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 export const BREVO_URL = 'https://api.brevo.com/v3/smtp/email';
@@ -14,7 +17,7 @@ export const BREVO_ENV = Object.freeze({
   EMAIL_PROVIDER: 'brevo',
   BREVO_API_KEY: 'xkeysib-test-key',
   MAIL_TO: 'contact@atousy.com',
-  MAIL_FROM: 'Atousy <devis@atousy.com>',
+  MAIL_FROM: 'Atousy <contact@atousy.com>',
 });
 
 export const RESEND_ENV = Object.freeze({
@@ -22,8 +25,11 @@ export const RESEND_ENV = Object.freeze({
   EMAIL_PROVIDER: 'resend',
   RESEND_API_KEY: 're_test_key',
   MAIL_TO: 'contact@atousy.com',
-  MAIL_FROM: 'Atousy <devis@atousy.com>',
+  MAIL_FROM: 'Atousy <contact@atousy.com>',
 });
+
+/** Ouverture du formulaire : 42 minutes avant l'horloge fixe des tests (26/10/2026 14:42 UTC). */
+export const STARTED = Date.UTC(2026, 9, 26, 14, 0, 0);
 
 /** Champs valides (aucune ville réelle, conformément aux règles du projet). */
 export function validFields(overrides = {}) {
@@ -38,6 +44,7 @@ export function validFields(overrides = {}) {
     telephone: '06 12 34 56 78',
     market: 'fr',
     website: '',
+    started: String(STARTED),
     'cf-turnstile-response': 'token-abc',
     ...overrides,
   };
@@ -76,7 +83,7 @@ export function multipartRequest(fields, { headers = {}, url = DEVIS_URL } = {})
  * @param {object | ((call) => Response | Promise<Response>)} [opts.turnstile]
  * @param {object | ((call) => Response | Promise<Response>)} [opts.provider] { status, body }
  */
-export function createFetch({ turnstile = { success: true, hostname: 'atousy.com' }, provider = { status: 201, body: { messageId: '<1@relay>' } } } = {}) {
+export function createFetch({ turnstile = { success: true, hostname: 'atousy.com', action: 'devis' }, provider = { status: 201, body: { messageId: '<1@relay>' } } } = {}) {
   const calls = [];
   const fn = async (input, init = {}) => {
     const url = String(input);

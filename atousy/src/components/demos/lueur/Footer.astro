@@ -1,5 +1,5 @@
 ---
-// Pied de page Lueur : marque, navigation, prestations, encart « dans un vrai site », mention fictive.
+// Pied de page Lueur : marque, navigation, prestations, encart « dans un vrai site », mention fictive.
 import Logo from './Logo.astro';
 import RealSiteNote from './RealSiteNote.astro';
 import { lueurNav, lueurServices } from './nav';
@@ -13,7 +13,7 @@ import { lueurNav, lueurServices } from './nav';
           <Logo size="lg" />
         </a>
         <p class="brand__tagline">Une maison bien éclairée, une installation sûre.</p>
-        <p class="brand__text">Électricien pour les particuliers : rénovation, tableaux, éclairage, recharge et domotique, autour de chez vous.</p>
+        <p class="brand__text">Électricien pour les particuliers : rénovation, tableaux, éclairage, recharge et domotique, autour de chez vous.</p>
       </div>
 
       <nav class="col" aria-label="Pied de page">
@@ -131,6 +131,8 @@ import { lueurNav, lueurServices } from './nav';
   }
 
   .bottom a {
+    display: inline-block;
+    padding-block: 0.4rem;
     color: var(--lu-ivory);
     font-weight: 600;
     text-decoration-color: var(--lu-amber);

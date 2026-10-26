@@ -8,12 +8,17 @@ export const TURNSTILE_TIMEOUT_MS = 5000;
 export const MAX_TOKEN_LENGTH = 2048;
 
 // Clés secrètes de test officielles : Siteverify renvoie alors un hostname
-// factice (« example.com »), on ne contrôle donc pas le hostname avec elles.
+// factice (« example.com »), on ne contrôle donc ni le hostname ni l'action avec elles.
+// La première accepte N'IMPORTE QUEL jeton : server/devis.js refuse ces clés hors
+// d'un poste local (localhost), pour qu'elles ne désactivent jamais l'anti-robot en ligne.
 const TEST_SECRETS = new Set([
   '1x0000000000000000000000000000000AA', // passe toujours
   '2x0000000000000000000000000000000AA', // échoue toujours
   '3x0000000000000000000000000000000AA', // « jeton déjà utilisé »
 ]);
+
+/** Clé secrète de test officielle de Cloudflare ? */
+export const isTestSecret = (secret) => TEST_SECRETS.has(secret);
 
 // Erreurs qui viennent de notre configuration, pas du visiteur.
 const CONFIG_ERRORS = new Set(['missing-input-secret', 'invalid-input-secret']);
@@ -28,15 +33,16 @@ const CONFIG_ERRORS = new Set(['missing-input-secret', 'invalid-input-secret']);
  * @param {string} p.token
  * @param {string | null} p.remoteip
  * @param {string[]} p.allowedHostnames hostnames acceptés (en minuscules)
+ * @param {string} [p.expectedAction] action posée par le widget (`action: 'devis'` côté navigateur)
  * @param {typeof fetch} p.fetch
- * @param {() => string} p.uuid
  * @param {number} [p.timeoutMs]
  * @returns {Promise<TurnstileResult>}
  */
-export async function verifyTurnstile({ secret, token, remoteip, allowedHostnames, fetch, uuid, timeoutMs = TURNSTILE_TIMEOUT_MS }) {
+export async function verifyTurnstile({ secret, token, remoteip, allowedHostnames, expectedAction, fetch, timeoutMs = TURNSTILE_TIMEOUT_MS }) {
   if (!token || token.length > MAX_TOKEN_LENGTH) return { ok: false, reason: 'captcha', codes: ['missing-or-oversized-token'] };
 
-  const payload = { secret, response: token, idempotency_key: uuid() };
+  // Pas d'idempotency_key : elle ne sert qu'à revérifier un même jeton, et on ne réessaie jamais.
+  const payload = { secret, response: token };
   if (remoteip) payload.remoteip = remoteip;
 
   let status;
@@ -78,11 +84,14 @@ export async function verifyTurnstile({ secret, token, remoteip, allowedHostname
   }
 
   // Défense en profondeur recommandée par Cloudflare : le jeton doit avoir
-  // été obtenu sur notre propre domaine.
+  // été obtenu sur notre propre domaine, par le widget du formulaire de devis.
   if (!TEST_SECRETS.has(secret)) {
     const hostname = typeof data.hostname === 'string' ? data.hostname.toLowerCase() : '';
     if (!hostname || !allowedHostnames.includes(hostname)) {
       return { ok: false, reason: 'captcha', codes: ['hostname-mismatch'] };
+    }
+    if (expectedAction && data.action !== expectedAction) {
+      return { ok: false, reason: 'captcha', codes: ['action-mismatch'] };
     }
   }
 

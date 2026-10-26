@@ -18,6 +18,13 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       <img src="/brand/atousy-logo-complet.svg" width="150" height="66" alt="Atousy, studio web & design — accueil" />
     </a>
 
+    {/* Avant la navigation : au clavier, le bouton précède le menu qu'il ouvre et reste en haut à l'ouverture. */}
+    <button class="menu-toggle js-only" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+      <span class="menu-toggle__open"><Icon name="menu" /></span>
+      <span class="menu-toggle__close"><Icon name="close" /></span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+
     <nav class="site-nav" id="site-nav" aria-label="Navigation principale">
       <ul class="site-nav__list">
         {
@@ -28,7 +35,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
                   {item.label}
                   <Icon name="chevron" class="site-nav__chevron" />
                 </button>
-                <span class="site-nav__group-label" aria-hidden="true">
+                <span class="site-nav__group-label">
                   {item.label}
                 </span>
                 <ul class="site-nav__sub" id="submenu-services">
@@ -61,39 +68,70 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       <MarketSelect id="market-header" />
       <a class="btn btn--dark btn--sm" href="/devis/">Demander un devis</a>
     </div>
-
-    <button class="menu-toggle js-only" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
-      <span class="menu-toggle__open"><Icon name="menu" /></span>
-      <span class="menu-toggle__close"><Icon name="close" /></span>
-      <span class="visually-hidden">Menu</span>
-    </button>
   </div>
 </header>
 
 <script>
   const header = document.querySelector<HTMLElement>('[data-site-header]');
   const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = header?.querySelector<HTMLElement>('#site-nav');
   const group = header?.querySelector<HTMLElement>('[data-submenu]');
   const groupBtn = group?.querySelector<HTMLButtonElement>('.site-nav__toggle');
+  const desktop = window.matchMedia('(min-width: 62.5em)');
 
   const setMenu = (open: boolean) => {
     header?.classList.toggle('is-open', open);
     toggle?.setAttribute('aria-expanded', String(open));
     document.documentElement.classList.toggle('menu-open', open);
   };
-  const setSub = (open: boolean) => {
+
+  // Sous-menu « Services » (grand écran). Son affichage dépend uniquement de .is-open,
+  // tenu à jour avec aria-expanded. Ouvert au survol, il se referme quand la souris sort ;
+  // ouvert au clic ou au clavier, il reste ouvert jusqu'à Échap, un clic ailleurs ou la sortie du focus.
+  let openedByHover = false;
+  let closeTimer: number | undefined;
+  const setSub = (open: boolean, byHover = false) => {
+    window.clearTimeout(closeTimer);
+    openedByHover = open && byHover;
     group?.classList.toggle('is-open', open);
     groupBtn?.setAttribute('aria-expanded', String(open));
   };
+  const subOpen = () => group?.classList.contains('is-open') ?? false;
 
   toggle?.addEventListener('click', () => setMenu(!header?.classList.contains('is-open')));
-  groupBtn?.addEventListener('click', () => setSub(!group?.classList.contains('is-open')));
+
+  groupBtn?.addEventListener('click', () => {
+    // Ouvert par le survol : le clic le garde ouvert au lieu de le refermer.
+    if (subOpen() && openedByHover) setSub(true);
+    else setSub(!subOpen());
+  });
+
+  group?.addEventListener('pointerenter', (e) => {
+    if (e.pointerType !== 'mouse' || !desktop.matches) return;
+    window.clearTimeout(closeTimer);
+    if (!subOpen()) setSub(true, true);
+  });
+  group?.addEventListener('pointerleave', (e) => {
+    if (e.pointerType !== 'mouse' || !openedByHover) return;
+    // Focus déjà dans le sous-menu (Tab après le survol) : il reste ouvert.
+    if (group.contains(document.activeElement) && document.activeElement !== groupBtn) {
+      openedByHover = false;
+      return;
+    }
+    closeTimer = window.setTimeout(() => setSub(false), 150);
+  });
+  group?.addEventListener('focusout', (e) => {
+    const next = e.relatedTarget as Node | null;
+    if (next ? group.contains(next) : group.matches(':hover')) return;
+    setSub(false);
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    if (group?.classList.contains('is-open')) {
+    if (subOpen()) {
+      const focusInside = group?.contains(document.activeElement);
       setSub(false);
-      groupBtn?.focus();
+      if (focusInside) groupBtn?.focus();
     } else if (header?.classList.contains('is-open')) {
       setMenu(false);
       toggle?.focus();
@@ -102,7 +140,25 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
   document.addEventListener('click', (e) => {
     if (group && !group.contains(e.target as Node)) setSub(false);
   });
-  window.matchMedia('(min-width: 62.5em)').addEventListener('change', () => setMenu(false));
+
+  // Changement de taille d'écran : tout se referme. Si l'élément qui avait le focus
+  // disparaît (bouton Menu en grand écran, liens du menu en petit écran), le focus va
+  // sur l'élément qui le remplace au même endroit.
+  desktop.addEventListener('change', () => {
+    const active = document.activeElement as HTMLElement | null;
+    setMenu(false);
+    setSub(false);
+    if (!active || !header?.contains(active) || active.getClientRects().length > 0) return;
+    const target = desktop.matches ? nav?.querySelector<HTMLElement>('.site-nav__link') : toggle;
+    target?.focus();
+  });
+
+  // Retour arrière depuis le cache du navigateur : la page revient avec le menu fermé.
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    setMenu(false);
+    setSub(false);
+  });
 </script>
 
 <style>
@@ -172,6 +228,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
   }
 
   .site-nav__toggle :global(.site-nav__chevron) {
+    flex: none;
     width: 0.9rem;
     height: 0.9rem;
     transition: transform 0.2s var(--ease);
@@ -205,12 +262,16 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       visibility 0.18s;
   }
 
-  .site-nav__item--group:hover .site-nav__sub,
-  .site-nav__item--group:focus-within .site-nav__sub,
-  .site-nav__item--group.is-open .site-nav__sub {
+  /* Avec JavaScript, seul .is-open (synchronisé avec aria-expanded) affiche le sous-menu ;
+     sans JavaScript, le survol et le focus clavier prennent le relais. */
+  .site-nav__item--group.is-open .site-nav__sub,
+  :global(html:not(.js)) .site-nav__item--group:hover .site-nav__sub,
+  :global(html:not(.js)) .site-nav__item--group:focus-within .site-nav__sub {
     opacity: 1;
     visibility: visible;
     transform: none;
+    /* À l'ouverture, les liens sont atteignables tout de suite au clavier (pas d'attente sur visibility). */
+    transition-property: opacity, transform;
   }
 
   .site-nav__item--group.is-open :global(.site-nav__chevron) {
@@ -229,7 +290,12 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
   .site-nav__sublink:hover,
   .site-nav__sublink[aria-current='page'] {
     background: var(--ivory);
-    color: var(--coral-text);
+  }
+
+  /* Page en cours : texte encre (le corail ne contraste pas assez en petit corps), soulignement corail. */
+  .site-nav__sublink[aria-current='page'] {
+    text-decoration: underline 2px var(--coral);
+    text-underline-offset: 0.35em;
   }
 
   .site-nav__mobile-extra {
@@ -241,6 +307,10 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
     align-items: center;
     gap: 1.5rem;
     margin-left: auto;
+  }
+
+  .site-header__actions .btn {
+    white-space: nowrap;
   }
 
   .menu-toggle {
@@ -257,6 +327,14 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       position: absolute;
       inset: 0 0 auto;
       background: transparent;
+    }
+  }
+
+  /* De 1000 à 1440 px, la marge de la navigation se réduit pour que tout tienne sur une ligne
+     (même valeur que ci-dessus à 1440 px). */
+  @media (min-width: 62.5em) and (max-width: 89.99em) {
+    .site-nav {
+      margin-left: clamp(1.5rem, 30.5vw - 17.5rem, 9.9rem);
     }
   }
 
@@ -277,6 +355,9 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       place-items: center;
       width: 2.9rem;
       height: 2.9rem;
+      /* 2,9rem + 2 × 0,8rem = 4,5rem : la première ligne garde la même hauteur,
+         menu ouvert ou fermé, et le logo ne bouge pas. */
+      margin-block: 0.8rem;
       margin-left: auto;
       margin-right: -0.5rem;
       padding: 0;
@@ -339,6 +420,11 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
       display: none;
     }
 
+    .site-nav__link[aria-current='page'] {
+      text-decoration: underline 2px var(--coral);
+      text-underline-offset: 0.3em;
+    }
+
     .site-nav__toggle {
       display: none;
     }
@@ -367,6 +453,11 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
 
     .site-nav__sublink:hover {
       background: none;
+      color: var(--ink);
+    }
+
+    .site-nav__sublink[aria-current='page'] {
+      color: var(--ink);
     }
 
     .site-nav__mobile-extra {

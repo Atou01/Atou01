@@ -1,6 +1,19 @@
 /* Atousy — styles globaux et tokens de la charte. */
 @import '@fontsource-variable/figtree/wght.css';
 
+/* Police de repli aux mêmes métriques que Figtree (Arial ou Liberation Sans, ajustées) :
+   le texte ne bouge presque plus quand Figtree arrive (CLS). Valeurs calculées avec
+   @capsizecss/unpack sur figtree-latin-wght-normal.woff2. Sans Arial ni Liberation Sans
+   sur l'appareil, cette police est ignorée et la pile système prend le relais. */
+@font-face {
+  font-family: 'Figtree Fallback';
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans'), local('Arimo');
+  size-adjust: 99.6%;
+  ascent-override: 95.39%;
+  descent-override: 25.1%;
+  line-gap-override: 0%;
+}
+
 :root {
   /* Couleurs de la charte (relevées sur le kit logo et la maquette) */
   --ivory: #f8f4ee;
@@ -19,7 +32,7 @@
   /* Texte posé sur le corail : marine (contraste 5,9:1). Le blanc ne passe pas (2,7:1). */
   --on-coral: #0f2329;
 
-  --font-sans: 'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Figtree Variable', 'Figtree', 'Figtree Fallback', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --fs-hero: clamp(2.75rem, 6.35vw, 7.25rem);
   --fs-h2: clamp(2.2rem, 5vw, 5rem);
@@ -46,6 +59,11 @@ html {
 }
 
 body {
+  /* Pied de page en bas de l'écran sur les pages courtes (404…). */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
   background: var(--ivory);
   color: var(--ink);
@@ -55,6 +73,10 @@ body {
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+body > main {
+  flex: 1 0 auto;
 }
 
 img,
@@ -98,9 +120,13 @@ h3 {
   text-wrap: balance;
 }
 
+/* Focus en deux tons : anneau marine et liseré clair dessous (16:1 entre les deux).
+   L'un des deux contraste toujours à plus de 3:1 avec le fond : ivoire, marine, corail
+   ou photo du hero. */
 :focus-visible {
-  outline: 2.5px solid var(--coral-text);
+  outline: 2.5px solid var(--marine);
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--paper);
 }
 
 .container {

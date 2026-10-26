@@ -1,0 +1,346 @@
+---
+// Démonstration fictive « Lueur » (électricien) — page Conseils : repères généraux, sans valeur normative.
+import LueurLayout from '../../../../components/demos/lueur/LueurLayout.astro';
+import PageHero from '../../../../components/demos/lueur/PageHero.astro';
+import ContactBand from '../../../../components/demos/lueur/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/lueur/RealSiteNote.astro';
+import LueurIcon from '../../../../components/demos/lueur/LueurIcon.astro';
+import type { LueurIconName } from '../../../../components/demos/lueur/icons';
+import lueur4 from '../../../../assets/photos/lueur-4.jpg';
+
+const tips: { id: string; icon: LueurIconName; title: string; paragraphs: string[]; signs?: string[]; keep: string }[] = [
+  {
+    id: 'signes',
+    icon: 'alert',
+    title: 'Savoir reconnaître les signes d’alerte',
+    paragraphs: [
+      'Certains symptômes méritent qu’on s’y arrête, même s’ils semblent anodins :',
+      'Dans ces situations, inutile de chercher la panne soi-même. Si vous pouvez le faire sans risque, coupez le circuit concerné au tableau, puis faites appel à un électricien.',
+    ],
+    signs: [
+      'un disjoncteur qui saute souvent ;',
+      'une prise ou un interrupteur qui chauffe ;',
+      'des traces de noircissement autour d’une prise ;',
+      'une odeur de brûlé ou de plastique chaud ;',
+      'des lumières qui vacillent sans raison apparente.',
+    ],
+    keep: 'Un signe inhabituel n’est jamais à négliger : on coupe, puis on appelle un professionnel.',
+  },
+  {
+    id: 'multiprises',
+    icon: 'plug',
+    title: 'Ménager les multiprises',
+    paragraphs: [
+      'Les multiprises dépannent, mais elles ne sont pas faites pour tout. Évitez de les brancher les unes sur les autres et de leur confier en même temps plusieurs appareils gourmands, comme un radiateur d’appoint, un four ou une bouilloire.',
+      'Un enrouleur se déroule entièrement avant usage. Et si les rallonges se multiplient dans une pièce, c’est souvent le signe qu’il manque des prises : un électricien peut en ajouter là où vous en avez réellement besoin.',
+    ],
+    keep: 'Trop de rallonges ? Mieux vaut ajouter des prises que multiplier les branchements.',
+  },
+  {
+    id: 'tableau',
+    icon: 'panel',
+    title: 'Apprivoiser son tableau électrique',
+    paragraphs: [
+      'Savoir où se trouve son tableau et pouvoir l’atteindre facilement, c’est précieux le jour où il faut couper le courant. Gardez l’espace devant lui dégagé et une lampe de poche à proximité.',
+      'Des circuits bien repérés — « cuisine », « chambres », « extérieur »… — permettent d’agir vite et sans hésiter. Si les étiquettes manquent ou ne correspondent plus à rien, votre électricien peut les mettre à jour et vous expliquer le rôle de chaque élément.',
+    ],
+    keep: 'Un tableau accessible et bien étiqueté, c’est du temps gagné quand il faut agir.',
+  },
+  {
+    id: 'confort',
+    icon: 'bulb',
+    title: 'Un éclairage confortable, pièce par pièce',
+    paragraphs: [
+      'Une seule source au plafond donne souvent une lumière dure et des zones d’ombre. Multiplier les points lumineux — suspension, lampes d’appoint, éclairage indirect — permet d’adapter l’ambiance à chaque moment de la journée.',
+      'Le soir, une lumière plus chaude et plus douce crée une atmosphère plus reposante ; des variateurs offrent cette souplesse. À l’extérieur, éclairer les marches et les allées rend les déplacements plus faciles à la nuit tombée.',
+    ],
+    keep: 'Plusieurs sources bien placées valent mieux qu’un seul plafonnier très puissant.',
+  },
+];
+---
+
+<LueurLayout
+  title="Conseils — Lueur, démonstration fictive | Atousy"
+  description="Conseils de Lueur, électricien fictif : quelques repères généraux de sécurité et de confort à la maison. Démonstration réalisée par Atousy."
+  current="conseils"
+>
+  <PageHero
+    label="Conseils"
+    title="Bien vivre avec son électricité, au quotidien."
+    lead="Quatre repères simples pour gagner en sécurité et en confort à la maison."
+    image={lueur4}
+    alt="Mains d’un électricien vérifiant une prise murale ouverte avec un testeur, tournevis et pince posés sur une bâche"
+    focus="45% 50%"
+  >
+    <p class="disclaimer">
+      <LueurIcon name="info" />
+      <span>
+        <strong>Information générale.</strong> Ces conseils ne remplacent ni un diagnostic ni l’intervention d’un électricien.
+        Pour toute intervention sur votre installation, faites appel à un professionnel.
+      </span>
+    </p>
+  </PageHero>
+
+  <section class="lu-section lu-light body" aria-label="Les conseils">
+    <div class="lu-container body__grid">
+      <nav class="toc" aria-labelledby="toc-title">
+        <p id="toc-title" class="toc__title">Sur cette page</p>
+        <ol>
+          {
+            tips.map((t, i) => (
+              <li>
+                <a href={`#${t.id}`}>
+                  <span class="toc__num" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  {t.title}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="tips">
+        {
+          tips.map((t, i) => (
+            <article id={t.id} class="tip" aria-labelledby={`${t.id}-title`}>
+              <div class="tip__head">
+                <span class="tip__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="tip__icon">
+                  <LueurIcon name={t.icon} />
+                </span>
+              </div>
+              <h2 id={`${t.id}-title`} class="tip__title">
+                {t.title}
+              </h2>
+              <p>{t.paragraphs[0]}</p>
+              {t.signs && <ul class="tip__signs">{t.signs.map((s) => <li>{s}</li>)}</ul>}
+              {t.paragraphs.slice(1).map((p) => <p>{p}</p>)}
+              <p class="tip__keep">
+                <span class="tip__keep-label">À retenir</span>
+                {t.keep}
+              </p>
+            </article>
+          ))
+        }
+
+        <RealSiteNote class="tips__note">des conseils rédigés et relus par l’artisan lui-même, enrichis au fil des questions de ses clients.</RealSiteNote>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand
+    title="Un doute sur votre installation ?"
+    text="Décrivez-nous ce que vous constatez : nous vous aidons à y voir plus clair et, si besoin, nous venons sur place."
+    button="Nous décrire la situation"
+  />
+</LueurLayout>
+
+<style>
+  .disclaimer {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    max-width: 36rem;
+    margin-top: clamp(1.75rem, 3vw, 2.25rem);
+    padding: 1rem 1.15rem;
+    background: rgb(242 180 90 / 0.08);
+    border: 1px solid rgb(242 180 90 / 0.35);
+    border-radius: 14px;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--lu-dim);
+  }
+
+  .disclaimer strong {
+    color: var(--lu-ivory);
+    font-weight: 650;
+  }
+
+  .disclaimer :global(svg) {
+    flex: none;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-top: 0.1rem;
+    color: var(--lu-amber);
+  }
+
+  /* ——— Corps ——— */
+  .body__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.38fr) minmax(0, 1fr);
+    gap: 3rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: 6.5rem;
+  }
+
+  .toc__title {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--lu-line-light);
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--lu-amber-ink);
+  }
+
+  .toc ol {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc a {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.25rem;
+    padding: 0.55rem 0;
+    color: var(--lu-ink);
+    font-size: 0.9688rem;
+    font-weight: 550;
+    line-height: 1.4;
+    text-decoration: none;
+  }
+
+  .toc a:hover {
+    color: var(--lu-amber-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .toc__num {
+    font-size: 0.8125rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    color: var(--lu-amber-ink);
+    padding-top: 0.08rem;
+  }
+
+  .tips {
+    display: grid;
+    gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  .tip {
+    padding: clamp(1.75rem, 4vw, 3rem);
+    background: var(--lu-card);
+    border: 1px solid var(--lu-line-light);
+    border-radius: calc(var(--lu-radius) + 4px);
+  }
+
+  .tip__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .tip__num {
+    font-size: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    font-weight: 250;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    color: var(--lu-amber-ink);
+  }
+
+  .tip__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--lu-night);
+    color: var(--lu-amber);
+    box-shadow: 0 10px 24px -10px rgb(242 180 90 / 0.65);
+  }
+
+  .tip__icon :global(svg) {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .tip__title {
+    max-width: 22ch;
+    margin-bottom: 1.25rem;
+    font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
+    font-weight: 400;
+  }
+
+  .tip p {
+    max-width: 62ch;
+    color: var(--lu-ink-2);
+  }
+
+  .tip p + p {
+    margin-top: 1rem;
+  }
+
+  .tip__signs {
+    display: grid;
+    gap: 0.45rem;
+    margin: 1rem 0 1.25rem;
+    padding: 0;
+    list-style: none;
+    color: var(--lu-ink);
+  }
+
+  .tip__signs li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .tip__signs li::before {
+    content: '';
+    position: absolute;
+    left: 0.2rem;
+    top: 0.62em;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    background: #d48a22;
+  }
+
+  .tip p.tip__keep {
+    display: grid;
+    max-width: none;
+    gap: 0.35rem;
+    margin-top: 1.75rem;
+    padding: 1rem 1.2rem;
+    background: var(--lu-night);
+    border-radius: 14px;
+    color: var(--lu-ivory);
+    font-weight: 500;
+  }
+
+  .tip__keep-label {
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lu-amber);
+  }
+
+  .tips :global(.tips__note) {
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 60em) {
+    .body__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .toc {
+      position: static;
+    }
+  }
+</style>

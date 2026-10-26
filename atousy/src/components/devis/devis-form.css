@@ -169,7 +169,7 @@ textarea.dv-control {
 }
 
 .dv-control::placeholder {
-  color: #7d878c;
+  color: #687277; /* 4.8:1 sur le fond du champ */
   opacity: 1;
 }
 

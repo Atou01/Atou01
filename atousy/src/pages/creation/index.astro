@@ -5,6 +5,7 @@ import Section from '../../components/pages/Section.astro';
 import DemoWindow from '../../components/pages/DemoWindow.astro';
 import Price from '../../components/Price.astro';
 import Icon from '../../components/Icon.astro';
+import { offerExclusions } from '../../data/site';
 
 const included = [
   'Jusqu’à 5 pages, dans une langue',
@@ -34,7 +35,7 @@ const steps = ['Le devis', 'La maquette', 'La livraison'];
 >
   <PageHero
     crumb="Création de site"
-    title="Un site neuf, pensé pour votre métier."
+    title={'Un site neuf,\npensé pour votre métier.'}
     lead="Pas encore de site ? Nous créons votre site vitrine : une image professionnelle et un chemin simple vers la demande de devis."
   >
     <Fragment slot="actions">
@@ -69,7 +70,7 @@ const steps = ['Le devis', 'La maquette', 'La livraison'];
     </p>
   </Section>
 
-  <Section id="contenu" title="Ce que comprend votre site">
+  <Section id="comprend" title="Ce que comprend votre site">
     <ul class="ip-list ip-list--num">
       {included.map((item) => <li>{item}</li>)}
     </ul>
@@ -111,7 +112,7 @@ const steps = ['Le devis', 'La maquette', 'La livraison'];
 
   <Section id="tarif" title="Le tarif" lead="Le site affiche le tarif du pays choisi." tone="marine">
     <Price />
-    <p class="exclusions">Domaine, hébergement et demandes supplémentaires non inclus, chiffrés à part.</p>
+    <p class="ip-exclusions">{offerExclusions} Ils sont chiffrés à part.</p>
     <ul class="ip-links">
       <li><a class="link-arrow" href="/offre/"><span>Voir le détail de l’offre</span><Icon name="arrow" /></a></li>
     </ul>
@@ -243,14 +244,6 @@ const steps = ['Le devis', 'La maquette', 'La livraison'];
     font-size: clamp(1.15rem, 1.45vw, 1.375rem);
     font-weight: 650;
     letter-spacing: -0.015em;
-  }
-
-  .exclusions {
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgb(255 253 250 / 0.16);
-    font-size: 0.9375rem;
-    color: rgb(255 253 250 / 0.7);
   }
 
   @media (max-width: 52em) {

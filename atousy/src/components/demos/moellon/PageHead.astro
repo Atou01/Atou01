@@ -1,0 +1,161 @@
+---
+// En-tête des pages intérieures : étiquette, titre (H1), chapeau, puis grande photo décalée.
+// La photo d'en-tête est la seule image prioritaire de la page (eager + fetchpriority high).
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  kicker: string;
+  title: string;
+  lead: string;
+  image?: ImageMetadata;
+  alt?: string;
+  caption?: string;
+  /** Point focal de la photo (object-position). */
+  focus?: string;
+}
+const { kicker, title, lead, image, alt = '', caption, focus = '50% 50%' } = Astro.props;
+---
+
+<section class:list={['head', image && 'head--image']} aria-labelledby="page-title">
+  <div class="mo-container head__grid">
+    <p class="mo-kicker head__kicker">{kicker}</p>
+    <h1 id="page-title" class="head__title">{title}</h1>
+    <div class="head__side">
+      <p class="mo-lead">{lead}</p>
+      <slot />
+    </div>
+  </div>
+
+  {
+    image && (
+      <figure class="head__figure">
+        <div class="head__media" style={`--focus: ${focus}`}>
+          <Picture
+            src={image}
+            alt={alt}
+            formats={['avif', 'webp']}
+            widths={[640, 960, 1280, 1680, 2200]}
+            sizes="(max-width: 56em) 100vw, 88vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+        {caption && <figcaption class="mo-caption head__caption">{caption}</figcaption>}
+      </figure>
+    )
+  }
+</section>
+
+<style>
+  .head {
+    position: relative;
+    padding-top: clamp(3.5rem, 8vw, 6.5rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .head--image {
+    padding-bottom: 0;
+  }
+
+  .head__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.5vw, 2rem);
+    align-items: start;
+  }
+
+  .head__kicker {
+    grid-column: 1 / -1;
+  }
+
+  .head__title {
+    grid-column: 1 / span 7;
+    font-size: clamp(2.9rem, 1.6rem + 4.6vw, 5.9rem);
+    font-weight: 360;
+    line-height: 0.98;
+    letter-spacing: -0.034em;
+  }
+
+  .head__side {
+    grid-column: 9 / -1;
+    display: grid;
+    gap: 1.5rem;
+    padding-top: 0.6rem;
+  }
+
+  .head__figure {
+    display: grid;
+    gap: 0.9rem;
+    width: calc(100% - var(--mo-gutter));
+    margin-top: clamp(2.75rem, 6vw, 4.5rem);
+    margin-left: auto;
+  }
+
+  /* Bloc de calcaire plus sombre derrière la photo, comme une pierre d'assise */
+  .head__media {
+    position: relative;
+    background: var(--mo-lime-deep);
+  }
+
+  .head__media::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * clamp(1rem, 3vw, 2.5rem));
+    top: clamp(1rem, 3vw, 2.5rem);
+    width: clamp(4rem, 14vw, 12rem);
+    height: 72%;
+    background: var(--mo-terra);
+    z-index: -1;
+  }
+
+  .head__media :global(img) {
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+    object-position: var(--focus);
+  }
+
+  .head__caption {
+    padding-left: 0.1rem;
+  }
+
+  .head--image {
+    isolation: isolate;
+  }
+
+  @media (max-width: 56em) {
+    .head__title,
+    .head__side {
+      grid-column: 1 / -1;
+    }
+
+    .head__side {
+      margin-top: 1.5rem;
+    }
+
+    .head__media :global(img) {
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  @media (max-width: 34em) {
+    .head__figure {
+      width: 100%;
+      padding-left: var(--mo-gutter);
+    }
+
+    .head__media :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+
+    .head__media::before {
+      left: calc(-1 * var(--mo-gutter));
+      width: var(--mo-gutter);
+    }
+
+    .head__caption {
+      padding-right: var(--mo-gutter);
+    }
+  }
+</style>

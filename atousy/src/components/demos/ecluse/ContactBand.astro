@@ -1,5 +1,5 @@
 ---
-// Encart d'appel à l'action, en fin de page : panneau ardoise arrondi vers la page Contact.
+// Encart d'appel à l'action, en fin de page : panneau ardoise arrondi vers la page Contact.
 import EIcon from './EIcon.astro';
 import RealSiteNote from './RealSiteNote.astro';
 
@@ -9,8 +9,8 @@ interface Props {
   button?: string;
 }
 const {
-  title = 'Une fuite, un projet, une question ?',
-  text = 'Décrivez votre besoin en quelques lignes, avec une photo si vous le pouvez : nous revenons vers vous pour en parler.',
+  title = 'Une fuite, un projet, une question ?',
+  text = 'Décrivez votre besoin en quelques lignes, avec une photo si vous le pouvez : nous revenons vers vous pour en parler.',
   button = 'Nous contacter',
 } = Astro.props;
 ---
@@ -18,11 +18,9 @@ const {
 <section class="band-wrap" aria-labelledby="ec-band-title">
   <div class="ec-wide">
     <div class="band ec-dark">
-      <svg class="band__deco" viewBox="0 0 320 220" fill="none" aria-hidden="true" focusable="false">
-        <path d="M0 96h150v54h170" stroke="currentColor" stroke-width="2" />
-        <path d="M0 126h150v54h170" stroke="currentColor" stroke-width="2" opacity="0.6" />
-        <path d="M0 156h150v54h170" stroke="currentColor" stroke-width="2" opacity="0.35" />
-        <path d="M150 20v200" stroke="currentColor" stroke-width="2" />
+      <svg class="band__deco" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 22H560V38H1200V60H0z" fill="rgb(255 255 255 / 0.035)" />
+        <path d="M0 22H560V38H1200" fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" />
       </svg>
       <div class="band__text">
         <h2 id="ec-band-title" class="band__title">{title}</h2>
@@ -50,20 +48,23 @@ const {
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     align-items: center;
     gap: 2rem clamp(2rem, 6vw, 6rem);
-    padding: clamp(2.25rem, 6vw, 4.75rem) clamp(1.5rem, 6vw, 5rem);
+    padding: clamp(2.25rem, 6vw, 4.75rem) clamp(1.5rem, 6vw, 5rem) clamp(4rem, 9vw, 7rem);
     background: var(--ec-slate-deep);
     border-radius: var(--ec-radius-lg);
     overflow: hidden;
     isolation: isolate;
   }
 
+  /* Deux niveaux d'eau, comme les biefs d'une écluse */
   .band__deco {
     position: absolute;
-    right: -2rem;
-    top: -1rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: -1;
-    width: clamp(14rem, 30vw, 22rem);
-    color: rgb(220 195 148 / 0.22);
+    width: 100%;
+    height: clamp(2.5rem, 5vw, 3.75rem);
+    color: rgb(220 195 148 / 0.45);
   }
 
   .band__title {

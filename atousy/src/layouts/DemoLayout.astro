@@ -1,8 +1,11 @@
 ---
-// Gabarit commun des démonstrations fictives (Rivage, Faîtage).
+// Gabarit commun des démonstrations fictives (Rivage, Faîtage, Écluse, Lueur, Moellon).
 // Bandeau « démonstration fictive » non masquable, page exclue des moteurs de recherche.
+// Le lien « Aller au contenu » est fourni ici, avant le bandeau : c'est le premier arrêt
+// au clavier. Il vise <main id="contenu"> du gabarit de marque.
 import '@fontsource-variable/figtree/wght.css';
 import '@fontsource-variable/newsreader/wght.css';
+import { site } from '../data/site';
 
 interface Props {
   title: string;
@@ -10,6 +13,12 @@ interface Props {
   brand: 'rivage' | 'faitage' | 'ecluse' | 'lueur' | 'moellon';
 }
 const { title, description, brand } = Astro.props;
+// Aperçu de partage : l'image d'Atousy (jamais une photo du faux client) et un titre
+// qui dit toujours « démonstration fictive ».
+const ogTitle = /fictiv/i.test(title) ? title : `${title} (démonstration fictive)`;
+const ogUrl = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og-image.jpg', site.url).href;
+const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à part. » Création et refonte de sites pour artisans, TPE et PME.';
 ---
 
 <!doctype html>
@@ -22,9 +31,21 @@ const { title, description, brand } = Astro.props;
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
     <slot name="head" />
   </head>
   <body>
+    <a class="demo-skip" href="#contenu">Aller au contenu</a>
     <aside class="demo-banner" aria-label="Démonstration fictive">
       <p>
         <strong>Démonstration fictive réalisée par Atousy</strong>
@@ -94,9 +115,48 @@ const { title, description, brand } = Astro.props;
       scroll-behavior: auto !important;
     }
   }
+
+  /* Un seul lien d'évitement : celui de ce gabarit. Un lien « Aller au contenu » ajouté par un
+     gabarit de marque (après le bandeau, donc deuxième au clavier) ferait doublon. */
+  .demo-skip ~ a[href='#contenu'][class*='skip'],
+  .demo-skip ~ * a[href='#contenu'][class*='skip'] {
+    display: none !important;
+  }
 </style>
 
 <style>
+  .demo-skip {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.75rem;
+    z-index: 1000;
+    padding: 0.65rem 1.1rem;
+    border-radius: 4px;
+    /* Clair sur le bandeau sombre, qu'il recouvre en haut de page. */
+    background: #f8f4ee;
+    color: #0f2329;
+    box-shadow: 0 2px 10px rgb(15 35 41 / 0.25);
+    font-family: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+
+  .demo-skip:not(:focus) {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .demo-skip:focus-visible {
+    outline: 2px solid #f07a5f;
+    outline-offset: 3px;
+  }
+
   .demo-banner {
     position: relative;
     z-index: 100;

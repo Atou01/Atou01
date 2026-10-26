@@ -1,0 +1,678 @@
+---
+// Démonstration fictive « Écluse » (plombier-chauffagiste) — page Entretien.
+// Contenu volontairement général : aucune obligation légale, aucune fréquence ni aucun tarif affirmés.
+import { Picture } from 'astro:assets';
+import EcluseLayout from '../../../../components/demos/ecluse/EcluseLayout.astro';
+import PageHead from '../../../../components/demos/ecluse/PageHead.astro';
+import RealSiteNote from '../../../../components/demos/ecluse/RealSiteNote.astro';
+import ContactBand from '../../../../components/demos/ecluse/ContactBand.astro';
+import EIcon, { type EIconName } from '../../../../components/demos/ecluse/EIcon.astro';
+import ecluse2 from '../../../../assets/photos/ecluse-2.jpg';
+import ecluse4 from '../../../../assets/photos/ecluse-4.jpg';
+import ecluse5 from '../../../../assets/photos/ecluse-5.jpg';
+
+const reasons: { icon: EIconName; title: string; text: string }[] = [
+  {
+    icon: 'gauge',
+    title: 'Des sécurités vérifiées',
+    text: 'Les organes de sécurité, les raccordements et l’évacuation des fumées ou des condensats sont vérifiés.',
+  },
+  {
+    icon: 'flame',
+    title: 'Un confort régulier',
+    text: 'Des réglages ajustés à votre logement, pour une chaleur stable et de l’eau chaude au bon moment.',
+  },
+  {
+    icon: 'drop',
+    title: 'Une consommation suivie',
+    text: 'Un appareil propre et bien réglé travaille dans de meilleures conditions qu’un appareil négligé.',
+  },
+  {
+    icon: 'calendar',
+    title: 'Moins d’imprévus',
+    text: 'Une pièce fatiguée repérée à temps, c’est souvent une panne évitée au cœur de l’hiver.',
+  },
+];
+
+const moments = [
+  { title: 'Avant la saison de chauffe', text: 'La fin de l’été est un bon moment : l’appareil est prêt quand le froid arrive.' },
+  { title: 'Après un long arrêt', text: 'Résidence peu occupée, appareil remis en route après plusieurs mois sans servir.' },
+  { title: 'Au moindre signe inhabituel', text: 'Bruit nouveau, odeur, pression qui baisse, code erreur qui revient.' },
+  { title: 'En arrivant dans un logement', text: 'Pour connaître l’état de l’installation dont vous héritez.' },
+];
+
+const boiler = [
+  'Contrôle visuel de l’appareil et de ses raccordements',
+  'Nettoyage des éléments accessibles, selon le modèle',
+  'Vérification des organes de sécurité',
+  'Contrôle de la combustion et des réglages',
+  'Vérification de la pression du circuit',
+  'Conseils d’utilisation et de programmation',
+];
+
+const heatpump = [
+  'Contrôle de l’unité extérieure et de ses abords',
+  'Nettoyage des filtres et éléments accessibles, selon le modèle',
+  'Vérification des raccordements hydrauliques et électriques',
+  'Contrôle des températures, pressions et réglages',
+  'Vérification de l’évacuation des condensats',
+  'Conseils d’utilisation et de programmation',
+];
+
+const habits = [
+  { title: 'Jetez un œil au manomètre', text: 'Une pression qui baisse souvent mérite d’être signalée.' },
+  { title: 'Dégagez l’unité extérieure', text: 'Feuilles, neige ou objets ne doivent pas gêner la circulation de l’air.' },
+  { title: 'Purgez les radiateurs', text: 'En début de saison, si le haut d’un radiateur reste froid.' },
+  { title: 'Notez les codes d’erreur', text: 'Une photo de l’écran aide beaucoup à préparer l’intervention.' },
+];
+
+const faq = [
+  {
+    q: 'À quelle fréquence faut-il entretenir son appareil ?',
+    a: 'Un entretien régulier est recommandé. Le bon rythme dépend de votre appareil, de son usage et des préconisations du fabricant : nous vous conseillons lors de la première visite.',
+  },
+  {
+    q: 'Combien de temps dure une visite ?',
+    a: 'Cela dépend du type d’appareil et de son état. Nous vous donnons une estimation au moment de convenir du rendez-vous.',
+  },
+  {
+    q: 'Faut-il être présent pendant la visite ?',
+    a: 'C’est préférable : c’est l’occasion de poser vos questions, de voir les réglages ensemble et de repartir avec quelques bons gestes.',
+  },
+  {
+    q: 'Entretenez-vous un appareil que vous n’avez pas installé ?',
+    a: 'Oui, dans la plupart des cas. Indiquez-nous la marque et le modèle, inscrits sur la plaque signalétique, pour que nous préparions la visite.',
+  },
+];
+---
+
+<EcluseLayout
+  title="Entretien — Écluse, démonstration fictive | Atousy"
+  description="Entretien de chaudières et de pompes à chaleur chez Écluse, plombier-chauffagiste fictif : pourquoi, quand, et ce que comprend une visite. Démonstration réalisée par Atousy."
+  current="entretien"
+>
+  <PageHead
+    crumb="Entretien"
+    title="Prendre soin de votre chauffage."
+    lead="Chaudière ou pompe à chaleur : l’entretien régulier est recommandé. Voici pourquoi, quand le prévoir, et ce que comprend une visite."
+    image={ecluse5}
+    imageAlt="Local technique lumineux : chaudière murale blanche, vase d’expansion, ballon d’eau chaude et tuyauteries en cuivre"
+    imagePosition="48% 50%"
+    caption="Projet type · Chaudière et ballon"
+  />
+
+  <!-- Pourquoi -->
+  <section class="ec-section why" aria-labelledby="why-title">
+    <div class="ec-container">
+      <div class="head">
+        <p class="ec-chip">Pourquoi entretenir</p>
+        <h2 id="why-title" class="ec-h2">Un appareil suivi, c’est un appareil qui vous rend service.</h2>
+      </div>
+      <ul class="reasons">
+        {
+          reasons.map((r) => (
+            <li class="reason">
+              <span class="reason__icon" aria-hidden="true">
+                <EIcon name={r.icon} />
+              </span>
+              <h3>{r.title}</h3>
+              <p>{r.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Quand -->
+  <section class="ec-section when" aria-labelledby="when-title">
+    <div class="ec-container when__grid">
+      <div class="when__intro">
+        <p class="ec-chip">Quand prévoir une visite</p>
+        <h2 id="when-title" class="ec-h2">Les bons moments pour faire le point.</h2>
+        <p class="ec-lead">
+          Au-delà d’un rythme régulier, certaines situations méritent un contrôle sans attendre.
+        </p>
+        <figure class="when__media">
+          <Picture
+            src={ecluse4}
+            alt="Technicien vu de dos, agenouillé sur un tapis de protection, au travail sous un lavabo, sa trousse à outils ouverte à côté"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960]}
+            sizes="(max-width: 60em) calc(100vw - 2rem), 34vw"
+          />
+        </figure>
+      </div>
+      <ol class="moments">
+        {
+          moments.map((m, i) => (
+            <li class="moment">
+              <span class="moment__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{m.title}</h3>
+                <p>{m.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Ce que comprend une visite -->
+  <section class="ec-section visit" aria-labelledby="visit-title">
+    <div class="ec-container">
+      <div class="head head--center">
+        <p class="ec-chip">Une visite d’entretien</p>
+        <h2 id="visit-title" class="ec-h2">Ce que comprend une visite.</h2>
+        <p class="ec-lead">
+          Le contenu exact dépend de votre appareil et des préconisations de son fabricant. Voici les grandes lignes.
+        </p>
+      </div>
+
+      <div class="visit__grid">
+        <article class="kit" aria-labelledby="kit-boiler">
+          <div class="kit__head">
+            <span class="kit__icon" aria-hidden="true"><EIcon name="flame" /></span>
+            <h3 id="kit-boiler">Chaudière</h3>
+          </div>
+          <ul class="ec-checks">
+            {boiler.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+
+        <article class="kit" aria-labelledby="kit-pac">
+          <div class="kit__head">
+            <span class="kit__icon" aria-hidden="true"><EIcon name="heatpump" /></span>
+            <h3 id="kit-pac">Pompe à chaleur</h3>
+          </div>
+          <ul class="ec-checks">
+            {heatpump.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+
+        <figure class="visit__media">
+          <Picture
+            src={ecluse2}
+            alt="Unité extérieure de pompe à chaleur sur son socle, abords dégagés, contre le mur d’une maison"
+            formats={['avif', 'webp']}
+            widths={[400, 640, 900]}
+            sizes="(max-width: 60em) calc(100vw - 2rem), 28vw"
+          />
+          <figcaption>
+            <strong>Après la visite</strong>
+            Un compte rendu de ce qui a été vérifié, et nos conseils pour la suite.
+          </figcaption>
+        </figure>
+      </div>
+
+      <RealSiteNote class="visit__note">
+        vos formules d’entretien et leurs tarifs, ainsi que les obligations réglementaires propres à chaque type
+        d’appareil, vérifiées et sourcées.
+      </RealSiteNote>
+    </div>
+  </section>
+
+  <!-- Entre deux visites -->
+  <section class="ec-section habits" aria-labelledby="habits-title">
+    <div class="ec-container habits__grid">
+      <div>
+        <p class="ec-chip">Entre deux visites</p>
+        <h2 id="habits-title" class="ec-h2">Quatre réflexes simples.</h2>
+        <p class="ec-lead">Pas besoin d’outils : quelques coups d’œil suffisent pour repérer ce qui doit nous être signalé.</p>
+      </div>
+      <ul class="habits__list">
+        {
+          habits.map((h) => (
+            <li>
+              <h3>{h.title}</h3>
+              <p>{h.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Questions fréquentes -->
+  <section class="ec-section faq" aria-labelledby="faq-title">
+    <div class="ec-container faq__grid">
+      <div>
+        <p class="ec-chip">Questions fréquentes</p>
+        <h2 id="faq-title" class="ec-h2">Vos questions sur l’entretien.</h2>
+      </div>
+      <div class="faq__list">
+        {
+          faq.map((f) => (
+            <details class="qa">
+              <summary>
+                <span>{f.q}</span>
+                <span class="qa__icon" aria-hidden="true">
+                  <EIcon name="chevron" />
+                </span>
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <ContactBand
+    title="Planifier une visite d’entretien ?"
+    text="Indiquez-nous le type d’appareil, sa marque et son âge approximatif : nous revenons vers vous pour convenir d’un rendez-vous."
+    button="Demander une visite"
+  />
+</EcluseLayout>
+
+<style>
+  .head h2 {
+    max-width: 20ch;
+  }
+
+  .head--center {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .head--center h2 {
+    max-width: 22ch;
+  }
+
+  .head .ec-lead {
+    max-width: 40rem;
+    margin-top: 1.25rem;
+  }
+
+  /* ——— Pourquoi ——— */
+  .reasons {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.6vw, 1.25rem);
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .reason {
+    padding: clamp(1.5rem, 2.5vw, 1.9rem);
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+  }
+
+  .reason__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 2rem;
+    border-radius: 50%;
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line);
+    color: var(--ec-slate);
+  }
+
+  .reason__icon :global(svg) {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+
+  .reason h3 {
+    font-size: 1.1875rem;
+  }
+
+  .reason p {
+    margin-top: 0.5rem;
+    font-size: 0.9688rem;
+  }
+
+  /* ——— Quand ——— */
+  .when {
+    padding-top: 0;
+  }
+
+  .when__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    gap: 3rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+    padding-top: clamp(4rem, 8vw, 6.5rem);
+    border-top: 1px solid var(--ec-line);
+  }
+
+  .when__intro .ec-lead {
+    max-width: 30rem;
+    margin-top: 1.25rem;
+  }
+
+  .when__media {
+    margin-top: clamp(2rem, 4vw, 2.75rem);
+  }
+
+  .when__media :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: 60% 60%;
+    border-radius: var(--ec-radius-lg);
+  }
+
+  .moments {
+    display: grid;
+    gap: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ec-line-strong);
+  }
+
+  .moment {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: clamp(1.5rem, 3vw, 2rem);
+    border-bottom: 1px solid var(--ec-line-strong);
+  }
+
+  .moment__num {
+    font-size: clamp(2rem, 1.6rem + 1.2vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ec-brass-ink);
+  }
+
+  .moment h3 {
+    font-size: clamp(1.2rem, 1.1rem + 0.4vw, 1.4rem);
+  }
+
+  .moment p {
+    margin-top: 0.4rem;
+  }
+
+  /* ——— Visite ——— */
+  .visit {
+    background: var(--ec-mist);
+  }
+
+  .visit__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.85fr);
+    gap: clamp(0.9rem, 1.6vw, 1.25rem);
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .kit {
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius-lg);
+  }
+
+  .kit__head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--ec-line);
+  }
+
+  .kit__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--ec-radius-sm);
+    background: var(--ec-slate);
+    color: var(--ec-brass-light);
+  }
+
+  .kit__icon :global(svg) {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .kit h3 {
+    font-size: 1.375rem;
+    letter-spacing: -0.03em;
+  }
+
+  .kit .ec-checks {
+    gap: 0.85rem;
+    color: var(--ec-ink);
+    font-size: 0.9844rem;
+  }
+
+  .visit__media {
+    position: relative;
+    min-height: 22rem;
+    border-radius: var(--ec-radius-lg);
+    overflow: hidden;
+    background: var(--ec-mist-2);
+  }
+
+  .visit__media :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .visit__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 65% 50%;
+  }
+
+  .visit__media figcaption {
+    position: absolute;
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: 0.85rem;
+    display: grid;
+    gap: 0.2rem;
+    padding: 1rem 1.1rem;
+    background: rgb(255 255 255 / 0.96);
+    border-radius: var(--ec-radius);
+    color: var(--ec-ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  .visit__media strong {
+    color: var(--ec-ink);
+    font-weight: 700;
+  }
+
+  .visit :global(.visit__note) {
+    max-width: 48rem;
+    margin: clamp(2rem, 4vw, 2.75rem) auto 0;
+  }
+
+  /* ——— Réflexes ——— */
+  .habits__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 2.5rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .habits__grid .ec-lead {
+    max-width: 30rem;
+    margin-top: 1.25rem;
+  }
+
+  .habits__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.6vw, 1.25rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .habits__list li {
+    position: relative;
+    padding: 1.5rem 1.4rem 1.4rem;
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+    background: var(--ec-white);
+  }
+
+  .habits__list li::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 3px;
+    margin-bottom: 1.1rem;
+    border-radius: 3px;
+    background: var(--ec-brass);
+  }
+
+  .habits__list h3 {
+    font-size: 1.0938rem;
+  }
+
+  .habits__list p {
+    margin-top: 0.4rem;
+    font-size: 0.9688rem;
+  }
+
+  /* ——— FAQ ——— */
+  .faq {
+    padding-top: 0;
+  }
+
+  .faq__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 2rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+    padding-top: clamp(4rem, 8vw, 6.5rem);
+    border-top: 1px solid var(--ec-line);
+  }
+
+  .faq__list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .qa {
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+  }
+
+  .qa summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--ec-radius);
+    color: var(--ec-ink);
+    font-weight: 700;
+    line-height: 1.4;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .qa__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line);
+    color: var(--ec-slate);
+    transition: transform 0.25s var(--ec-ease);
+  }
+
+  .qa__icon :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .qa[open] .qa__icon {
+    transform: rotate(180deg);
+  }
+
+  .qa p {
+    padding: 0 1.25rem 1.25rem;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 64em) {
+    .reasons {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .visit__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .visit__media {
+      grid-column: 1 / -1;
+      min-height: 0;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 60em) {
+    .when__grid,
+    .habits__grid,
+    .faq__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 40.01em) and (max-width: 60em) {
+    .when__media :global(img) {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 40em) {
+    .reasons,
+    .visit__grid,
+    .habits__list {
+      grid-template-columns: 1fr;
+    }
+
+    .visit__media {
+      aspect-ratio: 1 / 1;
+    }
+
+    .moment {
+      grid-template-columns: 3.25rem minmax(0, 1fr);
+    }
+
+    /* Cartes « Pourquoi » plus compactes : pictogramme et titre sur une même ligne */
+    .reason {
+      display: grid;
+      grid-template-columns: 2.75rem minmax(0, 1fr);
+      align-items: center;
+      column-gap: 1rem;
+      padding: 1.35rem 1.25rem;
+    }
+
+    .reason__icon {
+      width: 2.75rem;
+      height: 2.75rem;
+      margin-bottom: 0;
+    }
+
+    .reason p {
+      grid-column: 1 / -1;
+      margin-top: 0.8rem;
+    }
+  }
+</style>

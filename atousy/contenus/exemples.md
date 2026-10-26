@@ -84,7 +84,7 @@ Demande du fondateur : pouvoir faire défiler toutes les fenêtres et cliquer su
 | Faîtage · Charpentier — L’atelier | /exemples/faitage/atelier/ |
 | Faîtage · Charpentier — Contact | /exemples/faitage/contact/ |
 
-> À valider : les adresses suivent la navigation des démos (`src/components/demos/rivage/nav.ts` et `faitage/nav.ts`). Les pages Faîtage sont en cours de réalisation : vérifier qu’elles existent toutes avant la mise en ligne.
+> À valider : les adresses suivent la navigation des démos (`src/components/demos/rivage/nav.ts` et `faitage/nav.ts`). Les 5 pages Faîtage existent ; relire la liste « Ce que la démo illustre ».
 
 **Textes pour lecteurs d’écran :**
 - Zone : « Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site »

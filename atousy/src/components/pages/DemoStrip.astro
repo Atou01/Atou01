@@ -1,8 +1,10 @@
 ---
-// Bande des 10 fenêtres de démonstration (5 Rivage, 5 Faîtage).
+// Bande des fenêtres de démonstration : une fenêtre par page de chaque démo, dans l'ordre
+// de demoWindows (src/data/pages/demos.ts). Ajouter une démo dans ces données suffit.
 // Chaque fenêtre est un vrai lien vers sa page de démo (même onglet).
-// Défilement : molette, glisser à la souris, doigt, pavé tactile, flèches du clavier,
-// boutons précédent / suivant. Un glisser n'ouvre jamais la démo sous le curseur.
+// Défilement : glisser à la souris, doigt, pavé tactile (geste horizontal), Maj + molette,
+// flèches du clavier, boutons précédent / suivant. La molette verticale fait toujours défiler
+// la page, jamais la bande. Un glisser n'ouvre jamais la démo sous le curseur.
 // Sans JavaScript : la bande défile nativement (barre de défilement visible), les liens marchent.
 import Icon from '../Icon.astro';
 import DemoWindow from './DemoWindow.astro';
@@ -20,7 +22,7 @@ const total = demoWindows.length;
   <div class="container dw__head">
     <h2 id={`${id}-title`}>{title}</h2>
     <p class="dw__help">
-      <span class="dw__help-mouse">Faites défiler ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo.</span>
+      <span class="dw__help-mouse">Faites glisser la bande ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo.</span>
       <span class="dw__help-touch">Glissez pour voir les autres pages. Touchez une fenêtre pour ouvrir la démo.</span>
     </p>
   </div>
@@ -70,10 +72,10 @@ const total = demoWindows.length;
     </div>
     <div class="dw__rail" aria-hidden="true"><span class="dw__thumb" data-dw-thumb></span></div>
     <div class="dw__nav">
-      <button type="button" class="dw__btn" data-dw-prev aria-label="Fenêtre précédente" disabled>
+      <button type="button" class="dw__btn" data-dw-prev aria-label="Fenêtre précédente" aria-disabled="true">
         <Icon name="chevron" class="dw__chev dw__chev--prev" />
       </button>
-      <button type="button" class="dw__btn" data-dw-next aria-label="Fenêtre suivante">
+      <button type="button" class="dw__btn" data-dw-next aria-label="Fenêtre suivante" aria-disabled="false">
         <Icon name="chevron" class="dw__chev dw__chev--next" />
       </button>
     </div>
@@ -111,11 +113,19 @@ const total = demoWindows.length;
       if (live) live.textContent = `Fenêtre ${i + 1} sur ${total} : ${items[i].dataset.label ?? ''}`;
     };
 
-    // Accroche coupée pendant la molette ou le glisser, puis rétablie en douceur.
+    // Fenêtre visée par le dernier déplacement demandé (bouton, clavier, saut de démo).
+    // Les clics rapprochés partent de cette cible, pas de la position en cours d'animation :
+    // aucun pas n'est perdu. Elle est oubliée à l'arrivée ou dès que le visiteur fait
+    // défiler la bande lui-même.
+    let target: number | null = null;
+    const from = () => (target !== null ? posOf(target) : track.scrollLeft);
+
+    // Accroche coupée pendant le glisser, puis rétablie en douceur.
     let freeTimer = 0;
     const setFree = (on: boolean) => track.classList.toggle('is-free', on);
     const go = (i: number, say = false) => {
       const j = Math.max(0, Math.min(total - 1, i));
+      target = j;
       track.scrollTo({ left: posOf(j), behavior: behavior() });
       if (say) announce(j);
     };
@@ -125,12 +135,16 @@ const total = demoWindows.length;
       freeTimer = window.setTimeout(() => setFree(false), reduce.matches ? 0 : 450);
     };
 
-    // Boutons et indicateur
+    // Boutons et indicateur. Aux extrémités, les boutons sont marqués aria-disabled au lieu
+    // de disabled : ils gardent le focus clavier (sinon il tomberait sur <body>).
+    const setOff = (b: HTMLButtonElement | null, off: boolean) => b?.setAttribute('aria-disabled', String(off));
+    const isOff = (b: HTMLButtonElement) => b.getAttribute('aria-disabled') === 'true';
     const update = () => {
       const x = track.scrollLeft;
       const max = maxLeft();
-      if (prev) prev.disabled = x <= 2;
-      if (next) next.disabled = x >= max - 2;
+      if (target !== null && Math.abs(x - posOf(target)) <= 2) target = null;
+      setOff(prev, x <= 2);
+      setOff(next, x >= max - 2);
       if (thumb) {
         const sw = track.scrollWidth || 1;
         thumb.style.width = `${(track.clientWidth / sw) * 100}%`;
@@ -151,20 +165,20 @@ const total = demoWindows.length;
     window.addEventListener('resize', schedule);
 
     prev?.addEventListener('click', () => {
-      const x = track.scrollLeft;
-      let target = 0;
+      if (isOff(prev)) return;
+      const x = from();
       for (let i = total - 1; i >= 0; i--) {
         if (posOf(i) < x - 4) {
-          target = i;
-          break;
+          go(i, true);
+          return;
         }
       }
-      go(target, true);
     });
     next?.addEventListener('click', () => {
-      const x = track.scrollLeft;
-      const target = items.findIndex((_, i) => posOf(i) > x + 4);
-      if (target >= 0) go(target, true);
+      if (isOff(next)) return;
+      const x = from();
+      const i = items.findIndex((_, k) => posOf(k) > x + 4);
+      if (i >= 0) go(i, true);
     });
     jumps.forEach((b) =>
       b.addEventListener('click', () => {
@@ -185,8 +199,17 @@ const total = demoWindows.length;
       links[j].focus({ preventScroll: true });
       go(j, true);
     });
-    // Une fenêtre qui reçoit le focus (Tab) est ramenée entièrement à l'écran.
+    // Une fenêtre qui reçoit le focus au clavier (Tab) est ramenée entièrement à l'écran.
+    // Pas au clic : la bande bougerait entre l'appui et le relâchement, et le clic serait perdu.
+    const keyboardFocus = (el: Element) => {
+      try {
+        return el.matches(':focus-visible');
+      } catch {
+        return true;
+      }
+    };
     track.addEventListener('focusin', (e) => {
+      if (!keyboardFocus(e.target as Element)) return;
       const i = items.findIndex((el) => el.contains(e.target as Node));
       if (i < 0) return;
       const el = links[i];
@@ -194,50 +217,19 @@ const total = demoWindows.length;
       if (left < pad() - 4 || left + el.offsetWidth > track.clientWidth + 4) go(i);
     });
 
-    // Molette verticale → défilement horizontal, seulement quand le visiteur vise la bande :
-    // si la page défilait déjà (la bande passe sous le curseur), on laisse la page défiler.
-    // Aux extrémités, la page reprend la main.
-    let lastPageScroll = 0;
-    let wheeling = false;
-    let wheelTimer = 0;
-    window.addEventListener(
-      'scroll',
-      () => {
-        lastPageScroll = performance.now();
-      },
-      { passive: true },
-    );
-    track.addEventListener(
-      'wheel',
-      (e) => {
-        if (e.ctrlKey || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;
-        if (!wheeling && performance.now() - lastPageScroll < 300) return;
-        const unit = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? track.clientWidth : 1;
-        const delta = e.deltaY * unit;
-        const x = track.scrollLeft;
-        if ((delta < 0 && x <= 1) || (delta > 0 && x >= maxLeft() - 1)) {
-          wheeling = false;
-          return;
-        }
-        e.preventDefault();
-        wheeling = true;
-        clearTimeout(freeTimer);
-        setFree(true);
-        track.scrollLeft = x + delta;
-        clearTimeout(wheelTimer);
-        wheelTimer = window.setTimeout(() => {
-          wheeling = false;
-          settle();
-        }, 180);
-      },
-      { passive: false },
-    );
+    // La molette verticale n'est pas détournée : elle fait défiler la page. Le geste
+    // horizontal du pavé tactile, Maj + molette et le doigt font défiler la bande nativement.
+    // Tout défilement lancé par le visiteur remplace la cible des boutons.
+    const forget = () => (target = null);
+    track.addEventListener('wheel', forget, { passive: true });
+    track.addEventListener('touchstart', forget, { passive: true });
 
     // Glisser à la souris (le doigt et le pavé tactile défilent nativement).
     let drag: { x: number; left: number; moved: boolean } | null = null;
     let suppressClick = false;
     track.addEventListener('pointerdown', (e) => {
       if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      forget();
       drag = { x: e.clientX, left: track.scrollLeft, moved: false };
     });
     window.addEventListener('pointermove', (e) => {
@@ -516,17 +508,19 @@ const total = demoWindows.length;
     cursor: pointer;
     transition:
       background-color 0.2s var(--ease),
-      color 0.2s var(--ease),
-      opacity 0.2s;
+      border-color 0.2s var(--ease),
+      color 0.2s var(--ease);
   }
 
-  .dw__btn:hover:not(:disabled) {
+  .dw__btn:hover:not([aria-disabled='true']) {
     background: var(--marine);
     color: var(--paper);
   }
 
-  .dw__btn:disabled {
-    opacity: 0.35;
+  /* Bout de la bande : bouton estompé, mais l'anneau de focus reste net (pas d'opacity). */
+  .dw__btn[aria-disabled='true'] {
+    border-color: rgb(15 35 41 / 0.3);
+    color: rgb(15 35 41 / 0.35);
     cursor: default;
   }
 

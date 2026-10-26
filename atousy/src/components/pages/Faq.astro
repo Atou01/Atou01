@@ -69,8 +69,12 @@ const { items } = Astro.props;
     text-wrap: pretty;
   }
 
+  /* Survol : soulignement corail, la question garde sa couleur (contraste) */
   summary:hover h3 {
-    color: var(--coral-text);
+    text-decoration: underline;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
   }
 
   /* Plus / moins dessiné en CSS */

@@ -668,8 +668,16 @@ const seasons = [
       padding-top: 4rem;
     }
 
+    /* Le texte occupe presque toute la hauteur sur les petits écrans : voile prolongé vers le haut
+       pour que le titre et la phrase d'accroche restent lisibles sur le ciel clair de la photo. */
     .hero::after {
-      background: linear-gradient(0deg, rgb(10 25 18 / 0.8) 0%, rgb(10 25 18 / 0.5) 45%, rgb(10 25 18 / 0.1) 75%);
+      background: linear-gradient(
+        0deg,
+        rgb(10 25 18 / 0.82) 0%,
+        rgb(10 25 18 / 0.6) 45%,
+        rgb(10 25 18 / 0.45) 75%,
+        rgb(10 25 18 / 0.2) 100%
+      );
     }
 
     .hero__media :global(img) {
@@ -681,8 +689,8 @@ const seasons = [
       align-items: flex-start;
     }
 
+    /* Phrase d'accroche sous le bouton, comme en grand écran : bas du hero, là où le voile est le plus dense */
     .hero__aside {
-      order: -1;
       padding-top: 0.6rem;
       font-size: 1.0625rem;
     }

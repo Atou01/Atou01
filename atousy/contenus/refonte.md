@@ -47,7 +47,7 @@ Quand une page change d’adresse, l’ancienne peut renvoyer vers la nouvelle :
 
 ## Le tarif
 
-Le socle de l’offre s’applique : **1 490 €** (France) · **1 990 CHF** (Suisse) — le site affiche le tarif du pays choisi.
+Le socle de l’offre s’applique : **1 490 €** (Europe · EUR) · **1 990 CHF** (Suisse · CHF) — le site affiche le tarif du pays choisi.
 
 Tarif indicatif · Taxes et montant final à confirmer au devis
 

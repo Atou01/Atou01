@@ -107,7 +107,7 @@ const faq: FaqItem[] = [
     </div>
   </section>
 
-  <Section id="referencement" title="Le référencement de base, concrètement" lead="Ce qui est livré :">
+  <Section id="referencement" title="Le référencement de base, concrètement" lead="Ce qui est livré :">
     <ul class="ip-list ip-list--num">
       {
         seo.map((s) => (
@@ -132,11 +132,11 @@ const faq: FaqItem[] = [
         <p>Le nom de domaine, l’hébergement et toute demande supplémentaire. Ils sont chiffrés à part.</p>
       </div>
       <div class="trio__item">
-        <h2 id="corrections">Deux séries de corrections groupées</h2>
+        <h2 id="corrections">Deux séries<br /> de corrections groupées</h2>
         <p>Vous réunissez vos remarques dans une liste, nous les appliquons. Deux fois. Cela évite les allers-retours.</p>
       </div>
       <div class="trio__item">
-        <h2 id="trente-jours">Après la livraison : 30 jours</h2>
+        <h2 id="trente-jours">Après la livraison :<br /> 30 jours</h2>
         <p>
           Pendant 30 jours, nous corrigeons les anomalies dans le périmètre convenu : un lien cassé, un affichage défaillant. Pas de
           modifications illimitées.
@@ -217,19 +217,26 @@ const faq: FaqItem[] = [
     padding-bottom: clamp(3rem, 5.5vw, 5.5rem);
   }
 
+  /* Les trois textes démarrent à la même hauteur, quel que soit le nombre de lignes
+     des titres : chaque bloc occupe deux rangées partagées (subgrid). */
   .trio__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
     gap: 2.5rem clamp(1.5rem, 4.5vw, 4.5rem);
   }
 
   .trio__item {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    align-content: start;
     padding-top: clamp(1.75rem, 3vw, 3rem);
     border-top: 1px solid var(--line);
   }
 
   .trio h2 {
-    max-width: 12ch;
     font-size: clamp(1.6rem, 2.4vw, 2.35rem);
     letter-spacing: -0.04em;
     line-height: 1.02;
@@ -255,6 +262,15 @@ const faq: FaqItem[] = [
     .band__inner,
     .trio__grid {
       grid-template-columns: 1fr;
+    }
+
+    .trio__grid {
+      grid-template-rows: none;
+    }
+
+    .trio__item {
+      display: block;
+      grid-row: auto;
     }
 
     .band__divider {

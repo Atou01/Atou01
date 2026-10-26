@@ -4,6 +4,7 @@ import PageHero from '../../components/pages/PageHero.astro';
 import Section from '../../components/pages/Section.astro';
 import Price from '../../components/Price.astro';
 import Icon from '../../components/Icon.astro';
+import { offerExclusions } from '../../data/site';
 
 const signs = [
   'Le site s’affiche mal sur smartphone.',
@@ -46,7 +47,7 @@ const review = [
     </p>
   </PageHero>
 
-  <Section id="signes" title="Les signes qu’une refonte s’impose">
+  <Section id="signes" title="Les signes qu’une refonte s’impose">
     <ul class="ip-list ip-list--num">
       {signs.map((s) => <li>{s}</li>)}
     </ul>
@@ -95,6 +96,7 @@ const review = [
 
   <Section id="tarif" title="Le tarif" lead="Le socle de l’offre s’applique." tone="marine">
     <Price />
+    <p class="ip-exclusions">{offerExclusions} Ils sont chiffrés à part.</p>
     <ul class="ip-links">
       <li><a class="link-arrow" href="/offre/"><span>Voir le détail de l’offre</span><Icon name="arrow" /></a></li>
       <li><a class="link-arrow" href="/exemples/"><span>Voir les exemples</span><Icon name="arrow" /></a></li>

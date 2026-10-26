@@ -108,6 +108,8 @@ const services = [
               formats={['avif', 'webp']}
               widths={[480, 800, 1200, 1500]}
               sizes="(max-width: 56em) calc(100vw - 2.5rem), (max-width: 80em) 52vw, 41rem"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : undefined}
               style={`object-position: ${s.pos}`}
             />
           </div>

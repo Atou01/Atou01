@@ -11,17 +11,21 @@
 //   405 {"ok":false,"error":"method"}          (+ Allow: POST)
 //   413 {"ok":false,"error":"too_large"}
 //   415 {"ok":false,"error":"unsupported_type"}
+//   429 {"ok":false,"error":"rate_limited"}    (plafond quotidien atteint, si activé)
 //   502 {"ok":false,"error":"delivery_failed"}
 //   503 {"ok":false,"error":"not_configured"}
 // Règle absolue : {"ok":true} uniquement si le fournisseur d'e-mail a répondu 2xx.
 
-import { json, readBodyLimited, BodyTooLargeError } from './http.js';
-import { verifyTurnstile } from './turnstile.js';
+import { json, readBodyLimited, BodyTooLargeError, isLoopbackHostname } from './http.js';
+import { verifyTurnstile, isTestSecret } from './turnstile.js';
 import { readEmailConfig, buildMessage, sendEmail } from './email.js';
 import { wantsHtml, toHtmlResponse } from './html.js';
+import { takeDailySlot } from './limit.js';
 
 export const MAX_BODY_BYTES = 20 * 1024;
 export const MIN_FILL_MS = 3000;
+/** Action posée par le widget Turnstile du formulaire (src/scripts/devis-form.ts). */
+export const TURNSTILE_ACTION = 'devis';
 
 const ACCEPTED_TYPES = new Set(['application/x-www-form-urlencoded', 'multipart/form-data', 'application/json']);
 
@@ -99,9 +103,11 @@ async function parseBody(bytes, mediaType, contentTypeHeader) {
 // Nettoyage et validation
 // ---------------------------------------------------------------------------
 
-// Caractères de contrôle C0/C1 (sauf \n, traité à part), marques et
-// surcharges bidirectionnelles, BOM.
-const CONTROL = /[\u0000-\u0009\u000B-\u001F\u007F-\u009F\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g;
+// Caractères de contrôle C0/C1 (sauf \n, traité à part), marques et surcharges
+// bidirectionnelles, caractères invisibles (trait d'union conditionnel, espaces et
+// liants de largeur nulle, opérateurs invisibles), BOM.
+const CONTROL =
+  /[\u0000-\u0009\u000B-\u001F\u007F-\u009F\u00AD\u061C\u180E\u200B-\u200F\u202A-\u202E\u2060-\u2064\u2066-\u2069\uFEFF]/g;
 const LINE_BREAKS = /\r\n?|[\u0085\u2028\u2029]/g;
 
 function toStr(value) {
@@ -121,12 +127,14 @@ function cleanLine(value) {
 }
 
 /** Texte libre multiligne : on garde les sauts de ligne (au plus une ligne vide). */
-function cleanText(value) {
+export function cleanText(value) {
   return toStr(value)
     .replace(LINE_BREAKS, '\n')
     .replace(/[\t\v\f]/g, ' ')
     .replace(CONTROL, '')
-    .replace(/[ ]+\n/g, '\n')
+    // Espaces de fin de ligne. Le regard arrière ne fait démarrer la recherche qu'au début
+    // d'une suite d'espaces : temps linéaire, même sur 20 Ko d'espaces sans saut de ligne.
+    .replace(/(?<! ) +\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
@@ -143,8 +151,11 @@ const HOST_RE = /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-
 const PHONE_RE = /^[0-9 +.()-]{6,25}$/;
 
 /**
- * « exemple.fr » → « https://exemple.fr ». Renvoie null si l'adresse n'est pas
+ * « exemple.fr » → « https://exemple.fr/ ». Renvoie null si l'adresse n'est pas
  * une URL http(s) plausible (autre protocole, identifiants, hôte sans domaine…).
+ * La forme renvoyée est celle que lit un navigateur (URL.href) : « https://a.fr\\@b.fr »
+ * devient « https://a.fr/@b.fr », un nom de domaine accentué apparaît sous sa forme
+ * xn--… Le message montre ainsi le site qui s'ouvrirait vraiment.
  */
 export function normalizeSite(input) {
   let candidate = input;
@@ -163,7 +174,7 @@ export function normalizeSite(input) {
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
   if (url.username || url.password) return null;
   if (!HOST_RE.test(url.hostname)) return null;
-  return candidate;
+  return url.href;
 }
 
 const MSG = {
@@ -184,6 +195,8 @@ const MSG = {
   emailLength: "L'adresse e-mail ne doit pas dépasser 200 caractères.",
   telephone: 'Le numéro de téléphone doit comporter 6 à 25 caractères : chiffres, espaces et + . ( ) - uniquement.',
 };
+
+const MAX_RAW_BESOIN = 4000;
 
 function lengthRule(value, min, max, missing, length) {
   if (!value) return missing;
@@ -223,7 +236,9 @@ export function validateFields(raw) {
     }
   }
 
-  const besoin = cleanText(raw.besoin);
+  // Valeur brute bien au-delà de la limite : refusée sans être nettoyée.
+  const besoinRaw = toStr(raw.besoin);
+  const besoin = besoinRaw.length > MAX_RAW_BESOIN ? besoinRaw : cleanText(besoinRaw);
   set('besoin', lengthRule(besoin, 10, 2000, MSG.besoinMissing, MSG.besoinLength));
 
   const nom = cleanLine(raw.nom);
@@ -250,12 +265,17 @@ export function validateFields(raw) {
   return { data: { type, activite, zone, site, besoin, nom, email, telephone, market }, errors };
 }
 
-/** `started` : horodatage client en millisecondes ; toute autre valeur est ignorée. */
+/**
+ * `started` : horodatage client en millisecondes, posé par le script du formulaire.
+ * `present` : un nombre lisible a été envoyé. `value` : seulement s'il est plausible
+ * (postérieur à 2001) ; une horloge de visiteur très décalée ne bloque pas l'envoi.
+ */
 function parseStarted(value) {
   let n = null;
   if (typeof value === 'number') n = value;
-  else if (typeof value === 'string' && /^\d{12,16}$/.test(value.trim())) n = Number(value.trim());
-  return n !== null && Number.isFinite(n) && n > 1e12 ? n : null;
+  else if (typeof value === 'string' && /^\d{1,16}$/.test(value.trim())) n = Number(value.trim());
+  const present = n !== null && Number.isFinite(n) && n >= 0;
+  return { present, value: present && n > 1e12 ? n : null };
 }
 
 // ---------------------------------------------------------------------------
@@ -265,7 +285,7 @@ function parseStarted(value) {
 /**
  * @param {Request & { cf?: object }} request
  * @param {Record<string, string | undefined>} env
- * @param {{ fetch?: typeof fetch, now?: () => number, uuid?: () => string,
+ * @param {{ fetch?: typeof fetch, now?: () => number,
  *           logger?: Pick<Console, 'error' | 'warn'>, emailTimeoutMs?: number,
  *           turnstileTimeoutMs?: number }} [options] injections pour les tests
  */
@@ -286,7 +306,6 @@ export async function handleDevis(request, env = {}, options = {}) {
 async function handle(request, env, options, logger) {
   const fetchImpl = options.fetch ?? ((input, init) => globalThis.fetch(input, init));
   const now = options.now ?? (() => Date.now());
-  const uuid = options.uuid ?? (() => crypto.randomUUID());
 
   if (request.method !== 'POST') return fail(405, 'method', {}, { Allow: 'POST' });
 
@@ -294,6 +313,11 @@ async function handle(request, env, options, logger) {
   const origins = new Set([requestUrl.origin.toLowerCase(), ...extraOrigins(env)]);
   const origin = request.headers.get('origin');
   if (origin !== null && !origins.has(toOrigin(origin))) return fail(403, 'origin');
+  // Sans Origin, un navigateur qui annonce lui-même une requête venue d'un autre site est refusé.
+  // Une requête sans aucun des deux en-têtes (outil, ancien navigateur) reste acceptée.
+  if (origin === null && ['cross-site', 'same-site'].includes(request.headers.get('sec-fetch-site') ?? '')) {
+    return fail(403, 'origin');
+  }
 
   const contentType = request.headers.get('content-type') ?? '';
   const mediaType = contentType.split(';')[0].trim().toLowerCase();
@@ -314,9 +338,16 @@ async function handle(request, env, options, logger) {
     logger.warn('[devis] spam: honeypot');
     return fail(422, 'spam');
   }
+  const token = cleanLine(raw['cf-turnstile-response']);
   const started = parseStarted(raw.started);
-  if (started !== null) {
-    const elapsed = now() - started;
+  // Le jeton Turnstile et `started` viennent tous deux du script de la page : un jeton
+  // sans `started` vient d'un envoi automatisé.
+  if (token && !started.present) {
+    logger.warn('[devis] spam: missing started');
+    return fail(422, 'spam');
+  }
+  if (started.value !== null) {
+    const elapsed = now() - started.value;
     // Une date dans le futur vient d'une horloge client décalée : on ne conclut pas.
     if (elapsed >= 0 && elapsed < MIN_FILL_MS) {
       logger.warn('[devis] spam: too fast');
@@ -333,21 +364,26 @@ async function handle(request, env, options, logger) {
     logger.error('[devis] not_configured: TURNSTILE_SECRET_KEY');
     return fail(503, 'not_configured');
   }
+  // Les clés de test de Cloudflare acceptent n'importe quel jeton : en ligne (Production
+  // comme Preview), elles transformeraient le formulaire en relais d'e-mails sans anti-robot.
+  if (isTestSecret(secret) && !isLoopbackHostname(requestUrl.hostname)) {
+    logger.error('[devis] not_configured: turnstile test secret outside localhost');
+    return fail(503, 'not_configured');
+  }
   const email = readEmailConfig(env);
   if (!email.ok) {
     logger.error(`[devis] not_configured: ${email.missing.join(',')}`);
     return fail(503, 'not_configured');
   }
 
-  const token = cleanLine(raw['cf-turnstile-response']);
   const allowedHostnames = [...origins].map((o) => new URL(o).hostname);
   const captcha = await verifyTurnstile({
     secret,
     token,
     remoteip: request.headers.get('cf-connecting-ip'),
     allowedHostnames,
+    expectedAction: TURNSTILE_ACTION,
     fetch: fetchImpl,
-    uuid,
     timeoutMs: options.turnstileTimeoutMs,
   });
   if (!captcha.ok) {
@@ -362,6 +398,12 @@ async function handle(request, env, options, logger) {
     }
     logger.warn(`[devis] captcha: ${codes}`);
     return fail(400, 'captcha');
+  }
+
+  const slot = await takeDailySlot(env.DEVIS_COUNTER, env, now(), logger);
+  if (!slot.ok) {
+    logger.error(`[devis] rate_limited: daily cap ${slot.limit}`);
+    return fail(429, 'rate_limited');
   }
 
   if (email.config.overridden) logger.warn('[devis] EMAIL_API_BASE actif (test uniquement)');

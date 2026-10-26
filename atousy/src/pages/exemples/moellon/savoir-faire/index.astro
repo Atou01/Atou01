@@ -1,0 +1,615 @@
+---
+// Démonstration fictive « Moellon » (maçon, rénovation) — page Savoir-faire (cinq ancres).
+import { Picture } from 'astro:assets';
+import MoellonLayout from '../../../../components/demos/moellon/MoellonLayout.astro';
+import PageHead from '../../../../components/demos/moellon/PageHead.astro';
+import ContactBand from '../../../../components/demos/moellon/ContactBand.astro';
+import MIcon from '../../../../components/demos/moellon/MIcon.astro';
+import { moellonCrafts } from '../../../../components/demos/moellon/nav';
+import moellon2 from '../../../../assets/photos/moellon-2.jpg';
+import moellon3 from '../../../../assets/photos/moellon-3.jpg';
+import moellon4 from '../../../../assets/photos/moellon-4.jpg';
+import moellon5 from '../../../../assets/photos/moellon-5.jpg';
+import moellon6 from '../../../../assets/photos/moellon-6.jpg';
+
+const details = {
+  'maisons-anciennes': {
+    text: 'Une maison ancienne se rénove en commençant par la comprendre : comment elle a été bâtie, ce qui la fragilise, ce qui mérite d’être gardé. Nous reprenons maçonneries, ouvertures et sols en respectant les matériaux d’origine, pour une maison plus saine et plus agréable à vivre.',
+    list: [
+      'Diagnostic des maçonneries : fissures, humidité, appuis',
+      'Consolidation des murs et reprises en sous-œuvre',
+      'Décroûtage des enduits inadaptés, enduits à la chaux',
+      'Création ou reprise de planchers et de sols',
+      'Coordination avec les autres corps de métier',
+    ],
+    tip: 'Un enduit ciment posé sur un mur en pierre peut y enfermer l’humidité. Le remplacer par un enduit à la chaux est souvent la première étape d’une rénovation réussie.',
+    img: moellon6,
+    alt: 'Séjour rénové baigné de lumière, mur en pierre apparente, grande baie vitrée, fauteuil en lin et parquet de chêne',
+    caption: 'Projet type · Séjour, pierre apparente',
+    focus: '55% 50%',
+  },
+  extensions: {
+    text: 'Une pièce de plus, une cuisine ouverte sur le jardin, un atelier : l’extension maçonnée prolonge la maison. Nous soignons la liaison avec l’existant — fondations, chaînages, raccords de façade — pour que l’ensemble vieillisse d’un seul bloc.',
+    list: [
+      'Implantation, terrassement et fondations',
+      'Élévation en blocs, en brique ou en pierre',
+      'Chaînages, linteaux et dalle haute',
+      'Raccordement soigné à la maison existante',
+      'Préparation pour les menuiseries et la couverture',
+    ],
+    tip: 'Selon la surface créée et les règles locales d’urbanisme, une extension demande une déclaration préalable ou un permis de construire : c’est à vérifier dès le début du projet.',
+    img: moellon2,
+    alt: 'Extension en blocs béton en cours d’élévation contre une maison, échafaudages, palettes de blocs et brouette au premier plan',
+    caption: 'Projet type · Extension en cours d’élévation',
+    focus: '40% 50%',
+  },
+  ouvertures: {
+    text: 'Agrandir une fenêtre, créer une baie vers le jardin, relier deux pièces : ouvrir un mur porteur se prépare. La descente de charges est étudiée, le mur est étayé, puis un linteau ou une poutre adaptée reprend les efforts avant que l’ouverture soit réalisée et finie.',
+    list: [
+      'Étude de faisabilité et descente de charges',
+      'Étaiement provisoire et protection des lieux',
+      'Pose d’un linteau en béton, en acier ou en bois',
+      'Reprise des appuis et des jambages',
+      'Finition des tableaux, en pierre ou en enduit',
+    ],
+    tip: 'Pour une ouverture importante, l’intervention d’un bureau d’études structure est souvent nécessaire. Le sujet est abordé dès la première visite.',
+    img: moellon5,
+    alt: 'Grande ouverture percée dans un mur porteur en pierre, poutre métallique en place sur des étais, jardin visible au travers',
+    caption: 'Projet type · Baie dans un mur porteur',
+    focus: '45% 50%',
+  },
+  'pierre-chaux': {
+    text: 'Monter un mur de clôture, reprendre une façade, refaire des joints creusés par le temps : la pierre demande des mortiers qui lui ressemblent. La chaux, souple et perméable à la vapeur d’eau, accompagne les mouvements du mur au lieu de les contrarier.',
+    list: [
+      'Rejointoiement à la chaux, joints beurrés ou brossés',
+      'Remplacement des pierres abîmées',
+      'Murs de clôture et murets en moellons',
+      'Enduits à la chaux, à pierre vue ou couvrants',
+      'Nettoyage doux des parements',
+    ],
+    tip: 'La teinte et la finition des joints changent tout l’aspect d’une façade. Un petit échantillon réalisé sur le mur aide à décider sereinement.',
+    img: moellon3,
+    alt: 'Mur en moellons calcaires aux joints de chaux beurrés, vu en lumière rasante, volet vert et olivier en arrière-plan',
+    caption: 'Projet type · Joints beurrés à la chaux',
+    focus: '50% 50%',
+  },
+} as const;
+
+const anchors = moellonCrafts.map((c, i) => ({ ...c, num: String(i + 1).padStart(2, '0') }));
+const photoCrafts = anchors.slice(0, 4);
+const slab = anchors[4];
+const slabDetails = {
+  text: 'Tout ouvrage durable commence sous terre. Fondations d’extension, dalles de terrasse ou de garage, chapes intérieures : nous préparons des bases saines, adaptées au terrain comme à l’usage.',
+  list: [
+    'Terrassement et préparation du sol',
+    'Semelles filantes et longrines',
+    'Dalles sur terre-plein ou portées',
+    'Chapes et ragréages intérieurs',
+    'Hérisson ventilé et drainage contre l’humidité',
+  ],
+  tip: 'Dans une maison ancienne, une dalle béton étanche peut renvoyer l’humidité vers le pied des murs. Une dalle respirante, à la chaux par exemple, est parfois préférable.',
+};
+---
+
+<MoellonLayout
+  title="Savoir-faire — Moellon, démonstration fictive | Atousy"
+  description="Savoir-faire de Moellon, maçon fictif : rénovation de maisons anciennes, extensions, ouvertures de murs porteurs, murs en pierre et joints à la chaux, dalles et fondations. Démonstration Atousy."
+  current="savoir-faire"
+>
+  <PageHead
+    kicker="Savoir-faire"
+    title="Du mur ancien à la dalle neuve."
+    lead="Rénovation, extension, ouverture, rejointoiement, fondations : nous intervenons sur le gros œuvre comme sur les reprises délicates, avec des techniques adaptées à chaque bâti."
+    image={moellon4}
+    alt="Mains d’un maçon garnissant à la truelle les joints d’un mur en pierre, taloche chargée de mortier de chaux"
+    caption="Rejointoiement à la chaux"
+    focus="50% 42%"
+  >
+    <nav class="index" aria-label="Sur cette page">
+      <ol>
+        {
+          anchors.map((a) => (
+            <li>
+              <a href={`#${a.id}`}>
+                <span class="index__num" aria-hidden="true">{a.num}</span>
+                <span>{a.label}</span>
+                <MIcon name="arrow-down" class="index__arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+  </PageHead>
+
+  {
+    photoCrafts.map((c, i) => {
+      const d = details[c.id as keyof typeof details];
+      return (
+        <section id={c.id} class:list={['craft', i % 2 === 1 ? 'craft--right' : 'craft--left']} aria-labelledby={`${c.id}-title`}>
+          <div class="craft__grid">
+            <figure class="craft__media">
+              <div class="craft__img" style={`--focus: ${d.focus}`}>
+                <Picture
+                  src={d.img}
+                  alt={d.alt}
+                  formats={['avif', 'webp']}
+                  widths={[640, 960, 1280, 1600]}
+                  sizes="(max-width: 56em) 100vw, 56vw"
+                />
+              </div>
+              <figcaption class="mo-caption">{d.caption}</figcaption>
+            </figure>
+            <div class="craft__body">
+              <p class="craft__num" aria-hidden="true">{c.num}</p>
+              <h2 id={`${c.id}-title`} class="craft__title">{c.label}</h2>
+              <p class="craft__text">{d.text}</p>
+              <h3 class="craft__sub">Ce que comprend ce savoir-faire</h3>
+              <ul class="craft__list">
+                {d.list.map((item) => <li>{item}</li>)}
+              </ul>
+              <div class="tip" role="note">
+                <p><strong>Bon à savoir.</strong> {d.tip}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  <section id={slab.id} class="craft craft--slab mo-dark" aria-labelledby={`${slab.id}-title`}>
+    <div class="mo-container slab">
+      <div class="craft__body slab__body">
+        <p class="craft__num" aria-hidden="true">{slab.num}</p>
+        <h2 id={`${slab.id}-title`} class="craft__title">{slab.label}</h2>
+        <p class="craft__text">{slabDetails.text}</p>
+        <h3 class="craft__sub">Ce que comprend ce savoir-faire</h3>
+        <ul class="craft__list">
+          {slabDetails.list.map((item) => <li>{item}</li>)}
+        </ul>
+        <div class="tip" role="note">
+          <p><strong>Bon à savoir.</strong> {slabDetails.tip}</p>
+        </div>
+      </div>
+
+      <figure class="slab__figure">
+        <svg class="diagram" viewBox="0 0 640 460" role="img" aria-labelledby="coupe-title coupe-desc">
+          <title id="coupe-title">Coupe de principe d’un mur et d’une dalle</title>
+          <desc id="coupe-desc">Un mur en moellons repose sur une semelle de fondation en béton ; à côté, une dalle est coulée sur un hérisson de cailloux posé sur le sol en place.</desc>
+          <defs>
+            <pattern id="coupe-soil" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <path d="M0 0v14" stroke="#cbbba6" stroke-opacity=".28" stroke-width="2" />
+            </pattern>
+            <pattern id="coupe-gravel" width="22" height="16" patternUnits="userSpaceOnUse">
+              <circle cx="5" cy="5" r="3.2" fill="none" stroke="#cbbba6" stroke-width="1.4" />
+              <circle cx="15" cy="11" r="3.6" fill="none" stroke="#cbbba6" stroke-width="1.4" />
+              <circle cx="17" cy="3" r="1.6" fill="#cbbba6" />
+            </pattern>
+            <pattern id="coupe-concrete" width="18" height="18" patternUnits="userSpaceOnUse">
+              <circle cx="4" cy="5" r="1.3" fill="#2b211a" fill-opacity=".35" />
+              <circle cx="13" cy="12" r="1" fill="#2b211a" fill-opacity=".35" />
+              <path d="M9 3l2 1.5-2 1z" fill="#2b211a" fill-opacity=".3" />
+            </pattern>
+          </defs>
+
+          <!-- Sol en place -->
+          <rect x="0" y="236" width="640" height="224" fill="url(#coupe-soil)" />
+          <path d="M0 236h640" stroke="#cbbba6" stroke-opacity=".6" stroke-width="1.5" stroke-dasharray="6 5" />
+
+          <!-- Semelle de fondation -->
+          <rect x="52" y="300" width="196" height="64" fill="#cbbba6" />
+          <rect x="52" y="300" width="196" height="64" fill="url(#coupe-concrete)" />
+
+          <!-- Mur en moellons -->
+          <g fill="#e9dfcf" stroke="#2b211a" stroke-width="2">
+            <path d="M84 36h58l3 30H82z" />
+            <path d="M146 36h68l-1 30h-65z" />
+            <path d="M82 70h40v32H80z" />
+            <path d="M126 70h88v32h-88z" />
+            <path d="M80 106h76v34H81z" />
+            <path d="M160 106h54v34h-55z" />
+            <path d="M81 144h44v34H80z" />
+            <path d="M129 144h85l-1 34h-84z" />
+            <path d="M80 182h70v36H80z" />
+            <path d="M154 182h60v36h-60z" />
+            <path d="M80 222h52v38H80z" />
+            <path d="M136 222h78v38h-78z" />
+            <path d="M80 264h66v36H80z" />
+            <path d="M150 264h64v36h-64z" />
+          </g>
+          <rect x="198" y="36" width="16" height="264" fill="#d99a6c" fill-opacity=".9" />
+
+          <!-- Dalle sur hérisson -->
+          <rect x="214" y="250" width="402" height="36" fill="url(#coupe-gravel)" />
+          <rect x="214" y="212" width="402" height="38" fill="#cbbba6" />
+          <rect x="214" y="212" width="402" height="38" fill="url(#coupe-concrete)" />
+
+          <!-- Repères : libellés (grand écran) ou pastilles numérotées (mobile, légende en dessous) -->
+          <g class="lbl">
+            <g fill="none" stroke="#faf6ef" stroke-width="1.4">
+              <path d="M168 52h102" />
+              <path d="M206 128h64" />
+              <path d="M440 222v-46h30" />
+              <path d="M560 268v52h-90" />
+              <path d="M150 340v60h150" />
+            </g>
+            <g fill="#faf6ef">
+              <circle cx="168" cy="52" r="3.5" />
+              <circle cx="206" cy="128" r="3.5" />
+              <circle cx="440" cy="222" r="3.5" />
+              <circle cx="560" cy="268" r="3.5" />
+              <circle cx="150" cy="340" r="3.5" />
+            </g>
+            <g font-family="Figtree Variable, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#faf6ef">
+              <text x="280" y="58">Mur en moellons</text>
+              <text x="280" y="134">Enduit à la chaux</text>
+              <text x="480" y="182">Dalle</text>
+              <text x="460" y="326" text-anchor="end">Hérisson</text>
+              <text x="310" y="406">Semelle de fondation</text>
+            </g>
+            <text x="24" y="444" font-family="Figtree Variable, ui-sans-serif, system-ui, sans-serif" font-size="14" font-weight="500" fill="#cbbba6">Sol en place</text>
+          </g>
+          <g class="nums" font-family="Figtree Variable, ui-sans-serif, system-ui, sans-serif" font-size="24" font-weight="700" text-anchor="middle">
+            <g fill="#faf6ef" stroke="#2b211a" stroke-width="3">
+              <circle cx="140" cy="52" r="22" />
+              <circle cx="206" cy="150" r="22" />
+              <circle cx="440" cy="231" r="22" />
+              <circle cx="560" cy="268" r="22" />
+              <circle cx="150" cy="332" r="22" />
+              <circle cx="400" cy="400" r="22" />
+            </g>
+            <g fill="#2b211a">
+              <text x="140" y="60">1</text>
+              <text x="206" y="158">2</text>
+              <text x="440" y="239">3</text>
+              <text x="560" y="276">4</text>
+              <text x="150" y="340">5</text>
+              <text x="400" y="408">6</text>
+            </g>
+          </g>
+        </svg>
+        <ol class="legend" aria-hidden="true">
+          <li>Mur en moellons</li>
+          <li>Enduit à la chaux</li>
+          <li>Dalle</li>
+          <li>Hérisson</li>
+          <li>Semelle de fondation</li>
+          <li>Sol en place</li>
+        </ol>
+        <figcaption class="mo-caption">Coupe de principe, à titre d’illustration</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <ContactBand title="Un doute sur l’état d’un mur ?" text="Décrivez la situation en quelques lignes et joignez une photo : nous revenons vers vous pour en parler et, si besoin, venir voir sur place." />
+</MoellonLayout>
+
+<style>
+  /* ——— Sommaire des ancres (dans l'en-tête) ——— */
+  .index ol {
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--mo-line-strong);
+  }
+
+  .index li {
+    border-bottom: 1px solid var(--mo-line);
+  }
+
+  .index a {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding-block: 0.6rem;
+    color: var(--mo-ink);
+    font-size: 0.975rem;
+    font-weight: 560;
+    text-decoration: none;
+  }
+
+  .index__num {
+    font-family: var(--mo-serif);
+    font-size: 0.95rem;
+    color: var(--mo-terra-ink);
+  }
+
+  .index :global(.index__arrow) {
+    align-self: center;
+    width: 1rem;
+    height: 1rem;
+    color: var(--mo-terra-ink);
+    transition: transform 0.25s var(--mo-ease);
+  }
+
+  .index a:hover {
+    color: var(--mo-terra-ink);
+  }
+
+  .index a:hover :global(.index__arrow) {
+    transform: translateY(2px);
+  }
+
+  .index a:focus-visible {
+    outline-offset: 0;
+  }
+
+  /* ——— Sections savoir-faire ——— */
+  .craft {
+    padding-block: clamp(4.5rem, 9vw, 8rem);
+  }
+
+  .craft--left {
+    margin-top: clamp(2rem, 5vw, 4rem);
+  }
+
+  .craft--right {
+    background-color: var(--mo-paper);
+  }
+
+  .craft__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 3rem clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  /* La photo touche le bord de la page, le texte s'aligne sur la grille */
+  .craft--left .craft__grid {
+    padding-right: max(var(--mo-gutter), (100% - var(--mo-max)) / 2);
+  }
+
+  .craft--right .craft__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    padding-left: max(var(--mo-gutter), (100% - var(--mo-max)) / 2);
+  }
+
+  .craft--right .craft__media {
+    order: 2;
+  }
+
+  .craft__media {
+    position: sticky;
+    top: 7rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .craft--left .craft__media figcaption {
+    padding-left: var(--mo-gutter);
+  }
+
+  .craft__img :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: var(--focus);
+  }
+
+  .craft__body {
+    max-width: 36rem;
+    padding-top: 0.5rem;
+  }
+
+  .craft__num {
+    font-family: var(--mo-serif);
+    font-size: clamp(3.5rem, 2.5rem + 3vw, 5.5rem);
+    font-weight: 250;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--mo-terra);
+  }
+
+  .craft__title {
+    margin-top: 1.25rem;
+    font-size: clamp(2.1rem, 1.4rem + 2.2vw, 3.25rem);
+  }
+
+  .craft__text {
+    margin-top: 1.25rem;
+    font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    color: var(--mo-ink-2);
+  }
+
+  .craft__sub {
+    margin-top: 2.25rem;
+    font-family: var(--mo-sans);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--mo-ink);
+  }
+
+  .craft__list {
+    display: grid;
+    margin-top: 1rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--mo-line-strong);
+  }
+
+  .craft__list li {
+    position: relative;
+    padding: 0.7rem 0 0.7rem 1.75rem;
+    border-bottom: 1px solid var(--mo-line);
+  }
+
+  /* Puce : une petite pierre terre cuite */
+  .craft__list li::before {
+    content: '';
+    position: absolute;
+    left: 0.1rem;
+    top: 1.32rem;
+    width: 0.8rem;
+    height: 0.4rem;
+    border-radius: 1px 2px 1px 2px;
+    background: var(--mo-terra);
+  }
+
+  .tip {
+    margin-top: 2rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--mo-lime-deep);
+    border-left: 3px solid var(--mo-terra);
+    font-size: 0.975rem;
+  }
+
+  .craft--right .tip {
+    background: var(--mo-lime);
+  }
+
+  .tip strong {
+    font-weight: 700;
+  }
+
+  /* ——— Dalles et fondations (fond sombre + schéma) ——— */
+  .slab {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 3rem clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .slab__body .craft__num {
+    color: var(--mo-ochre-light);
+  }
+
+  .slab__body .craft__text {
+    color: var(--mo-lime-dim);
+  }
+
+  .slab__body .craft__sub {
+    color: var(--mo-cream);
+  }
+
+  .slab__body .craft__list {
+    border-top-color: var(--mo-line-light);
+  }
+
+  .slab__body .craft__list li {
+    border-bottom-color: var(--mo-line-light);
+    color: var(--mo-lime);
+  }
+
+  .slab__body .craft__list li::before {
+    background: var(--mo-ochre-light);
+  }
+
+  .slab__body .tip {
+    background: var(--mo-earth-2);
+    border-left-color: var(--mo-ochre-light);
+    color: var(--mo-lime);
+  }
+
+  .slab__body .tip strong {
+    color: var(--mo-cream);
+  }
+
+  .slab__figure {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .diagram {
+    width: 100%;
+    height: auto;
+    padding: clamp(1rem, 3vw, 2rem);
+    border: 1px solid var(--mo-line-light);
+    background: rgb(250 246 239 / 0.03);
+  }
+
+  .diagram .nums,
+  .legend {
+    display: none;
+  }
+
+  .legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 1rem;
+    padding: 0;
+    list-style: none;
+    counter-reset: leg;
+    font-size: 0.9375rem;
+    color: var(--mo-lime);
+  }
+
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    counter-increment: leg;
+  }
+
+  .legend li::before {
+    content: counter(leg);
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--mo-cream);
+    color: var(--mo-ink);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 40em) {
+    .diagram .lbl {
+      display: none;
+    }
+
+    .diagram .nums {
+      display: inline;
+    }
+
+    .legend {
+      display: grid;
+    }
+  }
+
+  @media (max-width: 56em) {
+    .craft__grid,
+    .craft--left .craft__grid,
+    .craft--right .craft__grid,
+    .slab {
+      grid-template-columns: 1fr;
+      padding-inline: 0;
+    }
+
+    .craft--right .craft__media {
+      order: 0;
+    }
+
+    .craft__media {
+      position: static;
+    }
+
+    .craft--left .craft__media figcaption,
+    .craft__media figcaption {
+      padding-inline: var(--mo-gutter);
+    }
+
+    .craft__body {
+      max-width: none;
+      padding-inline: var(--mo-gutter);
+    }
+
+    .slab__body {
+      padding-inline: 0;
+    }
+
+    .craft__img :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .index a:hover :global(.index__arrow) {
+      transform: none;
+    }
+  }
+</style>

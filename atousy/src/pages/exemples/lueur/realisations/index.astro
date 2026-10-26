@@ -1,0 +1,408 @@
+---
+// Démonstration fictive « Lueur » (électricien) — page Réalisations : projets types, jamais de vrais clients.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import LueurLayout from '../../../../components/demos/lueur/LueurLayout.astro';
+import PageHero from '../../../../components/demos/lueur/PageHero.astro';
+import ContactBand from '../../../../components/demos/lueur/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/lueur/RealSiteNote.astro';
+import lueur1 from '../../../../assets/photos/lueur-1.jpg';
+import lueur2 from '../../../../assets/photos/lueur-2.jpg';
+import lueur3 from '../../../../assets/photos/lueur-3.jpg';
+import lueur4 from '../../../../assets/photos/lueur-4.jpg';
+import lueur5 from '../../../../assets/photos/lueur-5.jpg';
+import lueur6 from '../../../../assets/photos/lueur-6.jpg';
+
+interface Project {
+  id: string;
+  kind: string;
+  title: string;
+  text: string;
+  tags: string[];
+  image: ImageMetadata;
+  alt: string;
+  focus: string;
+  layout: 'narrow' | 'wide' | 'band';
+}
+
+const featured = {
+  id: 'sejour',
+  kind: 'Rénovation & éclairage',
+  title: 'Un séjour rénové, éclairé par couches',
+  text: 'Dans une grande pièce de vie ouverte, l’unique plafonnier laisse place à trois ambiances : des spots encastrés pour la lumière générale, des suspensions au-dessus de la table, des lampes sur prises commandées pour la soirée.',
+  need: 'Une pièce sombre le soir, éclairée par un seul point au plafond, et des rallonges un peu partout.',
+  answer: 'Reprise des circuits, nouveaux points lumineux, prises supplémentaires et variateurs, avec un chantier protégé du début à la fin.',
+  tags: ['Rénovation électrique', 'Éclairage intérieur', 'Variateurs'],
+};
+
+const projects: Project[] = [
+  {
+    id: 'tableau',
+    kind: 'Tableau électrique',
+    title: 'Un tableau neuf, lisible et évolutif',
+    text: 'Un ancien tableau saturé est remplacé par un ensemble aéré : chaque circuit est protégé, repéré et étiqueté, avec de la place pour la suite.',
+    tags: ['Tableau électrique', 'Repérage des circuits'],
+    image: lueur2,
+    alt: 'Tableau électrique neuf encastré dans un mur blanc, trois rangées de disjoncteurs et câbles soigneusement peignés',
+    focus: '55% 50%',
+    layout: 'narrow',
+  },
+  {
+    id: 'borne',
+    kind: 'Borne de recharge',
+    title: 'Une borne murale dans le garage',
+    text: 'Une ligne dédiée part du tableau jusqu’au garage. La borne est fixée près de la porte et le câble rangé sur son support, pour une recharge sans manipulation compliquée.',
+    tags: ['Borne de recharge', 'Ligne dédiée'],
+    image: lueur3,
+    alt: 'Borne de recharge murale dans un garage ouvert sur un jardin au soleil couchant, câble enroulé et voiture blanche garée à côté',
+    focus: '40% 50%',
+    layout: 'wide',
+  },
+  {
+    id: 'jardin',
+    kind: 'Éclairage extérieur',
+    title: 'Un jardin mis en lumière à la nuit tombante',
+    text: 'Bornes basses le long de l’allée, projecteurs au pied de l’olivier, appliques sur la façade : une lumière chaude qui guide les pas et prolonge les soirées en terrasse.',
+    tags: ['Éclairage extérieur', 'Terrasse'],
+    image: lueur5,
+    alt: 'Jardin et terrasse d’une maison en pierre à la nuit tombante, olivier éclairé par le bas et allée dallée balisée de bornes lumineuses',
+    focus: '45% 55%',
+    layout: 'wide',
+  },
+  {
+    id: 'securite',
+    kind: 'Mise en sécurité',
+    title: 'Une maison ancienne remise en sécurité',
+    text: 'Contrôle des prises et des circuits, remplacement des éléments fatigués et ajout de prises là où les multiprises s’accumulaient.',
+    tags: ['Rénovation électrique', 'Mise en sécurité'],
+    image: lueur4,
+    alt: 'Mains d’un électricien contrôlant les fils d’une prise murale ouverte avec un testeur, outils posés sur une bâche',
+    focus: '45% 50%',
+    layout: 'narrow',
+  },
+  {
+    id: 'finitions',
+    kind: 'Appareillage',
+    title: 'Des finitions choisies pièce par pièce',
+    text: 'Interrupteurs et prises en laiton brossé, posés de niveau et alignés avec soin : le détail que l’on touche tous les jours, et qui change l’allure d’une pièce.',
+    tags: ['Appareillage', 'Finitions'],
+    image: lueur6,
+    alt: 'Interrupteur double et prise murale à plaques en laiton brossé sur un mur clair, dans une lumière de fin de journée',
+    focus: '62% 50%',
+    layout: 'band',
+  },
+];
+---
+
+<LueurLayout
+  title="Réalisations — Lueur, démonstration fictive | Atousy"
+  description="Projets types de Lueur, électricien fictif : rénovation d’un séjour, tableau électrique, borne de recharge, éclairage de jardin. Démonstration réalisée par Atousy."
+  current="realisations"
+>
+  <PageHero
+    label="Réalisations"
+    title="Projets types, du tableau au jardin."
+    lead="Six exemples de chantiers pour illustrer notre façon de travailler. Ils sont présentés à titre d’illustration : ce ne sont pas des réalisations de clients."
+  >
+    <RealSiteNote tone="dark" class="hero-note">vos chantiers réels, photographiés avec l’accord de vos clients, avec le contexte et les choix techniques de chacun.</RealSiteNote>
+  </PageHero>
+
+  <!-- Projet mis en avant -->
+  <section id={featured.id} class="lu-dark featured" aria-labelledby={`${featured.id}-title`}>
+    <div class="lu-container">
+      <div class="lu-frame featured__frame">
+        <Picture
+          src={lueur1}
+          alt="Séjour rénové à la tombée de la nuit : suspensions en lin au-dessus d’une table en bois, spots encastrés et lampadaire près du canapé"
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280, 1600, 2000, 2400]}
+          sizes="(max-width: 80em) calc(131vw - 2.6rem), 105rem"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="featured__body">
+        <div class="featured__head">
+          <p class="lu-caption">Projet type · {featured.kind}</p>
+          <h2 id={`${featured.id}-title`} class="featured__title">{featured.title}</h2>
+          <ul class="tags">{featured.tags.map((t) => <li>{t}</li>)}</ul>
+        </div>
+        <div class="featured__text">
+          <p class="lu-lead">{featured.text}</p>
+          <dl class="featured__dl">
+            <div>
+              <dt>Le besoin</dt>
+              <dd>{featured.need}</dd>
+            </div>
+            <div>
+              <dt>Notre réponse</dt>
+              <dd>{featured.answer}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Autres projets types -->
+  <section class="lu-section lu-light gallery" aria-label="Autres projets types">
+    <div class="lu-container gallery__grid">
+      {
+        projects.map((p) => (
+          <article id={p.id} class:list={['work', `work--${p.layout}`]} aria-labelledby={`${p.id}-title`}>
+            <div class="lu-frame work__frame">
+              <Picture
+                src={p.image}
+                alt={p.alt}
+                formats={['avif', 'webp']}
+                widths={[480, 720, 960, 1280, 1600]}
+                sizes={p.layout === 'narrow' ? '(max-width: 48em) calc(100vw - 2rem), 38vw' : '(max-width: 48em) calc(100vw - 2rem), 52vw'}
+                style={`object-position: ${p.focus}`}
+              />
+            </div>
+            <div class="work__body">
+              <p class="lu-caption">Projet type · {p.kind}</p>
+              <h2 id={`${p.id}-title`} class="work__title">
+                {p.title}
+              </h2>
+              <p class="work__text">{p.text}</p>
+              <ul class="tags">{p.tags.map((t) => <li>{t}</li>)}</ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <ContactBand title="Un projet qui ressemble à l’un de ceux-ci ?" text="Racontez-nous ce que vous aimeriez changer chez vous : nous vous aidons à le transformer en un projet clair et chiffré." />
+</LueurLayout>
+
+<style>
+  :global(.phero .hero-note) {
+    max-width: 40rem;
+    margin-top: 2rem;
+  }
+
+  /* ——— Projet mis en avant ——— */
+  .featured {
+    padding-bottom: clamp(4.5rem, 9vw, 8rem);
+  }
+
+  .featured__frame {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* recadrage resserré : on écarte le pan de mur vide à gauche de la photo */
+  .featured__frame :global(img) {
+    object-position: 50% 20%;
+    transform: scale(1.31);
+    transform-origin: 100% 30%;
+  }
+
+  .featured__body {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 2rem clamp(2.5rem, 6vw, 6rem);
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .featured__title {
+    max-width: 16ch;
+    margin-top: 1rem;
+    font-size: clamp(2rem, 1.35rem + 2.3vw, 3.2rem);
+  }
+
+  .featured__dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+    margin: 2rem 0 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--lu-line-dark);
+  }
+
+  .featured__dl dt {
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--lu-amber);
+  }
+
+  .featured__dl dd {
+    margin: 0.5rem 0 0;
+    color: var(--lu-dim);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tags li {
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--lu-line-dark);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    color: var(--lu-dim);
+  }
+
+  .lu-light .tags li {
+    border-color: var(--lu-line-light);
+    background: var(--lu-card);
+    color: var(--lu-ink-2);
+  }
+
+  /* ——— Galerie ——— */
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 3vw, 2.5rem);
+  }
+
+  .work {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work--narrow {
+    grid-column: span 5;
+  }
+
+  .work--wide {
+    grid-column: span 7;
+  }
+
+  .work--narrow .work__frame {
+    aspect-ratio: 4 / 4.6;
+  }
+
+  .work--wide .work__frame {
+    aspect-ratio: 4 / 3.2;
+  }
+
+  /* décalage vertical léger pour rompre la grille */
+  .work--narrow:nth-child(1) {
+    margin-top: clamp(0rem, 5vw, 4rem);
+  }
+
+  .work--narrow:nth-child(4) {
+    margin-top: clamp(0rem, 5vw, 4rem);
+  }
+
+  .work__body {
+    padding-top: 1.25rem;
+  }
+
+  .work__title {
+    max-width: 22ch;
+    margin-top: 0.75rem;
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    font-weight: 420;
+    letter-spacing: -0.02em;
+  }
+
+  .work__text {
+    max-width: 44ch;
+    margin-top: 0.75rem;
+    color: var(--lu-ink-2);
+  }
+
+  .work--band {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 2rem clamp(2rem, 5vw, 5rem);
+    align-items: center;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    background: var(--lu-night);
+    border-radius: calc(var(--lu-radius) + 6px);
+    color: var(--lu-ivory);
+  }
+
+  .work--band .work__frame {
+    aspect-ratio: 16 / 10;
+  }
+
+  .work--band .work__body {
+    padding: 1rem clamp(0.5rem, 2vw, 1.5rem) 1rem 0;
+  }
+
+  .work--band .lu-caption {
+    color: var(--lu-dim);
+  }
+
+  .work--band .lu-caption::before {
+    background: var(--lu-amber);
+    box-shadow: 0 0 8px rgb(242 180 90 / 0.8);
+  }
+
+  .work--band .work__title {
+    color: var(--lu-ivory);
+  }
+
+  .work--band .work__text {
+    color: var(--lu-dim);
+  }
+
+  .work--band .tags li {
+    background: transparent;
+    border-color: var(--lu-line-dark);
+    color: var(--lu-dim);
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 60em) {
+    .featured__body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .featured__frame {
+      aspect-ratio: 3 / 2;
+    }
+
+    .work--band {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .work--band .work__body {
+      padding: 0 0.5rem 0.75rem;
+    }
+  }
+
+  @media (min-width: 48.01em) and (max-width: 60em) {
+    .work--narrow,
+    .work--wide {
+      grid-column: span 6;
+    }
+
+    .work--narrow .work__frame,
+    .work--wide .work__frame {
+      aspect-ratio: 4 / 3.6;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .work--narrow,
+    .work--wide {
+      grid-column: 1 / -1;
+      margin-top: 0 !important;
+    }
+
+    .work--narrow .work__frame,
+    .work--wide .work__frame {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (max-width: 36em) {
+    .featured__dl {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

@@ -22,7 +22,7 @@ const needs = [
 >
   <PageHero
     crumb="Méthode"
-    title="Vous validez à chaque étape."
+    title={'Vous validez\nà chaque étape.'}
     lead="Trois étapes, toujours dans le même ordre. Rien n’avance sans votre accord."
   >
     <Fragment slot="actions">
@@ -138,7 +138,8 @@ const needs = [
   }
 
   .step__body a:hover {
-    color: var(--coral-text);
+    /* Le texte garde sa couleur ; le soulignement passe du corail à la couleur du texte. */
+    text-decoration-color: currentColor;
   }
 
   /* « Vous validez » : repère visuel de chaque étape */

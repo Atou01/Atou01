@@ -4,13 +4,18 @@ import { Picture } from 'astro:assets';
 import Icon from '../Icon.astro';
 import rivageImg from '../../assets/photos/rivage-1.jpg';
 import faitageImg from '../../assets/photos/faitage-1.jpg';
-import olivier from '../../assets/deco/olivier.png';
+import Olivier from '../../assets/deco/olivier.svg';
+import { photoWidths } from './photo-widths';
 import '@fontsource-variable/newsreader/wght.css';
+
+const photo = { formats: ['avif', 'webp'] as const, alt: '', widths: photoWidths };
+// Téléphone de la carte Faîtage : la photo 3:2 couvre un écran en portrait, elle est donc
+// rendue bien plus large que l'écran (hauteur × 1,5) : d'où 66vw puis 28vw.
 ---
 
 <section class="gallery" aria-labelledby="gallery-title">
   <div class="gallery__deco" aria-hidden="true">
-    <Picture src={olivier} alt="" formats={['avif', 'webp']} widths={[240, 400]} sizes="240px" />
+    <Olivier />
   </div>
 
   <div class="container">
@@ -31,7 +36,7 @@ import '@fontsource-variable/newsreader/wght.css';
             <span class="b-cta">Nous contacter</span>
           </span>
           <span class="b-hero">
-            <span class="b-img"><Picture src={rivageImg} alt="" formats={['avif', 'webp']} widths={[600, 900, 1300]} sizes="(max-width: 62.49em) 92vw, 52vw" /></span>
+            <span class="b-img"><Picture src={rivageImg} {...photo} sizes="(max-width: 62.49em) 92vw, 52vw" /></span>
             <span class="b-copy">
               <span class="b-title">Le jardin<br />vous appelle.</span>
               <span class="b-text">Des lieux pour ralentir, se retrouver et regarder les saisons passer. Le paysage commence avec votre façon de vivre.</span>
@@ -53,7 +58,7 @@ import '@fontsource-variable/newsreader/wght.css';
               <span class="b-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
             </span>
             <span class="b-hero">
-              <span class="b-img"><Picture src={faitageImg} alt="" formats={['avif', 'webp']} widths={[480, 800, 1100]} sizes="(max-width: 62.49em) 80vw, 32vw" /></span>
+              <span class="b-img"><Picture src={faitageImg} {...photo} sizes="(max-width: 62.49em) 80vw, 32vw" /></span>
               <span class="b-copy">
                 <span class="b-title">Des charpentes<br />pour demain.</span>
                 <span class="b-text">Construire, rénover, transmettre. Un savoir-faire local au service de vos projets.</span>
@@ -64,7 +69,7 @@ import '@fontsource-variable/newsreader/wght.css';
           <span class="phone">
             <span class="phone__screen">
               <span class="p-bar"><span class="p-mark"></span><span class="p-burger"></span></span>
-              <span class="p-img"><Picture src={faitageImg} alt="" formats={['avif', 'webp']} widths={[240, 400]} sizes="140px" /></span>
+              <span class="p-img"><Picture src={faitageImg} {...photo} sizes="(max-width: 62.49em) 66vw, 28vw" /></span>
               <span class="p-copy">
                 <span class="p-title">Des charpentes pour demain.</span>
                 <span class="p-btn">Voir le projet <Icon name="arrow" /></span>
@@ -92,14 +97,23 @@ import '@fontsource-variable/newsreader/wght.css';
       linear-gradient(180deg, var(--ivory) 0%, #f5efe6 100%);
   }
 
+  /* Rameau d'olivier (dessin vectoriel détouré), légèrement flou comme au premier plan.
+     Calé sur le bord gauche de la carte Rivage, qui le recouvre en partie. */
   .gallery__deco {
+    --deco-w: clamp(8rem, 11vw, 12rem);
     position: absolute;
-    left: -3.5rem;
-    top: 34%;
-    width: clamp(9rem, 14vw, 15rem);
-    opacity: 0.55;
-    filter: blur(2.5px);
+    left: calc(max(var(--gutter), (100% - var(--container)) / 2) + clamp(0rem, 3vw, 2.5rem) - var(--deco-w) * 0.72);
+    top: 38%;
+    width: var(--deco-w);
+    opacity: 0.85;
+    filter: blur(1.2px);
     pointer-events: none;
+  }
+
+  .gallery__deco :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .gallery__head {
@@ -504,6 +518,15 @@ import '@fontsource-variable/newsreader/wght.css';
     .b-links,
     .b-text {
       display: none;
+    }
+
+    /* Le texte d'accroche est masqué : le titre prend la place (pas de mot isolé). */
+    .b-copy {
+      max-width: 72cqw;
+    }
+
+    .b-wave {
+      font-size: 3.6cqw;
     }
 
     .b-nav {

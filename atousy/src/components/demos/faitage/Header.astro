@@ -2,6 +2,7 @@
 // En-tête Faîtage : logo à gauche, navigation à droite (Contact mis en avant).
 // Variante « overlay » : posée en transparence sur la photo d'ouverture.
 // Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
+// Le menu se referme aussi au clic sur un lien, au retour arrière (cache du navigateur) et au passage en grand écran.
 // Sans JavaScript, la navigation reste visible (liens repliés sous le logo).
 import Icon from '../../Icon.astro';
 import Logo from './Logo.astro';
@@ -15,6 +16,7 @@ const { current, variant = 'solid' } = Astro.props;
 ---
 
 <header class:list={['header', `header--${variant}`, variant === 'overlay' && 'ft-on-photo']} data-ft-header>
+  <a class="ft-skip" href="#contenu">Aller au contenu</a>
   <div class="bar ft-container">
     <a class="brand" href="/exemples/faitage/" aria-label="Faîtage, accueil">
       <Logo tone="inherit" />
@@ -80,11 +82,27 @@ const { current, variant = 'solid' } = Astro.props;
     header.addEventListener('focusout', function (e) {
       if (isOpen() && e.relatedTarget && !header.contains(e.relatedTarget)) setOpen(false, false);
     });
+    // Clic sur un lien de l'en-tête (logo ou menu) : le menu se referme avant de quitter la page.
+    header.addEventListener('click', function (e) {
+      if (isOpen() && e.target.closest && e.target.closest('a')) setOpen(false, false);
+    });
+    // Retour arrière depuis le cache du navigateur : la page revient avec le menu fermé.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && isOpen()) setOpen(false, false);
+    });
+    // Changement de taille d'écran : le menu se referme. Si l'élément qui avait le focus
+    // disparaît (bouton Menu en grand écran, liens du panneau en petit écran), le focus
+    // passe sur l'élément qui le remplace au même endroit.
     var mq = window.matchMedia('(min-width: 60.01em)');
     var onChange = function (e) {
-      if (e.matches) setOpen(false, false);
+      var active = document.activeElement;
+      setOpen(false, false);
+      if (!active || !header.contains(active) || active.getClientRects().length > 0) return;
+      var target = e.matches ? panel.querySelector('a') : btn;
+      if (target) target.focus();
     };
     if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
   })();
 </script>
 

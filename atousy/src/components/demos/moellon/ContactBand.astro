@@ -1,0 +1,97 @@
+---
+// Bandeau d'appel à l'action en fin de page, vers la page Contact de la démo.
+import MIcon from './MIcon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'Un mur à reprendre, une maison à faire revivre ?',
+  text = 'Décrivez votre projet en quelques lignes : nous revenons vers vous pour convenir d’une visite sur place.',
+} = Astro.props;
+---
+
+<section class="band" aria-labelledby="mo-band-title">
+  <div class="mo-container band__inner">
+    <svg class="band__stones" viewBox="0 0 31 28" aria-hidden="true" focusable="false">
+      <path d="M10 2.2c3-.9 8.5-.8 11.6.2 1.4.5 1.9 1.7 1.6 3.1l-.5 2.3c-.3 1.1-1.2 1.7-2.3 1.7H9.7c-1.2 0-2.1-.8-2.2-2l-.2-2.2C7.2 3.9 8.3 2.7 10 2.2Z" />
+      <path d="M2.6 11.6c2.7-.7 7.6-.8 10.6-.2 1.2.3 1.8 1.2 1.8 2.4v3.4c0 1.2-.9 2.1-2.1 2.1H3c-1.3 0-2.3-1-2.2-2.3l.1-3.3c.1-1 .7-1.8 1.7-2.1Z" />
+      <path d="M18.3 11.3c3-.5 7.4-.3 9.9.4 1.1.3 1.8 1.3 1.7 2.5l-.2 3.1c-.1 1.2-1 2.1-2.2 2.1h-9.2c-1.2 0-2.1-1-2-2.2l.2-3.6c.1-1.2.7-2.1 1.8-2.3Z" />
+      <path d="M1.9 21.5c4.1-.6 11.3-.6 15.3 0 1.2.2 2 1.1 2 2.3v1.3c0 1.3-1 2.3-2.3 2.3H2c-1.2 0-2-.9-2-2.1l.1-1.7c0-1.1.7-1.9 1.8-2.1Z" />
+      <path d="M23 21.4c2.1-.3 4.5-.2 6 .2 1 .3 1.6 1.1 1.6 2.1v1.6c0 1.2-1 2.2-2.2 2.2h-5.5c-1.2 0-2.1-1-2.1-2.2l.1-1.8c.1-1.1.9-1.9 2.1-2.1Z" />
+    </svg>
+    <h2 id="mo-band-title" class="band__title">{title}</h2>
+    <div class="band__side">
+      <p>{text}</p>
+      <a class="mo-btn mo-btn--light" href="/exemples/moellon/contact/">Parler de votre projet <MIcon name="arrow" /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    padding-block: clamp(3.75rem, 8vw, 6.5rem);
+    background-color: var(--mo-terra);
+    background-image: var(--mo-grain);
+    color: var(--mo-cream);
+    overflow: hidden;
+  }
+
+  .band__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+  }
+
+  .band__stones {
+    position: absolute;
+    right: -2rem;
+    top: -1.5rem;
+    width: clamp(12rem, 24vw, 20rem);
+    height: auto;
+    /* Pierres en ombre (plus sombres que le fond) : le texte crème garde tout son contraste */
+    fill: rgb(43 33 26 / 0.13);
+    pointer-events: none;
+  }
+
+  .band__title {
+    position: relative;
+    max-width: 18ch;
+    font-size: clamp(2.1rem, 1.3rem + 2.8vw, 3.6rem);
+    color: var(--mo-cream);
+  }
+
+  .band__side {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 1.6rem;
+  }
+
+  .band__side p {
+    max-width: 44ch;
+    font-size: 1.0625rem;
+    color: var(--mo-cream);
+  }
+
+  .band :global(:focus-visible) {
+    outline-color: var(--mo-cream);
+  }
+
+  @media (max-width: 56em) {
+    .band__inner {
+      grid-template-columns: 1fr;
+    }
+
+    /* Sur une colonne, les pierres descendent dans le coin bas, à l'écart du titre */
+    .band__stones {
+      top: auto;
+      bottom: -2.25rem;
+      right: -2.5rem;
+      width: 11rem;
+    }
+  }
+</style>

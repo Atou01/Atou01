@@ -3,19 +3,21 @@
 // Ce n'est pas une scène 3D interactive : chaque fenêtre est un vrai bloc HTML
 // cliquable, incliné en perspective CSS. L'inclinaison suit le défilement horizontal
 // (scroll-driven animations) quand le navigateur le permet ; sinon elle reste fixe.
-// Positions exprimées en cqw (largeur du hero).
+// Positions exprimées en cqw (largeur de la scène, plafonnée à 120rem sur très grand écran).
 import { Picture } from 'astro:assets';
 import Icon from '../Icon.astro';
 import heroImg from '../../assets/photos/hero-architecture.jpg';
 import rivage1 from '../../assets/photos/rivage-1.jpg';
 import faitage1 from '../../assets/photos/faitage-1.jpg';
+import { photoWidths } from './photo-widths';
 import '@fontsource-variable/newsreader/wght.css';
 
-const wide = '(max-width: 62.49em) 70vw, 38vw';
-const pic = { formats: ['avif', 'webp'] as const, alt: '' };
+// Largeur rendue d'une fenêtre (--w-wide) : 66 % (téléphone), 52 % (tablette), 36 % de la scène.
+const wide = '(max-width: 40em) 66vw, (max-width: 62.49em) 52vw, (min-width: 120em) 692px, 36vw';
+const pic = { formats: ['avif', 'webp'] as const, alt: '', widths: photoWidths, sizes: wide };
 
-// Une fenêtre par entreprise fictive. Trois démos de plus (plombier-chauffagiste,
-// électricien, maçon) viendront compléter le carrousel quand leurs photos seront prêtes.
+// Une fenêtre par entreprise fictive. Le carrousel s'adapte au nombre de fenêtres
+// (compteur, boutons, annonces) : d'autres démos peuvent s'ajouter ici.
 const windows = [
   { id: 'rivage-accueil', shape: 'wide', href: '/exemples/rivage/', label: 'Rivage · Paysagiste' },
   { id: 'faitage-accueil', shape: 'wide', href: '/exemples/faitage/', label: 'Faîtage · Charpentier' },
@@ -23,124 +25,135 @@ const windows = [
 ---
 
 <section class="hero" aria-labelledby="hero-title">
-  <div class="container hero__content">
-    <h1 id="hero-title">Votre métier.<br /> Un site à <span class="accent">part.</span></h1>
-    <p class="hero__lead">
-      <strong>Création et refonte de sites pour artisans, TPE et PME.</strong>
-      <span>Une image professionnelle. Un parcours clair vers la demande de devis.</span>
-    </p>
-    <div class="hero__actions">
-      <a class="btn btn--coral" href="/devis/">Demander un devis <Icon name="arrow" /></a>
-      <a class="btn btn--outline" href="/exemples/">Voir les exemples <Icon name="arrow" /></a>
-    </div>
-  </div>
-
-  <div class="showcase" data-showcase>
-    <div class="hero__bg" aria-hidden="true">
-      <Picture
-        src={heroImg}
-        alt=""
-        formats={['avif', 'webp']}
-        widths={[800, 1200, 1600, 2000, 2880]}
-        sizes="(max-width: 62.49em) 175vw, 100vw"
-        loading="eager"
-        fetchpriority="high"
-      />
-    </div>
-
-    <div class="showcase__frame" role="region" aria-roledescription="carrousel" aria-label="Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site">
-      <ul class="showcase__track" data-showcase-track>
-        {
-          windows.map((w, i) => (
-            <li class:list={['showcase__item', `showcase__item--${w.shape}`]} data-label={w.label}>
-              <a class:list={['screen', `screen--${w.id}`]} href={w.href} draggable="false">
-                <span class="visually-hidden">Ouvrir la démonstration fictive {w.label}</span>
-                <span class="screen__face" aria-hidden="true">
-                  {w.id === 'rivage-accueil' && (
-                    <>
-                      <span class="screen__img"><Picture src={rivage1} {...pic} widths={[480, 800, 1200, 1600]} sizes={wide} loading="eager" /></span>
-                      <span class="m-shade m-shade--left" />
-                      <span class="m-nav m-nav--green">
-                        <span class="m-logo">rivage</span>
-                        <span class="m-links"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
-                        <span class="m-cta">Nous contacter</span>
-                      </span>
-                      <span class="m-hero">
-                        <span class="m-title">Le jardin<br />vous appelle.</span>
-                        <span class="m-btn">Découvrir le projet <Icon name="arrow" /></span>
-                      </span>
-                      <span class="m-aside">Des paysages pour<br />vivre dehors.<br />En toute saison.</span>
-                    </>
-                  )}
-                  {w.id === 'faitage-accueil' && (
-                    <>
-                      <span class="screen__img screen__img--below-nav"><Picture src={faitage1} {...pic} widths={[480, 800, 1200]} sizes={wide} /></span>
-                      <span class="m-shade m-shade--left m-shade--below-nav" />
-                      <span class="m-nav m-nav--white">
-                        <span class="m-logo m-logo--faitage"><span class="m-ridge" />Faîtage</span>
-                        <span class="m-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
-                      </span>
-                      <span class="m-hero">
-                        <span class="m-title">Des charpentes<br />pour demain.</span>
-                        <span class="m-text">Construire, rénover, transmettre.<br />Un savoir-faire local au service de vos projets.</span>
-                        <span class="m-btn m-btn--solid">Découvrir le projet <Icon name="arrow" /></span>
-                      </span>
-                    </>
-                  )}
-                </span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-
-    <div class="showcase__bar">
-      <p class="showcase__status">
-        <span>Démonstrations fictives</span>
-        <span class="js-only showcase__current" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-label>{windows[0].label}</span> · <span data-showcase-count>1/{windows.length}</span></span>
+  <div class="hero__stage">
+    <div class="container hero__content">
+      <h1 id="hero-title">Votre métier.<br /> Un site à <span class="accent">part.</span></h1>
+      <p class="hero__lead">
+        <strong>Création et refonte de sites pour artisans, TPE et PME.</strong>
+        <span>Une image professionnelle. Un parcours clair vers la demande de&nbsp;devis.</span>
       </p>
-      <div class="showcase__nav js-only">
-        <button type="button" class="showcase__btn" data-showcase-prev aria-label="Fenêtre précédente" disabled><Icon name="chevron" class="showcase__chev showcase__chev--prev" /></button>
-        <button type="button" class="showcase__btn" data-showcase-next aria-label="Fenêtre suivante"><Icon name="chevron" class="showcase__chev showcase__chev--next" /></button>
+      <div class="hero__actions">
+        <a class="btn btn--coral" href="/devis/">Demander un devis <Icon name="arrow" /></a>
+        <a class="btn btn--outline" href="/exemples/">Voir les exemples <Icon name="arrow" /></a>
       </div>
+    </div>
+
+    <div class="showcase" data-showcase>
+      <div class="hero__bg" aria-hidden="true">
+        <Picture
+          src={heroImg}
+          alt=""
+          formats={['avif', 'webp']}
+          widths={[800, 1200, 1600, 2000, 2880]}
+          sizes="(max-width: 40em) 170vw, (max-width: 62.49em) 150vw, (min-width: 120em) 1920px, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+
+      <div class="showcase__frame" role="region" aria-roledescription="carrousel" aria-label="Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site">
+        <ul class="showcase__track" data-showcase-track>
+          {
+            windows.map((w, i) => (
+              <li class:list={['showcase__item', `showcase__item--${w.shape}`]} data-label={w.label} data-active={i === 0 ? '' : undefined}>
+                <a class:list={['screen', `screen--${w.id}`]} href={w.href} draggable="false">
+                  <span class="visually-hidden">Ouvrir la démonstration fictive {w.label}</span>
+                  <span class="screen__face" aria-hidden="true">
+                    {w.id === 'rivage-accueil' && (
+                      <>
+                        <span class="screen__img"><Picture src={rivage1} {...pic} loading="eager" /></span>
+                        <span class="m-shade m-shade--left" />
+                        <span class="m-nav m-nav--green">
+                          <span class="m-logo">rivage</span>
+                          <span class="m-links"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
+                          <span class="m-cta">Nous contacter</span>
+                        </span>
+                        <span class="m-hero">
+                          <span class="m-title">Le jardin<br />vous appelle.</span>
+                          <span class="m-btn">Découvrir le projet <Icon name="arrow" /></span>
+                        </span>
+                        <span class="m-aside">Des paysages pour<br />vivre dehors.<br />En toute saison.</span>
+                      </>
+                    )}
+                    {w.id === 'faitage-accueil' && (
+                      <>
+                        <span class="screen__img screen__img--below-nav"><Picture src={faitage1} {...pic} /></span>
+                        <span class="m-shade m-shade--left m-shade--below-nav" />
+                        <span class="m-nav m-nav--white">
+                          <span class="m-logo m-logo--faitage"><span class="m-ridge" />Faîtage</span>
+                          <span class="m-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
+                        </span>
+                        <span class="m-hero">
+                          <span class="m-title">Des charpentes<br />pour demain.</span>
+                          <span class="m-text">Construire, rénover, transmettre.<br />Un savoir-faire local au service de vos projets.</span>
+                          <span class="m-btn m-btn--solid">Découvrir le projet <Icon name="arrow" /></span>
+                        </span>
+                      </>
+                    )}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="showcase__bar">
+        <p class="showcase__status">
+          <span>Démonstrations fictives</span>
+          <span class="js-only showcase__current" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-label>{windows[0].label}</span> · <span data-showcase-count>1/{windows.length}</span></span>
+        </p>
+        <div class="showcase__nav js-only">
+          <button type="button" class="showcase__btn" data-showcase-prev aria-label="Fenêtre précédente" aria-disabled="true"><Icon name="chevron" class="showcase__chev showcase__chev--prev" /></button>
+          <button type="button" class="showcase__btn" data-showcase-next aria-label="Fenêtre suivante" aria-disabled={windows.length < 2 ? 'true' : 'false'}><Icon name="chevron" class="showcase__chev showcase__chev--next" /></button>
+        </div>
+      </div>
+      <p class="visually-hidden" aria-live="polite" data-showcase-live></p>
     </div>
   </div>
 </section>
 
 <script>
   // Carrousel : boutons, glisser à la souris, flèches du clavier, fenêtre active.
+  // Le nombre de fenêtres est lu dans la page : rien n'est figé dans ce script.
   const root = document.querySelector<HTMLElement>('[data-showcase]');
   const track = root?.querySelector<HTMLElement>('[data-showcase-track]');
   if (root && track) {
     const items = Array.from(track.children) as HTMLElement[];
+    const total = items.length;
     const label = root.querySelector('[data-showcase-label]');
     const count = root.querySelector('[data-showcase-count]');
+    const live = root.querySelector('[data-showcase-live]');
     const prev = root.querySelector<HTMLButtonElement>('[data-showcase-prev]');
     const next = root.querySelector<HTMLButtonElement>('[data-showcase-next]');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let active = 0;
+    let active = -1;
 
+    const clamp = (i: number) => Math.max(0, Math.min(total - 1, i));
     const centerOf = (el: HTMLElement) => el.offsetLeft + el.offsetWidth / 2;
     // Centre de la zone d'accroche (la marge droite laisse voir la fenêtre suivante).
     const snapMid = () => (track.clientWidth - (parseFloat(getComputedStyle(track).scrollPaddingRight) || 0)) / 2;
-    const scrollToItem = (i: number) => {
-      const el = items[Math.max(0, Math.min(items.length - 1, i))];
-      track.scrollTo({ left: centerOf(el) - snapMid(), behavior: reduce.matches ? 'auto' : 'smooth' });
+    const scrollToItem = (i: number, announce = false) => {
+      const j = clamp(i);
+      track.scrollTo({ left: centerOf(items[j]) - snapMid(), behavior: reduce.matches ? 'auto' : 'smooth' });
+      // Annonce pour les lecteurs d'écran (le compteur visible est masqué pour eux).
+      if (announce && live) live.textContent = `Fenêtre ${j + 1} sur ${total} : ${items[j].dataset.label ?? ''}`;
     };
+    // aria-disabled plutôt que disabled : le bouton garde le focus clavier en bout de course.
+    const setOff = (btn: HTMLButtonElement | null, off: boolean) => btn?.setAttribute('aria-disabled', String(off));
     const update = () => {
       const mid = track.scrollLeft + snapMid();
       let best = 0;
       items.forEach((el, i) => {
         if (Math.abs(centerOf(el) - mid) < Math.abs(centerOf(items[best]) - mid)) best = i;
       });
-      if (best === active && label?.textContent) return;
+      if (best === active) return;
       active = best;
       items.forEach((el, i) => el.toggleAttribute('data-active', i === best));
       if (label) label.textContent = items[best].dataset.label ?? '';
-      if (count) count.textContent = `${best + 1}/${items.length}`;
-      if (prev) prev.disabled = best === 0;
-      if (next) next.disabled = best === items.length - 1;
+      if (count) count.textContent = `${best + 1}/${total}`;
+      setOff(prev, best === 0);
+      setOff(next, best === total - 1);
     };
 
     let raf = 0;
@@ -148,8 +161,12 @@ const windows = [
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(update);
     }, { passive: true });
-    prev?.addEventListener('click', () => scrollToItem(active - 1));
-    next?.addEventListener('click', () => scrollToItem(active + 1));
+    prev?.addEventListener('click', () => {
+      if (active > 0) scrollToItem(active - 1, true);
+    });
+    next?.addEventListener('click', () => {
+      if (active < total - 1) scrollToItem(active + 1, true);
+    });
 
     // Flèches gauche/droite quand une fenêtre a le focus.
     track.addEventListener('keydown', (e) => {
@@ -157,51 +174,55 @@ const windows = [
       const i = items.findIndex((el) => el.contains(document.activeElement));
       if (i < 0) return;
       e.preventDefault();
-      const j = Math.max(0, Math.min(items.length - 1, i + (e.key === 'ArrowRight' ? 1 : -1)));
+      const j = clamp(i + (e.key === 'ArrowRight' ? 1 : -1));
       items[j].querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
-      scrollToItem(j);
+      scrollToItem(j, true);
     });
+    // Focus au clavier (Tab) : la fenêtre est ramenée au centre. Au clic ou au toucher,
+    // on ne fait rien : faire défiler entre l'appui et le relâchement annulerait le clic.
     track.addEventListener('focusin', (e) => {
-      const i = items.findIndex((el) => el.contains(e.target as Node));
+      const target = e.target as HTMLElement;
+      if (!target.matches(':focus-visible')) return;
+      const i = items.findIndex((el) => el.contains(target));
       if (i >= 0 && i !== active) scrollToItem(i);
     });
 
     // Glisser à la souris (le tactile et le pavé tactile défilent nativement).
-    let startX = 0;
-    let startLeft = 0;
-    let dragging = false;
-    let moved = false;
+    let drag: { x: number; left: number; moved: boolean } | null = null;
+    let suppressClick = false;
     track.addEventListener('pointerdown', (e) => {
       if (e.pointerType !== 'mouse' || e.button !== 0) return;
-      dragging = true;
-      moved = false;
-      startX = e.clientX;
-      startLeft = track.scrollLeft;
+      drag = { x: e.clientX, left: track.scrollLeft, moved: false };
     });
     window.addEventListener('pointermove', (e) => {
-      if (!dragging) return;
-      const dx = e.clientX - startX;
-      if (!moved && Math.abs(dx) > 6) {
-        moved = true;
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) > 6) {
+        drag.moved = true;
         track.classList.add('is-dragging');
       }
-      if (moved) track.scrollLeft = startLeft - dx;
+      if (drag.moved) track.scrollLeft = drag.left - dx;
     });
-    window.addEventListener('pointerup', () => {
-      if (!dragging) return;
-      dragging = false;
-      if (moved) {
+    const endDrag = () => {
+      if (!drag) return;
+      if (drag.moved) {
+        // Seul le clic qui suit immédiatement le relâchement est ignoré : un glisser
+        // n'ouvre pas la démo sous le curseur, et ne bloque ni le clavier ni le toucher ensuite.
+        suppressClick = true;
+        window.setTimeout(() => (suppressClick = false), 0);
         track.classList.remove('is-dragging');
         update();
         scrollToItem(active);
       }
-    });
-    // Un glisser ne doit pas ouvrir la démo sous le curseur.
+      drag = null;
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
     track.addEventListener('click', (e) => {
-      if (moved) {
-        e.preventDefault();
-        moved = false;
-      }
+      if (!suppressClick) return;
+      e.preventDefault();
+      e.stopPropagation();
+      suppressClick = false;
     }, true);
 
     update();
@@ -212,9 +233,21 @@ const windows = [
   .hero {
     --serif: 'Newsreader Variable', Georgia, serif;
     position: relative;
-    container-type: inline-size;
-    overflow: hidden;
+    container: hero / inline-size;
+    /* clip (et non hidden) : rien ne déborde sur les côtés, mais le hero peut grandir
+       en hauteur si le texte s'agrandit (espacement du texte, zoom). */
+    overflow-x: clip;
     background: #f4ece1;
+  }
+
+  /* Scène : toutes les positions sont en cqw de cette boîte. Au-delà de 120rem, elle reste
+     centrée et ne grandit plus (la photo garde ses proportions, le texte reste aligné sur l'en-tête). */
+  .hero__stage {
+    --scene-x: 0cqw;
+    position: relative;
+    container-type: inline-size;
+    max-width: 120rem;
+    margin-inline: auto;
   }
 
   /* ---------- Texte ---------- */
@@ -248,6 +281,11 @@ const windows = [
     margin-top: clamp(1.25rem, 1.9cqw, 2rem);
     font-size: var(--fs-lead);
     line-height: 1.45;
+  }
+
+  /* pretty : pas de mot isolé en fin de ligne (« devis. », « PME. »). */
+  .hero__lead > * {
+    text-wrap: pretty;
   }
 
   .hero__lead strong {
@@ -284,49 +322,71 @@ const windows = [
     width: var(--bg-w, 100cqw);
     max-width: none;
     height: auto;
+    /* Si le hero grandit (texte agrandi), la photo couvre toujours toute la hauteur. */
+    min-height: calc(100% - var(--bg-top, -3cqw));
+    object-fit: cover;
   }
 
-  /* Voile ivoire léger sous le texte */
+  /* Voile ivoire sous le texte (lisibilité du titre et du corail sur la photo) */
   .hero__bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgb(248 244 238 / 0.55) 0%, rgb(248 244 238 / 0.25) 34%, transparent 48%);
+    background: linear-gradient(90deg, rgb(248 244 238 / 0.82) 0%, rgb(248 244 238 / 0.8) 34%, rgb(248 244 238 / 0.62) 41%, transparent 48%);
+  }
+
+  /* Très grand écran : les bords de la photo se fondent dans le fond du hero. */
+  @container hero (min-width: 121rem) {
+    .hero__bg {
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+    }
   }
 
   .showcase__frame {
     position: absolute;
-    left: 44cqw;
+    left: var(--scene-x);
     right: 0;
-    top: 6cqw;
-    bottom: 4.5cqw;
+    top: 4cqw;
+    bottom: 2cqw;
   }
 
   .showcase__track {
-    --w-wide: 37cqw;
+    /* Fenêtre active décalée vers la gauche : la suivante se voit à droite (--peek). */
+    --w-wide: 36cqw;
     --w-tall: 15.5cqw;
-    /* Fenêtre active décalée vers la gauche : on voit la suivante à droite. */
-    --peek: 10cqw;
-    --side: calc((56cqw - var(--peek) - var(--w-wide)) / 2);
+    --ratio-wide: 1.1;
+    --peek: 12cqw;
+    --gap: 3cqw;
+    /* Hauteur du sol sous les fenêtres (assez pour que la barre du carrousel ne les touche pas) */
+    --floor: max(4cqw, 3.4rem);
+    --side: calc((100cqw - var(--scene-x) - var(--peek) - var(--w-wide)) / 2);
     display: flex;
     align-items: flex-end;
-    gap: 2.5cqw;
+    gap: var(--gap);
     height: 100%;
     margin: 0;
-    padding: 0 calc(var(--side) + var(--peek)) 6.6cqw var(--side);
+    padding: 0 calc(var(--side) + var(--peek)) var(--floor) var(--side);
     scroll-padding-right: var(--peek);
     list-style: none;
     overflow-x: auto;
     overflow-y: hidden;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
-    scrollbar-width: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
     mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
+  }
+
+  /* Avec JavaScript : boutons, glisser et flèches remplacent la barre de défilement.
+     Sans JavaScript, la barre reste visible pour atteindre les autres fenêtres. */
+  :global(html.js) .showcase__track {
+    scrollbar-width: none;
     cursor: grab;
   }
 
-  .showcase__track::-webkit-scrollbar {
+  :global(html.js) .showcase__track::-webkit-scrollbar {
     display: none;
   }
 
@@ -349,26 +409,12 @@ const windows = [
 
   .showcase__item--wide {
     width: var(--w-wide);
-    aspect-ratio: 1.6;
+    aspect-ratio: var(--ratio-wide);
   }
 
   .showcase__item--tall {
     width: var(--w-tall);
     aspect-ratio: 0.72;
-  }
-
-  /* Ombre portée au sol */
-  .showcase__item::after {
-    content: '';
-    position: absolute;
-    left: -4%;
-    right: -6%;
-    bottom: -2.2cqw;
-    height: 4cqw;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, rgb(70 52 34 / 0.34), rgb(70 52 34 / 0.1) 60%, transparent);
-    filter: blur(0.35cqw);
-    z-index: -1;
   }
 
   .screen {
@@ -385,6 +431,20 @@ const windows = [
     -webkit-user-drag: none;
   }
 
+  /* Ombre portée au sol : sur la fenêtre elle-même, pour la suivre quand elle se déplace. */
+  .screen::before {
+    content: '';
+    position: absolute;
+    left: -4%;
+    right: -6%;
+    bottom: -2.2cqw;
+    height: 4cqw;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(70 52 34 / 0.34), rgb(70 52 34 / 0.1) 60%, transparent);
+    filter: blur(0.35cqw);
+    transition: translate 0.4s var(--ease);
+  }
+
   /* Deux règles distinctes : le minifieur fusionnerait sinon animation-timeline
      dans le raccourci « animation », ce qui invalide la déclaration. */
   @supports (animation-timeline: view()) {
@@ -398,7 +458,7 @@ const windows = [
       animation-timeline: --win;
     }
 
-    /* La fenêtre la plus proche du centre passe devant ses voisines. */
+    /* La fenêtre la plus proche de la position active passe devant ses voisines. */
     .showcase__item {
       animation-name: win-z;
       animation-timing-function: linear;
@@ -410,11 +470,15 @@ const windows = [
     }
   }
 
+  /* Repères de la frise (grand écran) : la progression d'une fenêtre vaut 0 % quand elle
+     entre par la droite de la bande et 100 % quand elle sort à gauche.
+     Avec les mesures ci-dessus (bande 56cqw, fenêtre 36cqw, écart 3cqw, marge droite 12cqw) :
+     fenêtre active ≈ 56 %, fenêtre suivante ≈ 14 %, précédente ≈ 99 %. */
   @keyframes win-z {
     0% {
       z-index: 1;
     }
-    50% {
+    56% {
       z-index: 9;
     }
     100% {
@@ -422,40 +486,40 @@ const windows = [
     }
   }
 
-  /* Téléphone : rotations plus douces, voisines plus petites (pas de chevauchement). */
-  @keyframes win-tilt-sm {
+  @keyframes win-tilt {
     0% {
-      transform: perspective(150cqw) rotateY(-40deg) scale(0.72);
+      transform: perspective(90cqw) translateX(-46%) rotateY(-58deg) scale(0.76);
     }
-    30% {
-      transform: perspective(150cqw) rotateY(-24deg) scale(0.86);
+    /* Fenêtre suivante : ramenée vers la gauche, de biais, lisible au bord de la scène. */
+    14% {
+      transform: perspective(90cqw) translateX(-40%) rotateY(-46deg) scale(0.9);
     }
-    50% {
-      transform: perspective(150cqw) rotateY(-6deg) scale(1);
-    }
-    70% {
-      transform: perspective(150cqw) rotateY(22deg) scale(0.86);
+    /* Fenêtre active : posée sur le sol, nettement de biais comme sur la maquette. */
+    56% {
+      transform: perspective(90cqw) translateX(0) rotateY(-19deg) scale(1);
     }
     100% {
-      transform: perspective(150cqw) rotateY(38deg) scale(0.72);
+      transform: perspective(90cqw) translateX(0) rotateY(40deg) scale(0.8);
     }
   }
 
-  @keyframes win-tilt {
+  /* Téléphone et tablette : rotations plus douces, voisines plus petites, sans déplacement
+     latéral (aucun chevauchement entre fenêtres). Fenêtre active à 50 %. */
+  @keyframes win-tilt-sm {
     0% {
-      transform: perspective(90cqw) rotateY(-58deg) scale(0.74);
+      transform: perspective(150cqw) translateX(0) rotateY(-40deg) scale(0.72);
     }
     30% {
-      transform: perspective(90cqw) rotateY(-36deg) scale(0.88);
+      transform: perspective(150cqw) translateX(0) rotateY(-24deg) scale(0.86);
     }
     50% {
-      transform: perspective(90cqw) rotateY(-12deg) scale(1);
+      transform: perspective(150cqw) translateX(0) rotateY(-6deg) scale(1);
     }
     70% {
-      transform: perspective(90cqw) rotateY(30deg) scale(0.88);
+      transform: perspective(150cqw) translateX(0) rotateY(22deg) scale(0.86);
     }
     100% {
-      transform: perspective(90cqw) rotateY(56deg) scale(0.74);
+      transform: perspective(150cqw) translateX(0) rotateY(38deg) scale(0.72);
     }
   }
 
@@ -475,6 +539,12 @@ const windows = [
   .screen:hover,
   .screen:focus-visible {
     translate: 0 -0.8cqw;
+  }
+
+  /* L'ombre reste au sol quand la fenêtre se soulève. */
+  .screen:hover::before,
+  .screen:focus-visible::before {
+    translate: 0 0.8cqw;
   }
 
   .screen:focus-visible {
@@ -760,15 +830,20 @@ const windows = [
   /* ---------- Barre du carrousel ---------- */
   .showcase__bar {
     position: absolute;
-    right: var(--gutter);
+    /* Alignée sur le bord droit du contenu (comme le bouton de l'en-tête). */
+    right: max(var(--gutter), (100cqw - var(--container)) / 2);
     bottom: 1.6cqw;
     z-index: 3;
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
+  /* Fond ivoire : la mention « Démonstrations fictives » reste lisible sur la photo. */
   .showcase__status {
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius);
+    background: rgb(248 244 238 / 0.9);
     font-size: 0.8125rem;
     color: var(--ink-2);
   }
@@ -795,12 +870,12 @@ const windows = [
       opacity 0.2s;
   }
 
-  .showcase__btn:hover:not(:disabled) {
+  .showcase__btn:hover:not([aria-disabled='true']) {
     background: var(--marine);
     color: var(--paper);
   }
 
-  .showcase__btn:disabled {
+  .showcase__btn[aria-disabled='true'] {
     opacity: 0.35;
     cursor: default;
   }
@@ -820,18 +895,35 @@ const windows = [
 
   /* ---------- Grand écran : le hero suit les proportions de la scène ---------- */
   @media (min-width: 62.5em) {
-    .hero {
+    .hero__stage {
+      /* Début de la bande de fenêtres ; le texte s'arrête avant. */
+      --scene-x: 44cqw;
+      --text-max: calc(var(--scene-x) - max(var(--gutter), (100cqw - var(--container)) / 2) - 1.5rem);
+      /* Pas de min-height ni de max-height : la hauteur suit la largeur, et grandit
+         d'elle-même si le texte en a besoin. */
       aspect-ratio: 1.92;
-      min-height: 34rem;
-      max-height: 62rem;
     }
 
-    .hero__content > * {
-      max-width: 40cqw;
+    /* « Un site à part. » mesure environ 5,7 em : le titre ne déborde jamais sur les fenêtres. */
+    h1 {
+      font-size: min(var(--fs-hero), calc(var(--text-max) / 5.75));
     }
 
-    .hero__lead {
-      max-width: min(34rem, 36cqw);
+    /* Sur la photo (même sous le voile), le corail du titre est à peine plus soutenu
+       que --coral-text pour garder un contraste d'au moins 3:1. */
+    .accent {
+      color: #d9593d;
+    }
+
+    /* Le titre, le texte et les boutons restent dans leur colonne (ils passent à la ligne
+       plutôt que de déborder sur les fenêtres, même avec un espacement du texte agrandi). */
+    .hero__content > h1,
+    .hero__content > .hero__actions {
+      max-width: var(--text-max);
+    }
+
+    .hero__content > .hero__lead {
+      max-width: min(34rem, var(--text-max));
     }
   }
 
@@ -861,7 +953,6 @@ const windows = [
     }
 
     .showcase__frame {
-      left: 0;
       top: 3cqw;
       bottom: 13cqw;
     }
@@ -869,15 +960,15 @@ const windows = [
     .showcase__track {
       --w-wide: 66cqw;
       --w-tall: 30cqw;
+      --ratio-wide: 1.3;
       --peek: 0cqw;
-      --side: calc((100cqw - var(--w-wide)) / 2);
-      gap: 9cqw;
-      padding-bottom: 9cqw;
+      --gap: 9cqw;
+      --floor: 9cqw;
       -webkit-mask-image: none;
       mask-image: none;
     }
 
-    .showcase__item::after {
+    .screen::before {
       bottom: -3.4cqw;
       height: 6cqw;
     }
@@ -917,7 +1008,7 @@ const windows = [
     .showcase__track {
       --w-wide: 52cqw;
       --w-tall: 22cqw;
-      padding-bottom: 6cqw;
+      --floor: 6cqw;
     }
 
     .showcase__bar {
@@ -950,7 +1041,9 @@ const windows = [
     }
 
     .screen:hover,
-    .screen:focus-visible {
+    .screen:focus-visible,
+    .screen:hover::before,
+    .screen:focus-visible::before {
       translate: none;
     }
   }

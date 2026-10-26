@@ -1,5 +1,5 @@
 ---
-// Encart honnête : ce qu'un vrai site afficherait à cet endroit (coordonnées, tarifs, qualifications…).
+// Encart honnête : ce qu'un vrai site afficherait à cet endroit (coordonnées, tarifs, qualifications…).
 import EIcon from './EIcon.astro';
 
 interface Props {
@@ -11,7 +11,7 @@ const { tone = 'light', class: className } = Astro.props;
 
 <div class:list={['note', `note--${tone}`, className]} role="note">
   <span class="note__icon" aria-hidden="true"><EIcon name="info" /></span>
-  <p><strong>Dans un vrai site :</strong> <slot /></p>
+  <p><strong>Dans un vrai site :</strong> <slot /></p>
 </div>
 
 <style>

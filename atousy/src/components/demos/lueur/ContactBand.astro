@@ -1,5 +1,5 @@
 ---
-// Bandeau d'appel à l'action, en fin de page : un halo ambré, vers la page Contact de la démo.
+// Bandeau d'appel à l'action, en fin de page : un halo ambré, vers la page Contact de la démo.
 import Icon from '../../Icon.astro';
 
 interface Props {
@@ -8,17 +8,15 @@ interface Props {
   button?: string;
 }
 const {
-  title = 'Un projet électrique en tête ?',
-  text = 'Décrivez-nous votre besoin en quelques lignes : nous revenons vers vous pour en parler et, si besoin, organiser une visite.',
+  title = 'Un projet électrique en tête ?',
+  text = 'Décrivez-nous votre besoin en quelques lignes : nous revenons vers vous pour en parler et, si besoin, organiser une visite.',
   button = 'Décrire votre projet',
 } = Astro.props;
 ---
 
 <section class="band" aria-labelledby="lu-band-title">
   <div class="band__glow" aria-hidden="true"></div>
-  <svg class="band__arc" viewBox="0 0 400 220" fill="none" aria-hidden="true" focusable="false">
-    <path d="M40 220c0-118 71.6-200 160-200s160 82 160 200" />
-  </svg>
+  <div class="band__arch" aria-hidden="true"></div>
   <div class="lu-container band__inner">
     <p class="lu-label">Contact</p>
     <h2 id="lu-band-title" class="band__title">{title}</h2>
@@ -51,16 +49,32 @@ const {
     background: radial-gradient(closest-side, rgb(242 180 90 / 0.24), rgb(242 180 90 / 0.08) 55%, transparent 100%);
   }
 
-  .band__arc {
+  /* Grand arc de filament qui enveloppe tout le bandeau (le texte reste à l'intérieur, sans croisement) */
+  .band__arch {
     position: absolute;
-    left: 50%;
-    bottom: -2px;
     z-index: -1;
-    width: min(46rem, 120%);
+    left: 50%;
+    top: clamp(0.6rem, 2.2vw, 2.5rem);
+    bottom: -1px;
+    width: min(74rem, 100% + 4.5rem);
     transform: translateX(-50%);
-    stroke: var(--lu-amber);
-    stroke-width: 1;
-    opacity: 0.32;
+    border: 1px solid rgb(242 180 90 / 0.34);
+    border-bottom: 0;
+    border-radius: 999rem 999rem 0 0;
+  }
+
+  /* étincelle posée au sommet de l'arc, comme sur le logo */
+  .band__arch::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: var(--lu-amber);
+    box-shadow: 0 0 12px 3px rgb(242 180 90 / 0.55);
   }
 
   .band__inner {
@@ -74,7 +88,8 @@ const {
   }
 
   .band__title {
-    max-width: 18ch;
+    /* un peu plus étroit que le bandeau sur mobile : le titre reste sous l'arc */
+    max-width: min(18ch, 100% - 2.5rem);
     font-size: clamp(2.2rem, 1.4rem + 3vw, 3.9rem);
     color: var(--lu-ivory);
   }

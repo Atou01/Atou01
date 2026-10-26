@@ -34,6 +34,7 @@ export const footerNav: NavItem[] = [
 export const legalNav: NavItem[] = [
   { label: 'Mentions légales', href: '/mentions-legales/' },
   { label: 'Confidentialité', href: '/confidentialite/' },
+  { label: 'Conditions générales de vente', href: '/cgv/' },
 ];
 
 // Prix de travail validés dans le brief. Le pays est détecté automatiquement
@@ -54,7 +55,7 @@ export const offerHighlights = [
   "Jusqu'à 5 pages",
   'Adaptation aux smartphones',
   'Bases du référencement local',
-  'Deux séries de corrections',
+  'Deux séries de corrections groupées',
 ];
 
 export const offerExclusions = 'Domaine, hébergement et demandes supplémentaires non inclus.';

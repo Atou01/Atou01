@@ -38,8 +38,24 @@ const { id, class: className } = Astro.props;
     border-radius: var(--radius);
   }
 
-  select:hover {
-    color: var(--coral-text);
+  /* Survol : trait corail sous le libellé, comme les liens de la navigation
+     (le texte reste en encre : le corail ne contraste pas assez en petit corps). */
+  .market-select::after {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    right: 1.6rem;
+    bottom: 0.3rem;
+    height: 2px;
+    background: var(--coral);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s var(--ease);
+    pointer-events: none;
+  }
+
+  .market-select:hover::after {
+    transform: scaleX(1);
   }
 
   .market-select :global(.market-select__chevron) {

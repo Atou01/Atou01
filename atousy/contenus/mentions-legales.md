@@ -1,7 +1,7 @@
 ---
 page: /mentions-legales/
 title: "Mentions légales | Atousy"
-description: "Mentions légales du site atousy.com : éditeur, directeur de la publication, hébergeur, propriété intellectuelle et crédits des visuels utilisés sur le site."
+description: "Mentions légales du site atousy.com : éditeur, directeur de la publication, hébergeur, propriété intellectuelle, démonstrations fictives et crédits du site."
 statut: modèle à compléter — ne pas publier avec des crochets
 ---
 
@@ -45,7 +45,7 @@ Les textes, la mise en page, le logo et les éléments graphiques de ce site app
 
 ## Démonstrations fictives
 
-Les sites « Rivage » (paysagiste) et « Faîtage » (charpentier) présentés dans la rubrique Exemples sont des démonstrations. Ces entreprises n’existent pas. Leurs noms, textes et projets sont inventés. Toute ressemblance avec une entreprise existante serait fortuite.
+Les sites présentés dans la rubrique Exemples sont des démonstrations réalisées par Atousy à titre d’exemple. Ce ne sont pas des clients : ces entreprises n’existent pas, leurs noms, textes et projets sont inventés. Toute ressemblance avec une entreprise existante serait fortuite.
 
 ## Crédits
 
@@ -57,7 +57,7 @@ Les sites « Rivage » (paysagiste) et « Faîtage » (charpentier) présentés 
 
 ## Données personnelles
 
-Le traitement des données envoyées par le formulaire de devis est décrit dans la page [Confidentialité](/confidentialite/).
+Le traitement des données envoyées par le formulaire de devis est décrit dans la page [Confidentialité](/confidentialite/). Les conditions applicables aux prestations figurent dans les [conditions générales de vente](/cgv/).
 
 ## Nous signaler une erreur
 
@@ -70,4 +70,4 @@ Une information vous semble inexacte ? Écrivez-nous à contact@atousy.com.
 - Aucun crochet [À COMPLÉTER] ne doit être publié : compléter toutes les données avant la mise en ligne.
 - Pour une offre proposée en Suisse, les mêmes informations d’identification (nom, adresse, e-mail) sont généralement attendues. À faire vérifier.
 - Appel à l’action : bandeau standard du site « Parlons de votre projet. » + bouton « Demander un devis » → /devis/, ou aucun bandeau sur les pages légales (au choix du fondateur).
-- Liens internes : /confidentialite/, /exemples/, /devis/.
+- Liens internes : /confidentialite/, /cgv/, /exemples/, /devis/.

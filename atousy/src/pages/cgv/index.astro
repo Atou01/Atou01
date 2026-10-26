@@ -1,0 +1,278 @@
+---
+// Conditions générales de vente, clientèle professionnelle uniquement (contenus/cgv.md,
+// docs/obligations-suisse.md § 4 et 5). Modèle à compléter et à faire relire par un
+// professionnel : reste en noindex (LegalPage) tant que des éléments [À COMPLÉTER] subsistent.
+import LegalPage from '../../components/pages/LegalPage.astro';
+import Todo from '../../components/pages/Todo.astro';
+
+const toc = [
+  { id: 'champ', label: '1. Champ d’application' },
+  { id: 'devis', label: '2. Devis et formation du contrat' },
+  { id: 'prix', label: '3. Prix, devise et taxes' },
+  { id: 'paiement', label: '4. Acomptes et échéances' },
+  { id: 'retards', label: '5. Retards de paiement' },
+  { id: 'client', label: '6. Obligations du client' },
+  { id: 'deroule', label: '7. Déroulé de la prestation' },
+  { id: 'recette', label: '8. Recette' },
+  { id: 'garantie', label: '9. Garantie de 30 jours' },
+  { id: 'supplements', label: '10. Demandes supplémentaires' },
+  { id: 'domaine', label: '11. Nom de domaine et hébergement' },
+  { id: 'propriete', label: '12. Propriété intellectuelle' },
+  { id: 'responsabilite', label: '13. Limitation de responsabilité' },
+  { id: 'resiliation', label: '14. Résiliation' },
+  { id: 'donnees', label: '15. Données personnelles' },
+  { id: 'droit', label: '16. Droit applicable et tribunal' },
+  { id: 'signature', label: '17. Acceptation et signature' },
+];
+---
+
+<LegalPage
+  title="Conditions générales de vente | Atousy"
+  description="Conditions générales de vente d’Atousy pour la création et la refonte de sites vitrines, réservées aux professionnels : devis, prix, paiement, garanties."
+  heading="Conditions générales de vente"
+  crumb="Conditions générales de vente"
+  lead="Ces conditions s’appliquent aux prestations de création et de refonte de sites vitrines d’Atousy. Elles sont réservées aux clients professionnels et jointes à chaque devis."
+  toc={toc}
+>
+  <p slot="meta">Version du <Todo>JJ/MM/AAAA</Todo></p>
+  <p slot="meta"><strong>Modèle à faire relire par un professionnel avant usage.</strong></p>
+
+  <h2 id="champ">1. Champ d’application</h2>
+  <p>
+    Les présentes conditions générales de vente (CGV) s’appliquent à toutes les prestations d’Atousy : création et refonte de sites
+    vitrines, et prestations liées décrites au devis.
+  </p>
+  <p>
+    <strong>Elles sont réservées aux professionnels</strong> : entreprises et indépendants qui commandent une prestation pour leur activité.
+    Atousy ne contracte pas avec des particuliers agissant à titre privé. Le client déclare dans le devis agir dans le cadre de son
+    activité professionnelle.
+  </p>
+  <p>
+    Prestataire : Atousy, <Todo>raison sociale, forme juridique, adresse en France, numéro SIREN</Todo>,
+    {' '}<a href="mailto:contact@atousy.com">contact@atousy.com</a>.
+  </p>
+
+  <h2 id="devis">2. Devis et formation du contrat</h2>
+  <p>
+    Chaque prestation fait l’objet d’un devis écrit. Il décrit les livrables (pages, fonctions, nombre de séries de corrections), le prix,
+    la devise, l’échéancier de paiement, les délais et la durée de validité de l’offre (<Todo>par exemple 30 jours</Todo>).
+  </p>
+  <p>
+    Les tarifs affichés sur le site atousy.com sont indicatifs : ils ne constituent pas une offre. Seul le devis engage Atousy. Le contrat
+    est conclu quand le client accepte le devis (article 17).
+  </p>
+  <p>
+    <strong>Le devis prime</strong> : en cas de contradiction, ses clauses l’emportent sur les présentes CGV. Les conditions générales
+    d’achat du client ne s’appliquent que si Atousy les a acceptées par écrit. Les CGV applicables sont celles jointes au devis, dans la
+    version datée qu’il indique.
+  </p>
+
+  <h2 id="prix">3. Prix, devise et taxes</h2>
+  <p>
+    Le prix est forfaitaire pour les prestations décrites au devis. Il est exprimé en euros (EUR) ou en francs suisses (CHF), selon le
+    devis.
+  </p>
+  <p>
+    Les taxes applicables sont indiquées dans le devis et sur la facture.
+    {' '}<Todo>mention de TVA française, à valider par l’expert-comptable</Todo>
+  </p>
+  <p>
+    <strong>Clients établis en Suisse :</strong> aucune TVA suisse n’est facturée. Atousy, prestataire établi en France, n’est pas inscrite
+    au registre suisse des assujettis à la TVA. La prestation de services est soumise, le cas échéant, à l’impôt sur les acquisitions, à
+    déclarer par le client (art. 45 LTVA).
+  </p>
+  <p>
+    <Todo>pour un devis en CHF : écrire « payable en CHF, valeur effective » si un compte en CHF est disponible, sinon facturer en EUR</Todo>
+  </p>
+
+  <h2 id="paiement">4. Acomptes et échéances</h2>
+  <p>
+    Le paiement suit l’échéancier indiqué au devis :
+    {' '}<Todo>par exemple un acompte à l’acceptation du devis, un paiement à la validation de la maquette, le solde à la mise en ligne</Todo>.
+  </p>
+  <p>
+    Les factures sont payables par virement au plus tard à la date d’échéance indiquée sur chacune d’elles.
+    {' '}<Todo>délai de paiement ; coordonnées bancaires (IBAN/BIC) ; répartition des frais bancaires</Todo>
+  </p>
+  <p><Todo>les travaux commencent-ils seulement après le paiement de l’acompte ?</Todo></p>
+
+  <h2 id="retards">5. Retards de paiement</h2>
+  <p>
+    En cas de retard, des pénalités sont dues de plein droit, sans rappel, à compter du lendemain de la date d’échéance, au taux de
+    {' '}<Todo>taux, au moins égal à trois fois le taux d’intérêt légal</Todo>.
+  </p>
+  <p>
+    Tout retard de paiement entraîne aussi une indemnité forfaitaire de 40 € pour frais de recouvrement. Si les frais réellement engagés
+    sont plus élevés, une indemnité complémentaire peut être demandée sur justificatif.
+  </p>
+  <p>
+    Après une relance écrite restée sans effet pendant <Todo>délai, par exemple 8 jours</Todo>, Atousy peut suspendre les travaux en cours
+    jusqu’au paiement des sommes dues.
+  </p>
+  <p><Todo label="À VALIDER">par l’expert-comptable : pénalités de retard et indemnité de 40 € (droit français)</Todo></p>
+
+  <h2 id="client">6. Obligations du client</h2>
+  <p>Le client s’engage à :</p>
+  <ul>
+    <li>
+      fournir à temps les contenus nécessaires : informations sur son activité, textes, logo, photos, adresse e-mail qui recevra les
+      demandes ;
+    </li>
+    <li>donner les accès utiles : site actuel pour une refonte, nom de domaine, hébergement ;</li>
+    <li>
+      valider ou commenter chaque étape dans le délai prévu au devis (<Todo>par exemple 10 jours ouvrés</Todo>), en regroupant ses
+      remarques ;
+    </li>
+    <li>désigner un interlocuteur qui peut valider les étapes.</li>
+  </ul>
+  <p>
+    Les délais d’Atousy sont prolongés d’autant en cas de retard du client.
+    {' '}<Todo>conséquences d’une absence de réponse prolongée : report du planning, facturation des travaux réalisés</Todo>
+  </p>
+
+  <h2 id="deroule">7. Déroulé de la prestation</h2>
+  <ul>
+    <li><strong>Le devis.</strong> Besoins, livrables, prix et délais. Pour une refonte, Atousy examine d’abord le site actuel.</li>
+    <li><strong>La maquette.</strong> Atousy présente une maquette du site ; le client valide les contenus : pages, textes, photos.</li>
+    <li>
+      <strong>Deux séries de corrections groupées.</strong> Le client réunit ses remarques dans une liste, Atousy les applique. Une série
+      supplémentaire fait l’objet d’un devis complémentaire.
+      {' '}<Todo>sur la maquette, sur le site avant mise en ligne, ou les deux</Todo>
+    </li>
+    <li><strong>La mise en ligne,</strong> après la recette (article 8).</li>
+    <li>
+      <strong>La remise des accès.</strong> Atousy remet au client tous les accès au site.
+      {' '}<Todo>liste des accès remis</Todo>
+    </li>
+  </ul>
+  <p>
+    Les délais sont fixés au devis. Ils dépendent de la remise des contenus et du rythme des validations. Aucune position dans les moteurs
+    de recherche n’est garantie.
+  </p>
+
+  <h2 id="recette">8. Recette</h2>
+  <p>
+    Avant la mise en ligne, Atousy présente au client la version finale du site. Le client dispose de
+    {' '}<Todo>délai, par exemple 10 jours ouvrés</Todo> pour la vérifier et signaler par écrit les écarts par rapport au devis.
+  </p>
+  <p>
+    La recette est prononcée par écrit : procès-verbal de recette ou e-mail d’acceptation. Sans réserve écrite dans ce délai, ou si le
+    client demande la mise en ligne, le site est réputé accepté. Les réserves justifiées sont levées par Atousy ; une demande nouvelle
+    relève de l’article 10.
+  </p>
+
+  <h2 id="garantie">9. Garantie de 30 jours</h2>
+  <p>
+    Pendant 30 jours après la mise en ligne, Atousy corrige sans supplément les anomalies signalées dans le périmètre convenu au devis :
+    un lien cassé, un affichage défaillant.
+  </p>
+  <p>
+    La garantie ne couvre pas les modifications ni les nouvelles demandes, ni les anomalies causées par une intervention du client ou d’un
+    tiers sur le site, par l’hébergeur ou par un service tiers. Après ces 30 jours, toute intervention fait l’objet d’un devis.
+  </p>
+
+  <h2 id="supplements">10. Demandes supplémentaires</h2>
+  <p>
+    Toute demande hors du devis fait l’objet d’un devis complémentaire, que le client accepte ou non : une page au-delà de celles prévues,
+    une deuxième langue, une série de corrections en plus, des textes au-delà des informations fournies, une fonction absente du devis, une
+    modification après les 30 jours. Aucun travail supplémentaire n’est facturé sans accord écrit du client.
+  </p>
+
+  <h2 id="domaine">11. Nom de domaine et hébergement</h2>
+  <p>
+    Le nom de domaine et l’hébergement sont souscrits <strong>au nom du client et à sa charge</strong>, auprès des prestataires de son
+    choix. Le client en reste titulaire et veille à leur renouvellement.
+    {' '}<Todo>accompagnement d’Atousy pour ces démarches : compris ou facturé</Todo>
+  </p>
+  <p>Atousy ne répond pas des interruptions ou des défaillances de ces prestataires.</p>
+
+  <h2 id="propriete">12. Propriété intellectuelle</h2>
+  <p>
+    <strong>À complet paiement du prix</strong>, Atousy cède au client les droits patrimoniaux d’auteur sur les éléments créés
+    spécifiquement pour lui et livrés : <Todo>liste, par exemple maquette retenue, mise en page, textes rédigés par Atousy, code du site</Todo>.
+    La cession porte sur les droits de reproduction, de représentation et d’adaptation, pour l’exploitation du site et de ses contenus
+    {' '}<Todo>supports visés</Todo>, pour le monde entier et pour la durée légale des droits. Tant que le prix n’est pas entièrement payé,
+    Atousy reste titulaire de tous les droits.
+  </p>
+  <p>
+    <Todo label="À VALIDER">formalisme de la cession (art. L131-3 du Code de la propriété intellectuelle) ; remise ou non des fichiers sources</Todo>
+  </p>
+  <p>
+    <strong>Éléments de tiers exclus :</strong> les polices de caractères, photos de banques d’images, extensions et bibliothèques
+    logicielles restent soumises à leurs propres licences. Atousy ne les cède pas. Atousy conserve aussi ses méthodes, ses outils et ses
+    éléments génériques réutilisables.
+  </p>
+  <p>
+    <strong>Contenus du client :</strong> le client garantit détenir les droits sur les contenus qu’il fournit (textes, logo, photos,
+    marques) et pouvoir les utiliser sur son site. Il garantit Atousy contre toute réclamation de tiers à ce sujet.
+  </p>
+  <p>
+    <strong>Mention et références :</strong> sauf refus écrit du client, Atousy peut indiquer « Réalisé par Atousy » en pied de page du
+    site, avec un lien, et présenter le site en ligne parmi ses références (portfolio).
+  </p>
+
+  <h2 id="responsabilite">13. Limitation de responsabilité</h2>
+  <div class="legal-callout">
+    <p>
+      <strong>
+        La responsabilité d’Atousy ne peut être engagée qu’en cas de faute prouvée. Elle est limitée aux dommages directs, et à un montant
+        total égal au prix payé par le client au titre du devis concerné.
+      </strong>
+    </p>
+    <p>
+      Atousy ne répond pas des dommages indirects, comme une perte de chiffre d’affaires ou de clientèle, ni des conséquences des contenus
+      fournis par le client, ni des défaillances des hébergeurs, des registraires de noms de domaine et des services tiers.
+    </p>
+    <p>
+      <strong>
+        Ces limitations ne s’appliquent jamais en cas de faute lourde (faute grave) ou de dol, ni dans les cas où la loi interdit de limiter
+        la responsabilité.
+      </strong>
+    </p>
+  </div>
+
+  <h2 id="resiliation">14. Résiliation</h2>
+  <p>
+    <strong>Par le client :</strong> le client peut mettre fin à la prestation à tout moment, par écrit. Il paie alors les travaux réalisés
+    jusqu’à cette date <Todo>et, le cas échéant, une indemnité modérée, par exemple un pourcentage du solde</Todo>.
+  </p>
+  <p>
+    <strong>Pour manquement :</strong> en cas de manquement grave de l’une des parties, par exemple un défaut de paiement, l’autre partie
+    peut résilier le contrat par écrit, <Todo>délai, par exemple 15 jours</Todo> après une mise en demeure restée sans effet.
+  </p>
+  <p>En cas de résiliation, seuls les éléments payés sont cédés au client (article 12).</p>
+
+  <h2 id="donnees">15. Données personnelles</h2>
+  <p>
+    Les données des interlocuteurs du client sont traitées comme décrit dans la
+    {' '}<a href="/confidentialite/">politique de confidentialité</a>.
+  </p>
+  <p>
+    Si Atousy héberge ou maintient le site du client, ou accède aux données que ce site collecte (par exemple les demandes reçues par son
+    formulaire), elle agit comme sous-traitant du client au sens du RGPD et de la nLPD. Un accord de sous-traitance est alors annexé au
+    contrat. <Todo>modèle d’accord de sous-traitance</Todo>
+  </p>
+
+  <h2 id="droit">16. Droit applicable et tribunal compétent</h2>
+  <p>Le contrat est régi par le droit français, à l’exclusion de ses règles de conflit de lois.</p>
+  <p>
+    Les parties cherchent d’abord une solution amiable. Tout litige relatif au contrat relève de la compétence exclusive des tribunaux de
+    {' '}<Todo>ville</Todo>, France. Pour un client établi en Suisse, Atousy peut toutefois agir devant les tribunaux de son siège ou de son
+    domicile en Suisse. Cette clause est reprise dans le devis.
+  </p>
+
+  <h2 id="signature">17. Acceptation et signature</h2>
+  <p>
+    Le client accepte le devis et les présentes CGV par sa signature, ou par un écrit portant la mention « Bon pour accord » (un e-mail
+    suffit). Le devis indique : « Le client déclare avoir reçu, lu et accepté les conditions générales de vente, version
+    {' '}<Todo>JJ/MM/AAAA</Todo>. »
+  </p>
+  <p>
+    Pour un client établi en Suisse, le devis est de préférence signé à la main (chaque partie garde un original papier) ou par une
+    signature électronique qualifiée reconnue en Suisse (SCSE/ZertES).
+  </p>
+  <p>
+    Voir aussi les <a href="/mentions-legales/">mentions légales</a> et la
+    {' '}<a href="/confidentialite/">politique de confidentialité</a>.
+  </p>
+</LegalPage>

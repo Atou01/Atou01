@@ -1,8 +1,11 @@
 ---
 // Section de page intérieure : filet fin en haut, H2 à gauche et contenu à droite
 // (layout « split ») ou H2 au-dessus du contenu (layout « stack »). Ton marine possible.
+// L'id va sur la section (ancre) ; le H2 reçoit « id-title », pour ne jamais doubler
+// un id de la page (ex. « contenu », réservé au <main>).
 interface Props {
   id: string;
+  /** Un « \n » force un retour à la ligne dans le H2. */
   title: string;
   /** Phrase d'introduction sous le H2. */
   lead?: string;
@@ -10,12 +13,16 @@ interface Props {
   layout?: 'split' | 'stack';
 }
 const { id, title, lead, tone = 'ivory', layout = 'split' } = Astro.props;
+const titleId = `${id}-title`;
+const titleLines = title.split('\n');
 ---
 
-<section class:list={['ps', `ps--${tone}`, `ps--${layout}`, { 'ip-dark': tone === 'marine' }]} aria-labelledby={id}>
+<section id={id} class:list={['ps', `ps--${tone}`, `ps--${layout}`, { 'ip-dark': tone === 'marine' }]} aria-labelledby={titleId}>
   <div class="container ps__inner">
     <div class="ps__head">
-      <h2 id={id}>{title}</h2>
+      <h2 id={titleId} class:list={{ 'is-broken': titleLines.length > 1 }}>
+        {titleLines.map((line, i) => (i > 0 ? <><br />{line}</> : line))}
+      </h2>
       {lead && <p class="ps__lead">{lead}</p>}
       <slot name="head" />
     </div>
@@ -40,6 +47,10 @@ const { id, title, lead, tone = 'ivory', layout = 'split' } = Astro.props;
   h2 {
     max-width: 14ch;
     font-size: var(--fs-h2-sm);
+  }
+
+  h2.is-broken {
+    max-width: none;
   }
 
   .ps__lead {

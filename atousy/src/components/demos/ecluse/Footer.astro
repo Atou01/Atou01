@@ -1,5 +1,5 @@
 ---
-// Pied de page Écluse : marque, navigation, services, encart « dans un vrai site », mention fictive.
+// Pied de page Écluse : marque, navigation, services, encart « dans un vrai site », mention fictive.
 import Logo from './Logo.astro';
 import RealSiteNote from './RealSiteNote.astro';
 import { ecluseNav, ecluseServices } from './nav';
@@ -123,6 +123,9 @@ import { ecluseNav, ecluseServices } from './nav';
   }
 
   .bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
     color: var(--ec-slate);
     font-weight: 650;
     text-decoration-color: var(--ec-brass);
@@ -140,7 +143,8 @@ import { ecluseNav, ecluseServices } from './nav';
     }
   }
 
-  @media (max-width: 32em) {
+  /* Les deux listes de liens restent côte à côte sur mobile ; une seule colonne sur très petit écran */
+  @media (max-width: 22em) {
     .top {
       grid-template-columns: 1fr;
     }

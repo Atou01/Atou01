@@ -23,6 +23,8 @@ const TIMEOUT_MS = 15_000;
 // Le serveur refuse un envoi moins de 3 s après le chargement (anti-robot) : on attend au besoin.
 const MIN_FILL_MS = 3_300;
 const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=atousyTurnstileReady';
+// Au-delà, un script Turnstile toujours absent est considéré comme bloqué (réseau, bloqueur).
+const TURNSTILE_LOAD_MS = 10_000;
 
 type Outcome =
   | { kind: 'success' }
@@ -284,10 +286,24 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
   const slot = form.querySelector<HTMLElement>('[data-turnstile]');
   const siteKey = slot?.dataset.sitekey ?? '';
   let widgetId: string | undefined;
+  // Script bloqué, en échec, trop long à charger, ou rendu impossible.
   let turnstileFailed = false;
+  // Le widget signale une erreur (réseau, défi échoué) : il réessaie seul, l'envoi attend.
+  let widgetError = false;
+
+  const isCaptchaAlert = () => alertKind === 'captchaPending' || alertKind === 'captchaUnavailable' || alertKind === 'captchaError';
+  // Un message « patientez » déjà affiché est remplacé par la vraie cause dès qu'elle est connue.
+  const upgradePending = (kind: 'captchaUnavailable' | 'captchaError') => {
+    if (alertKind === 'captchaPending') showAlert(kind, NOTICE[kind]);
+  };
+  const markUnavailable = () => {
+    turnstileFailed = true;
+    upgradePending('captchaUnavailable');
+  };
 
   function renderTurnstile() {
     if (!slot || !window.turnstile || widgetId !== undefined) return;
+    turnstileFailed = false; // script arrivé, même en retard
     try {
       widgetId =
         window.turnstile.render(slot, {
@@ -296,12 +312,20 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
           language: 'fr',
           theme: 'light',
           size: 'flexible',
+          // Jeton expiré ou défi non résolu à temps : Turnstile en redemande un seul
+          // (refresh-expired et refresh-timeout valent « auto » par défaut).
           callback: () => {
-            if (alertKind === 'captchaPending' || alertKind === 'captchaUnavailable') clearAlert();
+            widgetError = false;
+            if (isCaptchaAlert()) clearAlert();
+          },
+          'error-callback': () => {
+            widgetError = true;
+            upgradePending('captchaError');
+            return false; // valeur fausse : Turnstile garde sa nouvelle tentative automatique
           },
         }) ?? undefined;
     } catch {
-      turnstileFailed = true;
+      markUnavailable();
     }
   }
 
@@ -313,10 +337,11 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
       script.src = TURNSTILE_SRC;
       script.async = true;
       script.defer = true;
-      script.addEventListener('error', () => {
-        turnstileFailed = true;
-      });
+      script.addEventListener('error', markUnavailable);
       document.head.append(script);
+      window.setTimeout(() => {
+        if (!window.turnstile) markUnavailable();
+      }, TURNSTILE_LOAD_MS);
     }
   }
 
@@ -423,15 +448,10 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
     }
     showFieldErrors({});
 
-    if (siteKey) {
-      if (turnstileFailed || !window.turnstile) {
-        showAlert(turnstileFailed ? 'captchaUnavailable' : 'captchaPending', turnstileFailed ? NOTICE.captchaUnavailable : NOTICE.captchaPending);
-        return;
-      }
-      if (!turnstileToken()) {
-        showAlert('captchaPending', NOTICE.captchaPending);
-        return;
-      }
+    if (siteKey && !turnstileToken()) {
+      const kind = turnstileFailed ? 'captchaUnavailable' : widgetError ? 'captchaError' : 'captchaPending';
+      showAlert(kind, NOTICE[kind]);
+      return;
     }
 
     setSending(true);
@@ -465,6 +485,11 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
         showAlert('tooLarge', NOTICE.tooLarge);
         return;
       case 'captcha':
+        if (!siteKey) {
+          // Page construite sans clé de site : aucun widget à refaire, le formulaire n'est pas en service.
+          showAlert('notConfigured', NOTICE.notConfigured, 'info');
+          return;
+        }
         resetTurnstile();
         showAlert('captcha', NOTICE.captcha);
         return;
@@ -512,4 +537,10 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
   });
 
   window.addEventListener('pagehide', saveDraft);
+  // Retour arrière : le navigateur restaure la saisie après l'exécution de ce script, ou ressort
+  // la page de son cache. Le type de projet et le compteur sont alors resynchronisés.
+  window.addEventListener('pageshow', () => {
+    syncType();
+    updateCounters();
+  });
 }

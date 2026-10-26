@@ -2,9 +2,8 @@
 // Partagés entre le rendu (DevisForm.astro) et le script client (src/scripts/devis-form.ts).
 
 /**
- * Adresse de contact affichée dans les messages d'erreur.
- * À activer quand la boîte est testée de bout en bout (envoi et réception) :
- * tant qu'elle vaut '', aucune adresse n'est publiée.
+ * Adresse de contact affichée dans les messages d'erreur (décision du fondateur).
+ * Si elle vaut '', les phrases qui la citent ne sont pas affichées.
  */
 export const CONTACT_EMAIL = 'contact@atousy.com';
 
@@ -43,6 +42,9 @@ export const NOTICE = {
   captchaPending: {
     text: "La vérification anti-spam n'est pas encore terminée. Patientez un instant ou terminez-la, puis envoyez votre demande.",
   },
+  captchaError: {
+    text: "La vérification anti-spam a rencontré une erreur et réessaie automatiquement. Patientez un instant ; si elle reste bloquée, rechargez la page : vos réponses seront conservées.",
+  },
   captchaUnavailable: {
     text: "La vérification anti-spam n'a pas pu se charger. Vérifiez votre connexion ou votre bloqueur de contenus, puis rechargez la page : vos réponses seront conservées.",
   },
@@ -79,8 +81,8 @@ export const SUCCESS = {
   text: 'Nous revenons vers vous par e-mail. Pensez à vérifier vos courriers indésirables si vous ne voyez rien arriver.',
 };
 
-/** Sans JavaScript : la vérification anti-spam ne peut pas s'afficher. */
+/** Sans JavaScript : la vérification anti-spam ne peut pas s'afficher, le bouton d'envoi est masqué. */
 export const NOJS = {
-  text: "Ce formulaire a besoin de JavaScript pour sa vérification anti-spam.",
-  contact: 'Vous pouvez aussi nous écrire à {email}.',
+  text: "Ce formulaire a besoin de JavaScript pour sa vérification anti-spam : sans JavaScript, il ne peut pas être envoyé.",
+  contact: 'Écrivez-nous directement à {email}.',
 };

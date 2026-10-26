@@ -2,13 +2,19 @@
 // Encart « Et ensuite ? » : ce qui se passe après l'envoi (contenus/devis.md).
 import Icon from '../Icon.astro';
 
-const steps = [
+type Step = { title: string; text?: string; link?: { href: string; label: string; after: string } };
+
+const steps: Step[] = [
   { title: 'Nous lisons votre demande.' },
   {
     title: 'Nous revenons vers vous par e-mail',
     text: 'pour préciser votre besoin. Pour une refonte, nous examinons votre site actuel.',
   },
-  { title: 'Vous recevez un devis clair et détaillé.' },
+  {
+    title: 'Vous recevez un devis clair et détaillé.',
+    text: 'Nos',
+    link: { href: '/cgv/', label: 'conditions générales de vente', after: 'y sont jointes.' },
+  },
 ];
 ---
 
@@ -22,6 +28,7 @@ const steps = [
           <p>
             <strong>{step.title}</strong>
             {step.text && ` ${step.text}`}
+            {step.link && <>{' '}<a href={step.link.href}>{step.link.label}</a>{` ${step.link.after}`}</>}
           </p>
         </li>
       ))
@@ -77,6 +84,17 @@ const steps = [
   strong {
     font-weight: 650;
     color: var(--paper);
+  }
+
+  .next__steps a {
+    color: var(--paper);
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  .next__steps a:hover {
+    text-decoration-thickness: 3px;
   }
 
   .next__note {

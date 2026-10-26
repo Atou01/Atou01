@@ -1,0 +1,601 @@
+---
+// Démonstration fictive « Écluse » (plombier-chauffagiste) — page Contact.
+// Formulaire volontairement désactivé (démonstration) : aucun envoi, aucun script.
+import EcluseLayout from '../../../../components/demos/ecluse/EcluseLayout.astro';
+import PageHead from '../../../../components/demos/ecluse/PageHead.astro';
+import RealSiteNote from '../../../../components/demos/ecluse/RealSiteNote.astro';
+import EIcon, { type EIconName } from '../../../../components/demos/ecluse/EIcon.astro';
+
+const topics: { id: string; label: string; icon: EIconName }[] = [
+  { id: 'depannage', label: 'Dépannage', icon: 'wrench' },
+  { id: 'salle-de-bain', label: 'Salle de bain', icon: 'shower' },
+  { id: 'chauffage', label: 'Chauffage & chaudière', icon: 'flame' },
+  { id: 'pompe-a-chaleur', label: 'Pompe à chaleur', icon: 'heatpump' },
+  { id: 'entretien', label: 'Entretien', icon: 'calendar' },
+  { id: 'autre', label: 'Autre demande', icon: 'chat' },
+];
+
+const helpful = [
+  'Une photo de la fuite, de l’appareil ou de la pièce',
+  'La plaque signalétique de l’appareil (marque, modèle)',
+  'Le type de logement et l’accès (étage, stationnement)',
+  'Vos disponibilités pour un passage',
+];
+
+const next = [
+  { title: 'Un premier échange', text: 'Nous revenons vers vous pour préciser votre besoin.' },
+  { title: 'Un diagnostic sur place', text: 'Nous regardons l’installation avant de proposer quoi que ce soit.' },
+  { title: 'Un devis expliqué', text: 'Détaillé poste par poste, avec les options possibles.' },
+];
+---
+
+<EcluseLayout
+  title="Contact — Écluse, démonstration fictive | Atousy"
+  description="Contacter Écluse, plombier-chauffagiste fictif : page de contact de démonstration réalisée par Atousy. Formulaire désactivé."
+  current="contact"
+>
+  <PageHead
+    crumb="Contact"
+    title="Parlons de votre besoin."
+    lead="Une fuite, un projet de salle de bain, une chaudière à remplacer ou un entretien à prévoir : décrivez la situation, nous revenons vers vous pour en parler."
+  >
+    <Fragment slot="aside">
+      <div class="urgent">
+        <p class="urgent__title">
+          <span class="urgent__icon" aria-hidden="true"><EIcon name="drop" /></span>
+          Une fuite importante ?
+        </p>
+        <p>Coupez l’arrivée d’eau générale, puis l’électricité si l’eau approche d’une prise ou d’un appareil.</p>
+        <RealSiteNote>votre numéro de dépannage, cliquable sur mobile, et vos horaires d’intervention.</RealSiteNote>
+      </div>
+    </Fragment>
+  </PageHead>
+
+  <section class="body" aria-label="Formulaire et informations de contact">
+    <div class="ec-container body__grid">
+      <!-- Formulaire (désactivé) -->
+      <div class="card">
+        <h2 id="form-title" class="card__title">Votre demande</h2>
+        <p id="form-note" class="disabled-note" role="note">
+          <span class="disabled-note__icon" aria-hidden="true"><EIcon name="lock" /></span>
+          <span><strong>Formulaire désactivé :</strong> ceci est une démonstration.</span>
+        </p>
+
+        <form class="form" aria-labelledby="form-title" aria-describedby="form-note">
+          <fieldset class="form__set" disabled>
+            <legend class="ec-visually-hidden">Votre demande et vos coordonnées</legend>
+
+            <fieldset class="topics">
+              <legend class="label">Votre demande concerne</legend>
+              <div class="topics__grid">
+                {
+                  topics.map((t, i) => (
+                    <div class="topic">
+                      <input id={`ec-topic-${t.id}`} type="radio" name="topic" value={t.id} checked={i === 0} disabled />
+                      <label for={`ec-topic-${t.id}`}>
+                        <EIcon name={t.icon} />
+                        <span>{t.label}</span>
+                      </label>
+                    </div>
+                  ))
+                }
+              </div>
+            </fieldset>
+
+            <div class="row">
+              <div class="field">
+                <label class="label" for="ec-name">Nom et prénom</label>
+                <input id="ec-name" name="name" type="text" autocomplete="name" disabled />
+              </div>
+              <div class="field">
+                <label class="label" for="ec-email">E-mail</label>
+                <input id="ec-email" name="email" type="email" autocomplete="email" disabled />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="label" for="ec-phone">Téléphone <span class="opt">(facultatif)</span></label>
+                <input id="ec-phone" name="phone" type="tel" autocomplete="tel" disabled />
+              </div>
+              <div class="field">
+                <label class="label" for="ec-town">Commune d’intervention</label>
+                <input id="ec-town" name="town" type="text" autocomplete="address-level2" disabled />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="label" for="ec-home">Type de logement</label>
+                <div class="select">
+                  <select id="ec-home" name="home" disabled>
+                    <option>Maison</option>
+                    <option>Appartement</option>
+                    <option>Local professionnel</option>
+                  </select>
+                  <EIcon name="chevron" class="select__icon" />
+                </div>
+              </div>
+              <div class="field">
+                <label class="label" for="ec-device">Appareil concerné <span class="opt">(facultatif)</span></label>
+                <input id="ec-device" name="device" type="text" placeholder="Marque, modèle, âge approximatif" disabled />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="ec-message">Décrivez la situation</label>
+              <textarea id="ec-message" name="message" rows="6" disabled></textarea>
+            </div>
+            <div class="field">
+              <label class="label" for="ec-files">Photos <span class="opt">(facultatif)</span></label>
+              <div class="drop">
+                <input id="ec-files" class="drop__input" name="files" type="file" accept="image/*" multiple disabled />
+                <span class="drop__ui" aria-hidden="true">
+                  <span class="drop__icon"><EIcon name="upload" /></span>
+                  <span><strong>Ajouter des photos</strong> — la fuite, l’appareil ou sa plaque signalétique</span>
+                </span>
+              </div>
+            </div>
+            <div class="check">
+              <input id="ec-consent" name="consent" type="checkbox" disabled />
+              <label for="ec-consent">J’accepte que ces informations soient utilisées pour répondre à ma demande.</label>
+            </div>
+            <button class="ec-btn submit" type="submit" disabled>
+              Envoyer la demande
+              <span class="ec-btn__icon"><EIcon name="arrow" /></span>
+            </button>
+          </fieldset>
+        </form>
+      </div>
+
+      <!-- Informations -->
+      <div class="aside">
+        <div class="block">
+          <h2 class="block__title">Pour une réponse plus précise</h2>
+          <ul class="ec-checks">
+            {helpful.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+
+        <div class="block">
+          <h2 class="block__title">Et ensuite ?</h2>
+          <ol class="next">
+            {
+              next.map((n, i) => (
+                <li>
+                  <span class="next__num" aria-hidden="true">{i + 1}</span>
+                  <span>
+                    <strong>{n.title}</strong>
+                    {n.text}
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="block">
+          <h2 class="block__title">Nous trouver</h2>
+          <RealSiteNote>
+            vos coordonnées complètes (téléphone, e-mail, adresse), vos horaires, votre zone d’intervention et un plan
+            d’accès.
+          </RealSiteNote>
+        </div>
+      </div>
+    </div>
+  </section>
+</EcluseLayout>
+
+<style>
+  /* ——— Encart urgence (dans l'en-tête) ——— */
+  .urgent {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 30rem;
+    margin-left: auto;
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+  }
+
+  .urgent__title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--ec-ink);
+    font-size: 1.125rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  .urgent__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--ec-slate);
+    color: var(--ec-brass-light);
+  }
+
+  .urgent__icon :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .urgent > p:not(.urgent__title) {
+    font-size: 0.9688rem;
+  }
+
+  /* ——— Corps ——— */
+  .body {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(4rem, 8vw, 6.5rem);
+  }
+
+  .body__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 3rem clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .card {
+    padding: clamp(1.25rem, 4vw, 2.75rem);
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius-lg);
+    box-shadow: var(--ec-shadow);
+  }
+
+  .card__title {
+    font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+  }
+
+  .disabled-note {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.1rem;
+    padding: 0.75rem 1rem;
+    background: var(--ec-brass-soft);
+    border: 1px solid rgb(130 98 43 / 0.25);
+    border-radius: var(--ec-radius-sm);
+    color: var(--ec-ink);
+    font-size: 0.9688rem;
+    line-height: 1.45;
+  }
+
+  .disabled-note__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--ec-white);
+    color: var(--ec-brass-ink);
+  }
+
+  .disabled-note__icon :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .disabled-note strong {
+    font-weight: 750;
+  }
+
+  .form {
+    margin-top: 1.75rem;
+  }
+
+  fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .form__set {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .label {
+    padding: 0;
+    color: var(--ec-ink);
+    font-size: 0.9375rem;
+    font-weight: 650;
+  }
+
+  .opt {
+    font-weight: 450;
+    color: var(--ec-ink-3);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3.1rem;
+    padding: 0.75rem 0.95rem;
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line-strong);
+    border-radius: var(--ec-radius-sm);
+    color: var(--ec-ink);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  ::placeholder {
+    color: var(--ec-ink-3);
+    opacity: 1;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+
+  fieldset:disabled input:not([type='file']),
+  fieldset:disabled select,
+  fieldset:disabled textarea {
+    cursor: not-allowed;
+    opacity: 1;
+  }
+
+  /* Choix du sujet : pastilles radio */
+  .topics .label {
+    display: block;
+    margin-bottom: 0.65rem;
+  }
+
+  .topics__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .topic {
+    position: relative;
+  }
+
+  .topic input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .topic label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 3.1rem;
+    height: 100%;
+    padding: 0.6rem 0.85rem;
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line-strong);
+    border-radius: var(--ec-radius-sm);
+    color: var(--ec-ink);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.25;
+    cursor: not-allowed;
+  }
+
+  .topic label :global(svg) {
+    flex: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    color: var(--ec-slate);
+  }
+
+  .topic input:checked + label {
+    background: var(--ec-mist);
+    border-color: var(--ec-slate);
+    box-shadow: inset 0 0 0 1px var(--ec-slate);
+  }
+
+  .select {
+    position: relative;
+  }
+
+  select {
+    appearance: none;
+    padding-right: 2.5rem;
+  }
+
+  .select :global(.select__icon) {
+    position: absolute;
+    right: 0.9rem;
+    top: 50%;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: -0.55rem;
+    color: var(--ec-ink-2);
+    pointer-events: none;
+  }
+
+  /* Zone de dépôt : le champ natif (désactivé) est recouvert d'un habillage en français */
+  .drop {
+    position: relative;
+    background: var(--ec-mist);
+    border: 1.5px dashed var(--ec-line-strong);
+    border-radius: var(--ec-radius-sm);
+  }
+
+  .drop .drop__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: not-allowed;
+  }
+
+  .drop__ui {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 0.95rem;
+    color: var(--ec-ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .drop__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--ec-white);
+    color: var(--ec-slate);
+  }
+
+  .drop__icon :global(svg) {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .drop__ui strong {
+    font-weight: 650;
+    color: var(--ec-ink);
+  }
+
+  .check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .check input {
+    flex: none;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin: 0.12rem 0 0;
+    accent-color: var(--ec-slate);
+  }
+
+  .check label {
+    color: var(--ec-ink-2);
+    font-size: 0.9688rem;
+  }
+
+  .submit {
+    justify-self: start;
+    margin-top: 0.5rem;
+  }
+
+  .submit:disabled {
+    cursor: not-allowed;
+    background: #5f6f79;
+    border-color: #5f6f79;
+    color: var(--ec-white);
+  }
+
+  .submit:disabled .ec-btn__icon {
+    background: var(--ec-mist-2);
+    transform: none;
+  }
+
+  /* ——— Informations ——— */
+  /* Colonne d'informations : reste en vue pendant le défilement du formulaire (grand écran) */
+  .aside {
+    position: sticky;
+    top: 7rem;
+    display: grid;
+    gap: clamp(2rem, 4vw, 2.75rem);
+    padding-top: 0.5rem;
+  }
+
+  .block__title {
+    margin-bottom: 1.1rem;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+  }
+
+  .block .ec-checks {
+    color: var(--ec-ink);
+    font-size: 0.9844rem;
+  }
+
+  .next {
+    display: grid;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .next li {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.85rem;
+    font-size: 0.9688rem;
+  }
+
+  .next strong {
+    display: block;
+    color: var(--ec-ink);
+    font-weight: 700;
+  }
+
+  .next__num {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 2px solid var(--ec-brass);
+    color: var(--ec-ink);
+    font-size: 0.9375rem;
+    font-weight: 800;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 64em) {
+    .topics__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 60em) {
+    .body__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .aside {
+      position: static;
+    }
+
+    .urgent {
+      max-width: none;
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 36em) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+
+    .submit {
+      justify-self: stretch;
+      justify-content: space-between;
+    }
+  }
+</style>

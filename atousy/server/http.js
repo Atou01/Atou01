@@ -20,6 +20,14 @@ export function json(status, body, headers = {}) {
   });
 }
 
+/**
+ * Hôte local (poste de développement) : localhost, 127.0.0.1 ou [::1].
+ * @param {string} hostname valeur de `URL.hostname`
+ */
+export function isLoopbackHostname(hostname) {
+  return ['localhost', '127.0.0.1', '[::1]'].includes(String(hostname).toLowerCase());
+}
+
 export class BodyTooLargeError extends Error {
   constructor() {
     super('body_too_large');

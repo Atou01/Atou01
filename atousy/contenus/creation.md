@@ -49,7 +49,7 @@ Une mise en page soignée, des photos légères, une lecture confortable.
 
 ## Le tarif
 
-**1 490 €** (France) · **1 990 CHF** (Suisse) — le site affiche le tarif du pays choisi.
+**1 490 €** (Europe · EUR) · **1 990 CHF** (Suisse · CHF) — le site affiche le tarif du pays choisi.
 
 Tarif indicatif · Taxes et montant final à confirmer au devis
 

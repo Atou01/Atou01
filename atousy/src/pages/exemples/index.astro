@@ -187,7 +187,8 @@ const cards = [demos.rivage, demos.faitage];
   }
 
   .demo__list a:hover {
-    color: var(--coral-text);
+    /* Le texte garde sa couleur ; le soulignement passe du corail à la couleur du texte. */
+    text-decoration-color: currentColor;
   }
 
   /* Boutons alignés en bas des deux cartes */

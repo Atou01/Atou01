@@ -1,11 +1,13 @@
 ---
 // Formulaire de demande de devis (POST /api/devis).
-// Amélioration progressive : sans JavaScript, le formulaire s'envoie tel quel avec la
-// validation native du navigateur ; avec JavaScript (src/scripts/devis-form.ts), envoi
-// en arrière-plan, messages en français à côté des champs, brouillon conservé pendant
-// la session, et confirmation affichée UNIQUEMENT après une réponse 200 {"ok":true}.
+// Avec JavaScript (src/scripts/devis-form.ts) : envoi en arrière-plan, messages en français
+// à côté des champs, brouillon conservé pendant la session, et confirmation affichée
+// UNIQUEMENT après une réponse 200 {"ok":true}.
+// Sans JavaScript, l'envoi ne peut pas aboutir (le serveur exige le jeton Turnstile) :
+// un avis s'affiche en tête du formulaire, avec l'adresse de contact, et le bouton d'envoi est masqué.
 import './devis-form.css';
 import Icon from '../Icon.astro';
+import Todo from '../pages/Todo.astro';
 import Field from './Field.astro';
 import { CONTACT_EMAIL, NOJS, SUCCESS } from './messages';
 
@@ -13,11 +15,17 @@ import { CONTACT_EMAIL, NOJS, SUCCESS } from './messages';
 const siteKey = String(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '').trim();
 const nojsContact = CONTACT_EMAIL ? NOJS.contact.replace('{email}', CONTACT_EMAIL) : '';
 
-const oneLine = { type: 'text', autocomplete: 'off' } as const;
+// Pas d'autocomplete="off" : il empêcherait le navigateur de restaurer la saisie au retour arrière.
+const oneLine = { type: 'text' } as const;
 ---
 
 <div class="dv" data-devis>
   <form class="dv-form" action="/api/devis" method="post" accept-charset="utf-8" data-devis-form>
+    <p class="dv-nojs nojs-only">
+      {NOJS.text}
+      {nojsContact && <>{' '}<a href={`mailto:${CONTACT_EMAIL}`}>{nojsContact}</a></>}
+    </p>
+
     <p class="dv-required">Tous les champs sont obligatoires, sauf ceux marqués « facultatif ».</p>
 
     <div class="dv-summary-region" role="alert" data-summary></div>
@@ -130,25 +138,28 @@ const oneLine = { type: 'text', autocomplete: 'off' } as const;
           </div>
         )
       }
-      <p class="dv-nojs nojs-only">
-        {NOJS.text}
-        {nojsContact && <>{' '}<a href={`mailto:${CONTACT_EMAIL}`}>{nojsContact}</a></>}
-      </p>
-
       <div class="dv-alert-region" role="alert" data-form-alert></div>
 
       <div class="dv-actions">
-        <button type="submit" class="btn btn--coral dv-submit" data-submit>
+        <button type="submit" class="btn btn--coral dv-submit js-only" data-submit>
           <span class="dv-spinner" aria-hidden="true"></span>
           <span data-submit-label>Envoyer ma demande</span>
           <Icon name="arrow" class="dv-submit__arrow" />
         </button>
-        {!siteKey && <p class="dv-unconfigured">Anti-spam non configuré</p>}
+        {/* Repère pour le développement uniquement : jamais affiché sur le site publié. */}
+        {!siteKey && import.meta.env.DEV && <p class="dv-unconfigured">Anti-spam non configuré</p>}
         <p class="dv-status" role="status" data-status></p>
       </div>
 
+      <!-- Information au moment de la collecte (RGPD art. 13, nLPD art. 19) : premier niveau,
+           le détail est dans la politique de confidentialité. -->
       <p class="dv-privacy">
-        Vos informations servent uniquement à répondre à votre demande. Elles ne sont ni vendues ni utilisées pour de la publicité. Pour en savoir plus :{' '}<a href="/confidentialite/">Confidentialité</a>.
+        Les informations de ce formulaire (type de projet, activité, zone d'intervention, site actuel, besoin, nom, e-mail,
+        téléphone facultatif et tarif affiché) sont traitées par Atousy <Todo>raison sociale</Todo>, France, pour répondre à
+        votre demande de devis. Elles ne sont ni vendues ni utilisées pour de la publicité. Destinataires : nos prestataires
+        d'hébergement, d'anti-spam et d'envoi d'e-mails, Cloudflare (États-Unis) et <Todo label="À CONFIRMER">Brevo (France)
+        ou Resend (États-Unis)</Todo>. Durées de conservation et vos droits :{' '}<a href="/confidentialite/">politique de
+        confidentialité</a>.
       </p>
     </div>
   </form>

@@ -1,6 +1,6 @@
 ---
-// Logo Écluse : pictogramme d'écluse (deux niveaux d'eau séparés par une porte) dans un carré arrondi
-// ardoise, + mot-symbole « écluse » en minuscules, Figtree très gras.
+// Logo Écluse : goutte d'eau dont le niveau forme une marche (les deux biefs d'une écluse), dans un
+// carré arrondi ardoise, + mot-symbole « écluse » en minuscules, Figtree très gras.
 interface Props {
   size?: 'md' | 'lg';
 }
@@ -10,8 +10,8 @@ const { size = 'md' } = Astro.props;
 <span class:list={['logo', `logo--${size}`]}>
   <svg class="logo__glyph" viewBox="0 0 28 28" aria-hidden="true" focusable="false">
     <rect x="0.5" y="0.5" width="27" height="27" rx="8" fill="var(--ec-slate)" />
-    <path d="M5 12h8.25v5H23v3.5a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z" fill="var(--ec-brass)" />
-    <path d="M13.25 5.5v18" stroke="#fff" stroke-width="2" stroke-linecap="round" />
+    <path d="M14 4.8c3.5 4.3 6.4 7.8 6.4 11.5a6.4 6.4 0 0 1-12.8 0c0-3.7 2.9-7.2 6.4-11.5z" fill="#fff" />
+    <path d="M7.66 17.1H14v-3.3h6.27c.09.84.13 1.67.13 2.5a6.4 6.4 0 0 1-12.8 0c0-.43.02-.83.06-1.2z" fill="var(--ec-brass)" />
   </svg>
   <span class="logo__word">écluse</span>
 </span>

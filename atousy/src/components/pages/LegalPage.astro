@@ -108,8 +108,13 @@ const { title, description, heading, crumb, lead, toc } = Astro.props;
     text-decoration: none;
   }
 
+  /* Survol : soulignement corail, le texte garde sa couleur (le corail ne contraste
+     pas assez en petit corps). */
   .legal__toc a:hover {
-    color: var(--coral-text);
+    text-decoration: underline;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
   }
 
   /* Texte courant */
@@ -172,7 +177,59 @@ const { title, description, heading, crumb, lead, toc } = Astro.props;
   }
 
   .legal__body :global(a:not(.btn):hover) {
-    color: var(--coral-text);
+    color: var(--ink);
+    text-decoration-thickness: 3px;
+  }
+
+  /* Encadré (clause à mettre en évidence) */
+  .legal__body :global(.legal-callout) {
+    margin-top: 1.25rem;
+    padding: 0.25rem 1.25rem 1.1rem;
+    border-left: 4px solid var(--coral);
+    background: var(--paper);
+  }
+
+  .legal__body :global(.legal-callout p) {
+    color: var(--ink);
+  }
+
+  /* Tableau (prestataires) : empilé en cartes sur petit écran */
+  .legal__body :global(.legal-table) {
+    width: 100%;
+    margin-top: 1.25rem;
+    border-collapse: collapse;
+  }
+
+  .legal__body :global(.legal-table caption) {
+    margin-bottom: 0.6rem;
+    font-size: 0.9375rem;
+    text-align: left;
+    color: var(--ink-2);
+  }
+
+  .legal__body :global(.legal-table th),
+  .legal__body :global(.legal-table td) {
+    padding: 0.8rem 1rem 0.8rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    text-align: left;
+    vertical-align: top;
+    color: var(--ink-2);
+  }
+
+  .legal__body :global(.legal-table thead th) {
+    border-bottom-color: var(--line-strong);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .legal__body :global(.legal-table tbody th) {
+    font-weight: 650;
+    color: var(--ink);
   }
 
   .legal__body :global(code) {
@@ -189,6 +246,47 @@ const { title, description, heading, crumb, lead, toc } = Astro.props;
 
     .legal__toc {
       position: static;
+    }
+  }
+
+  @media (max-width: 40em) {
+    .legal__body :global(.legal-table thead) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .legal__body :global(.legal-table),
+    .legal__body :global(.legal-table caption),
+    .legal__body :global(.legal-table tbody),
+    .legal__body :global(.legal-table tr),
+    .legal__body :global(.legal-table th),
+    .legal__body :global(.legal-table td) {
+      display: block;
+    }
+
+    .legal__body :global(.legal-table tbody) {
+      border-top: 1px solid var(--line-strong);
+    }
+
+    .legal__body :global(.legal-table tr) {
+      padding-block: 0.8rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .legal__body :global(.legal-table tbody th),
+    .legal__body :global(.legal-table td) {
+      padding: 0.2rem 0;
+      border: 0;
+    }
+
+    .legal__body :global(.legal-table td[data-label]::before) {
+      content: attr(data-label) ' : ';
+      font-weight: 650;
+      color: var(--ink);
     }
   }
 </style>

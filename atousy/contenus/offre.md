@@ -85,7 +85,7 @@ Le tarif affiché est indicatif. Le montant final et les taxes applicables sont 
 
 ### Pourquoi deux tarifs ?
 
-Le tarif dépend du marché : en euros pour la France, en francs suisses pour la Suisse. Choisissez votre pays avec le sélecteur.
+Le tarif dépend du marché : en euros pour l’Europe (Europe · EUR), en francs suisses pour la Suisse (Suisse · CHF). Choisissez votre pays avec le sélecteur.
 
 ### Faites-vous aussi les refontes ?
 

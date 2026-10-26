@@ -118,6 +118,8 @@ const starts = [
                         ? '(max-width: 48em) calc(100vw - 2.5rem), (max-width: 80em) 58vw, 45rem'
                         : '(max-width: 48em) calc(100vw - 2.5rem), (max-width: 80em) 42vw, 32rem'
                     }
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    fetchpriority={i === 0 ? 'high' : undefined}
                     style={`object-position: ${p.pos}`}
                   />
                 </div>

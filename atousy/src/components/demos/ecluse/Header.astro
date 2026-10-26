@@ -1,6 +1,6 @@
 ---
-// En-tête Écluse : logo à gauche, navigation en « pilule » segmentée, bouton Contact.
-// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
+// En-tête Écluse : logo à gauche, navigation en « pilule » segmentée, bouton Contact.
+// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
 // Sans JavaScript, la navigation reste visible (liens repliés sous le logo).
 import EIcon from './EIcon.astro';
 import Logo from './Logo.astro';
@@ -15,6 +15,7 @@ const contact = ecluseNav.find((item) => item.key === 'contact')!;
 ---
 
 <header class="header" data-ec-header>
+  <a class="ec-skip" href="#contenu">Aller au contenu</a>
   <div class="bar ec-wide">
     <a class="brand" href="/exemples/ecluse/" aria-label="Écluse, accueil">
       <Logo />
@@ -257,7 +258,7 @@ const contact = ecluseNav.find((item) => item.key === 'contact')!;
       min-height: 4.25rem;
     }
 
-    /* Sans JavaScript : liens visibles, repliés sous le logo, en-tête non collant */
+    /* Sans JavaScript : liens visibles, repliés sous le logo, en-tête non collant */
     .header:not(.is-enhanced) {
       position: relative;
     }
@@ -277,7 +278,7 @@ const contact = ecluseNav.find((item) => item.key === 'contact')!;
       border-radius: var(--ec-radius);
     }
 
-    /* Avec JavaScript : panneau déroulant */
+    /* Avec JavaScript : panneau déroulant */
     .is-enhanced .burger:not([hidden]) {
       display: inline-flex;
     }

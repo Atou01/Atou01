@@ -40,6 +40,16 @@ const MESSAGES = {
 };
 const GENERIC = { title: "Votre demande n'a pas pu être envoyée.", text: BACK };
 
+// Les règles de public/_headers ne s'appliquent pas aux réponses construites par une
+// fonction : cette page porte donc ses propres en-têtes. Elle n'a ni script, ni image,
+// ni police externe : tout le reste est interdit.
+const PAGE_HEADERS = {
+  'Content-Security-Policy':
+    "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+};
+
 /**
  * Transforme la réponse JSON du traitement en page HTML, même code HTTP.
  * @param {Response} jsonResponse
@@ -57,7 +67,9 @@ export async function toHtmlResponse(jsonResponse) {
   let list = '';
   if (body.ok === true) {
     title = 'Demande envoyée. Merci !';
-    text = 'Votre demande de devis a bien été transmise. Nous revenons vers vous rapidement, par e-mail.';
+    // Même texte que la confirmation avec JavaScript (src/components/devis/messages.ts) : aucun délai promis.
+    text =
+      'Votre demande de devis a bien été transmise. Nous revenons vers vous par e-mail. Pensez à vérifier vos courriers indésirables si vous ne voyez rien arriver.';
   } else {
     ({ title, text } = MESSAGES[body.error] ?? GENERIC);
     if (body.error === 'validation' && body.fields && typeof body.fields === 'object') {
@@ -102,5 +114,6 @@ ${body.ok === true ? '<a class="btn btn--main" href="/">Retour à l\'accueil</a>
   const headers = new Headers(jsonResponse.headers);
   headers.set('Content-Type', 'text/html; charset=utf-8');
   headers.set('Cache-Control', 'no-store');
+  for (const [name, value] of Object.entries(PAGE_HEADERS)) headers.set(name, value);
   return new Response(page, { status: jsonResponse.status, headers });
 }

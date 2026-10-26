@@ -11,7 +11,7 @@ const steps = [
   },
   {
     title: 'La livraison',
-    text: 'On met le site en ligne, on vous remet les accès et on corrige les anomalies pendant 30 jours.',
+    text: 'On met le site en ligne, on vous remet les accès et on corrige les anomalies pendant 30 jours, dans le périmètre convenu.',
   },
 ];
 ---
@@ -40,7 +40,7 @@ const steps = [
 
 <style>
   .method {
-    padding-block: clamp(3rem, 4.4vw, 4.75rem) clamp(3rem, 4.4vw, 4.5rem);
+    padding-block: clamp(2.25rem, 3.2vw, 3.5rem);
   }
 
   .method__head {
@@ -75,7 +75,10 @@ const steps = [
     gap: 1rem clamp(1rem, 3vw, 3rem);
   }
 
+  /* Colonne des numéros de largeur fixe : titres et filets alignés d'une étape à l'autre. */
   .method__num {
+    min-width: 1.3em;
+    font-variant-numeric: tabular-nums;
     font-size: clamp(1.5rem, 1.9vw, 1.9rem);
     font-weight: 400;
     line-height: 1.1;

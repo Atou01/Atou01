@@ -65,9 +65,11 @@ const year = new Date().getFullYear();
     font-weight: 500;
   }
 
+  /* Survol : soulignement corail, le texte reste en encre (contraste). */
   .site-footer__nav a:hover,
   .site-footer__legal a:hover {
-    color: var(--coral-text);
+    text-decoration: underline 2px var(--coral);
+    text-underline-offset: 0.3em;
   }
 
   .site-footer__legal {
@@ -96,6 +98,20 @@ const year = new Date().getFullYear();
 
   .site-footer__note {
     margin-left: auto;
+  }
+
+  /* Tablette : logo et pays sur la première ligne, les six liens sur une seule ligne dessous
+     (sinon « Devis » passait seul à la ligne). */
+  @media (min-width: 48em) and (max-width: 62.49em) {
+    nav {
+      order: 3;
+      flex-basis: 100%;
+      justify-content: flex-start;
+    }
+
+    :global(.site-footer__market) {
+      margin-left: auto;
+    }
   }
 
   @media (max-width: 47.99em) {

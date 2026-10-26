@@ -3,7 +3,7 @@
 //   Brevo  : POST https://api.brevo.com/v3/smtp/email   (en-tête api-key)       → 201
 //   Resend : POST https://api.resend.com/emails          (Authorization: Bearer) → 200
 
-import { fetchWithTimeout, readTextCapped } from './http.js';
+import { fetchWithTimeout, readTextCapped, isLoopbackHostname } from './http.js';
 
 export const EMAIL_TIMEOUT_MS = 8000;
 
@@ -37,10 +37,6 @@ export function parseMailbox(raw) {
   const name = m && m[1] ? m[1].trim() : undefined;
   if (!ADDRESS_RE.test(email)) return null;
   return name ? { email, name } : { email };
-}
-
-function isLoopbackBase(url) {
-  return ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
 }
 
 /**
@@ -77,7 +73,7 @@ export function readEmailConfig(env) {
     } catch {
       url = null;
     }
-    if (!url || !/^https?:$/.test(url.protocol) || !isLoopbackBase(url)) problems.push('EMAIL_API_BASE');
+    if (!url || !/^https?:$/.test(url.protocol) || !isLoopbackHostname(url.hostname)) problems.push('EMAIL_API_BASE');
     else base = override.replace(/\/+$/, '');
   }
 
@@ -90,6 +86,9 @@ export function readEmailConfig(env) {
 
 const TYPE_LABEL = { creation: 'Création', refonte: 'Refonte' };
 const MARKET_LABEL = { fr: 'Europe · EUR', ch: 'Suisse · CHF' };
+
+// Le contenu vient d'un formulaire public : rien n'en est vérifié (identité, adresse du site).
+const NOT_VERIFIED = "Informations saisies par le visiteur, non vérifiées : contrôlez l'adresse du site avant de l'ouvrir.";
 
 function truncate(s, n) {
   return s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s;
@@ -125,6 +124,7 @@ export function buildMessage(data, receivedAt = new Date()) {
     '',
     '—',
     `Reçue le ${when}. Répondre à ce message écrit directement au visiteur.`,
+    NOT_VERIFIED,
   ].join('\n');
 
   const cell = 'padding:6px 12px 6px 0;vertical-align:top;';
@@ -137,7 +137,7 @@ ${rows.map(([k, v]) => `<tr><th align="left" style="${cell}white-space:nowrap;">
 </table>
 <h2 style="font-size:16px;margin:20px 0 6px;">Besoin</h2>
 <p style="margin:0;">${escapeHtml(data.besoin).replace(/\n/g, '<br>')}</p>
-<p style="margin-top:24px;color:#6b6b66;font-size:13px;">Reçue le ${escapeHtml(when)}. Répondre à ce message écrit directement au visiteur.</p>
+<p style="margin-top:24px;color:#6b6b66;font-size:13px;">Reçue le ${escapeHtml(when)}. Répondre à ce message écrit directement au visiteur.<br>${escapeHtml(NOT_VERIFIED)}</p>
 </body></html>`;
 
   return { subject, text, html };

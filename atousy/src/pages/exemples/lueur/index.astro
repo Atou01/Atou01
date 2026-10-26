@@ -1,5 +1,5 @@
 ---
-// Démonstration fictive « Lueur » (électricien) — page d'accueil.
+// Démonstration fictive « Lueur » (électricien) — page d'accueil.
 import { Picture } from 'astro:assets';
 import LueurLayout from '../../../components/demos/lueur/LueurLayout.astro';
 import ContactBand from '../../../components/demos/lueur/ContactBand.astro';
@@ -23,7 +23,7 @@ const pledges: { icon: LueurIconName; title: string; text: string }[] = [
   {
     icon: 'sparkle',
     title: 'Un chantier propre',
-    text: 'Sols protégés, poussière aspirée, chutes de gaine ramassées : vous retrouvez votre intérieur comme vous l’avez laissé.',
+    text: 'Sols protégés, poussière aspirée, chutes de gaine ramassées : vous retrouvez votre intérieur comme vous l’avez laissé.',
   },
   {
     icon: 'chat',
@@ -37,19 +37,19 @@ const services: { id: string; icon: LueurIconName; title: string; text: string }
     id: 'renovation',
     icon: 'socket',
     title: 'Rénovation électrique',
-    text: 'Remettre à niveau une installation vieillissante : circuits, prises et points lumineux là où vous en avez besoin.',
+    text: 'Remettre à niveau une installation vieillissante : circuits, prises et points lumineux là où vous en avez besoin.',
   },
   {
     id: 'tableau',
     icon: 'panel',
     title: 'Tableau électrique',
-    text: 'Remplacement ou réorganisation du tableau : protections adaptées, circuits repérés, place pour la suite.',
+    text: 'Remplacement ou réorganisation du tableau : protections adaptées, circuits repérés, place pour la suite.',
   },
   {
     id: 'eclairage',
     icon: 'bulb',
     title: 'Éclairage intérieur et extérieur',
-    text: 'Spots, suspensions, variateurs, éclairage de jardin : une lumière pensée pour chaque pièce et chaque moment.',
+    text: 'Spots, suspensions, variateurs, éclairage de jardin : une lumière pensée pour chaque pièce et chaque moment.',
   },
   {
     id: 'borne',
@@ -88,7 +88,7 @@ const tips = [
 
 <LueurLayout
   title="Lueur — démonstration fictive | Atousy"
-  description="Lueur, électricien fictif : rénovation électrique, tableaux, éclairage intérieur et extérieur, bornes de recharge et domotique. Site de démonstration réalisé par Atousy."
+  description="Lueur, électricien fictif : rénovation électrique, tableaux, éclairage intérieur et extérieur, bornes de recharge et domotique. Site de démonstration réalisé par Atousy."
   current="accueil"
   header="overlay"
 >
@@ -109,7 +109,7 @@ const tips = [
     <div class="lu-container hero__inner">
       <div class="hero__content">
         <h1 id="hero-title">Une maison <span class="hero__glow">bien éclairée</span>, une installation sûre.</h1>
-        <p class="hero__text">Rénovation électrique, tableaux, éclairage et bornes de recharge : un travail propre et expliqué.</p>
+        <p class="hero__text">Rénovation électrique, tableaux, éclairage et bornes de recharge : un travail propre et expliqué.</p>
         <a class="lu-btn" href="/exemples/lueur/prestations/">Découvrir nos prestations <Icon name="arrow" /></a>
       </div>
       <p class="hero__caption lu-caption">Projet type · Séjour rénové, éclairage d’ambiance</p>
@@ -194,7 +194,7 @@ const tips = [
           <div class="lu-frame bento__frame">
             <Picture
               src={lueur2}
-              alt="Tableau électrique neuf encastré dans un mur blanc : rangées de disjoncteurs et câbles soigneusement peignés"
+              alt="Tableau électrique neuf encastré dans un mur blanc : rangées de disjoncteurs et câbles soigneusement peignés"
               formats={['avif', 'webp']}
               widths={[480, 720, 960, 1280]}
               sizes="(max-width: 40em) calc(100vw - 2rem), (max-width: 64em) 92vw, 30vw"
@@ -203,7 +203,7 @@ const tips = [
           <p class="lu-caption">Projet type · Tableau électrique neuf</p>
         </li>
         <li class="bento__cta">
-          <p class="bento__cta-title">Un besoin qui ne rentre dans aucune case ?</p>
+          <p class="bento__cta-title">Un besoin qui ne rentre dans aucune case ?</p>
           <a class="bento__cta-link" href="/exemples/lueur/contact/">Parlons-en <Icon name="arrow" /></a>
         </li>
       </ul>
@@ -215,7 +215,7 @@ const tips = [
     <div class="night__media">
       <Picture
         src={lueur5}
-        alt="Jardin et terrasse d’une maison en pierre à la nuit tombante : olivier éclairé par le bas, bornes lumineuses le long d’une allée dallée et appliques en façade"
+        alt="Jardin et terrasse d’une maison en pierre à la nuit tombante : olivier éclairé par le bas, bornes lumineuses le long d’une allée dallée et appliques en façade"
         formats={['avif', 'webp']}
         widths={[640, 960, 1280, 1600, 2000, 2400]}
         sizes="100vw"
@@ -227,7 +227,7 @@ const tips = [
         <p class="lu-label">Éclairage extérieur</p>
         <h2 id="night-title" class="lu-h2">Quand le jour tombe, le jardin reste accueillant.</h2>
         <p class="night__text">
-          Allées balisées, arbres mis en valeur, terrasse éclairée : une lumière chaude et bien placée, qui guide les pas
+          Allées balisées, arbres mis en valeur, terrasse éclairée : une lumière chaude et bien placée, qui guide les pas
           sans éblouir.
         </p>
         <a class="lu-link" href="/exemples/lueur/prestations/#eclairage">L’éclairage intérieur et extérieur <Icon name="arrow" /></a>
@@ -240,8 +240,14 @@ const tips = [
   <section class="lu-section lu-light method" aria-labelledby="method-title">
     <div class="lu-container">
       <div class="method__head">
-        <p class="lu-label">Méthode</p>
-        <h2 id="method-title" class="lu-h2">Quatre étapes claires, du premier échange à la mise en service.</h2>
+        <div>
+          <p class="lu-label">Méthode</p>
+          <h2 id="method-title" class="lu-h2">Quatre étapes claires, du premier échange à la mise en service.</h2>
+        </div>
+        <p class="lu-lead">
+          À chaque étape, vous savez ce qui va se passer et ce que cela implique pour votre quotidien : pas de jargon,
+          pas de travaux lancés sans votre accord.
+        </p>
       </div>
       <ol class="steps">
         {
@@ -279,7 +285,7 @@ const tips = [
         <p class="lu-label">Réalisations</p>
         <h2 id="works-title" class="lu-h2">Des projets types, pour se projeter.</h2>
         <p class="lu-lead">
-          Une ligne dédiée depuis le tableau, une borne fixée près de la porte, un câble rangé sur son support : la
+          Une ligne dédiée depuis le tableau, une borne fixée près de la porte, un câble rangé sur son support : la
           recharge devient un geste du quotidien.
         </p>
         <ul class="works__list">
@@ -335,7 +341,7 @@ const tips = [
         </ol>
         <p class="tips__note">
           <LueurIcon name="info" />
-          <span>Information générale : pour toute intervention sur votre installation, faites appel à un professionnel.</span>
+          <span>Information générale : pour toute intervention sur votre installation, faites appel à un professionnel.</span>
         </p>
         <a class="lu-link" href="/exemples/lueur/conseils/">Lire les conseils <Icon name="arrow" /></a>
       </div>
@@ -379,7 +385,7 @@ const tips = [
     inset: 0;
     z-index: -1;
     background:
-      linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.8) 30%, rgb(14 19 27 / 0.35) 55%, rgb(14 19 27 / 0) 75%),
+      linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.82) 34%, rgb(14 19 27 / 0.5) 56%, rgb(14 19 27 / 0) 80%),
       linear-gradient(0deg, rgb(14 19 27 / 0.7) 0%, rgb(14 19 27 / 0) 35%);
   }
 
@@ -394,12 +400,12 @@ const tips = [
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 39rem;
+    max-width: 47rem;
     margin-block: auto;
   }
 
   .hero h1 {
-    font-size: clamp(2.75rem, 1.4rem + 4.6vw, 5.6rem);
+    font-size: clamp(2.75rem, 1.5rem + 3.9vw, 5rem);
     font-weight: 340;
     line-height: 1;
     letter-spacing: -0.04em;
@@ -407,6 +413,7 @@ const tips = [
   }
 
   .hero__glow {
+    white-space: nowrap;
     color: var(--lu-amber);
     font-weight: 420;
     text-shadow:
@@ -437,7 +444,7 @@ const tips = [
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
     gap: 3rem clamp(2.5rem, 7vw, 7rem);
-    align-items: end;
+    align-items: center;
   }
 
   .intro__copy .lu-h2 {
@@ -763,7 +770,7 @@ const tips = [
     inset: 0;
     z-index: -1;
     background:
-      linear-gradient(90deg, rgb(14 19 27 / 0.86) 0%, rgb(14 19 27 / 0.62) 35%, rgb(14 19 27 / 0.1) 65%, rgb(14 19 27 / 0) 100%),
+      linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.78) 38%, rgb(14 19 27 / 0.2) 68%, rgb(14 19 27 / 0) 100%),
       linear-gradient(0deg, rgb(14 19 27 / 0.75) 0%, rgb(14 19 27 / 0) 45%);
   }
 
@@ -798,8 +805,19 @@ const tips = [
 
   /* ——— Méthode ——— */
   .method__head {
-    max-width: 46rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: 1.5rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
     margin-bottom: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .method__head .lu-h2 {
+    max-width: 17ch;
+  }
+
+  .method__head .lu-lead {
+    max-width: 30rem;
   }
 
   .steps {
@@ -1065,6 +1083,7 @@ const tips = [
 
   @media (max-width: 60em) {
     .intro__grid,
+    .method__head,
     .services__head,
     .works__grid,
     .tips__grid {
@@ -1082,7 +1101,9 @@ const tips = [
     .tips__media {
       order: 2;
     }
+  }
 
+  @media (max-width: 48em) {
     .pledges {
       grid-template-columns: minmax(0, 1fr);
       gap: 1.75rem;
@@ -1101,6 +1122,20 @@ const tips = [
 
     .pledge p {
       margin-top: 0.3rem;
+    }
+  }
+
+  @media (min-width: 40.01em) and (max-width: 64em) {
+    .hero__scrim {
+      background:
+        linear-gradient(90deg, rgb(14 19 27 / 0.94) 0%, rgb(14 19 27 / 0.84) 45%, rgb(14 19 27 / 0.4) 75%, rgb(14 19 27 / 0.1) 100%),
+        linear-gradient(0deg, rgb(14 19 27 / 0.7) 0%, rgb(14 19 27 / 0) 35%);
+    }
+
+    .night__scrim {
+      background:
+        linear-gradient(90deg, rgb(14 19 27 / 0.94) 0%, rgb(14 19 27 / 0.85) 45%, rgb(14 19 27 / 0.35) 75%, rgb(14 19 27 / 0.1) 100%),
+        linear-gradient(0deg, rgb(14 19 27 / 0.75) 0%, rgb(14 19 27 / 0) 45%);
     }
   }
 

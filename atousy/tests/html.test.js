@@ -32,7 +32,22 @@ describe('POST /api/devis sans JavaScript', () => {
     assert.equal(res.headers.get('cache-control'), 'no-store');
     const html = await res.text();
     assert.match(html, /Demande envoyée/);
+    // Texte validé : aucun délai de réponse promis.
+    assert.match(html, /Nous revenons vers vous par e-mail\. Pensez à vérifier vos courriers indésirables/);
+    assert.doesNotMatch(html, /rapidement/);
     assert.equal(fetch.providerCalls().length, 1);
+  });
+
+  test('la page porte ses propres en-têtes de sécurité (les règles _headers ne s’y appliquent pas)', async () => {
+    const res = await handleDevis(formRequest(validFields(), { headers: NAVIGATE }), {}, opts(createFetch()));
+    const csp = res.headers.get('content-security-policy');
+    assert.match(csp, /default-src 'none'/);
+    assert.match(csp, /frame-ancestors 'none'/);
+    assert.doesNotMatch(csp, /script-src/);
+    assert.equal(res.headers.get('x-frame-options'), 'DENY');
+    assert.equal(res.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+    assert.equal(res.headers.get('x-content-type-options'), 'nosniff');
+    assert.doesNotMatch(await res.text(), /<script/);
   });
 
   test('fournisseur en erreur → jamais de confirmation, 502', async () => {

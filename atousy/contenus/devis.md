@@ -80,7 +80,9 @@ Quelques questions pour comprendre votre besoin. Nous revenons vers vous par e-m
 
 ## Mention de confidentialité (sous le bouton)
 
-Vos informations servent uniquement à répondre à votre demande. Elles ne sont ni vendues ni utilisées pour de la publicité. Pour en savoir plus : [Confidentialité](/confidentialite/).
+Premier niveau d’information au moment de la collecte (docs/obligations-suisse.md § 3.1) :
+
+Les informations de ce formulaire (type de projet, activité, zone d’intervention, site actuel, besoin, nom, e-mail, téléphone facultatif et tarif affiché) sont traitées par Atousy [À COMPLÉTER : raison sociale], France, pour répondre à votre demande de devis. Elles ne sont ni vendues ni utilisées pour de la publicité. Destinataires : nos prestataires d’hébergement, d’anti-spam et d’envoi d’e-mails, Cloudflare (États-Unis) et [À CONFIRMER : Brevo (France) ou Resend (États-Unis)]. Durées de conservation et vos droits : [politique de confidentialité](/confidentialite/).
 
 ## Messages
 
@@ -105,6 +107,14 @@ Vos informations servent uniquement à répondre à votre demande. Elles ne sont
 
 La vérification anti-spam n’a pas abouti. Refaites-la, puis envoyez à nouveau votre demande.
 
+> Si la page a été construite sans clé de site Turnstile (aucun widget affiché), cette réponse affiche le message « Service pas encore configuré » ci-dessous.
+
+### Vérification anti-spam pas encore prête (avant l’envoi) — à valider
+
+- **En cours :** La vérification anti-spam n’est pas encore terminée. Patientez un instant ou terminez-la, puis envoyez votre demande.
+- **Erreur du widget :** La vérification anti-spam a rencontré une erreur et réessaie automatiquement. Patientez un instant ; si elle reste bloquée, rechargez la page : vos réponses seront conservées.
+- **Script bloqué ou absent après 10 secondes :** La vérification anti-spam n’a pas pu se charger. Vérifiez votre connexion ou votre bloqueur de contenus, puis rechargez la page : vos réponses seront conservées.
+
 ### Envoi refusé par l’anti-spam (réponse `spam`)
 
 Votre demande n’a pas pu être envoyée. Patientez quelques secondes, puis réessayez.
@@ -124,9 +134,9 @@ Votre message est trop long. Raccourcissez-le, puis réessayez.
 - **Titre :** Le formulaire n’est pas encore en service.
 - **Texte :** Votre demande n’a pas été envoyée. Écrivez-nous directement à contact@atousy.com.
 
-### JavaScript désactivé
+### JavaScript désactivé (en tête du formulaire, bouton d’envoi masqué)
 
-Ce formulaire a besoin de JavaScript pour sa vérification anti-spam. Vous pouvez aussi nous écrire à contact@atousy.com.
+Ce formulaire a besoin de JavaScript pour sa vérification anti-spam : sans JavaScript, il ne peut pas être envoyé. Écrivez-nous directement à contact@atousy.com.
 
 > Décision du fondateur : l’adresse de contact affichée est contact@atousy.com.
 
@@ -134,7 +144,7 @@ Ce formulaire a besoin de JavaScript pour sa vérification anti-spam. Vous pouve
 
 1. **Nous lisons votre demande.**
 2. **Nous revenons vers vous par e-mail** pour préciser votre besoin. Pour une refonte, nous examinons votre site actuel.
-3. **Vous recevez un devis clair et détaillé.**
+3. **Vous recevez un devis clair et détaillé.** Nos [conditions générales de vente](/cgv/) y sont jointes.
 
 Aucun rendez-vous à réserver : tout commence par ce message.
 
@@ -146,4 +156,4 @@ Aucun rendez-vous à réserver : tout commence par ce message.
 - Pré-sélection du type via `?type=creation` ou `?type=refonte` (liens des pages Création et Refonte), si l’intégration le permet.
 - Aucun délai de réponse promis (pas de « sous 24 h »). Aucun calendrier de rendez-vous.
 - Pas de case à cocher de consentement : le traitement repose sur les mesures précontractuelles prises à la demande du visiteur (article 6.1.b du RGPD, voir Confidentialité). À confirmer par le fondateur.
-- Liens internes : /confidentialite/, /offre/, /methode/.
+- Liens internes : /confidentialite/, /cgv/, /offre/, /methode/.

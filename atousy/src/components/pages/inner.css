@@ -22,8 +22,10 @@
   text-underline-offset: 0.22em;
 }
 
+/* Survol : le texte garde sa couleur (le corail sur fond clair n'atteint pas 4,5:1),
+   le soulignement passe du corail à la couleur du texte. */
 .ip-text a:not(.link-arrow):not(.btn):hover {
-  color: var(--coral-text);
+  text-decoration-color: currentColor;
 }
 
 /* Liste à filets fins (comme la liste de l'offre sur l'accueil) */
@@ -112,4 +114,18 @@
 .ip-note strong {
   font-weight: 650;
   color: var(--ink);
+}
+
+/* Ce qui n'est pas compris, sous un prix (texte : offerExclusions, src/data/site.ts) */
+.ip-exclusions {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.ip-dark .ip-exclusions {
+  border-color: rgb(255 253 250 / 0.16);
+  color: rgb(255 253 250 / 0.7);
 }
