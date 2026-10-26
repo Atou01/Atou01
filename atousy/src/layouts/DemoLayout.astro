@@ -1,0 +1,135 @@
+---
+// Gabarit commun des démonstrations fictives (Rivage, Faîtage).
+// Bandeau « démonstration fictive » non masquable, page exclue des moteurs de recherche.
+import '@fontsource-variable/figtree/wght.css';
+import '@fontsource-variable/newsreader/wght.css';
+
+interface Props {
+  title: string;
+  description: string;
+  brand: 'rivage' | 'faitage';
+}
+const { title, description, brand } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fr" data-demo={brand}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <slot name="head" />
+  </head>
+  <body>
+    <div class="demo-banner" role="note">
+      <p>
+        <strong>Démonstration fictive réalisée par Atousy</strong>
+        <span> — cette entreprise n'existe pas.</span>
+      </p>
+      <a href="/exemples/">Retour à Atousy</a>
+    </div>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img,
+  svg,
+  picture {
+    display: block;
+    max-width: 100%;
+  }
+
+  img {
+    height: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  ol,
+  figure {
+    margin: 0;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+
+<style>
+  .demo-banner {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem 1.25rem;
+    padding: 0.6rem 1.25rem;
+    background: #0f2329;
+    color: #f8f4ee;
+    font-family: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .demo-banner strong {
+    font-weight: 650;
+  }
+
+  .demo-banner a {
+    color: #f8f4ee;
+    font-weight: 600;
+    text-underline-offset: 0.2em;
+  }
+
+  .demo-banner a:hover {
+    color: #f07a5f;
+  }
+
+  .demo-banner a:focus-visible {
+    outline: 2px solid #f07a5f;
+    outline-offset: 3px;
+  }
+</style>

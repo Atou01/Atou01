@@ -1,0 +1,95 @@
+---
+// Prix du marché choisi. Sans JavaScript, les deux prix s'affichent avec leur pays.
+import { markets, priceNote } from '../data/site';
+
+interface Props {
+  /** Thème du fond : marine (bandeau) ou clair. */
+  tone?: 'dark' | 'light';
+}
+const { tone = 'dark' } = Astro.props;
+---
+
+<div class:list={['price', `price--${tone}`]}>
+  <p class="price__amounts">
+    {
+      Object.values(markets).map((m) => (
+        <span class="price__amount" data-price-market={m.id}>
+          <span class="price__country nojs-only">{m.country} : </span>
+          {m.price}
+        </span>
+      ))
+    }
+  </p>
+  <p class="price__note">{priceNote}</p>
+  <p class="price__market js-only">
+    Tarif affiché pour la <strong data-market-country>France</strong>{' '}
+    (<span data-market-status>par défaut</span>).{' '}
+    <button type="button" class="price__switch" data-market-switch>Voir le tarif <span data-market-other>Suisse</span></button>
+  </p>
+</div>
+
+<style>
+  .price__amounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 2rem;
+  }
+
+  .price__amount {
+    font-size: clamp(2.75rem, 5.4vw, 5.25rem);
+    font-weight: 750;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .price__country {
+    font-size: 0.4em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    vertical-align: middle;
+  }
+
+  .price__note {
+    margin-top: 0.85rem;
+    font-size: 0.9375rem;
+  }
+
+  .price__market {
+    margin-top: 0.4rem;
+    font-size: 0.8125rem;
+    opacity: 0.8;
+  }
+
+  .price__market strong {
+    font-weight: 600;
+  }
+
+  .price__switch {
+    margin-left: 0.35rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+
+  .price--dark .price__note {
+    color: rgb(255 253 250 / 0.85);
+  }
+
+  .price--light .price__note,
+  .price--light .price__market {
+    color: var(--ink-2);
+  }
+
+  .price__switch:hover {
+    color: var(--coral);
+  }
+
+  .price--light .price__switch:hover {
+    color: var(--coral-text);
+  }
+</style>

@@ -1,0 +1,107 @@
+---
+// « Vous validez à chaque étape. » — méthode en trois étapes.
+const steps = [
+  {
+    title: 'Le devis',
+    text: 'On échange sur vos besoins et on vous propose un devis clair et détaillé.',
+  },
+  {
+    title: 'La maquette',
+    text: 'Vous découvrez une maquette de votre futur site et validez les contenus ensemble.',
+  },
+  {
+    title: 'La livraison',
+    text: 'On met le site en ligne, on vous remet les accès et on corrige les anomalies pendant 30 jours.',
+  },
+];
+---
+
+<section class="method" aria-labelledby="method-title">
+  <div class="container">
+    <div class="method__head">
+      <h2 id="method-title">Vous validez<br /> à chaque étape.</h2>
+      <p>Un processus simple et collaboratif, du devis à la mise en ligne. Vous gardez le contrôle, on s'occupe du reste.</p>
+    </div>
+    <ol class="method__steps">
+      {
+        steps.map((step, i) => (
+          <li>
+            <span class="method__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .method {
+    padding-block: clamp(3rem, 4.4vw, 4.75rem) clamp(3rem, 4.4vw, 4.5rem);
+  }
+
+  .method__head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 4rem;
+  }
+
+  h2 {
+    font-size: clamp(2.1rem, 3.75vw, 3.75rem);
+  }
+
+  .method__head p {
+    max-width: 30rem;
+    padding-top: 0.4rem;
+    font-size: clamp(1rem, 1.2vw, 1.125rem);
+    color: var(--ink-2);
+  }
+
+  .method__steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.5rem, 4.5vw, 4.5rem);
+    margin-top: clamp(2rem, 2.8vw, 3rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .method__steps li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem clamp(1rem, 3vw, 3rem);
+  }
+
+  .method__num {
+    font-size: clamp(1.5rem, 1.9vw, 1.9rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #75828a;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line-strong);
+    font-size: clamp(1.1rem, 1.35vw, 1.3rem);
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .method__steps p {
+    margin-top: 0.85rem;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 52em) {
+    .method__head,
+    .method__steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

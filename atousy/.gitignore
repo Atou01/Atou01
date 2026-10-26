@@ -1,0 +1,16 @@
+# Le .gitignore racine du dépôt ignore package.json / package-lock.json / index.html :
+# on les réautorise pour ce projet.
+!package.json
+!package-lock.json
+!index.html
+
+node_modules/
+dist/
+.astro/
+.wrangler/
+.dev.vars
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store

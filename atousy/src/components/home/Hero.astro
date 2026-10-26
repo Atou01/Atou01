@@ -1,0 +1,930 @@
+---
+// Hero : scène architecturale (photo) + carrousel de fenêtres de démonstration.
+// Ce n'est pas une scène 3D interactive : chaque fenêtre est un vrai bloc HTML
+// cliquable, incliné en perspective CSS. L'inclinaison suit le défilement horizontal
+// (scroll-driven animations) quand le navigateur le permet ; sinon elle reste fixe.
+// Positions exprimées en cqw (largeur du hero).
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import heroImg from '../../assets/photos/hero-architecture.jpg';
+import rivage1 from '../../assets/photos/rivage-1.jpg';
+import rivage2 from '../../assets/photos/rivage-2.jpg';
+import rivage4 from '../../assets/photos/rivage-4.jpg';
+import rivage5 from '../../assets/photos/rivage-5.jpg';
+import faitage1 from '../../assets/photos/faitage-1.jpg';
+import faitage3 from '../../assets/photos/faitage-3.jpg';
+import faitage4 from '../../assets/photos/faitage-4.jpg';
+import '@fontsource-variable/newsreader/wght.css';
+
+const wide = '(max-width: 62.49em) 70vw, 38vw';
+const narrow = '(max-width: 62.49em) 32vw, 16vw';
+const pic = { formats: ['avif', 'webp'] as const, alt: '' };
+
+const windows = [
+  { id: 'rivage-accueil', shape: 'wide', href: '/exemples/rivage/', label: 'Rivage · Paysagiste — Accueil' },
+  { id: 'faitage-savoir-faire', shape: 'tall', href: '/exemples/faitage/savoir-faire/', label: 'Faîtage · Charpentier — Savoir-faire' },
+  { id: 'faitage-accueil', shape: 'wide', href: '/exemples/faitage/', label: 'Faîtage · Charpentier — Accueil' },
+  { id: 'rivage-jardins', shape: 'wide', href: '/exemples/rivage/jardins/', label: 'Rivage · Paysagiste — Votre jardin' },
+  { id: 'faitage-realisations', shape: 'wide', href: '/exemples/faitage/realisations/', label: 'Faîtage · Charpentier — Réalisations' },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__content">
+    <h1 id="hero-title">Votre métier.<br /> Un site à <span class="accent">part.</span></h1>
+    <p class="hero__lead">
+      <strong>Création et refonte de sites pour artisans, TPE et PME.</strong>
+      <span>Une image professionnelle. Un parcours clair vers la demande de devis.</span>
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--coral" href="/devis/">Demander un devis <Icon name="arrow" /></a>
+      <a class="btn btn--outline" href="/exemples/">Voir les exemples <Icon name="arrow" /></a>
+    </div>
+  </div>
+
+  <div class="showcase" data-showcase>
+    <div class="hero__bg" aria-hidden="true">
+      <Picture
+        src={heroImg}
+        alt=""
+        formats={['avif', 'webp']}
+        widths={[800, 1200, 1600, 2000, 2880]}
+        sizes="(max-width: 62.49em) 175vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+
+    <div class="showcase__frame" role="region" aria-roledescription="carrousel" aria-label="Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site">
+      <ul class="showcase__track" data-showcase-track>
+        {
+          windows.map((w, i) => (
+            <li class:list={['showcase__item', `showcase__item--${w.shape}`]} data-label={w.label}>
+              <a class:list={['screen', `screen--${w.id}`]} href={w.href} draggable="false">
+                <span class="visually-hidden">Ouvrir la démonstration fictive {w.label}</span>
+                <span class="screen__face" aria-hidden="true">
+                  {w.id === 'rivage-accueil' && (
+                    <>
+                      <span class="screen__img"><Picture src={rivage1} {...pic} widths={[480, 800, 1200, 1600]} sizes={wide} loading="eager" /></span>
+                      <span class="m-shade m-shade--left" />
+                      <span class="m-nav m-nav--green">
+                        <span class="m-logo">rivage</span>
+                        <span class="m-links"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
+                        <span class="m-cta">Nous contacter</span>
+                      </span>
+                      <span class="m-hero">
+                        <span class="m-title">Le jardin<br />vous appelle.</span>
+                        <span class="m-btn">Découvrir le projet <Icon name="arrow" /></span>
+                      </span>
+                      <span class="m-aside">Des paysages pour<br />vivre dehors.<br />En toute saison.</span>
+                    </>
+                  )}
+                  {w.id === 'faitage-savoir-faire' && (
+                    <>
+                      <span class="screen__img"><Picture src={faitage3} {...pic} widths={[320, 520, 760]} sizes={narrow} /></span>
+                      <span class="m-shade m-shade--bottom" />
+                      <span class="m-nav m-nav--paper m-nav--end"><span>Savoir-faire</span><span>Réalisations</span><span>Contact</span></span>
+                      <span class="m-hero m-hero--tall">
+                        <span class="m-title">Des structures durables.</span>
+                        <span class="m-btn">Voir le projet <Icon name="arrow" /></span>
+                      </span>
+                    </>
+                  )}
+                  {w.id === 'faitage-accueil' && (
+                    <>
+                      <span class="screen__img screen__img--below-nav"><Picture src={faitage1} {...pic} widths={[480, 800, 1200]} sizes={wide} /></span>
+                      <span class="m-shade m-shade--left m-shade--below-nav" />
+                      <span class="m-nav m-nav--white">
+                        <span class="m-logo m-logo--faitage"><span class="m-ridge" />Faîtage</span>
+                        <span class="m-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
+                      </span>
+                      <span class="m-hero">
+                        <span class="m-title">Des charpentes<br />pour demain.</span>
+                        <span class="m-text">Construire, rénover, transmettre.<br />Un savoir-faire local au service de vos projets.</span>
+                        <span class="m-btn m-btn--solid">Découvrir le projet <Icon name="arrow" /></span>
+                      </span>
+                    </>
+                  )}
+                  {w.id === 'rivage-jardins' && (
+                    <span class="m-page m-page--ivory">
+                      <span class="m-nav m-nav--green">
+                        <span class="m-logo">rivage</span>
+                        <span class="m-links"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
+                        <span class="m-cta">Nous contacter</span>
+                      </span>
+                      <span class="m-gallery-head">
+                        <span class="m-title m-title--dark">Votre jardin</span>
+                        <span class="m-kicker">Projets types · démonstration</span>
+                      </span>
+                      <span class="m-gallery">
+                        <span class="m-tile"><Picture src={rivage2} {...pic} widths={[240, 400]} sizes="(max-width: 62.49em) 24vw, 12vw" /><span>Terrasse et massifs</span></span>
+                        <span class="m-tile"><Picture src={rivage4} {...pic} widths={[240, 400]} sizes="(max-width: 62.49em) 24vw, 12vw" /><span>Muret en pierre sèche</span></span>
+                        <span class="m-tile"><Picture src={rivage5} {...pic} widths={[240, 400]} sizes="(max-width: 62.49em) 24vw, 12vw" /><span>Bassin naturel</span></span>
+                      </span>
+                    </span>
+                  )}
+                  {w.id === 'faitage-realisations' && (
+                    <>
+                      <span class="screen__img"><Picture src={faitage4} {...pic} widths={[480, 800, 1200]} sizes={wide} /></span>
+                      <span class="m-shade m-shade--bottom" />
+                      <span class="m-nav m-nav--glass">
+                        <span class="m-logo m-logo--faitage"><span class="m-ridge" />Faîtage</span>
+                        <span class="m-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
+                      </span>
+                      <span class="m-hero">
+                        <span class="m-kicker m-kicker--light">Projet type · Maison ossature bois</span>
+                        <span class="m-title">Nos réalisations</span>
+                      </span>
+                    </>
+                  )}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="showcase__bar">
+      <p class="showcase__status">
+        <span>Démonstrations fictives</span>
+        <span class="js-only showcase__current" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-label>{windows[0].label}</span> · <span data-showcase-count>1/{windows.length}</span></span>
+      </p>
+      <div class="showcase__nav js-only">
+        <button type="button" class="showcase__btn" data-showcase-prev aria-label="Fenêtre précédente" disabled><Icon name="chevron" class="showcase__chev showcase__chev--prev" /></button>
+        <button type="button" class="showcase__btn" data-showcase-next aria-label="Fenêtre suivante"><Icon name="chevron" class="showcase__chev showcase__chev--next" /></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Carrousel : boutons, glisser à la souris, flèches du clavier, fenêtre active.
+  const root = document.querySelector<HTMLElement>('[data-showcase]');
+  const track = root?.querySelector<HTMLElement>('[data-showcase-track]');
+  if (root && track) {
+    const items = Array.from(track.children) as HTMLElement[];
+    const label = root.querySelector('[data-showcase-label]');
+    const count = root.querySelector('[data-showcase-count]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-showcase-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-showcase-next]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let active = 0;
+
+    const centerOf = (el: HTMLElement) => el.offsetLeft + el.offsetWidth / 2;
+    // Centre de la zone d'accroche (la marge droite laisse voir la fenêtre suivante).
+    const snapMid = () => (track.clientWidth - (parseFloat(getComputedStyle(track).scrollPaddingRight) || 0)) / 2;
+    const scrollToItem = (i: number) => {
+      const el = items[Math.max(0, Math.min(items.length - 1, i))];
+      track.scrollTo({ left: centerOf(el) - snapMid(), behavior: reduce.matches ? 'auto' : 'smooth' });
+    };
+    const update = () => {
+      const mid = track.scrollLeft + snapMid();
+      let best = 0;
+      items.forEach((el, i) => {
+        if (Math.abs(centerOf(el) - mid) < Math.abs(centerOf(items[best]) - mid)) best = i;
+      });
+      if (best === active && label?.textContent) return;
+      active = best;
+      items.forEach((el, i) => el.toggleAttribute('data-active', i === best));
+      if (label) label.textContent = items[best].dataset.label ?? '';
+      if (count) count.textContent = `${best + 1}/${items.length}`;
+      if (prev) prev.disabled = best === 0;
+      if (next) next.disabled = best === items.length - 1;
+    };
+
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    }, { passive: true });
+    prev?.addEventListener('click', () => scrollToItem(active - 1));
+    next?.addEventListener('click', () => scrollToItem(active + 1));
+
+    // Flèches gauche/droite quand une fenêtre a le focus.
+    track.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const i = items.findIndex((el) => el.contains(document.activeElement));
+      if (i < 0) return;
+      e.preventDefault();
+      const j = Math.max(0, Math.min(items.length - 1, i + (e.key === 'ArrowRight' ? 1 : -1)));
+      items[j].querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+      scrollToItem(j);
+    });
+    track.addEventListener('focusin', (e) => {
+      const i = items.findIndex((el) => el.contains(e.target as Node));
+      if (i >= 0 && i !== active) scrollToItem(i);
+    });
+
+    // Glisser à la souris (le tactile et le pavé tactile défilent nativement).
+    let startX = 0;
+    let startLeft = 0;
+    let dragging = false;
+    let moved = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      dragging = true;
+      moved = false;
+      startX = e.clientX;
+      startLeft = track.scrollLeft;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 6) {
+        moved = true;
+        track.classList.add('is-dragging');
+      }
+      if (moved) track.scrollLeft = startLeft - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      if (!dragging) return;
+      dragging = false;
+      if (moved) {
+        track.classList.remove('is-dragging');
+        update();
+        scrollToItem(active);
+      }
+    });
+    // Un glisser ne doit pas ouvrir la démo sous le curseur.
+    track.addEventListener('click', (e) => {
+      if (moved) {
+        e.preventDefault();
+        moved = false;
+      }
+    }, true);
+
+    update();
+  }
+</script>
+
+<style>
+  .hero {
+    --serif: 'Newsreader Variable', Georgia, serif;
+    position: relative;
+    container-type: inline-size;
+    overflow: hidden;
+    background: #f4ece1;
+  }
+
+  /* ---------- Texte ---------- */
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    padding-top: max(calc(var(--header-h) + 1.5rem), 11.5cqw);
+    padding-bottom: 5cqw;
+    pointer-events: none;
+  }
+
+  .hero__content > * {
+    pointer-events: auto;
+  }
+
+  h1 {
+    font-size: var(--fs-hero);
+    font-weight: 780;
+    letter-spacing: -0.052em;
+    line-height: 0.95;
+  }
+
+  .accent {
+    color: var(--coral-text);
+  }
+
+  .hero__lead {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 34rem;
+    margin-top: clamp(1.25rem, 1.9cqw, 2rem);
+    font-size: var(--fs-lead);
+    line-height: 1.45;
+  }
+
+  .hero__lead strong {
+    font-weight: 600;
+  }
+
+  .hero__lead span {
+    color: var(--ink-2);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: clamp(1.5rem, 2.3cqw, 2.5rem);
+  }
+
+  /* ---------- Scène ---------- */
+  .showcase {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero__bg :global(img) {
+    position: absolute;
+    top: var(--bg-top, -3cqw);
+    left: var(--bg-left, 0);
+    width: var(--bg-w, 100cqw);
+    max-width: none;
+    height: auto;
+  }
+
+  /* Voile ivoire léger sous le texte */
+  .hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(248 244 238 / 0.55) 0%, rgb(248 244 238 / 0.25) 34%, transparent 48%);
+  }
+
+  .showcase__frame {
+    position: absolute;
+    left: 44cqw;
+    right: 0;
+    top: 6cqw;
+    bottom: 4.5cqw;
+  }
+
+  .showcase__track {
+    --w-wide: 37cqw;
+    --w-tall: 15.5cqw;
+    /* Fenêtre active décalée vers la gauche : on voit la suivante à droite. */
+    --peek: 10cqw;
+    --side: calc((56cqw - var(--peek) - var(--w-wide)) / 2);
+    display: flex;
+    align-items: flex-end;
+    gap: 2.5cqw;
+    height: 100%;
+    margin: 0;
+    padding: 0 calc(var(--side) + var(--peek)) 6.6cqw var(--side);
+    scroll-padding-right: var(--peek);
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
+    cursor: grab;
+  }
+
+  .showcase__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .showcase__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  .showcase__track.is-dragging .screen {
+    pointer-events: none;
+  }
+
+  .showcase__item {
+    position: relative;
+    flex: none;
+    scroll-snap-align: center;
+    view-timeline-name: --win;
+    view-timeline-axis: inline;
+  }
+
+  .showcase__item--wide {
+    width: var(--w-wide);
+    aspect-ratio: 1.6;
+  }
+
+  .showcase__item--tall {
+    width: var(--w-tall);
+    aspect-ratio: 0.72;
+  }
+
+  /* Ombre portée au sol */
+  .showcase__item::after {
+    content: '';
+    position: absolute;
+    left: -4%;
+    right: -6%;
+    bottom: -2.2cqw;
+    height: 4cqw;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(70 52 34 / 0.34), rgb(70 52 34 / 0.1) 60%, transparent);
+    filter: blur(0.35cqw);
+    z-index: -1;
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform-style: preserve-3d;
+    transform-origin: 50% 100%;
+    transform: perspective(90cqw) rotateY(-14deg);
+    border-radius: 0.25cqw;
+    color: #fff;
+    text-decoration: none;
+    transition: translate 0.4s var(--ease);
+    -webkit-user-drag: none;
+  }
+
+  /* Deux règles distinctes : le minifieur fusionnerait sinon animation-timeline
+     dans le raccourci « animation », ce qui invalide la déclaration. */
+  @supports (animation-timeline: view()) {
+    .screen {
+      animation-name: win-tilt;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .showcase__item > .screen {
+      animation-timeline: --win;
+    }
+  }
+
+  @keyframes win-tilt {
+    0% {
+      transform: perspective(90cqw) rotateY(-58deg) scale(0.74);
+    }
+    30% {
+      transform: perspective(90cqw) rotateY(-36deg) scale(0.88);
+    }
+    50% {
+      transform: perspective(90cqw) rotateY(-12deg) scale(1);
+    }
+    70% {
+      transform: perspective(90cqw) rotateY(30deg) scale(0.88);
+    }
+    100% {
+      transform: perspective(90cqw) rotateY(56deg) scale(0.74);
+    }
+  }
+
+  /* Tranche de l'écran (épaisseur) */
+  .screen::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0.9cqw;
+    height: 100%;
+    background: linear-gradient(90deg, #cfcac2, #f3f0ea 45%, #dcd7cf);
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+  }
+
+  .screen:hover,
+  .screen:focus-visible {
+    translate: 0 -0.8cqw;
+  }
+
+  .screen:focus-visible {
+    outline-offset: 0.5cqw;
+  }
+
+  .screen__face {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+    border-radius: inherit;
+    container-type: inline-size;
+    background: #1e3328;
+    box-shadow:
+      0 0 0 0.12cqw rgb(255 255 255 / 0.9),
+      0 2cqw 4cqw -1.5cqw rgb(40 30 20 / 0.35);
+  }
+
+  .screen__img,
+  .screen__img :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .screen__img--below-nav {
+    top: 10.5cqw;
+  }
+
+  .screen__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Mini-sites (unités = cqw de la fenêtre) ---------- */
+  .m-shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .m-shade--left {
+    background: linear-gradient(20deg, rgb(10 25 18 / 0.72) 0%, rgb(10 25 18 / 0.28) 42%, transparent 62%);
+  }
+
+  .m-shade--below-nav {
+    top: 10.5cqw;
+    background: linear-gradient(90deg, rgb(28 20 12 / 0.7) 0%, rgb(28 20 12 / 0.25) 50%, transparent 72%);
+  }
+
+  .m-shade--bottom {
+    background: linear-gradient(0deg, rgb(25 18 12 / 0.72) 0%, rgb(25 18 12 / 0.28) 42%, transparent 64%);
+  }
+
+  .m-nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 4cqw;
+    height: 10.5cqw;
+    padding-inline: 4.5cqw;
+    font-size: 2.1cqw;
+    white-space: nowrap;
+  }
+
+  .m-nav--green {
+    background: #1e3328;
+    color: #fff;
+  }
+
+  .m-nav--white {
+    background: #fbf9f5;
+    color: #2b2219;
+  }
+
+  .m-nav--glass {
+    background: linear-gradient(180deg, rgb(20 14 8 / 0.55), transparent);
+    color: #fff;
+  }
+
+  .m-nav--paper {
+    background: #f7f4ee;
+    color: #2b2219;
+  }
+
+  .m-nav--end {
+    justify-content: flex-end;
+    gap: 6cqw;
+    height: 14cqw;
+    padding-inline: 6cqw;
+    font-size: 4.4cqw;
+  }
+
+  .m-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2cqw;
+    margin-right: auto;
+    font-family: var(--serif);
+    font-size: 5.2cqw;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+
+  .m-logo--faitage {
+    font-size: 4.4cqw;
+    font-weight: 520;
+  }
+
+  .m-ridge {
+    width: 3cqw;
+    height: 3cqw;
+    border-top: 0.45cqw solid currentColor;
+    border-left: 0.45cqw solid currentColor;
+    transform: translateY(0.9cqw) rotate(45deg);
+  }
+
+  .m-links {
+    display: flex;
+    gap: 4cqw;
+  }
+
+  .m-cta {
+    padding: 1.1cqw 2.2cqw;
+    border: 0.25cqw solid rgb(255 255 255 / 0.7);
+    border-radius: 0.6cqw;
+  }
+
+  .m-hero {
+    position: absolute;
+    z-index: 1;
+    left: 4.8cqw;
+    bottom: 7cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3.6cqw;
+    max-width: 60cqw;
+  }
+
+  .m-title {
+    font-family: var(--serif);
+    font-size: 7.6cqw;
+    font-weight: 420;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .m-title--dark {
+    color: #1d2a24;
+  }
+
+  .m-text {
+    margin-top: -1cqw;
+    font-size: 2.1cqw;
+    line-height: 1.5;
+    opacity: 0.92;
+  }
+
+  .m-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.4cqw;
+    padding: 1.5cqw 2.6cqw;
+    border: 0.25cqw solid rgb(255 255 255 / 0.85);
+    border-radius: 0.6cqw;
+    font-size: 2cqw;
+  }
+
+  .m-btn--solid {
+    background: #fff;
+    color: #2b2219;
+    border-color: #fff;
+  }
+
+  .m-btn :global(svg) {
+    width: 2.4cqw;
+    height: 2.4cqw;
+  }
+
+  .m-aside {
+    position: absolute;
+    z-index: 1;
+    right: 6cqw;
+    bottom: 7cqw;
+    font-size: 2.4cqw;
+    line-height: 1.45;
+  }
+
+  .m-hero--tall {
+    left: 8cqw;
+    right: 8cqw;
+    bottom: 12cqw;
+    gap: 9cqw;
+  }
+
+  .m-hero--tall .m-title {
+    font-size: 14cqw;
+  }
+
+  .m-hero--tall .m-btn {
+    gap: 6cqw;
+    padding: 3.5cqw 6cqw;
+    font-size: 4.6cqw;
+    border-width: 0.6cqw;
+  }
+
+  .m-hero--tall .m-btn :global(svg) {
+    width: 5cqw;
+    height: 5cqw;
+  }
+
+  .m-kicker {
+    font-size: 2cqw;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #5a6a60;
+  }
+
+  .m-kicker--light {
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .m-page {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  .m-page--ivory {
+    background: #f6f2ea;
+  }
+
+  .m-gallery-head {
+    position: absolute;
+    left: 5cqw;
+    right: 5cqw;
+    top: 16cqw;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .m-gallery {
+    position: absolute;
+    left: 5cqw;
+    right: 5cqw;
+    top: 29cqw;
+    bottom: 5cqw;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 2.4cqw;
+  }
+
+  .m-tile {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 0.4cqw;
+  }
+
+  .m-tile :global(picture),
+  .m-tile :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .m-tile > span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 4cqw 1.8cqw 1.6cqw;
+    background: linear-gradient(0deg, rgb(10 25 18 / 0.7), transparent);
+    font-size: 1.8cqw;
+  }
+
+  /* ---------- Barre du carrousel ---------- */
+  .showcase__bar {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 1.6cqw;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .showcase__status {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+
+  .showcase__nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .showcase__btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1.5px solid var(--marine);
+    border-radius: 50%;
+    background: rgb(255 253 250 / 0.75);
+    color: var(--marine);
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      color 0.2s var(--ease),
+      opacity 0.2s;
+  }
+
+  .showcase__btn:hover:not(:disabled) {
+    background: var(--marine);
+    color: var(--paper);
+  }
+
+  .showcase__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .showcase__btn :global(.showcase__chev) {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .showcase__btn :global(.showcase__chev--prev) {
+    transform: rotate(90deg);
+  }
+
+  .showcase__btn :global(.showcase__chev--next) {
+    transform: rotate(-90deg);
+  }
+
+  /* ---------- Grand écran : le hero suit les proportions de la scène ---------- */
+  @media (min-width: 62.5em) {
+    .hero {
+      aspect-ratio: 1.92;
+      min-height: 34rem;
+      max-height: 62rem;
+    }
+
+    .hero__content > * {
+      max-width: 40cqw;
+    }
+
+    .hero__lead {
+      max-width: min(34rem, 36cqw);
+    }
+  }
+
+  /* ---------- Téléphone et tablette ---------- */
+  @media (max-width: 62.49em) {
+    .hero {
+      background: var(--ivory);
+    }
+
+    .hero__content {
+      padding-top: 1.75rem;
+      padding-bottom: 1.75rem;
+    }
+
+    .showcase {
+      position: relative;
+      inset: auto;
+      height: 84cqw;
+      max-height: 40rem;
+      --bg-w: 170cqw;
+      --bg-left: -66cqw;
+      --bg-top: -22cqw;
+    }
+
+    .hero__bg::after {
+      display: none;
+    }
+
+    .showcase__frame {
+      left: 0;
+      top: 3cqw;
+      bottom: 13cqw;
+    }
+
+    .showcase__track {
+      --w-wide: 66cqw;
+      --w-tall: 28cqw;
+      --peek: 0cqw;
+      --side: calc((100cqw - var(--w-wide)) / 2);
+      gap: 5cqw;
+      padding-bottom: 9cqw;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .showcase__item::after {
+      bottom: -3.4cqw;
+      height: 6cqw;
+    }
+
+    .screen::after {
+      width: 1.4cqw;
+    }
+
+    .showcase__bar {
+      left: var(--gutter);
+      right: var(--gutter);
+      bottom: 3cqw;
+      justify-content: space-between;
+    }
+
+    .showcase__current {
+      display: block;
+    }
+
+    .showcase__sep {
+      display: none;
+    }
+  }
+
+  @media (max-width: 30em) {
+    .hero__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .screen {
+      animation: none;
+      transform: perspective(90cqw) rotateY(-10deg);
+    }
+
+    .screen:hover,
+    .screen:focus-visible {
+      translate: none;
+    }
+  }
+</style>

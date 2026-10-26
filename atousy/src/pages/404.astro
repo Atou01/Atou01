@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout title="Page introuvable | Atousy" description="Cette page n'existe pas ou a été déplacée." noindex>
+  <section class="notfound">
+    <div class="container">
+      <h1>Page introuvable.</h1>
+      <p>Cette page n'existe pas ou a été déplacée.</p>
+      <a class="btn btn--coral" href="/">Retour à l'accueil <Icon name="arrow" /></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    padding-block: clamp(4rem, 10vw, 9rem);
+  }
+
+  h1 {
+    font-size: var(--fs-h2);
+  }
+
+  p {
+    margin-block: 1.25rem 2rem;
+    font-size: var(--fs-lead);
+    color: var(--ink-2);
+  }
+</style>

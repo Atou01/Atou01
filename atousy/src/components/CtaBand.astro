@@ -1,0 +1,51 @@
+---
+// Bandeau corail « Parlons de votre projet. »
+import Icon from './Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const { title = 'Parlons de votre projet.', text = 'Un site à votre image, pensé pour votre activité.' } = Astro.props;
+---
+
+<section class="cta" aria-labelledby="cta-title">
+  <div class="container cta__inner">
+    <div>
+      <h2 id="cta-title">{title}</h2>
+      <p>{text}</p>
+    </div>
+    <a class="btn btn--light" href="/devis/">Demander un devis <Icon name="arrow" /></a>
+  </div>
+</section>
+
+<style>
+  .cta {
+    background: var(--coral);
+    color: var(--on-coral);
+    padding-block: clamp(2rem, 2.8vw, 2.75rem);
+  }
+
+  .cta__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 3.7vw, 3.6rem);
+    letter-spacing: -0.045em;
+  }
+
+  p {
+    margin-top: 0.5rem;
+    font-size: clamp(1rem, 1.4vw, 1.3rem);
+  }
+
+  .btn {
+    min-width: 15rem;
+    min-height: 3.6rem;
+  }
+</style>

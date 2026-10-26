@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Gallery from '../components/home/Gallery.astro';
+import OfferBand from '../components/home/OfferBand.astro';
+import Method from '../components/home/Method.astro';
+import CtaBand from '../components/CtaBand.astro';
+---
+
+<BaseLayout
+  title="Atousy — Création et refonte de sites pour artisans, TPE et PME"
+  description="Studio web & design : création et refonte de sites vitrines pour artisans, TPE et PME. Un devis clair, une maquette à valider, un site pensé pour obtenir des demandes de devis."
+  overlayHeader
+>
+  <Hero />
+  <Gallery />
+  <OfferBand />
+  <Method />
+  <CtaBand />
+</BaseLayout>

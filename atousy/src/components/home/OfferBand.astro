@@ -1,0 +1,87 @@
+---
+// Bandeau marine « Un cadre clair pour votre projet. » + prix du marché choisi.
+import Icon from '../Icon.astro';
+import Price from '../Price.astro';
+import { offerHighlights, offerExclusions } from '../../data/site';
+---
+
+<section class="offer" aria-labelledby="offer-title">
+  <div class="container offer__inner">
+    <div class="offer__intro">
+      <h2 id="offer-title">Un cadre clair<br /> pour votre projet.</h2>
+      <p>Un site efficace, sur mesure, pour valoriser votre activité et générer des demandes de devis.</p>
+      <a class="btn btn--coral" href="/offre/">Découvrir l'offre <Icon name="arrow" /></a>
+    </div>
+    <div class="offer__divider" aria-hidden="true"></div>
+    <div class="offer__details">
+      <Price />
+      <ul class="offer__list">
+        {offerHighlights.map((item) => <li>{item}</li>)}
+      </ul>
+      <p class="offer__exclusions">{offerExclusions}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .offer {
+    background: var(--marine-band);
+    color: var(--paper);
+    padding-block: clamp(3rem, 4.6vw, 5rem);
+  }
+
+  .offer__inner {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: clamp(2rem, 5.5vw, 6rem);
+  }
+
+  h2 {
+    font-size: clamp(2.2rem, 4.75vw, 4.75rem);
+  }
+
+  .offer__intro p {
+    max-width: 32rem;
+    margin-top: 1.4rem;
+    font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+    line-height: 1.5;
+    color: rgb(255 253 250 / 0.88);
+  }
+
+  .offer__intro .btn {
+    margin-top: 2rem;
+  }
+
+  .offer__divider {
+    background: rgb(255 253 250 / 0.16);
+  }
+
+  .offer__list {
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgb(255 253 250 / 0.16);
+  }
+
+  .offer__list li {
+    padding-block: 0.6rem;
+    border-bottom: 1px solid rgb(255 253 250 / 0.16);
+    font-size: clamp(1rem, 1.25vw, 1.15rem);
+  }
+
+  .offer__exclusions {
+    margin-top: 1rem;
+    font-size: 0.9375rem;
+    color: rgb(255 253 250 / 0.66);
+  }
+
+  @media (max-width: 52em) {
+    .offer__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .offer__divider {
+      height: 1px;
+    }
+  }
+</style>
