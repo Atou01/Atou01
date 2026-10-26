@@ -1,56 +1,30 @@
 ---
 page: /exemples/
 title: "Exemples de sites vitrines, démos fictives | Atousy"
-description: "Deux sites de démonstration fictifs créés par Atousy : Rivage, paysagiste, et Faîtage, charpentier. Cinq pages, mobile, contact : voyez notre façon de travailler."
+description: "Deux sites de démonstration fictifs créés par Atousy : Rivage, paysagiste, et Faîtage, charpentier. Cinq pages, mobile, contact : voyez notre façon de faire."
 statut: brouillon à valider
 ---
 
 # Deux métiers. Deux sites à part.
 
-Rivage et Faîtage n’existent pas. Ce sont deux entreprises fictives, imaginées pour vous montrer notre façon de travailler : la structure, le ton, l’adaptation au mobile, le chemin vers la prise de contact.
-
-Ce ne sont pas des réalisations pour des clients.
+Rivage et Faîtage n’existent pas. Ce sont deux entreprises fictives, imaginées pour montrer notre façon de travailler.
 
 ## Parcourez les pages
 
-Faites défiler les fenêtres, puis cliquez sur l’une d’elles : vous arrivez directement sur la page de démonstration.
-
-**Aide sous les fenêtres :**
-- Ordinateur : « Faites défiler ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo. »
-- Mobile : « Glissez pour voir les autres pages. Touchez une fenêtre pour ouvrir la démo. »
-
-**Libellé de chaque fenêtre** (visible sous la fenêtre, et repris pour les lecteurs d’écran) :
-- Rivage · Paysagiste — Accueil → /exemples/rivage/
-- Rivage · Paysagiste — Notre approche → /exemples/rivage/approche/
-- Rivage · Paysagiste — Savoir-faire → /exemples/rivage/savoir-faire/
-- Rivage · Paysagiste — Votre jardin → /exemples/rivage/jardins/
-- Rivage · Paysagiste — Nous contacter → /exemples/rivage/contact/
-- Faîtage · Charpentier — Accueil → /exemples/faitage/
-- Faîtage · Charpentier — Réalisations → /exemples/faitage/realisations/
-- Faîtage · Charpentier — Savoir-faire → /exemples/faitage/savoir-faire/
-- Faîtage · Charpentier — [page 4, à confirmer] → /exemples/faitage/…
-- Faîtage · Charpentier — Contact → /exemples/faitage/contact/
-
-**Texte pour lecteurs d’écran :**
-- Zone : « Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site »
-- Lien de chaque fenêtre : « Ouvrir la démonstration fictive [libellé] »
-- Boutons : « Fenêtre précédente » · « Fenêtre suivante »
-- Position : « Fenêtre [n] sur [total] »
-
-> À valider : liste et adresses exactes des pages Faîtage (démo en cours de réalisation). Les adresses Rivage correspondent aux pages existantes.
+Faites défiler les fenêtres. Cliquez sur l’une d’elles pour ouvrir la page de démonstration.
 
 ## Rivage — paysagiste
 
-*Démonstration fictive.* Un paysagiste qui dessine des jardins naturels, pensés pour toutes les saisons.
+*Démonstration fictive.* Un paysagiste qui dessine des jardins naturels, pour toutes les saisons.
 
 **Ce que la démo illustre :**
 
-- **Un site complet de 5 pages** : Accueil, Notre approche, Savoir-faire, Votre jardin, Nous contacter.
-- **Un ton calme et une mise en page aérée**, à l’image du métier.
-- **Des photos mises en valeur**, légères à charger.
-- **L’adaptation au mobile** : le menu, les photos et les textes se réorganisent.
-- **Une page contact claire** : un formulaire simple et les étapes qui suivent la demande. Le formulaire est volontairement désactivé.
-- **Des encarts « Dans un vrai site »** : ils montrent où apparaîtraient les coordonnées et les vraies réalisations.
+- 5 pages : Accueil, Notre approche, Savoir-faire, Votre jardin, Nous contacter ;
+- un ton calme, une mise en page aérée ;
+- des photos mises en valeur, légères à charger ;
+- l’adaptation au mobile ;
+- une page contact claire (formulaire désactivé) ;
+- des encarts « Dans un vrai site » : coordonnées, vraies réalisations.
 
 **Bouton :** Ouvrir la démo Rivage → /exemples/rivage/
 
@@ -60,11 +34,11 @@ Faites défiler les fenêtres, puis cliquez sur l’une d’elles : vous arrivez
 
 **Ce que la démo illustre :**
 
-- **Un site de 5 pages**, dont Accueil, Réalisations, Savoir-faire et Contact.
-- **Des réalisations présentées par projet**, avec des photos de chantier. Les projets sont inventés.
-- **Un savoir-faire expliqué simplement** : les assemblages, le bois, les étapes d’un chantier.
-- **Un affichage pensé pour le téléphone** : menu compact, pages lisibles d’une main.
-- **Une page contact** qui va droit au but.
+- 5 pages : Accueil, Réalisations, Savoir-faire, L’atelier, Contact ;
+- des réalisations présentées projet par projet (projets inventés) ;
+- un savoir-faire expliqué simplement ;
+- un affichage pensé pour le téléphone ;
+- une page contact qui va droit au but.
 
 **Bouton :** Ouvrir la démo Faîtage → /exemples/faitage/
 
@@ -72,7 +46,7 @@ Faites défiler les fenêtres, puis cliquez sur l’une d’elles : vous arrivez
 
 ## Ce que ces démos ne sont pas
 
-Ce ne sont pas des sites de clients. Les noms, les textes et les projets sont inventés. Les photos ont été générées par intelligence artificielle pour ces démonstrations.
+Ce ne sont pas des sites de clients. Les noms, les textes et les projets sont inventés. Les photos ont été générées par intelligence artificielle.
 
 Votre site sera construit avec vos informations et, de préférence, vos propres photos.
 
@@ -87,9 +61,40 @@ Parlons de votre métier et de ce que votre site doit montrer.
 
 ---
 
+## Textes d’interface des fenêtres (bande à faire défiler)
+
+Demande du fondateur : pouvoir faire défiler toutes les fenêtres et cliquer sur une fenêtre pour arriver sur le site de démo.
+
+**Aide sous la bande :**
+- Ordinateur : « Faites défiler ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo. »
+- Mobile : « Glissez pour voir les autres pages. Touchez une fenêtre pour ouvrir la démo. »
+
+**Libellé de chaque fenêtre** (visible sous la fenêtre) → page ouverte au clic :
+
+| Libellé | Page |
+| --- | --- |
+| Rivage · Paysagiste — Accueil | /exemples/rivage/ |
+| Rivage · Paysagiste — Notre approche | /exemples/rivage/approche/ |
+| Rivage · Paysagiste — Savoir-faire | /exemples/rivage/savoir-faire/ |
+| Rivage · Paysagiste — Votre jardin | /exemples/rivage/jardins/ |
+| Rivage · Paysagiste — Nous contacter | /exemples/rivage/contact/ |
+| Faîtage · Charpentier — Accueil | /exemples/faitage/ |
+| Faîtage · Charpentier — Réalisations | /exemples/faitage/realisations/ |
+| Faîtage · Charpentier — Savoir-faire | /exemples/faitage/savoir-faire/ |
+| Faîtage · Charpentier — L’atelier | /exemples/faitage/atelier/ |
+| Faîtage · Charpentier — Contact | /exemples/faitage/contact/ |
+
+> À valider : les adresses suivent la navigation des démos (`src/components/demos/rivage/nav.ts` et `faitage/nav.ts`). Les pages Faîtage sont en cours de réalisation : vérifier qu’elles existent toutes avant la mise en ligne.
+
+**Textes pour lecteurs d’écran :**
+- Zone : « Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site »
+- Lien de chaque fenêtre : « Ouvrir la démonstration fictive [libellé] »
+- Boutons : « Fenêtre précédente » · « Fenêtre suivante »
+- Position : « Fenêtre [n] sur [total] »
+
 ## Notes pour l’intégration (non affichées)
 
-- Chaque fenêtre est un vrai lien : un clic (ou Entrée au clavier) ouvre la page de démo dans le même onglet. Le bandeau de la démo propose « Retour à Atousy » → /exemples/.
-- Le défilement doit marcher à la souris (molette, glisser), au doigt, au clavier (flèches) et avec les boutons précédent / suivant. Un glisser ne doit pas déclencher de clic.
+- Chaque fenêtre est un vrai lien : un clic, une touche ou Entrée au clavier ouvre la page de démo dans le même onglet. Le bandeau de la démo propose « Retour à Atousy » → /exemples/.
+- Le défilement marche à la souris (molette, glisser), au doigt, au clavier (flèches) et avec les boutons précédent / suivant. Un glisser ne doit pas déclencher de clic.
 - Toujours écrire « démonstration fictive » à côté du nom de la démo. Les pages de démo restent en noindex.
 - Liens internes : /exemples/rivage/, /exemples/faitage/, /creation/, /refonte/, /offre/, /devis/.

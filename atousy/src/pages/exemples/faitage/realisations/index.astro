@@ -1,0 +1,385 @@
+---
+// Démonstration fictive « Faîtage » (charpentier) — page Réalisations (projets types).
+// L'ouverture sert de couverture au projet type 01 ; les projets 02 à 04 suivent en alternance.
+import { Picture } from 'astro:assets';
+import FaitageLayout from '../../../../components/demos/faitage/FaitageLayout.astro';
+import ContactBand from '../../../../components/demos/faitage/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/faitage/RealSiteNote.astro';
+import Icon from '../../../../components/Icon.astro';
+import faitage1 from '../../../../assets/photos/faitage-1.jpg';
+import faitage2 from '../../../../assets/photos/faitage-2.jpg';
+import faitage4 from '../../../../assets/photos/faitage-4.jpg';
+import faitage6 from '../../../../assets/photos/faitage-6.jpg';
+
+const projects = [
+  {
+    id: 'charpente-neuve',
+    kind: 'Charpente traditionnelle',
+    title: 'Une charpente taillée à l’atelier, levée en quelques jours',
+    text: 'Pour une maison neuve en maçonnerie, une charpente traditionnelle à fermes en épicéa : toutes les pièces sont taillées et numérotées à l’atelier, puis levées sur site avant la pose de la couverture.',
+    specs: [
+      ['Mission', 'Plans, taille, levage, couverture'],
+      ['Structure', 'Fermes, pannes et chevrons'],
+      ['Bois', 'Épicéa, assemblages chevillés'],
+    ],
+    img: faitage2,
+    alt: 'Charpente neuve en épicéa en cours de levage, entourée d’échafaudages, montagnes en arrière-plan',
+  },
+  {
+    id: 'extension',
+    kind: 'Extension bois',
+    title: 'Une pièce de vie greffée sur une maison de pierre',
+    text: 'Agrandir une maison ancienne sans la dénaturer : une extension à ossature bois, bardée de lames verticales, largement vitrée vers le jardin et raccordée avec soin à la façade en pierre.',
+    specs: [
+      ['Mission', 'Étude de l’existant, ossature, bardage'],
+      ['Structure', 'Ossature bois, toiture plate'],
+      ['Bois', 'Bardage mélèze à claire-voie'],
+    ],
+    img: faitage6,
+    alt: 'Extension contemporaine en bois accolée à une maison ancienne en pierre aux volets bruns',
+  },
+  {
+    id: 'preau',
+    kind: 'Préau en bois massif',
+    title: 'Un préau ouvert sur la vue',
+    text: 'Une terrasse couverte en bois massif, posée sur un dallage en pierre : de puissants poteaux, une charpente apparente et une toiture légère pour profiter de l’extérieur en toute saison.',
+    specs: [
+      ['Mission', 'Conception, taille, levage'],
+      ['Structure', 'Poteaux-poutres, charpente apparente'],
+      ['Bois', 'Douglas massif'],
+    ],
+    img: faitage1,
+    alt: 'Préau en bois massif aux larges poteaux sur une terrasse en pierre, face à un panorama de montagnes',
+  },
+];
+---
+
+<FaitageLayout
+  title="Réalisations — Faîtage, démonstration fictive | Atousy"
+  description="Projets types de Faîtage, charpentier fictif : maison ossature bois, charpente traditionnelle, extension bois et préau. Démonstration Atousy."
+  current="realisations"
+  header="overlay"
+>
+  <!-- Ouverture : couverture du projet type 01 -->
+  <section class="hero ft-on-photo" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <Picture
+        src={faitage4}
+        alt="Maison contemporaine à ossature et bardage bois dans une prairie fleurie, face aux sommets"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600, 2000, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hero__shade" aria-hidden="true"></div>
+    <div class="ft-container hero__inner">
+      <p class="hero__kicker">Projet type · Maison ossature bois</p>
+      <h1 id="hero-title">Nos réalisations</h1>
+      <p class="hero__text">Construction neuve, charpente, extension, ouvrage extérieur : quatre projets types pour illustrer notre travail.</p>
+    </div>
+  </section>
+
+  <!-- Projet type 01 (photo d'ouverture) -->
+  <section class="featured" id="maison-ossature" aria-labelledby="p1-title">
+    <div class="ft-container featured__grid">
+      <div class="featured__intro">
+        <p class="ft-label"><span class="ft-label__num">01</span>Maison ossature bois</p>
+        <h2 id="p1-title" class="ft-h2">Une maison bois face aux sommets.</h2>
+      </div>
+      <div class="featured__body">
+        <p class="ft-lead">
+          Sur un terrain en pente, en montagne, une maison à ossature bois aux lignes simples : un grand pignon vitré
+          tourné vers la vallée, un bardage vertical qui grisera avec le temps et une terrasse de plain-pied sur la
+          prairie.
+        </p>
+        <dl class="specs">
+          <div><dt>Mission</dt><dd>Conception, ossature, charpente, bardage</dd></div>
+          <div><dt>Structure</dt><dd>Ossature bois, toiture à deux pans</dd></div>
+          <div><dt>Bois</dt><dd>Épicéa en structure, mélèze en bardage</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projets types 02 à 04 -->
+  <section class="ft-section projects" aria-label="Autres projets types">
+    <div class="ft-container">
+      <ol class="project-list">
+        {
+          projects.map((p, i) => (
+            <li class:list={['project', i % 2 === 1 && 'project--reverse']} id={p.id}>
+              <figure class="project__media">
+                <Picture src={p.img} alt={p.alt} formats={['avif', 'webp']} widths={[640, 960, 1280, 1600]} sizes="(max-width: 56em) 100vw, 58vw" />
+              </figure>
+              <div class="project__body">
+                <p class="ft-caption">Projet type · {p.kind}</p>
+                <p class="project__num" aria-hidden="true">
+                  {String(i + 2).padStart(2, '0')}
+                </p>
+                <h2 class="project__title">{p.title}</h2>
+                <p class="project__text">{p.text}</p>
+                <dl class="specs">
+                  {
+                    p.specs.map(([k, v]) => (
+                      <div>
+                        <dt>{k}</dt>
+                        <dd>{v}</dd>
+                      </div>
+                    ))
+                  }
+                </dl>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="projects__foot">
+        <RealSiteNote>vos chantiers réels, photographiés et décrits avec l’accord de vos clients, éventuellement classés par type de travaux.</RealSiteNote>
+        <a class="ft-btn" href="/exemples/faitage/savoir-faire/">Découvrir notre savoir-faire <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand title="Votre projet pourrait être le prochain." />
+</FaitageLayout>
+
+<style>
+  /* ——— Ouverture ——— */
+  .hero {
+    position: relative;
+    display: flex;
+    min-height: clamp(34rem, calc(100svh - 2.5rem), 54rem);
+    color: var(--ft-white);
+    background: var(--ft-charcoal);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero__media :global(picture) {
+    height: 100%;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 55%;
+  }
+
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(0deg, rgb(25 18 12 / 0.78) 0%, rgb(25 18 12 / 0.3) 40%, rgb(25 18 12 / 0) 62%);
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-block: 9rem clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .hero__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.1rem;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(251 249 245 / 0.9);
+  }
+
+  .hero__kicker::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-top: 2px solid var(--ft-wood-light);
+    border-left: 2px solid var(--ft-wood-light);
+    transform: translateY(0.15rem) rotate(45deg);
+  }
+
+  .hero h1 {
+    color: var(--ft-white);
+    font-size: clamp(3rem, 1.6rem + 5.4vw, 6.4rem);
+    font-weight: 420;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .hero__text {
+    max-width: 36rem;
+    margin-top: 1.25rem;
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem);
+    color: rgb(251 249 245 / 0.9);
+  }
+
+  /* ——— Projet 01 ——— */
+  .featured {
+    padding-block: clamp(3.5rem, 7vw, 6rem);
+    background: var(--ft-white);
+    border-bottom: 1px solid var(--ft-line);
+    scroll-margin-top: 1rem;
+  }
+
+  .featured__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 2rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .featured__body {
+    display: grid;
+    gap: 2rem;
+  }
+
+  /* ——— Fiches ——— */
+  .specs {
+    display: grid;
+    margin: 0;
+    border-top: 1px solid var(--ft-line-strong);
+  }
+
+  .specs > div {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--ft-line);
+  }
+
+  .specs dt {
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    line-height: 1.9;
+    text-transform: uppercase;
+    color: var(--ft-wood-ink);
+  }
+
+  .specs dd {
+    margin: 0;
+    font-weight: 550;
+  }
+
+  /* ——— Projets 02 à 04 ——— */
+  .project-list {
+    display: grid;
+    gap: clamp(4.5rem, 9vw, 8rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .project {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 2rem clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+    scroll-margin-top: 2rem;
+  }
+
+  .project--reverse .project__media {
+    order: 2;
+  }
+
+  .project__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .project__body {
+    display: grid;
+    justify-items: start;
+  }
+
+  .project__num {
+    margin-top: 1.75rem;
+    font-family: var(--ft-serif);
+    font-size: clamp(3rem, 2.2rem + 2.4vw, 4.5rem);
+    font-weight: 350;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--ft-wood);
+  }
+
+  .project__title {
+    margin-top: 1rem;
+    font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.75rem);
+    line-height: 1.08;
+  }
+
+  .project__text {
+    margin-top: 1.1rem;
+    color: var(--ft-ink-2);
+  }
+
+  .project .specs {
+    width: 100%;
+    margin-top: 1.75rem;
+  }
+
+  .projects__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-top: clamp(4.5rem, 9vw, 7rem);
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--ft-line-strong);
+  }
+
+  .projects__foot :global(.note) {
+    flex: 1 1 26rem;
+    max-width: 44rem;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 56em) {
+    .featured__grid,
+    .project {
+      grid-template-columns: 1fr;
+    }
+
+    .project--reverse .project__media {
+      order: 0;
+    }
+
+    .project__num {
+      display: none;
+    }
+
+    .project__title {
+      margin-top: 0.75rem;
+    }
+  }
+
+  @media (max-width: 34em) {
+    .hero {
+      min-height: clamp(32rem, calc(100svh - 6rem), 44rem);
+    }
+
+    .hero__media :global(img) {
+      object-position: 70% 50%;
+    }
+
+    .specs > div {
+      grid-template-columns: 1fr;
+      gap: 0.1rem;
+    }
+  }
+</style>

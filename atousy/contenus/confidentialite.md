@@ -1,7 +1,7 @@
 ---
 page: /confidentialite/
 title: "Politique de confidentialité | Atousy"
-description: "Comment Atousy traite les données du formulaire de devis : finalité, base légale, conservation, destinataires, stockage local et vos droits (RGPD et nLPD suisse)."
+description: "Comment Atousy traite les données du formulaire de devis : finalité, base légale, conservation, destinataires, stockage et vos droits (RGPD et nLPD suisse)."
 statut: modèle à compléter — ne pas publier avec des crochets
 ---
 
@@ -125,4 +125,5 @@ Cette page peut évoluer, par exemple si un prestataire change. La date de mise 
 
 - Aucun crochet [À COMPLÉTER] ne doit être publié.
 - Lien depuis la mention sous le formulaire de devis et depuis le pied de page.
+- Appel à l’action : bandeau standard du site « Parlons de votre projet. » + bouton « Demander un devis » → /devis/, ou aucun bandeau sur les pages légales (au choix du fondateur).
 - Liens internes : /devis/, /mentions-legales/.

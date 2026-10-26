@@ -54,7 +54,7 @@ Titres SEO : 60 caractères au plus, terminés par « | Atousy ». Méta-descrip
 12. Client sans logo ou sans photos : que propose-t-on (hors socle, sur devis, rien) ?
 
 **Exemples**
-13. Liste et adresses exactes des 5 pages de la démo Faîtage (en cours de réalisation).
+13. Démo Faîtage (en cours de réalisation) : relire la liste « Ce que la démo illustre » quand elle sera terminée ; vérifier que ses 5 pages existent (Accueil, Réalisations, Savoir-faire, L’atelier, Contact).
 14. Vérifier qu’aucune entreprise proche n’utilise les noms « Rivage » ou « Faîtage ».
 
 **Devis**
@@ -81,7 +81,7 @@ Titres SEO : 60 caractères au plus, terminés par « | Atousy ». Méta-descrip
   et `/devis/?type=refonte`. À confirmer côté intégration (sinon lien simple vers /devis/).
 - **Fenêtres des exemples** : demande du fondateur — pouvoir faire défiler toutes les fenêtres et cliquer sur une fenêtre
   pour arriver sur la démo. `exemples.md` fournit les textes (aide au défilement, libellé de chaque fenêtre, textes pour
-  lecteurs d’écran, boutons précédent / suivant) et la liste des 10 pages visées. L’accueil a déjà ce principe avec 5 fenêtres.
+  lecteurs d’écran, boutons précédent / suivant) et la liste des 10 pages visées (5 Rivage, 5 Faîtage, d’après la navigation des démos). L’accueil a déjà ce principe avec 5 fenêtres.
 - **Stockage de session** : en plus de `atousy-market` (stockage local), le code utilise `atousy-market-auto`
   (stockage de session). Les deux sont décrits dans `confidentialite.md`.
 - **Typographie** : écrire les prix avec une espace insécable fine entre les milliers (1 490) et une espace insécable

@@ -70,4 +70,5 @@ Une information vous semble inexacte ? Écrivez-nous à [À COMPLÉTER : e-mail 
 
 - Aucun crochet [À COMPLÉTER] ne doit être publié : compléter toutes les données avant la mise en ligne.
 - Pour une offre proposée en Suisse, les mêmes informations d’identification (nom, adresse, e-mail) sont généralement attendues. À faire vérifier.
-- Liens internes : /confidentialite/, /exemples/.
+- Appel à l’action : bandeau standard du site « Parlons de votre projet. » + bouton « Demander un devis » → /devis/, ou aucun bandeau sur les pages légales (au choix du fondateur).
+- Liens internes : /confidentialite/, /exemples/, /devis/.

@@ -1,7 +1,7 @@
 ---
 page: /offre/
 title: "L’offre site vitrine : tarif et contenu | Atousy"
-description: "Le détail de l’offre Atousy : tarif indicatif, jusqu’à 5 pages, mobile, formulaire, livrables SEO précis, deux séries de corrections et 30 jours après livraison."
+description: "Le détail de l’offre Atousy : tarif indicatif, jusqu’à 5 pages, mobile, formulaire, livrables SEO, deux séries de corrections et 30 jours après livraison."
 statut: brouillon à valider
 ---
 
@@ -17,68 +17,63 @@ Un tarif affiché, un contenu détaillé, des limites écrites. Vous savez ce qu
 
 **Tarif indicatif · Taxes et montant final à confirmer au devis**
 
-Le site affiche le tarif du pays choisi. Vous pouvez en changer à tout moment avec le sélecteur France · EUR / Suisse · CHF. Sans JavaScript, les deux tarifs s’affichent.
+Le site affiche le tarif du pays choisi, modifiable avec le sélecteur.
 
 > À valider : prix de travail (1 490 € et 1 990 CHF) avant la mise en ligne.
 
 ## Ce que comprend le socle
 
-- **Jusqu’à 5 pages.** Par exemple : Accueil, Services, Réalisations, À propos, Contact.
-- **Une langue.** Le site est rédigé dans une seule langue.
-- **L’adaptation au mobile.** Lisible et facile à utiliser sur smartphone, tablette et ordinateur.
-- **Des textes préparés pour vous**, à partir des informations que vous nous transmettez et que vous validez. Il ne s’agit pas d’une rédaction illimitée.
+- **Jusqu’à 5 pages**, par exemple : Accueil, Services, Réalisations, À propos, Contact.
+- **Une langue.**
+- **L’adaptation au mobile.**
+- **Des textes préparés** à partir des informations que vous validez. Pas une rédaction illimitée.
 - **Un formulaire** de contact ou de demande de devis.
 - **Les bases du référencement local**, détaillées ci-dessous.
 - **Deux séries de corrections groupées.**
 - **La mise en ligne et la remise de tous les accès.**
 
-> À valider : où arrivent les demandes du formulaire d’un site client (adresse e-mail du client, service d’envoi utilisé, éventuel coût) ?
+> À valider : où arrivent les demandes du formulaire d’un site client (adresse du client, service d’envoi, coût éventuel) ?
 
 ## Le référencement de base, concrètement
 
-Votre site est préparé pour être bien compris par les moteurs de recherche. Voici ce qui est livré :
+Ce qui est livré :
 
-- **La structure des pages** : une organisation claire, un sujet par page.
-- **Les titres** : la balise title et les titres H1 et H2 de chaque page.
-- **Les méta-descriptions** : le court texte affiché sous le lien dans les résultats de recherche.
-- **Des contenus adaptés** à votre métier et à votre zone d’intervention.
-- **Des images optimisées** : poids réduit et texte alternatif.
-- **Les liens internes** entre vos pages.
+- **la structure des pages** : un sujet par page ;
+- **les titres** : balise title, H1 et H2 ;
+- **les méta-descriptions**, affichées dans les résultats de recherche ;
+- **des contenus adaptés** à votre métier et à votre zone d’intervention ;
+- **des images optimisées** : poids réduit, texte alternatif ;
+- **les liens internes** entre vos pages.
 
-Ce qui n’est pas compris : le suivi du référencement dans la durée et la rédaction de contenus supplémentaires. Personne ne peut garantir une position dans Google, nous non plus.
+Non compris : le suivi du référencement dans la durée. Aucune position dans Google ne peut être garantie.
 
 ## Non inclus
 
-Chiffrés à part :
-
-- le nom de domaine ;
-- l’hébergement ;
-- toute demande supplémentaire.
+Le nom de domaine, l’hébergement et toute demande supplémentaire. Ils sont chiffrés à part.
 
 > À valider : le domaine et l’hébergement sont-ils souscrits par le client à son nom, ou fournis et refacturés par Atousy ?
 
 ## Deux séries de corrections groupées
 
-Vous réunissez vos remarques dans une seule liste. Nous les appliquons. Puis une seconde fois. Grouper vos retours évite les allers-retours et garde le projet lisible.
+Vous réunissez vos remarques dans une liste, nous les appliquons. Deux fois. Cela évite les allers-retours.
 
-> À valider : les deux séries portent-elles sur la maquette, sur le site avant mise en ligne, ou sur les deux ?
+> À valider : les deux séries portent-elles sur la maquette, sur le site avant mise en ligne, ou les deux ?
 
 ## Après la livraison : 30 jours
 
-Pendant 30 jours après la livraison, nous corrigeons les anomalies dans le périmètre convenu : un lien qui ne mène nulle part, un affichage cassé, un formulaire qui ne part pas. Ce n’est pas une période de modifications illimitées.
+Pendant 30 jours, nous corrigeons les anomalies dans le périmètre convenu : un lien cassé, un affichage défaillant. Pas de modifications illimitées.
 
 ## Ce qui demande un devis complémentaire
 
-- Une page au-delà de cinq.
-- Une deuxième langue.
-- Des corrections au-delà des deux séries prévues.
-- Des textes à rédiger au-delà des informations fournies.
+- Une page au-delà de cinq, une deuxième langue.
+- Une série de corrections en plus.
+- Des textes au-delà des informations fournies.
 - Une fonction absente du socle.
-- Une modification demandée après les 30 jours.
+- Une modification après les 30 jours.
 
-Chaque ajout fait l’objet d’un devis. Vous l’acceptez ou non.
+Chaque ajout fait l’objet d’un devis, que vous acceptez ou non.
 
-> À valider : liste exacte des cas. Exemples de fonctions absentes du socle à citer ou non (réservation en ligne, boutique, espace client…).
+> À valider : liste exacte des cas ; citer ou non des exemples de fonctions hors socle (réservation en ligne, boutique, espace client…).
 
 ## Questions fréquentes
 
@@ -112,13 +107,13 @@ Non. Personne ne peut le garantir honnêtement. Nous livrons des bases solides :
 
 Les anomalies signalées pendant les 30 jours sont corrigées. Ensuite, toute modification fait l’objet d’un devis.
 
-> À valider : proposer plus tard une formule de suivi ? Aucune n’existe à ce jour, ne pas en parler sur le site.
+> À valider : une formule de suivi sera-t-elle proposée plus tard ? Aucune n’existe à ce jour : ne pas en parler sur le site.
 
 ### Est-ce que je récupère les accès ?
 
 Oui. À la mise en ligne, nous vous remettons tous les accès.
 
-> À valider : cession des droits sur le site (code, textes, mise en page) à préciser dans le devis ou les conditions générales.
+> À valider : cession des droits sur le site (code, textes, mise en page) à préciser dans le devis ou des conditions générales.
 
 ## Parlons de votre projet.
 
@@ -131,7 +126,7 @@ Un échange suffit pour savoir si l’offre vous convient.
 
 ## Notes pour l’intégration (non affichées)
 
-- Le bloc tarif utilise le composant Price existant (tarif du marché choisi + mention obligatoire). Écrire 1 490 € et 1 990 CHF avec une espace insécable fine entre les milliers et une espace insécable avant € / CHF.
-- La FAQ peut être en `<details>` ; les questions restent des H3 pour la lecture.
+- Le bloc tarif utilise le composant Price existant (tarif du marché choisi + mention obligatoire ; sans JavaScript, les deux tarifs s’affichent).
+- La FAQ peut être en `<details>` ; les questions restent des H3.
 - Liens internes : /creation/, /refonte/, /methode/, /exemples/, /devis/.
-- Ne jamais écrire « HT » ou « TTC » ailleurs que dans la question de la FAQ, ni « à partir de », ni « garanti » ou « illimité » (sauf pour dire ce qui ne l’est pas).
+- Ne jamais écrire « HT » ou « TTC » ailleurs que dans la question de la FAQ, ni « à partir de » devant un prix, ni « garanti » ou « illimité » (sauf pour dire ce qui ne l’est pas).

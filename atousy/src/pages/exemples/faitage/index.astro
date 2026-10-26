@@ -165,7 +165,7 @@ const steps = [
             />
           </span>
           <span class="ft-caption">Projet type · Maison ossature bois</span>
-          <span class="work__title">Une maison bois face aux sommets <Icon name="arrow" /></span>
+          <span class="work__title">Une maison bois face aux sommets<Icon name="arrow" /></span>
         </a>
         <a class="work" href="/exemples/faitage/realisations/#extension">
           <span class="work__img">
@@ -178,7 +178,7 @@ const steps = [
             />
           </span>
           <span class="ft-caption">Projet type · Extension bois</span>
-          <span class="work__title">Une pièce de vie greffée sur la pierre <Icon name="arrow" /></span>
+          <span class="work__title">Une pièce de vie greffée sur la pierre<Icon name="arrow" /></span>
         </a>
       </div>
 
@@ -528,9 +528,7 @@ const steps = [
   }
 
   .work__title {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
+    display: block;
     font-family: var(--ft-serif);
     font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.875rem);
     font-weight: 450;
@@ -539,9 +537,11 @@ const steps = [
   }
 
   .work__title :global(svg) {
-    flex: none;
+    display: inline-block;
     width: 1.1rem;
     height: 1.1rem;
+    margin-left: 0.5rem;
+    vertical-align: -0.05em;
     color: var(--ft-wood-ink);
     transition: transform 0.3s var(--ft-ease);
   }
@@ -738,6 +738,24 @@ const steps = [
 
     .steps {
       grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 3.75rem 1fr;
+      column-gap: 0.5rem;
+      padding-top: 1.25rem;
+    }
+
+    .step__num {
+      grid-row: span 2;
+      margin-bottom: 0;
+      font-size: 2.5rem;
+    }
+
+    .step p {
+      margin-top: 0.35rem;
     }
 
     .craft {

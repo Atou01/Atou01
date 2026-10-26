@@ -17,9 +17,9 @@ On échange sur vos besoins : votre activité, votre zone d’intervention, ce q
 
 ## 02 — La maquette
 
-Vous découvrez une maquette de votre site. Ensemble, nous validons les contenus : les pages, les textes, les photos. Vos remarques sont regroupées en deux séries de corrections.
+Vous découvrez une maquette de votre site. Ensemble, nous validons les contenus : pages, textes, photos. Vos remarques sont regroupées en deux séries de corrections.
 
-**Vous validez :** la maquette, puis les contenus.
+**Vous validez :** la maquette et les contenus.
 
 ## 03 — La livraison
 
@@ -27,26 +27,17 @@ Le site est mis en ligne. Nous vous remettons tous les accès. Pendant 30 jours,
 
 **Vous validez :** la version finale, avant la mise en ligne.
 
-> À valider : la validation de la version finale avant mise en ligne est-elle une étape formelle (accord écrit, e-mail) ?
+> À valider : la validation de la version finale est-elle formelle (accord par e-mail) ?
 
 ## Ce dont nous avons besoin de vous
 
-- **Les informations sur votre activité** : vos services, votre façon de travailler, votre zone d’intervention.
-- **Votre logo**, si vous en avez un.
-- **Vos photos** de chantiers ou de réalisations, si vous en avez.
-- **Vos coordonnées** et l’adresse e-mail qui recevra les demandes.
-- **Pour une refonte** : l’adresse de votre site actuel et, si possible, ses accès.
-- **Des retours groupés** à chaque étape.
+- Les informations sur votre activité : services, façon de travailler, zone d’intervention.
+- Votre logo et vos photos de chantiers, si vous en avez.
+- Vos coordonnées et l’adresse e-mail qui recevra les demandes.
+- Pour une refonte : l’adresse de votre site actuel et, si possible, ses accès.
+- Des retours groupés à chaque étape.
 
-> À valider : que propose-t-on à un client sans logo ou sans photos ? (création de logo, photos : hors socle, sur devis, ou non proposés.)
-
-## Ce que vous validez, en résumé
-
-| Étape | Ce que vous validez |
-| --- | --- |
-| 01 Le devis | Le contenu du site, le tarif, le calendrier |
-| 02 La maquette | La mise en page et les contenus |
-| 03 La livraison | La version finale avant la mise en ligne |
+> À valider : que propose-t-on à un client sans logo ou sans photos (hors socle, sur devis, rien) ?
 
 ## Et les délais ?
 
@@ -54,7 +45,7 @@ Ils dépendent de votre projet et du rythme des échanges. Ils sont à définir 
 
 ## Parlons de votre projet.
 
-La première étape commence par un message.
+Tout commence par un message.
 
 **Bouton :** Demander un devis → /devis/
 **Lien secondaire :** Voir l’offre en détail → /offre/
@@ -63,6 +54,7 @@ La première étape commence par un message.
 
 ## Notes pour l’intégration (non affichées)
 
-- Reprendre la numérotation 01 · 02 · 03 de l’accueil (composant Method) pour la cohérence.
-- Aucune durée chiffrée (ni semaines, ni jours ouvrés), hormis les 30 jours de correction des anomalies.
+- Reprendre la numérotation 01 · 02 · 03 de l’accueil (composant Method).
+- Les trois lignes « Vous validez » peuvent former un petit récapitulatif visuel (pastilles ou tableau).
+- Aucune durée chiffrée, hormis les 30 jours de correction des anomalies.
 - Liens internes : /offre/ (corrections, 30 jours, non inclus), /refonte/ (examen du site actuel), /exemples/, /devis/.
