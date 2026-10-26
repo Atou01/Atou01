@@ -15,8 +15,8 @@ const projects = [
   {
     id: 'charpente-neuve',
     kind: 'Charpente traditionnelle',
-    title: 'Une charpente taillée à l’atelier, levée en quelques jours',
-    text: 'Pour une maison neuve en maçonnerie, une charpente traditionnelle à fermes en épicéa : toutes les pièces sont taillées et numérotées à l’atelier, puis levées sur site avant la pose de la couverture.',
+    title: 'Une charpente taillée à l’atelier, levée sur le chantier',
+    text: 'Pour une maison neuve en maçonnerie, une charpente traditionnelle à fermes en épicéa : toutes les pièces sont taillées et numérotées à l’atelier, puis levées sur site avant la pose de la couverture.',
     specs: [
       ['Mission', 'Plans, taille, levage, couverture'],
       ['Structure', 'Fermes, pannes et chevrons'],
@@ -29,7 +29,7 @@ const projects = [
     id: 'extension',
     kind: 'Extension bois',
     title: 'Une pièce de vie greffée sur une maison de pierre',
-    text: 'Agrandir une maison ancienne sans la dénaturer : une extension à ossature bois, bardée de lames verticales, largement vitrée vers le jardin et raccordée avec soin à la façade en pierre.',
+    text: 'Agrandir une maison ancienne sans la dénaturer : une extension à ossature bois, bardée de lames verticales, largement vitrée vers le jardin et raccordée avec soin à la façade en pierre.',
     specs: [
       ['Mission', 'Étude de l’existant, ossature, bardage'],
       ['Structure', 'Ossature bois, toiture plate'],
@@ -42,7 +42,7 @@ const projects = [
     id: 'preau',
     kind: 'Préau en bois massif',
     title: 'Un préau ouvert sur la vue',
-    text: 'Une terrasse couverte en bois massif, posée sur un dallage en pierre : de puissants poteaux, une charpente apparente et une toiture légère pour profiter de l’extérieur en toute saison.',
+    text: 'Une terrasse couverte en bois massif, posée sur un dallage en pierre : de puissants poteaux, une charpente apparente et une toiture légère pour profiter de l’extérieur en toute saison.',
     specs: [
       ['Mission', 'Conception, taille, levage'],
       ['Structure', 'Poteaux-poutres, charpente apparente'],
@@ -56,7 +56,7 @@ const projects = [
 
 <FaitageLayout
   title="Réalisations — Faîtage, démonstration fictive | Atousy"
-  description="Projets types de Faîtage, charpentier fictif : maison ossature bois, charpente traditionnelle, extension bois et préau. Démonstration Atousy."
+  description="Projets types de Faîtage, charpentier fictif : maison ossature bois, charpente traditionnelle, extension bois et préau. Démonstration Atousy."
   current="realisations"
   header="overlay"
 >
@@ -77,7 +77,7 @@ const projects = [
     <div class="ft-container hero__inner">
       <p class="hero__kicker">Projet type · Maison ossature bois</p>
       <h1 id="hero-title">Nos réalisations</h1>
-      <p class="hero__text">Construction neuve, charpente, extension, ouvrage extérieur : quatre projets types pour illustrer notre travail.</p>
+      <p class="hero__text">Construction neuve, charpente, extension, ouvrage extérieur : quatre projets types pour illustrer notre travail.</p>
     </div>
   </section>
 
@@ -90,7 +90,7 @@ const projects = [
       </div>
       <div class="featured__body">
         <p class="ft-lead">
-          Sur un terrain en pente, en montagne, une maison à ossature bois aux lignes simples : un grand pignon vitré
+          Sur un terrain en pente, en montagne, une maison à ossature bois aux lignes simples : un grand pignon vitré
           tourné vers la vallée, un bardage vertical qui grisera avec le temps et une terrasse de plain-pied sur la
           prairie.
         </p>
@@ -291,6 +291,10 @@ const projects = [
     scroll-margin-top: 2rem;
   }
 
+  .project--reverse {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+  }
+
   .project--reverse .project__media {
     order: 2;
   }
@@ -351,7 +355,8 @@ const projects = [
   /* ——— Responsive ——— */
   @media (max-width: 56em) {
     .featured__grid,
-    .project {
+    .project,
+    .project--reverse {
       grid-template-columns: 1fr;
     }
 

@@ -1,0 +1,584 @@
+---
+// Bande des 10 fenêtres de démonstration (5 Rivage, 5 Faîtage).
+// Chaque fenêtre est un vrai lien vers sa page de démo (même onglet).
+// Défilement : molette, glisser à la souris, doigt, pavé tactile, flèches du clavier,
+// boutons précédent / suivant. Un glisser n'ouvre jamais la démo sous le curseur.
+// Sans JavaScript : la bande défile nativement (barre de défilement visible), les liens marchent.
+import Icon from '../Icon.astro';
+import DemoWindow from './DemoWindow.astro';
+import { demos, demoWindows } from '../../data/pages/demos';
+
+interface Props {
+  id?: string;
+  title?: string;
+}
+const { id = 'parcourir', title = 'Parcourez les pages' } = Astro.props;
+const total = demoWindows.length;
+---
+
+<section class="dw" aria-labelledby={`${id}-title`} data-dw>
+  <div class="container dw__head">
+    <h2 id={`${id}-title`}>{title}</h2>
+    <p class="dw__help">
+      <span class="dw__help-mouse">Faites défiler ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo.</span>
+      <span class="dw__help-touch">Glissez pour voir les autres pages. Touchez une fenêtre pour ouvrir la démo.</span>
+    </p>
+  </div>
+
+  <div
+    class="dw__viewport"
+    role="region"
+    aria-roledescription="carrousel"
+    aria-label="Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site"
+  >
+    <ul class="dw__track" data-dw-track>
+      {
+        demoWindows.map((w, i) => (
+          <li
+            class:list={['dw__item', `dw__item--${w.demo}`, { 'dw__item--group': i > 0 && demoWindows[i - 1].demo !== w.demo }]}
+            data-demo={w.demo}
+            data-label={w.label}
+          >
+            <a class="dw__link" href={w.href} draggable="false">
+              <span class="visually-hidden">Ouvrir la démonstration fictive {w.label}</span>
+              <span class="dw__frame">
+                <DemoWindow id={w.id} eager={i < 3} priority={i === 0} sizes="(max-width: 40em) 80vw, (max-width: 62.49em) 46vw, 36vw" halfSizes="(max-width: 40em) 40vw, (max-width: 62.49em) 23vw, 18vw" />
+              </span>
+              <span class="dw__caption" aria-hidden="true">
+                <span class="dw__label">
+                  <span class="dw__demo">{demos[w.demo].prefix}</span> — {w.page}
+                </span>
+                <span class="dw__meta">Démonstration fictive</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="container dw__bar js-only">
+    <div class="dw__jumps">
+      {
+        Object.values(demos).map((d) => (
+          <button type="button" class="dw__jump" data-dw-jump={d.id}>
+            <span class="visually-hidden">Aller aux pages </span>
+            {d.name}
+          </button>
+        ))
+      }
+    </div>
+    <div class="dw__rail" aria-hidden="true"><span class="dw__thumb" data-dw-thumb></span></div>
+    <div class="dw__nav">
+      <button type="button" class="dw__btn" data-dw-prev aria-label="Fenêtre précédente" disabled>
+        <Icon name="chevron" class="dw__chev dw__chev--prev" />
+      </button>
+      <button type="button" class="dw__btn" data-dw-next aria-label="Fenêtre suivante">
+        <Icon name="chevron" class="dw__chev dw__chev--next" />
+      </button>
+    </div>
+  </div>
+  <p class="visually-hidden" aria-live="polite" data-dw-live data-total={total}></p>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-dw]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-dw-track]');
+    if (!track) return;
+    const items = Array.from(track.children) as HTMLElement[];
+    // Les liens portent l'accroche (scroll-snap) : leurs positions servent de repères.
+    const links = items.map((el) => el.querySelector<HTMLAnchorElement>('a') as HTMLAnchorElement);
+    const prev = root.querySelector<HTMLButtonElement>('[data-dw-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-dw-next]');
+    const thumb = root.querySelector<HTMLElement>('[data-dw-thumb]');
+    const live = root.querySelector<HTMLElement>('[data-dw-live]');
+    const jumps = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dw-jump]'));
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const total = items.length;
+
+    const behavior = (): ScrollBehavior => (reduce.matches ? 'auto' : 'smooth');
+    const maxLeft = () => Math.max(0, track.scrollWidth - track.clientWidth);
+    // Marge de départ = position de la 1re fenêtre (alignée sur le contenu de la page).
+    const pad = () => links[0].offsetLeft;
+    const posOf = (i: number) => Math.min(maxLeft(), Math.max(0, links[i].offsetLeft - pad()));
+    const nearest = () => {
+      const x = track.scrollLeft;
+      let best = 0;
+      for (let i = 1; i < total; i++) if (Math.abs(posOf(i) - x) < Math.abs(posOf(best) - x)) best = i;
+      return best;
+    };
+    const announce = (i: number) => {
+      if (live) live.textContent = `Fenêtre ${i + 1} sur ${total} : ${items[i].dataset.label ?? ''}`;
+    };
+
+    // Accroche coupée pendant la molette ou le glisser, puis rétablie en douceur.
+    let freeTimer = 0;
+    const setFree = (on: boolean) => track.classList.toggle('is-free', on);
+    const go = (i: number, say = false) => {
+      const j = Math.max(0, Math.min(total - 1, i));
+      track.scrollTo({ left: posOf(j), behavior: behavior() });
+      if (say) announce(j);
+    };
+    const settle = () => {
+      go(nearest());
+      clearTimeout(freeTimer);
+      freeTimer = window.setTimeout(() => setFree(false), reduce.matches ? 0 : 450);
+    };
+
+    // Boutons et indicateur
+    const update = () => {
+      const x = track.scrollLeft;
+      const max = maxLeft();
+      if (prev) prev.disabled = x <= 2;
+      if (next) next.disabled = x >= max - 2;
+      if (thumb) {
+        const sw = track.scrollWidth || 1;
+        thumb.style.width = `${(track.clientWidth / sw) * 100}%`;
+        thumb.style.left = `${(x / sw) * 100}%`;
+      }
+      const demo = items[nearest()].dataset.demo;
+      jumps.forEach((b) => {
+        if (b.dataset.dwJump === demo) b.setAttribute('aria-current', 'true');
+        else b.removeAttribute('aria-current');
+      });
+    };
+    let raf = 0;
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    track.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+
+    prev?.addEventListener('click', () => {
+      const x = track.scrollLeft;
+      let target = 0;
+      for (let i = total - 1; i >= 0; i--) {
+        if (posOf(i) < x - 4) {
+          target = i;
+          break;
+        }
+      }
+      go(target, true);
+    });
+    next?.addEventListener('click', () => {
+      const x = track.scrollLeft;
+      const target = items.findIndex((_, i) => posOf(i) > x + 4);
+      if (target >= 0) go(target, true);
+    });
+    jumps.forEach((b) =>
+      b.addEventListener('click', () => {
+        const i = items.findIndex((el) => el.dataset.demo === b.dataset.dwJump);
+        if (i >= 0) go(i, true);
+      }),
+    );
+
+    // Clavier : flèches, Début, Fin quand une fenêtre a le focus.
+    track.addEventListener('keydown', (e) => {
+      const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
+      if (!keys.includes(e.key)) return;
+      const i = items.findIndex((el) => el.contains(document.activeElement));
+      if (i < 0) return;
+      e.preventDefault();
+      const j =
+        e.key === 'Home' ? 0 : e.key === 'End' ? total - 1 : Math.max(0, Math.min(total - 1, i + (e.key === 'ArrowRight' ? 1 : -1)));
+      links[j].focus({ preventScroll: true });
+      go(j, true);
+    });
+    // Une fenêtre qui reçoit le focus (Tab) est ramenée entièrement à l'écran.
+    track.addEventListener('focusin', (e) => {
+      const i = items.findIndex((el) => el.contains(e.target as Node));
+      if (i < 0) return;
+      const el = links[i];
+      const left = el.offsetLeft - track.scrollLeft;
+      if (left < pad() - 4 || left + el.offsetWidth > track.clientWidth + 4) go(i);
+    });
+
+    // Molette verticale → défilement horizontal, seulement quand le visiteur vise la bande :
+    // si la page défilait déjà (la bande passe sous le curseur), on laisse la page défiler.
+    // Aux extrémités, la page reprend la main.
+    let lastPageScroll = 0;
+    let wheeling = false;
+    let wheelTimer = 0;
+    window.addEventListener(
+      'scroll',
+      () => {
+        lastPageScroll = performance.now();
+      },
+      { passive: true },
+    );
+    track.addEventListener(
+      'wheel',
+      (e) => {
+        if (e.ctrlKey || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;
+        if (!wheeling && performance.now() - lastPageScroll < 300) return;
+        const unit = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? track.clientWidth : 1;
+        const delta = e.deltaY * unit;
+        const x = track.scrollLeft;
+        if ((delta < 0 && x <= 1) || (delta > 0 && x >= maxLeft() - 1)) {
+          wheeling = false;
+          return;
+        }
+        e.preventDefault();
+        wheeling = true;
+        clearTimeout(freeTimer);
+        setFree(true);
+        track.scrollLeft = x + delta;
+        clearTimeout(wheelTimer);
+        wheelTimer = window.setTimeout(() => {
+          wheeling = false;
+          settle();
+        }, 180);
+      },
+      { passive: false },
+    );
+
+    // Glisser à la souris (le doigt et le pavé tactile défilent nativement).
+    let drag: { x: number; left: number; moved: boolean } | null = null;
+    let suppressClick = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      drag = { x: e.clientX, left: track.scrollLeft, moved: false };
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) > 6) {
+        drag.moved = true;
+        clearTimeout(freeTimer);
+        setFree(true);
+        track.classList.add('is-dragging');
+      }
+      if (drag.moved) track.scrollLeft = drag.left - dx;
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      if (drag.moved) {
+        // Le clic qui suit immédiatement le relâchement est ignoré.
+        suppressClick = true;
+        window.setTimeout(() => (suppressClick = false), 0);
+        track.classList.remove('is-dragging');
+        settle();
+      }
+      drag = null;
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    track.addEventListener(
+      'click',
+      (e) => {
+        if (!suppressClick) return;
+        e.preventDefault();
+        e.stopPropagation();
+        suppressClick = false;
+      },
+      true,
+    );
+    track.addEventListener('dragstart', (e) => e.preventDefault());
+
+    update();
+  });
+</script>
+
+<style>
+  .dw {
+    position: relative;
+    padding-block: clamp(2.5rem, 4.5vw, 4.5rem) clamp(2.75rem, 4.5vw, 4.5rem);
+    background:
+      radial-gradient(60% 55% at 80% 70%, rgb(255 255 255 / 0.6), transparent 70%),
+      linear-gradient(180deg, var(--ivory-deep) 0%, #f5efe6 100%);
+  }
+
+  .dw__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 3rem;
+  }
+
+  h2 {
+    font-size: var(--fs-h2-sm);
+  }
+
+  .dw__help {
+    max-width: 26rem;
+    padding-bottom: 0.3rem;
+    font-size: 1rem;
+    color: var(--ink-2);
+  }
+
+  .dw__help-touch {
+    display: none;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .dw__help-mouse {
+      display: none;
+    }
+
+    .dw__help-touch {
+      display: inline;
+    }
+  }
+
+  /* ---------- Bande ---------- */
+  .dw__track {
+    /* Marge alignée sur le conteneur de la page */
+    --dw-pad: max(var(--gutter), calc((100% - var(--container)) / 2));
+    --dw-w: clamp(17rem, 36vw, 35rem);
+    --dw-gap: clamp(1.25rem, 2.2vw, 2.25rem);
+    position: relative;
+    display: flex;
+    gap: var(--dw-gap);
+    margin: 0;
+    padding: clamp(1.75rem, 2.6vw, 2.5rem) var(--dw-pad) 1.25rem;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--dw-pad);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  :global(html.js) .dw__track {
+    scrollbar-width: none;
+    cursor: grab;
+  }
+
+  :global(html.js) .dw__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dw__track.is-free {
+    scroll-snap-type: none;
+  }
+
+  .dw__track.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .dw__item {
+    flex: none;
+    width: var(--dw-w);
+  }
+
+  /* Respiration et filet fin entre les deux démos */
+  .dw__item--group {
+    width: calc(var(--dw-w) + var(--dw-gap) * 1.25 + 1px);
+    margin-left: calc(var(--dw-gap) * 0.25);
+    padding-left: calc(var(--dw-gap) * 1.25);
+    border-left: 1px solid var(--line-strong);
+  }
+
+  .dw__link {
+    display: block;
+    scroll-snap-align: start;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--radius);
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dw__link:focus-visible {
+    outline-offset: 6px;
+  }
+
+  .dw__frame {
+    display: block;
+    border-radius: 3px;
+    box-shadow:
+      0 0 0 1px rgb(15 35 41 / 0.08),
+      0 26px 50px -28px rgb(40 30 20 / 0.5),
+      0 10px 22px -16px rgb(40 30 20 / 0.28);
+    transition:
+      transform 0.45s var(--ease),
+      box-shadow 0.45s var(--ease);
+  }
+
+  .dw__link:hover .dw__frame,
+  .dw__link:focus-visible .dw__frame {
+    transform: translateY(-5px);
+    box-shadow:
+      0 0 0 1px rgb(15 35 41 / 0.1),
+      0 34px 60px -30px rgb(40 30 20 / 0.55),
+      0 14px 26px -16px rgb(40 30 20 / 0.3);
+  }
+
+  .dw__track.is-dragging .dw__frame {
+    transform: none;
+  }
+
+  .dw__caption {
+    display: grid;
+    gap: 0.2rem;
+    margin-top: 1.1rem;
+  }
+
+  .dw__label {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .dw__demo {
+    font-weight: 650;
+  }
+
+  .dw__meta {
+    width: max-content;
+    padding-bottom: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+    background: linear-gradient(var(--coral), var(--coral)) left bottom / 2.4rem 2px no-repeat;
+    transition: background-size 0.3s var(--ease);
+  }
+
+  .dw__link:hover .dw__meta,
+  .dw__link:focus-visible .dw__meta {
+    background-size: 100% 2px;
+  }
+
+  /* ---------- Barre : démos, indicateur, boutons ---------- */
+  .dw__bar {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem 2rem;
+    margin-top: 0.75rem;
+  }
+
+  .dw__jumps {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .dw__jump {
+    padding: 0.4rem 0;
+    border: 0;
+    background: none;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    cursor: pointer;
+    background: linear-gradient(var(--coral), var(--coral)) left bottom / 0 2px no-repeat;
+    transition:
+      background-size 0.25s var(--ease),
+      color 0.2s var(--ease);
+  }
+
+  .dw__jump:hover {
+    color: var(--ink);
+  }
+
+  .dw__jump[aria-current='true'] {
+    color: var(--ink);
+    background-size: 100% 2px;
+  }
+
+  .dw__rail {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: var(--line-strong);
+  }
+
+  .dw__thumb {
+    position: absolute;
+    top: -0.5px;
+    left: 0;
+    width: 30%;
+    height: 2px;
+    background: var(--marine);
+    transition:
+      left 0.12s linear,
+      width 0.2s var(--ease);
+  }
+
+  .dw__nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .dw__btn {
+    display: grid;
+    place-items: center;
+    width: 2.9rem;
+    height: 2.9rem;
+    padding: 0;
+    border: 1.5px solid var(--marine);
+    border-radius: 50%;
+    background: rgb(255 253 250 / 0.75);
+    color: var(--marine);
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      color 0.2s var(--ease),
+      opacity 0.2s;
+  }
+
+  .dw__btn:hover:not(:disabled) {
+    background: var(--marine);
+    color: var(--paper);
+  }
+
+  .dw__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .dw__btn :global(.dw__chev) {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .dw__btn :global(.dw__chev--prev) {
+    transform: rotate(90deg);
+  }
+
+  .dw__btn :global(.dw__chev--next) {
+    transform: rotate(-90deg);
+  }
+
+  /* Tablette */
+  @media (max-width: 62.49em) {
+    .dw__track {
+      --dw-w: clamp(17rem, 46vw, 30rem);
+    }
+  }
+
+  /* Téléphone : une fenêtre et le début de la suivante */
+  @media (max-width: 40em) {
+    .dw__track {
+      --dw-w: calc(100vw - 2 * var(--gutter) - 2.75rem);
+      --dw-gap: 1rem;
+    }
+
+    .dw__bar {
+      flex-wrap: wrap;
+    }
+
+    .dw__rail {
+      order: -1;
+      flex-basis: 100%;
+    }
+
+    .dw__nav {
+      margin-left: auto;
+    }
+
+    .dw__label {
+      font-size: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dw__link:hover .dw__frame,
+    .dw__link:focus-visible .dw__frame {
+      transform: none;
+    }
+  }
+</style>

@@ -12,7 +12,7 @@ const crafts = [
   {
     id: 'charpente',
     title: 'Charpente traditionnelle',
-    text: 'Fermes, pannes, chevrons : la charpente traditionnelle reste la plus belle façon de couvrir une maison. Nous la dessinons selon la portée, la pente et les charges propres à votre terrain, puis nous la taillons à l’atelier, assemblage par assemblage.',
+    text: 'Fermes, pannes, chevrons : la charpente traditionnelle reste la plus belle façon de couvrir une maison. Nous la dessinons selon la portée, la pente et les charges propres à votre terrain, puis nous la taillons à l’atelier, assemblage par assemblage.',
     items: ['Étude et plans de charpente', 'Taille traditionnelle, assemblages tenon-mortaise', 'Levage et contreventement', 'Charpentes apparentes pour combles aménagés'],
     drawing: '<path d="M4 50h72M4 50 40 8l36 42M40 8v42M40 42 23 30M40 42l17-12"/>',
   },
@@ -20,13 +20,13 @@ const crafts = [
     id: 'ossature',
     title: 'Ossature bois',
     text: 'Une maison à ossature bois se construit vite et proprement, et offre un excellent confort thermique. Murs, planchers et toiture sont préparés à l’atelier pour réduire la durée du chantier et les nuisances pour le voisinage.',
-    items: ['Murs à ossature, isolation et pare-pluie', 'Planchers et solivages', 'Bardages bois : mélèze, douglas…', 'Coordination avec les autres corps de métier'],
+    items: ['Murs à ossature, isolation et pare-pluie', 'Planchers et solivages', 'Bardages bois : mélèze, douglas…', 'Coordination avec les autres corps de métier'],
     drawing: '<path d="M6 10h68M6 14h68M6 48h68M10 14v34M24 14v34M38 14v34M52 14v34M66 14v34M10 48 38 14"/>',
   },
   {
     id: 'extensions',
     title: 'Extensions et surélévations',
-    text: 'Gagner une chambre, agrandir le séjour, créer un bureau : léger et posé à sec, le bois permet de greffer une extension sur une maison existante sans fondations lourdes ni long temps de séchage.',
+    text: 'Gagner une chambre, agrandir le séjour, créer un bureau : léger et posé à sec, le bois permet de greffer une extension sur une maison existante sans fondations lourdes ni long temps de séchage.',
     items: ['Étude de faisabilité sur l’existant', 'Extension de plain-pied ou surélévation', 'Grandes baies et menuiseries', 'Raccords soignés avec la pierre ou l’enduit'],
     drawing: '<path d="M6 50V26L24 10l18 16v24M4 50h72M42 30h30v20M48 37h18v13"/>',
   },
@@ -40,49 +40,49 @@ const crafts = [
   {
     id: 'couverture',
     title: 'Couverture',
-    text: 'Une charpente ne vaut que par le toit qui la protège. Nous assurons donc aussi la couverture : écran sous-toiture, liteaunage, pose des tuiles, ardoises ou bac acier, et finitions de zinguerie jusqu’au faîtage.',
+    text: 'Une charpente ne vaut que par le toit qui la protège. Nous assurons donc aussi la couverture : écran sous-toiture, liteaunage, pose des tuiles, ardoises ou bac acier, et finitions de zinguerie jusqu’au faîtage.',
     items: ['Couverture neuve et réfection', 'Tuiles, ardoises ou bac acier', 'Isolation de toiture par l’extérieur', 'Fenêtres de toit et zinguerie'],
     drawing: '<path d="M4 46 40 10l36 36M12 46h56M14 38h52M22 30h36M30 22h20M4 46h72"/>',
   },
   {
     id: 'preaux',
     title: 'Préaux, auvents et terrasses couvertes',
-    text: 'Un préau pour la voiture, un auvent pour le bois de chauffage, une terrasse couverte face à la vue : de petits ouvrages en bois massif, conçus avec le même soin qu’une charpente de maison.',
+    text: 'Un préau pour la voiture, un auvent pour le bois de chauffage, une terrasse couverte face à la vue : de petits ouvrages en bois massif, conçus avec le même soin qu’une charpente de maison.',
     items: ['Préaux et carports', 'Auvents et abris', 'Pergolas et terrasses couvertes', 'Escaliers et garde-corps extérieurs'],
     drawing: '<path d="M4 16h72M8 12h64M12 16v34M68 16v34M12 26l10-10M68 26 58 16M4 50h72"/>',
   },
 ];
 
 const woods = [
-  { name: 'Épicéa', use: 'Léger et régulier : charpentes courantes et ossatures.' },
-  { name: 'Douglas', use: 'Naturellement résistant : structures apparentes, extérieurs abrités.' },
-  { name: 'Mélèze', use: 'Dense et résineux : bardages et ouvrages exposés aux intempéries.' },
-  { name: 'Chêne', use: 'Dur et durable : pièces maîtresses, assemblages et rénovations anciennes.' },
+  { name: 'Épicéa', use: 'Léger et régulier : charpentes courantes et ossatures.' },
+  { name: 'Douglas', use: 'Naturellement résistant : structures apparentes, extérieurs abrités.' },
+  { name: 'Mélèze', use: 'Dense et résineux : bardages et ouvrages exposés aux intempéries.' },
+  { name: 'Chêne', use: 'Dur et durable : pièces maîtresses, assemblages et rénovations anciennes.' },
 ];
 
 const faq = [
   {
-    q: 'Faut-il une autorisation pour une extension ou un préau ?',
-    a: 'Le plus souvent, oui : déclaration préalable ou permis de construire selon la surface et votre commune. Nous vous aidons à constituer le dossier technique (plans, coupes, descriptif).',
+    q: 'Faut-il une autorisation pour une extension ou un préau ?',
+    a: 'Le plus souvent, oui : déclaration préalable ou permis de construire selon la surface et votre commune. Nous vous aidons à constituer le dossier technique (plans, coupes, descriptif).',
   },
   {
-    q: 'Intervenez-vous sur des charpentes anciennes ?',
+    q: 'Intervenez-vous sur des charpentes anciennes ?',
     a: 'Oui. Après un diagnostic sur place, nous conservons tout ce qui peut l’être et ne remplaçons que les pièces réellement abîmées.',
   },
   {
-    q: 'Combien de temps dure un chantier ?',
-    a: 'Cela dépend du projet. Comme les pièces sont taillées à l’atelier, la phase sur site est courte ; un planning précis accompagne chaque devis.',
+    q: 'Combien de temps dure un chantier ?',
+    a: 'Cela dépend du projet. Comme les pièces sont taillées à l’atelier, la phase sur site est courte ; un planning précis accompagne chaque devis.',
   },
   {
-    q: 'Le devis est-il détaillé ?',
-    a: 'Chaque devis présente les postes un par un : bois, taille, levage, couverture, finitions. Vous savez exactement ce que vous payez.',
+    q: 'Le devis est-il détaillé ?',
+    a: 'Chaque devis présente les postes un par un : bois, taille, levage, couverture, finitions. Vous savez exactement ce que vous payez.',
   },
 ];
 ---
 
 <FaitageLayout
   title="Savoir-faire — Faîtage, démonstration fictive | Atousy"
-  description="Charpente traditionnelle, ossature bois, extensions, rénovation de charpente et couverture : le savoir-faire de Faîtage, charpentier fictif. Démonstration Atousy."
+  description="Charpente traditionnelle, ossature bois, extensions, rénovation de charpente et couverture : le savoir-faire de Faîtage, charpentier fictif. Démonstration Atousy."
   current="savoir-faire"
 >
   <!-- Ouverture -->
@@ -102,7 +102,7 @@ const faq = [
     <div class="ft-container hero__inner">
       <p class="hero__kicker">Savoir-faire</p>
       <h1 id="hero-title">Des structures durables.</h1>
-      <p class="hero__text">Charpente, ossature, extension, couverture : une seule équipe, du premier croquis à la pose du faîtage.</p>
+      <p class="hero__text">Charpente, ossature, extension, couverture : une seule équipe, du premier croquis à la pose du faîtage.</p>
       <a class="ft-btn ft-btn--light" href="/exemples/faitage/realisations/">Voir les réalisations <Icon name="arrow" /></a>
     </div>
   </section>
@@ -110,7 +110,7 @@ const faq = [
   <!-- Métiers -->
   <section class="ft-section trades" aria-labelledby="trades-title">
     <div class="ft-container trades__grid">
-      <aside class="toc" aria-labelledby="toc-title">
+      <nav class="toc" aria-labelledby="toc-title">
         <p id="toc-title" class="toc__title">Nos métiers</p>
         <ol class="toc__list">
           {
@@ -126,7 +126,7 @@ const faq = [
             ))
           }
         </ol>
-      </aside>
+      </nav>
 
       <div class="trades__main">
         <div class="trades__intro">
@@ -196,7 +196,7 @@ const faq = [
       <div>
         <p class="ft-label"><span class="ft-label__num">03</span>Questions fréquentes</p>
         <h2 id="faq-title" class="ft-h2">Avant de vous lancer.</h2>
-        <p class="faq__aside">Une autre question ? <a class="ft-link" href="/exemples/faitage/contact/">Écrivez-nous <Icon name="arrow" /></a></p>
+        <p class="faq__aside">Une autre question ? <a class="ft-link" href="/exemples/faitage/contact/">Écrivez-nous <Icon name="arrow" /></a></p>
       </div>
       <div class="faq__list">
         {
@@ -378,7 +378,6 @@ const faq = [
     gap: 1.5rem clamp(1.5rem, 4vw, 3.5rem);
     padding-block: clamp(2rem, 4vw, 3rem);
     border-bottom: 1px solid var(--ft-line-strong);
-    scroll-margin-top: 6.5rem;
   }
 
   .trade__head {

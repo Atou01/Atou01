@@ -1,10 +1,91 @@
 ---
-import PagePlaceholder from '../../components/PagePlaceholder.astro';
+// Modèle LCEN à compléter (contenus/mentions-legales.md). Reste en noindex tant que
+// des éléments [À COMPLÉTER] subsistent.
+import LegalPage from '../../components/pages/LegalPage.astro';
+import Todo from '../../components/pages/Todo.astro';
+
+const toc = [
+  { id: 'editeur', label: 'Éditeur du site' },
+  { id: 'directeur', label: 'Directeur de la publication' },
+  { id: 'hebergeur', label: 'Hébergeur' },
+  { id: 'propriete', label: 'Propriété intellectuelle' },
+  { id: 'demonstrations', label: 'Démonstrations fictives' },
+  { id: 'credits', label: 'Crédits' },
+  { id: 'donnees', label: 'Données personnelles' },
+  { id: 'erreur', label: 'Nous signaler une erreur' },
+];
 ---
 
-<PagePlaceholder
+<LegalPage
   title="Mentions légales | Atousy"
+  description="Mentions légales du site atousy.com : éditeur, directeur de la publication, hébergeur, propriété intellectuelle et crédits des visuels utilisés sur le site."
   heading="Mentions légales"
-  lead="Informations légales sur l'éditeur et l'hébergeur du site."
-  description="Mentions légales du site Atousy."
-/>
+  crumb="Mentions légales"
+  lead="Conformément à l’article 6 de la loi n° 2004‑575 du 21 juin 2004 pour la confiance dans l’économie numérique (LCEN), voici les informations relatives au site atousy.com."
+  toc={toc}
+>
+  <p slot="meta">Dernière mise à jour : <Todo>date</Todo></p>
+
+  <h2 id="editeur">Éditeur du site</h2>
+  <ul>
+    <li><strong>Dénomination :</strong> <Todo>nom commercial et raison sociale, ou nom et prénom de l’entrepreneur individuel</Todo></li>
+    <li><strong>Statut juridique :</strong> <Todo>micro-entreprise, EI, SASU, SAS…</Todo></li>
+    <li><strong>Capital social :</strong> <Todo>uniquement pour une société</Todo></li>
+    <li><strong>SIREN / SIRET :</strong> <Todo /></li>
+    <li><strong>Immatriculation :</strong> <Todo>RCS ou RNE et ville d’immatriculation, le cas échéant</Todo></li>
+    <li><strong>Adresse :</strong> <Todo>adresse du siège ou de domiciliation</Todo></li>
+    <li><strong>E-mail :</strong> <Todo>contact@atousy.com, une fois la boîte testée</Todo></li>
+    <li><strong>Téléphone :</strong> <Todo>facultatif</Todo></li>
+    <li>
+      <strong>TVA :</strong> <Todo>numéro de TVA intracommunautaire, ou mention de la franchise en base de TVA</Todo>
+    </li>
+  </ul>
+
+  <h2 id="directeur">Directeur de la publication</h2>
+  <p><Todo>nom et prénom du directeur ou de la directrice de la publication</Todo></p>
+
+  <h2 id="hebergeur">Hébergeur</h2>
+  <p>Le site est hébergé par <strong>Cloudflare, Inc.</strong> (service Cloudflare Pages).</p>
+  <ul>
+    <li>
+      <strong>Adresse :</strong>
+      <Todo>adresse postale de Cloudflare, Inc., à reprendre telle qu’indiquée par Cloudflare au moment de la publication</Todo>
+    </li>
+    <li><strong>Téléphone :</strong> <Todo>numéro indiqué par Cloudflare</Todo></li>
+    <li><strong>Site :</strong> <a href="https://www.cloudflare.com" rel="noopener">www.cloudflare.com</a></li>
+  </ul>
+
+  <h2 id="propriete">Propriété intellectuelle</h2>
+  <p>
+    Les textes, la mise en page, le logo et les éléments graphiques de ce site appartiennent à <Todo>éditeur</Todo>, sauf mention contraire.
+    Toute reproduction ou réutilisation, totale ou partielle, sans autorisation écrite préalable est interdite.
+  </p>
+
+  <h2 id="demonstrations">Démonstrations fictives</h2>
+  <p>
+    Les sites « Rivage » (paysagiste) et « Faîtage » (charpentier) présentés dans la rubrique <a href="/exemples/">Exemples</a> sont des
+    démonstrations. Ces entreprises n’existent pas. Leurs noms, textes et projets sont inventés. Toute ressemblance avec une entreprise
+    existante serait fortuite.
+  </p>
+
+  <h2 id="credits">Crédits</h2>
+  <ul>
+    <li><strong>Conception et réalisation :</strong> Atousy.</li>
+    <li>
+      <strong>Visuels :</strong> images générées par intelligence artificielle (Genspark) pour ce site.{' '}
+      <Todo label="À CONFIRMER">conditions d’usage commercial de ces visuels</Todo>
+    </li>
+    <li>
+      <strong>Polices de caractères :</strong> Figtree et Newsreader, sous licence SIL Open Font License, hébergées avec le site.
+    </li>
+    <li><strong>Icônes :</strong> dessinées pour le site.</li>
+  </ul>
+
+  <h2 id="donnees">Données personnelles</h2>
+  <p>
+    Le traitement des données envoyées par le formulaire de devis est décrit dans la page <a href="/confidentialite/">Confidentialité</a>.
+  </p>
+
+  <h2 id="erreur">Nous signaler une erreur</h2>
+  <p>Une information vous semble inexacte ? Écrivez-nous à <Todo>e-mail de contact</Todo>.</p>
+</LegalPage>

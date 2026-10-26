@@ -1,0 +1,162 @@
+---
+// En-tête des pages intérieures : fil d'Ariane, grand H1, chapeau, actions.
+// Avec un slot « media » : texte à gauche, visuel à droite (comme l'accueil).
+// Sans : H1 à gauche, chapeau et actions à droite.
+interface Props {
+  crumb: string;
+  /** Un « \n » force un retour à la ligne dans le H1. */
+  title: string;
+  lead: string;
+  /** Petite étiquette au-dessus du H1 (ex. « Démonstrations fictives »). */
+  tag?: string;
+}
+const { crumb, title, lead, tag } = Astro.props;
+const hasMedia = Astro.slots.has('media');
+const titleLines = title.split('\n');
+---
+
+<section class:list={['ph', hasMedia ? 'ph--media' : 'ph--split']} aria-labelledby="page-title">
+  <div class="container ph__inner">
+    <div class="ph__main">
+      <nav class="ph__crumbs" aria-label="Fil d'Ariane">
+        <ol>
+          <li><a href="/">Accueil</a></li>
+          <li aria-current="page">{crumb}</li>
+        </ol>
+      </nav>
+      {tag && <p class="ph__tag">{tag}</p>}
+      <h1 id="page-title" class:list={{ 'is-broken': titleLines.length > 1 }}>
+        {titleLines.map((line, i) => (i > 0 ? <><br />{line}</> : line))}
+      </h1>
+    </div>
+    <div class="ph__aside">
+      <p class="ph__lead">{lead}</p>
+      <slot name="after-lead" />
+      {
+        Astro.slots.has('actions') && (
+          <div class="ph__actions">
+            <slot name="actions" />
+          </div>
+        )
+      }
+      <slot name="note" />
+    </div>
+    {
+      hasMedia && (
+        <div class="ph__media">
+          <slot name="media" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .ph {
+    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(3rem, 6vw, 6rem);
+  }
+
+  .ph__inner {
+    display: grid;
+    gap: 1.75rem clamp(2rem, 6vw, 6.5rem);
+  }
+
+  .ph__crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+
+  .ph__crumbs li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    opacity: 0.6;
+  }
+
+  .ph__crumbs a {
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  .ph__crumbs a:hover {
+    color: var(--coral-text);
+  }
+
+  .ph__tag {
+    display: inline-block;
+    margin-top: clamp(1.75rem, 3.5vw, 3.25rem);
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  h1 {
+    max-width: 13.5ch;
+    margin-top: clamp(1.75rem, 3.5vw, 3.25rem);
+    font-size: var(--fs-h2);
+  }
+
+  h1.is-broken {
+    max-width: none;
+  }
+
+  .ph__tag + h1 {
+    margin-top: 1.25rem;
+  }
+
+  .ph__lead {
+    max-width: 34rem;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .ph__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: clamp(1.5rem, 2.3vw, 2.25rem);
+  }
+
+  /* H1 à gauche, chapeau à droite (posé sur la ligne de base du titre) */
+  @media (min-width: 62.5em) {
+    .ph--split .ph__inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: end;
+    }
+
+    .ph--split .ph__aside {
+      padding-bottom: 0.35rem;
+    }
+
+    .ph--media .ph__inner {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      grid-template-rows: auto 1fr;
+      align-items: start;
+    }
+
+    .ph--media .ph__main,
+    .ph--media .ph__aside {
+      grid-column: 1;
+    }
+
+    .ph--media .ph__media {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: end;
+    }
+  }
+
+  @media (max-width: 30em) {
+    .ph__actions :global(.btn) {
+      flex: 1 1 100%;
+    }
+  }
+</style>

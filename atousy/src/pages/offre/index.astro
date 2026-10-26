@@ -1,10 +1,268 @@
 ---
-import PagePlaceholder from '../../components/PagePlaceholder.astro';
+import InnerLayout from '../../components/pages/InnerLayout.astro';
+import PageHero from '../../components/pages/PageHero.astro';
+import Section from '../../components/pages/Section.astro';
+import Faq from '../../components/pages/Faq.astro';
+import type { FaqItem } from '../../components/pages/Faq.astro';
+import Price from '../../components/Price.astro';
+import Icon from '../../components/Icon.astro';
+
+const socle = [
+  { strong: 'Jusqu’à 5 pages', rest: ', par exemple : Accueil, Services, Réalisations, À propos, Contact.' },
+  { strong: 'Une langue.', rest: '' },
+  { strong: 'L’adaptation au mobile.', rest: '' },
+  { strong: 'Des textes préparés', rest: ' à partir des informations que vous validez. Pas une rédaction illimitée.' },
+  { strong: 'Un formulaire', rest: ' de contact ou de demande de devis.' },
+  { strong: 'Les bases du référencement local', rest: ', détaillées ci-dessous.' },
+  { strong: 'Deux séries de corrections groupées.', rest: '' },
+  { strong: 'La mise en ligne et la remise de tous les accès.', rest: '' },
+];
+
+const seo = [
+  { strong: 'La structure des pages', rest: ' : un sujet par page' },
+  { strong: 'Les titres', rest: ' : balise title, H1 et H2' },
+  { strong: 'Les méta-descriptions', rest: ', affichées dans les résultats de recherche' },
+  { strong: 'Des contenus adaptés', rest: ' à votre métier et à votre zone d’intervention' },
+  { strong: 'Des images optimisées', rest: ' : poids réduit, texte alternatif' },
+  { strong: 'Les liens internes', rest: ' entre vos pages' },
+];
+
+const extras = [
+  'Une page au-delà de cinq, une deuxième langue.',
+  'Une série de corrections en plus.',
+  'Des textes au-delà des informations fournies.',
+  'Une fonction absente du socle.',
+  'Une modification après les 30 jours.',
+];
+
+const faq: FaqItem[] = [
+  {
+    q: 'Le prix est-il HT ou TTC ?',
+    a: 'Le tarif affiché est indicatif. Le montant final et les taxes applicables sont précisés dans votre devis, avant tout engagement.',
+  },
+  {
+    q: 'Pourquoi deux tarifs ?',
+    a: 'Le tarif dépend du marché : en euros pour la France et le reste de l’Europe, en francs suisses pour la Suisse. Choisissez votre pays avec le sélecteur.',
+  },
+  {
+    q: 'Faites-vous aussi les refontes ?',
+    a: 'Oui. Nous examinons d’abord votre site actuel, puis nous vous proposons un devis.',
+    link: { href: '/refonte/', label: 'Voir la refonte' },
+  },
+  {
+    q: 'Dois-je écrire les textes moi-même ?',
+    a: 'Non. Vous nous donnez les informations utiles : vos services, votre façon de travailler, votre zone d’intervention. Nous préparons les textes. Vous les validez.',
+  },
+  { q: 'Puis-je avoir plus de 5 pages ?', a: 'Oui, sur devis complémentaire.' },
+  {
+    q: 'Pouvez-vous garantir la première place sur Google ?',
+    a: 'Non. Personne ne peut le garantir honnêtement. Nous livrons des bases solides : structure, titres, descriptions, images et liens internes.',
+  },
+  {
+    q: 'Que se passe-t-il après les 30 jours ?',
+    a: 'Les anomalies signalées pendant les 30 jours sont corrigées. Ensuite, toute modification fait l’objet d’un devis.',
+  },
+  { q: 'Est-ce que je récupère les accès ?', a: 'Oui. À la mise en ligne, nous vous remettons tous les accès.' },
+];
 ---
 
-<PagePlaceholder
-  title="L'offre | Atousy"
-  heading="L'offre"
-  lead="Un cadre clair : ce qui est inclus, ce qui ne l'est pas, et comment se passe la suite."
-  description="L'offre Atousy : site jusqu'à 5 pages, mobile, formulaire, bases du référencement local, deux séries de corrections, mise en ligne et remise des accès."
-/>
+<InnerLayout
+  title="L’offre site vitrine : tarif et contenu | Atousy"
+  description="Le détail de l’offre Atousy : tarif indicatif, jusqu’à 5 pages, mobile, formulaire, livrables SEO, deux séries de corrections et 30 jours après livraison."
+  crumb="L’offre"
+  ctaTitle="Parlons de votre projet."
+  ctaText="Un échange suffit pour savoir si l’offre vous convient."
+>
+  <PageHero
+    crumb="L’offre"
+    title="Un cadre clair pour votre projet."
+    lead="Un tarif affiché, un contenu détaillé, des limites écrites. Vous savez ce qui est compris avant de vous engager."
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--coral" href="/devis/">Demander un devis <Icon name="arrow" /></a>
+      <a class="btn btn--outline" href="/methode/">Découvrir la méthode <Icon name="arrow" /></a>
+    </Fragment>
+  </PageHero>
+
+  <!-- Bandeau marine : tarif + socle -->
+  <section class="band ip-dark" aria-label="Tarif et contenu du socle">
+    <div class="container band__inner">
+      <div class="band__col">
+        <h2 id="tarif">Le tarif</h2>
+        <div class="band__price">
+          <Price />
+        </div>
+        <p class="band__hint">Le site affiche le tarif du pays choisi, modifiable avec le sélecteur.</p>
+      </div>
+      <div class="band__divider" aria-hidden="true"></div>
+      <div class="band__col">
+        <h2 id="socle">Ce que comprend le socle</h2>
+        <ul class="ip-list band__list">
+          {
+            socle.map((s) => (
+              <li>
+                <strong>{s.strong}</strong>
+                {s.rest}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Section id="referencement" title="Le référencement de base, concrètement" lead="Ce qui est livré :">
+    <ul class="ip-list ip-list--num">
+      {
+        seo.map((s) => (
+          <li>
+            <span>
+              <strong>{s.strong}</strong>
+              {s.rest}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="ip-note">
+      <strong>Non compris :</strong> le suivi du référencement dans la durée. Aucune position dans Google ne peut être garantie.
+    </p>
+  </Section>
+
+  <section class="trio" aria-label="Limites et suivi">
+    <div class="container trio__grid">
+      <div class="trio__item">
+        <h2 id="non-inclus">Non inclus</h2>
+        <p>Le nom de domaine, l’hébergement et toute demande supplémentaire. Ils sont chiffrés à part.</p>
+      </div>
+      <div class="trio__item">
+        <h2 id="corrections">Deux séries de corrections groupées</h2>
+        <p>Vous réunissez vos remarques dans une liste, nous les appliquons. Deux fois. Cela évite les allers-retours.</p>
+      </div>
+      <div class="trio__item">
+        <h2 id="trente-jours">Après la livraison : 30 jours</h2>
+        <p>
+          Pendant 30 jours, nous corrigeons les anomalies dans le périmètre convenu : un lien cassé, un affichage défaillant. Pas de
+          modifications illimitées.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Section id="devis-complementaire" title="Ce qui demande un devis complémentaire">
+    <ul class="ip-list">
+      {extras.map((e) => <li>{e}</li>)}
+    </ul>
+    <div class="ip-text extras-foot">
+      <p>Chaque ajout fait l’objet d’un devis, que vous acceptez ou non.</p>
+    </div>
+  </Section>
+
+  <Section id="faq" title="Questions fréquentes">
+    <Faq items={faq} />
+    <ul class="ip-links">
+      <li><a class="link-arrow" href="/creation/"><span>Création de site</span><Icon name="arrow" /></a></li>
+      <li><a class="link-arrow" href="/exemples/"><span>Voir les exemples</span><Icon name="arrow" /></a></li>
+    </ul>
+  </Section>
+</InnerLayout>
+
+<style>
+  /* Bandeau marine, même composition que l'accueil */
+  .band {
+    margin-bottom: clamp(3rem, 5.5vw, 5.5rem);
+    padding-block: clamp(3rem, 5vw, 5.25rem);
+    background: var(--marine-band);
+    color: var(--paper);
+  }
+
+  .band__inner {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: clamp(2rem, 5.5vw, 6rem);
+  }
+
+  .band h2 {
+    font-size: var(--fs-h2-sm);
+  }
+
+  .band__price {
+    margin-top: clamp(1.5rem, 2.5vw, 2.5rem);
+  }
+
+  .band__hint {
+    max-width: 26rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgb(255 253 250 / 0.16);
+    font-size: 0.9375rem;
+    color: rgb(255 253 250 / 0.7);
+  }
+
+  .band__divider {
+    background: rgb(255 253 250 / 0.16);
+  }
+
+  .band__list {
+    margin-top: clamp(1.5rem, 2.5vw, 2.5rem);
+  }
+
+  .band__list li {
+    font-size: clamp(1rem, 1.2vw, 1.125rem);
+    color: rgb(255 253 250 / 0.82);
+  }
+
+  .band__list strong {
+    color: var(--paper);
+  }
+
+  /* Trois blocs courts côte à côte */
+  .trio {
+    padding-bottom: clamp(3rem, 5.5vw, 5.5rem);
+  }
+
+  .trio__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem clamp(1.5rem, 4.5vw, 4.5rem);
+  }
+
+  .trio__item {
+    padding-top: clamp(1.75rem, 3vw, 3rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .trio h2 {
+    max-width: 12ch;
+    font-size: clamp(1.6rem, 2.4vw, 2.35rem);
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+  }
+
+  .trio p {
+    margin-top: 1.1rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+
+  .extras-foot {
+    margin-top: 1.5rem;
+  }
+
+  .extras-foot p {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  @media (max-width: 52em) {
+    .band__inner,
+    .trio__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .band__divider {
+      height: 1px;
+    }
+  }
+</style>

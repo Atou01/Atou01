@@ -10,7 +10,7 @@ interface Props {
   title: string;
   description: string;
   current: FaitagePage;
-  /** 'overlay' : en-tête transparent posé sur la photo d'ouverture (desktop). */
+  /** 'overlay' : en-tête transparent posé sur la photo d'ouverture (desktop). */
   header?: 'solid' | 'overlay';
 }
 const { title, description, current, header = 'solid' } = Astro.props;

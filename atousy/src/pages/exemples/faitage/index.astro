@@ -13,7 +13,7 @@ import faitage6 from '../../../assets/photos/faitage-6.jpg';
 const pillars = [
   {
     title: 'Construire',
-    text: 'Maisons à ossature bois, charpentes neuves, préaux : des structures dessinées pour votre terrain et votre usage.',
+    text: 'Maisons à ossature bois, charpentes neuves, préaux : des structures dessinées pour votre terrain et votre usage.',
   },
   {
     title: 'Rénover',
@@ -28,9 +28,9 @@ const pillars = [
 const crafts = [
   { id: 'charpente', title: 'Charpente traditionnelle', text: 'Fermes, pannes et chevrons taillés et assemblés à l’atelier.' },
   { id: 'ossature', title: 'Ossature bois', text: 'Murs, planchers et toitures pour une maison saine et performante.' },
-  { id: 'extensions', title: 'Extensions bois', text: 'Agrandir sans alourdir : une pièce de vie greffée sur l’existant.' },
+  { id: 'extensions', title: 'Extensions bois', text: 'Agrandir sans alourdir : une pièce de vie greffée sur l’existant.' },
   { id: 'renovation', title: 'Rénovation de charpente', text: 'Reprise, traitement et renforcement de structures anciennes.' },
-  { id: 'couverture', title: 'Couverture', text: 'Tuiles, ardoises ou bac acier : la toiture complète, faîtage compris.' },
+  { id: 'couverture', title: 'Couverture', text: 'Tuiles, ardoises ou bac acier : la toiture complète, faîtage compris.' },
 ];
 
 const steps = [
@@ -43,7 +43,7 @@ const steps = [
 
 <FaitageLayout
   title="Faîtage — démonstration fictive | Atousy"
-  description="Faîtage, charpentier fictif : charpente traditionnelle, ossature bois, extensions et rénovation. Site de démonstration réalisé par Atousy."
+  description="Faîtage, charpentier fictif : charpente traditionnelle, ossature bois, extensions et rénovation. Site de démonstration réalisé par Atousy."
   current="accueil"
 >
   <!-- Ouverture -->
@@ -149,7 +149,7 @@ const steps = [
           <h2 id="works-title" class="ft-h2">Des projets à vivre.</h2>
         </div>
         <p class="works__intro">
-          Projets types présentés à titre d’illustration : maisons, extensions et charpentes, du plan à la réception.
+          Projets types présentés à titre d’illustration : maisons, extensions et charpentes, du plan à la réception.
         </p>
       </div>
 
@@ -165,7 +165,7 @@ const steps = [
             />
           </span>
           <span class="ft-caption">Projet type · Maison ossature bois</span>
-          <span class="work__title">Une maison bois face aux sommets<Icon name="arrow" /></span>
+          <span class="work__title">Une maison bois face aux <span class="nowrap">sommets<Icon name="arrow" /></span></span>
         </a>
         <a class="work" href="/exemples/faitage/realisations/#extension">
           <span class="work__img">
@@ -178,7 +178,7 @@ const steps = [
             />
           </span>
           <span class="ft-caption">Projet type · Extension bois</span>
-          <span class="work__title">Une pièce de vie greffée sur la pierre<Icon name="arrow" /></span>
+          <span class="work__title">Une pièce de vie greffée sur la <span class="nowrap">pierre<Icon name="arrow" /></span></span>
         </a>
       </div>
 
@@ -215,7 +215,7 @@ const steps = [
     <div class="workshop__media">
       <Picture
         src={faitage5}
-        alt="Atelier de charpente baigné de lumière : poutres sur tréteaux, établi et outils"
+        alt="Atelier de charpente baigné de lumière : poutres sur tréteaux, établi et outils"
         formats={['avif', 'webp']}
         widths={[640, 960, 1280, 1600]}
         sizes="(max-width: 60em) 100vw, 50vw"
@@ -546,6 +546,10 @@ const steps = [
     transition: transform 0.3s var(--ft-ease);
   }
 
+  .nowrap {
+    white-space: nowrap;
+  }
+
   .work:hover .work__title {
     color: var(--ft-wood-ink);
   }
@@ -728,7 +732,7 @@ const steps = [
 
     .hero__shade {
       background:
-        linear-gradient(0deg, rgb(28 20 12 / 0.82) 0%, rgb(28 20 12 / 0.45) 50%, rgb(28 20 12 / 0.1) 100%);
+        linear-gradient(0deg, rgb(28 20 12 / 0.85) 0%, rgb(28 20 12 / 0.55) 55%, rgb(28 20 12 / 0.12) 100%);
     }
 
     .hero__caption {

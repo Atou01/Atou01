@@ -1,0 +1,36 @@
+---
+// Gabarit des pages intérieures : BaseLayout + fil d'Ariane structuré + bandeau corail final.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaBand from '../CtaBand.astro';
+import { site } from '../../data/site';
+import './inner.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Nom de la page dans le fil d'Ariane. */
+  crumb: string;
+  noindex?: boolean;
+  ctaTitle?: string;
+  ctaText?: string;
+}
+
+const { title, description, crumb, noindex = false, ctaTitle, ctaText } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, site.url).href;
+
+// Données structurées : seulement le fil d'Ariane (rien d'invérifiable).
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Accueil', item: new URL('/', site.url).href },
+    { '@type': 'ListItem', position: 2, name: crumb, item: pageUrl },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} noindex={noindex}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />
+  <slot />
+  <CtaBand title={ctaTitle} text={ctaText} />
+</BaseLayout>

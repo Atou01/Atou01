@@ -1,10 +1,204 @@
 ---
-import PagePlaceholder from '../../components/PagePlaceholder.astro';
+import InnerLayout from '../../components/pages/InnerLayout.astro';
+import PageHero from '../../components/pages/PageHero.astro';
+import Section from '../../components/pages/Section.astro';
+import Icon from '../../components/Icon.astro';
+
+const needs = [
+  'Les informations sur votre activité : services, façon de travailler, zone d’intervention.',
+  'Votre logo et vos photos de chantiers, si vous en avez.',
+  'Vos coordonnées et l’adresse e-mail qui recevra les demandes.',
+  'Pour une refonte : l’adresse de votre site actuel et, si possible, ses accès.',
+  'Des retours groupés à chaque étape.',
+];
 ---
 
-<PagePlaceholder
-  title="Méthode | Atousy"
-  heading="Méthode"
-  lead="Devis, maquette, livraison : vous validez à chaque étape."
-  description="La méthode Atousy en trois étapes : un devis clair, une maquette à valider, puis la mise en ligne avec remise des accès."
-/>
+<InnerLayout
+  title="La méthode : devis, maquette, livraison | Atousy"
+  description="Trois étapes pour votre site : un devis clair et détaillé, une maquette dont vous validez les contenus, puis la mise en ligne avec remise de tous les accès."
+  crumb="Méthode"
+  ctaTitle="Parlons de votre projet."
+  ctaText="Tout commence par un message."
+>
+  <PageHero
+    crumb="Méthode"
+    title="Vous validez à chaque étape."
+    lead="Trois étapes, toujours dans le même ordre. Rien n’avance sans votre accord."
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--coral" href="/devis/">Demander un devis <Icon name="arrow" /></a>
+      <a class="btn btn--outline" href="/offre/">Voir l’offre en détail <Icon name="arrow" /></a>
+    </Fragment>
+  </PageHero>
+
+  <section class="steps" aria-label="Les trois étapes">
+    <div class="container">
+      <ol class="steps__list">
+        <li class="step">
+          <span class="step__num" aria-hidden="true">01</span>
+          <h2 class="step__title">Le devis</h2>
+          <div class="step__body">
+            <p>
+              On échange sur vos besoins : votre activité, votre zone d’intervention, ce que le site doit apporter. Pour une refonte, nous{' '}
+              <a href="/refonte/">examinons d’abord votre site actuel</a>. Vous recevez un devis clair et détaillé.
+            </p>
+            <p class="validate"><span class="validate__check" aria-hidden="true"></span><span><strong>Vous validez :</strong> le devis.</span></p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">02</span>
+          <h2 class="step__title">La maquette</h2>
+          <div class="step__body">
+            <p>
+              Vous découvrez une maquette de votre site. Ensemble, nous validons les contenus : pages, textes, photos. Vos remarques sont
+              regroupées en <a href="/offre/#corrections">deux séries de corrections</a>.
+            </p>
+            <p class="validate">
+              <span class="validate__check" aria-hidden="true"></span><span><strong>Vous validez :</strong> la maquette et les contenus.</span>
+            </p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num" aria-hidden="true">03</span>
+          <h2 class="step__title">La livraison</h2>
+          <div class="step__body">
+            <p>
+              Le site est mis en ligne. Nous vous remettons tous les accès. Pendant <a href="/offre/#trente-jours">30 jours</a>, nous
+              corrigeons les anomalies dans le périmètre convenu.
+            </p>
+            <p class="validate">
+              <span class="validate__check" aria-hidden="true"></span><span><strong>Vous validez :</strong> la version finale, avant la mise en
+              ligne.</span>
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <Section id="besoins" title="Ce dont nous avons besoin de vous" tone="marine">
+    <ul class="ip-list ip-list--num">
+      {needs.map((n) => <li>{n}</li>)}
+    </ul>
+  </Section>
+
+  <Section id="delais" title="Et les délais ?">
+    <div class="ip-text">
+      <p class="big">Ils dépendent de votre projet et du rythme des échanges. Ils sont à définir au devis.</p>
+    </div>
+    <ul class="ip-links">
+      <li><a class="link-arrow" href="/offre/"><span>Voir l’offre en détail</span><Icon name="arrow" /></a></li>
+      <li><a class="link-arrow" href="/exemples/"><span>Voir les exemples</span><Icon name="arrow" /></a></li>
+    </ul>
+  </Section>
+</InnerLayout>
+
+<style>
+  .steps {
+    padding-bottom: clamp(3rem, 5.5vw, 5.5rem);
+  }
+
+  .steps__list {
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: minmax(4rem, 1fr) minmax(0, 4fr) minmax(0, 7fr);
+    gap: 1rem clamp(1.5rem, 4vw, 4rem);
+    padding-block: clamp(1.75rem, 3vw, 3rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .step__num {
+    font-size: clamp(2.25rem, 4vw, 4rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: #75828a;
+  }
+
+  .step__title {
+    font-size: var(--fs-h2-sm);
+  }
+
+  .step__body p {
+    max-width: 40rem;
+    font-size: clamp(1.0625rem, 1.2vw, 1.1875rem);
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+
+  .step__body a {
+    color: inherit;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+
+  .step__body a:hover {
+    color: var(--coral-text);
+  }
+
+  /* « Vous validez » : repère visuel de chaque étape */
+  .step__body .validate {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.4rem;
+    padding: 0.6rem 1.1rem 0.6rem 0.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--paper);
+    font-size: 1rem;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .validate strong {
+    font-weight: 650;
+  }
+
+  .validate__check {
+    position: relative;
+    flex: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--coral);
+  }
+
+  .validate__check::after {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.33rem;
+    width: 0.38rem;
+    height: 0.68rem;
+    border-right: 2px solid var(--on-coral);
+    border-bottom: 2px solid var(--on-coral);
+    transform: rotate(45deg);
+  }
+
+  .ip-text .big {
+    font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  @media (max-width: 52em) {
+    .step {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .step__body {
+      grid-column: 1 / -1;
+    }
+
+    .step__body .validate {
+      border-radius: 1.25rem;
+    }
+  }
+</style>

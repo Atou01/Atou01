@@ -21,7 +21,7 @@ const next = [
 
 <FaitageLayout
   title="Contact — Faîtage, démonstration fictive | Atousy"
-  description="Contacter Faîtage, charpentier fictif : page de contact de démonstration réalisée par Atousy. Formulaire désactivé."
+  description="Contacter Faîtage, charpentier fictif : page de contact de démonstration réalisée par Atousy. Formulaire désactivé."
   current="contact"
 >
   <!-- En-tête de page -->
@@ -32,7 +32,7 @@ const next = [
         <h1 id="page-title">Parlons de votre projet.</h1>
       </div>
       <p class="ft-lead head__lead">
-        Charpente neuve, maison bois, extension ou rénovation : décrivez-nous votre projet, nous revenons vers vous pour
+        Charpente neuve, maison bois, extension ou rénovation : décrivez-nous votre projet, nous revenons vers vous pour
         en discuter et organiser une visite.
       </p>
     </div>
@@ -48,7 +48,7 @@ const next = [
             <rect x="5" y="10.5" width="14" height="10" rx="1.5" />
             <path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3" />
           </svg>
-          <span><strong>Formulaire désactivé :</strong> ceci est une démonstration.</span>
+          <span><strong>Formulaire désactivé :</strong> ceci est une démonstration.</span>
         </p>
 
         <form class="form" aria-labelledby="form-title" aria-describedby="form-note">
@@ -109,7 +109,15 @@ const next = [
             </div>
             <div class="field">
               <label for="ft-files">Photos ou plans <span class="opt">(facultatif)</span></label>
-              <input id="ft-files" name="files" type="file" multiple disabled />
+              <div class="drop">
+                <input id="ft-files" class="drop__input" name="files" type="file" multiple disabled />
+                <span class="drop__ui" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                    <path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M4.5 14.5v4a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4" />
+                  </svg>
+                  <span><strong>Ajouter des fichiers</strong> — photos, plans ou croquis</span>
+                </span>
+              </div>
             </div>
             <div class="check">
               <input id="ft-consent" name="consent" type="checkbox" disabled />
@@ -123,7 +131,7 @@ const next = [
       </div>
 
       <!-- Informations -->
-      <aside class="aside" aria-label="Préparer votre demande">
+      <div class="aside">
         <div class="block">
           <h2 class="block__title">Pour préparer notre échange</h2>
           <ul class="ticks">
@@ -132,7 +140,7 @@ const next = [
         </div>
 
         <div class="block">
-          <h2 class="block__title">Et ensuite ?</h2>
+          <h2 class="block__title">Et ensuite ?</h2>
           <ol class="next">
             {
               next.map((n, i) => (
@@ -154,7 +162,7 @@ const next = [
           <h2 class="block__title">Nous trouver</h2>
           <RealSiteNote>vos coordonnées (téléphone, e-mail, adresse de l’atelier), vos horaires et votre zone d’intervention, avec un plan d’accès.</RealSiteNote>
         </div>
-      </aside>
+      </div>
     </div>
   </section>
 </FaitageLayout>
@@ -288,25 +296,44 @@ const next = [
     min-height: 9rem;
   }
 
-  input[type='file'] {
-    width: 100%;
-    padding: 0.75rem 0.9rem;
+  /* Zone de dépôt : le champ natif (désactivé) est recouvert d'un habillage en français */
+  .drop {
+    position: relative;
     background: var(--ft-paper);
+    background-image: repeating-linear-gradient(-45deg, transparent 0 10px, rgb(43 34 25 / 0.025) 10px 20px);
     border: 1px dashed var(--ft-line-strong);
     border-radius: 2px;
-    color: var(--ft-ink-2);
-    font-size: 0.9375rem;
   }
 
-  input[type='file']::file-selector-button {
-    margin-right: 0.9rem;
-    padding: 0.45rem 0.85rem;
-    background: var(--ft-white);
-    border: 1px solid var(--ft-line-strong);
-    border-radius: 2px;
+  .drop__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: not-allowed;
+  }
+
+  .drop__ui {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0.9rem;
+    color: var(--ft-ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .drop__ui svg {
+    flex: none;
+    width: 1.35rem;
+    height: 1.35rem;
+    color: var(--ft-wood-ink);
+  }
+
+  .drop__ui strong {
+    font-weight: 650;
     color: var(--ft-ink);
-    font: inherit;
-    font-weight: 600;
   }
 
   .select {

@@ -1,10 +1,203 @@
 ---
-import PagePlaceholder from '../../components/PagePlaceholder.astro';
+import InnerLayout from '../../components/pages/InnerLayout.astro';
+import PageHero from '../../components/pages/PageHero.astro';
+import DemoStrip from '../../components/pages/DemoStrip.astro';
+import Section from '../../components/pages/Section.astro';
+import Icon from '../../components/Icon.astro';
+import { demos, demoHighlights, demoDescriptions } from '../../data/pages/demos';
+import '@fontsource-variable/newsreader/wght.css';
+
+const cards = [demos.rivage, demos.faitage];
 ---
 
-<PagePlaceholder
-  title="Exemples de sites | Atousy"
-  heading="Exemples"
-  lead="Deux démonstrations fictives pour montrer notre approche : un paysagiste et un charpentier."
-  description="Découvrez deux sites de démonstration fictifs réalisés par Atousy : Rivage, paysagiste, et Faîtage, charpentier."
-/>
+<InnerLayout
+  title="Exemples de sites vitrines, démos fictives | Atousy"
+  description="Deux sites de démonstration fictifs créés par Atousy : Rivage, paysagiste, et Faîtage, charpentier. Cinq pages, mobile, contact : voyez notre façon de faire."
+  crumb="Exemples"
+  ctaTitle="Et le vôtre ?"
+  ctaText="Parlons de votre métier et de ce que votre site doit montrer."
+>
+  <PageHero
+    crumb="Exemples"
+    tag="Démonstrations fictives"
+    title="Deux métiers. Deux sites à part."
+    lead="Rivage et Faîtage n’existent pas. Ce sont deux entreprises fictives, imaginées pour montrer notre façon de travailler."
+  />
+
+  <DemoStrip />
+
+  <section class="demos" aria-label="Les deux démonstrations">
+    <div class="container demos__grid">
+      {
+        cards.map((d) => (
+          <article class:list={['demo', `demo--${d.id}`]} aria-labelledby={`demo-${d.id}`}>
+            <p class:list={['demo__mark', `demo__mark--${d.id}`]} aria-hidden="true">
+              {d.id === 'rivage' ? (
+                <>
+                  <span class="demo__wave">≈</span>rivage
+                </>
+              ) : (
+                <>
+                  <span class="demo__ridge" />
+                  Faîtage
+                </>
+              )}
+            </p>
+            <p class="demo__tag">Démonstration fictive</p>
+            <h2 id={`demo-${d.id}`}>
+              {d.name} — {d.trade}
+            </h2>
+            <p class="demo__desc">{demoDescriptions[d.id]}</p>
+
+            <h3>Ce que la démo illustre</h3>
+            <ul class="ip-list ip-list--compact demo__list">
+              <li>
+                5 pages :{' '}
+                {d.pages.map((p, i) => (
+                  <>
+                    <a href={p.href}>{p.page}</a>
+                    {i < d.pages.length - 1 ? ', ' : ' ;'}
+                  </>
+                ))}
+              </li>
+              {demoHighlights[d.id].map((h) => (
+                <li>{h}</li>
+              ))}
+            </ul>
+
+            <a class="btn btn--dark demo__btn" href={d.href}>
+              Ouvrir la démo {d.name} <Icon name="arrow" />
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <Section id="pas-des-clients" title="Ce que ces démos ne sont pas" tone="marine">
+    <div class="ip-text">
+      <p>
+        Ce ne sont pas des sites de clients. Les noms, les textes et les projets sont inventés. Les photos ont été générées par
+        intelligence artificielle.
+      </p>
+      <p><strong>Votre site sera construit avec vos informations et, de préférence, vos propres photos.</strong></p>
+    </div>
+    <ul class="ip-links">
+      <li><a class="link-arrow" href="/offre/"><span>Voir l’offre</span><Icon name="arrow" /></a></li>
+      <li><a class="link-arrow" href="/creation/"><span>Création de site</span><Icon name="arrow" /></a></li>
+      <li><a class="link-arrow" href="/refonte/"><span>Refonte de site</span><Icon name="arrow" /></a></li>
+    </ul>
+  </Section>
+</InnerLayout>
+
+<style>
+  .demos {
+    padding-block: clamp(3rem, 6vw, 6rem);
+  }
+
+  .demos__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2.5rem, 6vw, 6.5rem);
+  }
+
+  .demo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: clamp(1.75rem, 3vw, 2.5rem);
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .demo__mark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    font-family: 'Newsreader Variable', Georgia, serif;
+    font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+    font-weight: 420;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .demo__mark--rivage {
+    color: #1e3328;
+  }
+
+  .demo__mark--faitage {
+    align-items: center;
+    color: #2b2219;
+    font-weight: 500;
+  }
+
+  .demo__wave {
+    font-size: 0.6em;
+    opacity: 0.7;
+  }
+
+  .demo__ridge {
+    width: 0.42em;
+    height: 0.42em;
+    border-top: 2px solid #b06d34;
+    border-left: 2px solid #b06d34;
+    transform: translateY(0.12em) rotate(45deg);
+  }
+
+  .demo__tag {
+    margin-top: 1.75rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  h2 {
+    margin-top: 1rem;
+    font-size: var(--fs-h2-sm);
+  }
+
+  .demo__desc {
+    max-width: 32rem;
+    margin-top: 1rem;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  h3 {
+    margin-top: 2rem;
+    font-size: 1.125rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .demo__list {
+    width: 100%;
+    margin-top: 0.85rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .demo__list a {
+    font-weight: 600;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+
+  .demo__list a:hover {
+    color: var(--coral-text);
+  }
+
+  /* Boutons alignés en bas des deux cartes */
+  .demo__btn {
+    margin-top: auto;
+  }
+
+  @media (max-width: 52em) {
+    .demos__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

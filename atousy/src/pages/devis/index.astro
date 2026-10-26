@@ -1,10 +1,103 @@
 ---
-import PagePlaceholder from '../../components/PagePlaceholder.astro';
+// Demande de devis. Textes : contenus/devis.md (brouillon à valider).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DevisForm from '../../components/devis/DevisForm.astro';
+import NextSteps from '../../components/devis/NextSteps.astro';
+
+const hasTurnstile = Boolean(String(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '').trim());
 ---
 
-<PagePlaceholder
-  title="Demander un devis | Atousy"
-  heading="Demander un devis"
-  lead="Quelques questions pour comprendre votre projet. Réponse sous forme de devis clair et détaillé."
-  description="Demandez un devis pour la création ou la refonte de votre site vitrine d'artisan, de TPE ou de PME : quelques questions, une réponse claire et détaillée."
-/>
+<BaseLayout
+  title="Demander un devis pour votre site | Atousy"
+  description="Décrivez votre projet de création ou de refonte de site vitrine en quelques questions. Atousy revient vers vous par e-mail avec un devis clair et détaillé."
+>
+  {hasTurnstile && <link slot="head" rel="preconnect" href="https://challenges.cloudflare.com" />}
+
+  <section class="devis-hero" aria-labelledby="devis-title">
+    <div class="container devis-hero__inner">
+      <h1 id="devis-title">Parlons de votre <span class="accent">projet.</span></h1>
+      <p class="devis-hero__lead">
+        Quelques questions pour comprendre votre besoin. Nous revenons vers vous par e-mail avec les prochaines étapes.
+      </p>
+    </div>
+  </section>
+
+  <div class="container devis-layout">
+    <div class="devis-layout__main">
+      <DevisForm />
+    </div>
+    <div class="devis-layout__aside">
+      <NextSteps />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .devis-hero {
+    padding-block: clamp(2.5rem, 6vw, 6rem) clamp(2.25rem, 4.5vw, 4rem);
+  }
+
+  .devis-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 25rem);
+    gap: 1.5rem clamp(3rem, 7vw, 7rem);
+    align-items: end;
+  }
+
+  h1 {
+    max-width: 12ch;
+    font-size: clamp(2.9rem, 7vw, 7rem);
+  }
+
+  .accent {
+    color: var(--coral-text);
+  }
+
+  .devis-hero__lead {
+    max-width: 36rem;
+    padding-bottom: 0.6rem;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .devis-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(19rem, 25rem);
+    gap: clamp(3rem, 7vw, 7rem);
+    align-items: start;
+    padding-bottom: clamp(4rem, 8vw, 7.5rem);
+  }
+
+  .devis-layout__main {
+    max-width: 46rem;
+  }
+
+  .devis-layout__aside {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  @media (max-width: 62.49em) {
+    .devis-hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .devis-hero__lead {
+      padding-bottom: 0;
+    }
+
+    .devis-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 3.5rem;
+    }
+
+    .devis-layout__main {
+      max-width: none;
+    }
+
+    .devis-layout__aside {
+      position: static;
+    }
+  }
+</style>

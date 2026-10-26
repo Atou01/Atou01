@@ -1,10 +1,199 @@
 ---
-import PagePlaceholder from '../../components/PagePlaceholder.astro';
+import InnerLayout from '../../components/pages/InnerLayout.astro';
+import PageHero from '../../components/pages/PageHero.astro';
+import Section from '../../components/pages/Section.astro';
+import Price from '../../components/Price.astro';
+import Icon from '../../components/Icon.astro';
+
+const signs = [
+  'Le site s’affiche mal sur smartphone.',
+  'Les pages sont lentes à charger.',
+  'Les informations ne sont plus à jour.',
+  'Vos visiteurs ne trouvent pas comment vous contacter.',
+  'Vous hésitez à donner l’adresse de votre site.',
+  'Vous ne savez plus qui détient les accès.',
+];
+
+const review = [
+  { title: 'La structure', text: 'Pages, menu, ordre des informations.' },
+  { title: 'Les contenus', text: 'Textes et photos.' },
+  { title: 'Le mobile', text: 'Affichage et lisibilité.' },
+  { title: 'La vitesse', text: 'Chargement, poids des images.' },
+  { title: 'Le référencement de base', text: 'Titres, descriptions, organisation.' },
+  { title: 'Le formulaire', text: 'Les demandes arrivent-elles bien ?' },
+];
 ---
 
-<PagePlaceholder
-  title="Refonte de site | Atousy"
-  heading="Refonte de site"
-  lead="Votre site existe déjà mais ne vous ressemble plus ? On l'examine, puis on le reconstruit sur des bases saines."
-  description="Refonte de sites vitrines pour artisans, TPE et PME : examen du site existant, nouvelle structure, adaptation mobile et bases du référencement local."
-/>
+<InnerLayout
+  title="Refonte de site vitrine pour artisans | Atousy"
+  description="Votre site a vieilli ? Atousy examine d’abord l’existant, garde ce qui fonctionne et refait le reste : mobile, structure, contenus, formulaire, référencement."
+  crumb="Refonte de site"
+  ctaTitle="Parlons de votre site actuel."
+  ctaText="Indiquez son adresse dans le formulaire. Nous l’examinons avant le devis."
+>
+  <PageHero
+    crumb="Refonte de site"
+    title={"Votre site existe.\nIl peut faire mieux."}
+    lead="Il date ou s’affiche mal sur téléphone ? Nous repartons de l’existant. On garde ce qui fonctionne, on refait le reste."
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--coral" href="/devis/?type=refonte">Demander une refonte <Icon name="arrow" /></a>
+      <a class="btn btn--outline" href="/methode/">Découvrir la méthode <Icon name="arrow" /></a>
+    </Fragment>
+    <p slot="note" class="hero-note">
+      Pas encore de site ?{' '}
+      <a class="link-arrow" href="/creation/"><span>Voir la création</span><Icon name="arrow" /></a>
+    </p>
+  </PageHero>
+
+  <Section id="signes" title="Les signes qu’une refonte s’impose">
+    <ul class="ip-list ip-list--num">
+      {signs.map((s) => <li>{s}</li>)}
+    </ul>
+  </Section>
+
+  <Section
+    id="examen"
+    title="D’abord, un examen de votre site actuel"
+    lead="Une refonte commence toujours par là. Avant le devis, nous regardons :"
+    tone="marine"
+    layout="stack"
+  >
+    <ul class="review">
+      {
+        review.map((r) => (
+          <li>
+            <h3>{r.title}</h3>
+            <p>{r.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section id="garder-refaire" title="Ce qu’on garde, ce qu’on refait" layout="stack">
+    <div class="keep">
+      <div class="keep__col keep__col--keep">
+        <h3>On garde ce qui sert encore</h3>
+        <p>Vos textes justes, vos bonnes photos, votre nom de domaine.</p>
+      </div>
+      <div class="keep__col keep__col--redo">
+        <h3>On refait ce qui vous freine</h3>
+        <p>Mise en page, mobile, structure, titres, formulaire.</p>
+      </div>
+    </div>
+    <p class="keep__foot">Tout est écrit dans le devis.</p>
+  </Section>
+
+  <Section id="anciennes-adresses" title="Vos anciennes adresses de pages">
+    <div class="ip-text">
+      <p class="big">
+        Quand une page change d’adresse, l’ancienne peut renvoyer vers la nouvelle : les liens déjà partagés restent valides.
+      </p>
+    </div>
+  </Section>
+
+  <Section id="tarif" title="Le tarif" lead="Le socle de l’offre s’applique." tone="marine">
+    <Price />
+    <ul class="ip-links">
+      <li><a class="link-arrow" href="/offre/"><span>Voir le détail de l’offre</span><Icon name="arrow" /></a></li>
+      <li><a class="link-arrow" href="/exemples/"><span>Voir les exemples</span><Icon name="arrow" /></a></li>
+    </ul>
+  </Section>
+</InnerLayout>
+
+<style>
+  .hero-note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.9rem;
+    margin-top: 1.75rem;
+    font-size: 1rem;
+    color: var(--ink-2);
+  }
+
+  .hero-note .link-arrow {
+    color: var(--ink);
+  }
+
+  .ip-text .big {
+    font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  /* Points examinés : grille 3 × 2 à filets clairs */
+  .review {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.25rem clamp(1.5rem, 4.5vw, 4.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .review h3 {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgb(255 253 250 / 0.22);
+    font-size: clamp(1.15rem, 1.45vw, 1.375rem);
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .review p {
+    margin-top: 0.75rem;
+    font-size: 1.0625rem;
+    color: rgb(255 253 250 / 0.82);
+  }
+
+  /* On garde / on refait */
+  .keep {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem clamp(1.5rem, 4.5vw, 4.5rem);
+  }
+
+  .keep__col {
+    padding: clamp(1.5rem, 2.5vw, 2.25rem);
+    background: var(--paper);
+    border-top: 2px solid var(--marine);
+  }
+
+  .keep__col--redo {
+    border-top-color: var(--coral);
+  }
+
+  .keep h3 {
+    font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+
+  .keep p {
+    margin-top: 0.9rem;
+    font-size: clamp(1.0625rem, 1.25vw, 1.1875rem);
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+
+  .keep__foot {
+    margin-top: 1.5rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 62.49em) {
+    .review {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 40em) {
+    .review,
+    .keep {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

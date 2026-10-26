@@ -1,0 +1,1179 @@
+---
+// Aperçu d'une page de démonstration fictive, dessiné en HTML (pas une capture d'écran).
+// Purement décoratif (aria-hidden) : le lien et son libellé sont posés par le parent.
+// Toutes les mesures sont en cqw (largeur de la fenêtre), format 16:10.
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import type { DemoWindowId } from '../../data/pages/demos';
+import rivage1 from '../../assets/photos/rivage-1.jpg';
+import rivage2 from '../../assets/photos/rivage-2.jpg';
+import rivage3 from '../../assets/photos/rivage-3.jpg';
+import faitage1 from '../../assets/photos/faitage-1.jpg';
+import faitage3 from '../../assets/photos/faitage-3.jpg';
+import faitage4 from '../../assets/photos/faitage-4.jpg';
+import faitage5 from '../../assets/photos/faitage-5.jpg';
+import '@fontsource-variable/newsreader/wght.css';
+
+interface Props {
+  id: DemoWindowId;
+  /** sizes de l'image pleine largeur de la fenêtre. */
+  sizes?: string;
+  /** sizes d'une image en demi-largeur. */
+  halfSizes?: string;
+  eager?: boolean;
+  priority?: boolean;
+}
+
+const {
+  id,
+  sizes = '(max-width: 40em) 82vw, 36vw',
+  halfSizes = '(max-width: 40em) 44vw, 18vw',
+  eager = false,
+  priority = false,
+} = Astro.props;
+
+const demo = id.startsWith('rivage') ? 'rivage' : 'faitage';
+const loading = eager ? ('eager' as const) : ('lazy' as const);
+const prio = priority ? { fetchpriority: 'high' as const } : {};
+const full = { formats: ['avif', 'webp'] as const, alt: '', widths: [480, 720, 1080], sizes, loading, ...prio };
+const half = { formats: ['avif', 'webp'] as const, alt: '', widths: [280, 480, 640], sizes: halfSizes, loading, ...prio };
+
+const rivageLinks = [
+  { key: 'rivage-approche', label: 'Notre approche' },
+  { key: 'rivage-savoir-faire', label: 'Savoir-faire' },
+  { key: 'rivage-jardins', label: 'Votre jardin' },
+];
+const faitageLinks = [
+  { key: 'faitage-accueil', label: 'Accueil' },
+  { key: 'faitage-realisations', label: 'Réalisations' },
+  { key: 'faitage-savoir-faire', label: 'Savoir-faire' },
+  { key: 'faitage-atelier', label: 'L’atelier' },
+];
+const glassNav = id === 'faitage-realisations';
+---
+
+<span class:list={['w', `w--${demo}`, `w--${id}`]} aria-hidden="true">
+  {
+    demo === 'rivage' ? (
+      <span class="rv-nav">
+        <span class="rv-logo">
+          <span class="rv-wave">≈</span>rivage
+        </span>
+        <span class="rv-links">
+          {rivageLinks.map((l) => (
+            <span class:list={{ 'is-on': l.key === id }}>{l.label}</span>
+          ))}
+        </span>
+        <span class="rv-cta">Nous contacter</span>
+      </span>
+    ) : (
+      <span class:list={['ft-nav', { 'ft-nav--glass': glassNav }]}>
+        <span class="ft-logo">
+          <span class="ft-ridge" />
+          Faîtage
+        </span>
+        <span class="ft-links">
+          {faitageLinks.map((l) => (
+            <span class:list={{ 'is-on': l.key === id }}>{l.label}</span>
+          ))}
+        </span>
+        <span class:list={['ft-cta', { 'ft-cta--wood': id === 'faitage-contact' }]}>
+          Contact <Icon name="arrow" />
+        </span>
+      </span>
+    )
+  }
+
+  {
+    id === 'rivage-accueil' && (
+      <>
+        <span class="w-img w-img--below-rv">
+          <Picture src={rivage1} {...full} />
+        </span>
+        <span class="w-shade w-shade--left w-img--below-rv" />
+        <span class="w-copy">
+          <span class="w-title">
+            Le jardin
+            <br />
+            vous appelle.
+          </span>
+          <span class="w-text">Des lieux pour ralentir, se retrouver et regarder les saisons passer.</span>
+          <span class="w-btn">
+            Entrer dans le jardin <Icon name="arrow" />
+          </span>
+        </span>
+        <span class="rv-aside">
+          Des paysages pour vivre dehors.
+          <br />
+          En toute saison.
+        </span>
+      </>
+    )
+  }
+
+  {
+    (id === 'rivage-approche' || id === 'rivage-savoir-faire' || id === 'rivage-jardins' || id === 'rivage-contact') && (
+      <span class="rv-crumbs">
+        Accueil <span>/</span>{' '}
+        {id === 'rivage-approche' ? 'Notre approche' : id === 'rivage-savoir-faire' ? 'Savoir-faire' : id === 'rivage-jardins' ? 'Votre jardin' : 'Nous contacter'}
+      </span>
+    )
+  }
+
+  {
+    id === 'rivage-approche' && (
+      <>
+        <span class="rv-h1">Notre approche</span>
+        <span class="rv-lead w-text">Un jardin réussi ne se plaque pas sur un terrain. Il naît d’un lieu, d’une lumière, et de la façon dont vous aimez y vivre.</span>
+        <span class="rv-media rv-media--wide">
+          <Picture src={rivage2} {...full} />
+        </span>
+      </>
+    )
+  }
+
+  {
+    id === 'rivage-savoir-faire' && (
+      <>
+        <span class="rv-h1 rv-h1--low">Savoir-faire</span>
+        <span class="rv-lead w-text">De la conception à l’entretien, un seul interlocuteur pour faire naître votre jardin.</span>
+        <span class="rv-chips">
+          <span>Conception</span>
+          <span>Plantation</span>
+          <span>Pierre sèche</span>
+          <span>Bassins naturels</span>
+          <span>Terrasses</span>
+        </span>
+        <span class="rv-media rv-media--left">
+          <Picture src={rivage1} {...half} />
+        </span>
+        <span class="rv-service">
+          <span class="rv-service__num">01 / 06</span>
+          <span class="rv-service__title">Conception de jardin</span>
+          <span class="rv-service__text w-text">Relevé du terrain, esquisse d’ambiance, plan de plantation.</span>
+        </span>
+      </>
+    )
+  }
+
+  {
+    id === 'rivage-jardins' && (
+      <>
+        <span class="rv-h1 rv-h1--low">Votre jardin</span>
+        <span class="rv-lead w-text">Chaque jardin part d’un lieu et d’une façon de vivre. Ces projets types vous aident à imaginer le vôtre.</span>
+        <span class="rv-note w-text">Projets types illustrés : Rivage est une entreprise fictive.</span>
+        <span class="rv-media rv-media--g1">
+          <Picture src={rivage2} {...half} />
+        </span>
+        <span class="rv-media rv-media--g2">
+          <Picture src={rivage3} {...half} />
+        </span>
+      </>
+    )
+  }
+
+  {
+    id === 'rivage-contact' && (
+      <>
+        <span class="rv-h1">Nous contacter</span>
+        <span class="rv-lead w-text">Parlez-nous de votre jardin : ce que vous aimez, ce qui vous manque, la façon dont vous aimeriez y vivre.</span>
+        <span class="rv-form">
+          <span class="rv-form__notice">Formulaire désactivé : ceci est une démonstration.</span>
+          <span class="rv-form__title">Votre demande</span>
+          <span class="rv-form__row">
+            <span class="rv-field">
+              <span>Prénom et nom</span>
+              <span class="rv-field__box" />
+            </span>
+            <span class="rv-field">
+              <span>Adresse e-mail</span>
+              <span class="rv-field__box" />
+            </span>
+          </span>
+          <span class="rv-field">
+            <span>Téléphone (facultatif)</span>
+            <span class="rv-field__box" />
+          </span>
+        </span>
+        <span class="rv-next">
+          <span class="rv-next__title">Et ensuite ?</span>
+          <span class="rv-step">
+            <span class="rv-step__n">1</span>Nous lisons votre message
+          </span>
+          <span class="rv-step">
+            <span class="rv-step__n">2</span>Nous vous rappelons
+          </span>
+          <span class="rv-step">
+            <span class="rv-step__n">3</span>Nous venons voir le jardin
+          </span>
+        </span>
+      </>
+    )
+  }
+
+  {
+    id === 'faitage-accueil' && (
+      <>
+        <span class="w-img w-img--below-ft">
+          <Picture src={faitage1} {...full} />
+        </span>
+        <span class="w-shade w-shade--wood w-img--below-ft" />
+        <span class="w-copy w-copy--ft">
+          <span class="w-title">
+            Des charpentes
+            <br />
+            pour demain.
+          </span>
+          <span class="w-text">
+            Construire, rénover, transmettre.
+            <br />
+            Un savoir-faire local au service de vos projets.
+          </span>
+          <span class="w-btn w-btn--square">
+            Découvrir le projet <Icon name="arrow" />
+          </span>
+        </span>
+        <span class="ft-caption">Projet type · Préau en bois massif</span>
+      </>
+    )
+  }
+
+  {
+    id === 'faitage-realisations' && (
+      <>
+        <span class="w-img">
+          <Picture src={faitage4} {...full} />
+        </span>
+        <span class="w-shade w-shade--bottom" />
+        <span class="w-copy w-copy--ft w-copy--low">
+          <span class="ft-kicker">
+            <span class="ft-ridge" />
+            Projet type · Maison ossature bois
+          </span>
+          <span class="w-title">Nos réalisations</span>
+          <span class="w-text">Construction neuve, charpente, extension, ouvrage extérieur : quatre projets types.</span>
+        </span>
+      </>
+    )
+  }
+
+  {
+    id === 'faitage-savoir-faire' && (
+      <>
+        <span class="w-img w-img--below-ft">
+          <Picture src={faitage3} {...full} />
+        </span>
+        <span class="w-shade w-shade--wood w-img--below-ft" />
+        <span class="w-copy w-copy--ft w-copy--mid">
+          <span class="ft-kicker ft-kicker--wood">
+            <span class="ft-ridge" />
+            Savoir-faire
+          </span>
+          <span class="w-title">
+            Des structures
+            <br />
+            durables.
+          </span>
+          <span class="w-text">Charpente, ossature, extension, couverture : une seule équipe.</span>
+          <span class="w-btn w-btn--square">
+            Voir les réalisations <Icon name="arrow" />
+          </span>
+        </span>
+      </>
+    )
+  }
+
+  {
+    id === 'faitage-atelier' && (
+      <>
+        <span class="ft-split">
+          <span class="ft-kicker ft-kicker--ink">L’atelier</span>
+          <span class="ft-split__title">
+            Là où le bois
+            <br />
+            prend forme.
+          </span>
+          <span class="ft-split__text w-text">Avant d’être levée sur votre chantier, chaque charpente passe par notre atelier.</span>
+        </span>
+        <span class="ft-split__img">
+          <Picture src={faitage5} {...half} />
+        </span>
+      </>
+    )
+  }
+
+  {
+    id === 'faitage-contact' && (
+      <>
+        <span class="ft-contact-head">
+          <span class="ft-kicker ft-kicker--ink">Contact</span>
+          <span class="ft-split__title">
+            Parlons de
+            <br />
+            votre projet.
+          </span>
+          <span class="ft-contact-lead w-text">Charpente neuve, maison bois, extension ou rénovation : décrivez-nous votre projet.</span>
+        </span>
+        <span class="ft-contact-body">
+          <span class="ft-form">
+            <span class="ft-form__title">Votre demande</span>
+            <span class="ft-form__notice">Formulaire désactivé : ceci est une démonstration.</span>
+            <span class="ft-form__row">
+              <span class="ft-field">
+                <span>Nom et prénom</span>
+                <span class="ft-field__box" />
+              </span>
+              <span class="ft-field">
+                <span>E-mail</span>
+                <span class="ft-field__box" />
+              </span>
+            </span>
+          </span>
+          <span class="ft-prep">
+            <span class="ft-prep__title">Pour préparer notre échange</span>
+            <span class="ft-prep__item">Quelques photos du bâtiment</span>
+            <span class="ft-prep__item">Des plans ou un croquis</span>
+            <span class="ft-prep__item">Vos délais souhaités</span>
+          </span>
+        </span>
+      </>
+    )
+  }
+</span>
+
+<style>
+  .w {
+    --serif: 'Newsreader Variable', Georgia, serif;
+    --rv-green: #1e3328;
+    --rv-ivory: #f6f1e6;
+    --rv-ink: #1b2620;
+    --rv-ink-2: #4c5a51;
+    --rv-line: rgb(30 51 40 / 0.16);
+    --ft-white: #fbf9f5;
+    --ft-sand: #f3eee6;
+    --ft-ink: #2b2219;
+    --ft-ink-2: #5d5148;
+    --ft-charcoal: #221f1c;
+    --ft-wood: #b06d34;
+    --ft-wood-ink: #8f5426;
+    --ft-wood-light: #d9a66d;
+    --ft-line: rgb(43 34 25 / 0.14);
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    container-type: inline-size;
+    border-radius: 3px;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0;
+    text-align: left;
+    white-space: normal;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .w--rivage {
+    background: var(--rv-ivory);
+    color: var(--rv-ink);
+  }
+
+  .w--faitage {
+    background: var(--ft-white);
+    color: var(--ft-ink);
+  }
+
+  .w :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  .w :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .w :global(svg) {
+    display: inline-block;
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+  }
+
+  /* ---------- Rivage : navigation ---------- */
+  .rv-nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 3.2cqw;
+    height: 8.6cqw;
+    padding-inline: 5.5cqw;
+    border-bottom: max(1px, 0.1cqw) solid var(--rv-line);
+    background: var(--rv-ivory);
+    font-size: 1.5cqw;
+    white-space: nowrap;
+  }
+
+  .rv-logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.7cqw;
+    margin-right: auto;
+    font-family: var(--serif);
+    font-size: 3.9cqw;
+    font-weight: 420;
+    letter-spacing: -0.01em;
+  }
+
+  .rv-wave {
+    font-size: 2.3cqw;
+    opacity: 0.7;
+  }
+
+  .rv-links {
+    display: flex;
+    gap: 3.2cqw;
+  }
+
+  .rv-links .is-on {
+    box-shadow: 0 0.35cqw 0 -0.2cqw currentColor;
+  }
+
+  .rv-cta {
+    padding: 1.1cqw 1.8cqw;
+    border-radius: 0.4cqw;
+    background: var(--rv-green);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* ---------- Faîtage : navigation ---------- */
+  .ft-nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 2.5cqw;
+    height: 8.2cqw;
+    padding-inline: 4.5cqw;
+    border-bottom: max(1px, 0.1cqw) solid var(--ft-line);
+    background: var(--ft-white);
+    font-size: 1.4cqw;
+    white-space: nowrap;
+  }
+
+  .ft-nav--glass {
+    border-bottom-color: rgb(255 255 255 / 0.28);
+    background: linear-gradient(180deg, rgb(20 28 40 / 0.45), transparent);
+    color: #fff;
+  }
+
+  .ft-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2cqw;
+    margin-right: auto;
+    font-family: var(--serif);
+    font-size: 3.3cqw;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .ft-ridge {
+    width: 1.5cqw;
+    height: 1.5cqw;
+    border-top: 0.24cqw solid var(--ft-wood);
+    border-left: 0.24cqw solid var(--ft-wood);
+    transform: translateY(0.45cqw) rotate(45deg);
+  }
+
+  .ft-nav--glass .ft-ridge {
+    border-color: var(--ft-wood-light);
+  }
+
+  .ft-links {
+    display: flex;
+    gap: 2.5cqw;
+  }
+
+  .ft-links .is-on {
+    box-shadow: 0 0.35cqw 0 -0.15cqw var(--ft-wood);
+  }
+
+  .ft-nav--glass .ft-links .is-on {
+    box-shadow: 0 0.35cqw 0 -0.15cqw var(--ft-wood-light);
+  }
+
+  .ft-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    padding: 1.15cqw 1.9cqw;
+    border: max(1px, 0.1cqw) solid transparent;
+    background: var(--ft-charcoal);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .ft-nav--glass .ft-cta {
+    border-color: rgb(255 255 255 / 0.85);
+    background: transparent;
+  }
+
+  .ft-cta--wood {
+    background: var(--ft-wood-ink);
+  }
+
+  /* ---------- Héros photo (commun) ---------- */
+  .w-img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .w-img--below-rv {
+    top: 8.6cqw;
+  }
+
+  .w-img--below-ft {
+    top: 8.2cqw;
+  }
+
+  .w-shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .w-shade--left {
+    background:
+      linear-gradient(90deg, rgb(10 25 18 / 0.62) 0%, rgb(10 25 18 / 0.25) 45%, transparent 68%),
+      linear-gradient(0deg, rgb(10 25 18 / 0.35) 0%, transparent 40%);
+  }
+
+  .w-shade--wood {
+    background: linear-gradient(90deg, rgb(28 20 12 / 0.68) 0%, rgb(28 20 12 / 0.28) 48%, transparent 72%);
+  }
+
+  .w-shade--bottom {
+    background: linear-gradient(15deg, rgb(25 18 12 / 0.72) 0%, rgb(25 18 12 / 0.25) 42%, transparent 62%);
+  }
+
+  .w-copy {
+    position: absolute;
+    z-index: 1;
+    left: 7cqw;
+    bottom: 6.5cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.2cqw;
+    max-width: 52cqw;
+    color: #fff;
+  }
+
+  .w-copy--ft {
+    left: 4.5cqw;
+  }
+
+  .w-copy--low {
+    bottom: 5.5cqw;
+    gap: 1.8cqw;
+  }
+
+  .w-copy--mid {
+    bottom: auto;
+    top: 17cqw;
+  }
+
+  .w-title {
+    display: block;
+    font-family: var(--serif);
+    font-size: 7.2cqw;
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+  }
+
+  .w-copy .w-text {
+    display: block;
+    max-width: 40cqw;
+    font-size: 1.55cqw;
+    line-height: 1.5;
+    opacity: 0.94;
+  }
+
+  .w-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.6cqw;
+    margin-top: 0.4cqw;
+    padding: 1.3cqw 2.2cqw;
+    border-radius: 0.35cqw;
+    background: #fff;
+    color: var(--rv-ink);
+    font-size: 1.45cqw;
+    font-weight: 500;
+  }
+
+  .w-btn--square {
+    border-radius: 0;
+    color: var(--ft-ink);
+  }
+
+  .rv-aside {
+    position: absolute;
+    z-index: 1;
+    right: 6cqw;
+    bottom: 7cqw;
+    padding-top: 1cqw;
+    border-top: max(1px, 0.1cqw) solid rgb(255 255 255 / 0.55);
+    color: #fff;
+    font-family: var(--serif);
+    font-size: 1.85cqw;
+    font-style: italic;
+    line-height: 1.35;
+  }
+
+  .ft-caption {
+    position: absolute;
+    z-index: 1;
+    right: 4.5cqw;
+    bottom: 4cqw;
+    color: rgb(255 255 255 / 0.88);
+    font-size: 1cqw;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ft-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9cqw;
+    font-size: 1.05cqw;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ft-kicker .ft-ridge {
+    width: 1cqw;
+    height: 1cqw;
+    border-width: 0.2cqw;
+    border-color: var(--ft-wood-light);
+    transform: translateY(0.3cqw) rotate(45deg);
+  }
+
+  .ft-kicker--wood {
+    color: var(--ft-wood-light);
+  }
+
+  .ft-kicker--ink {
+    color: var(--ft-ink);
+  }
+
+  /* ---------- Rivage : pages intérieures ---------- */
+  .rv-crumbs {
+    position: absolute;
+    top: 12.6cqw;
+    left: 7cqw;
+    font-size: 1.15cqw;
+    color: var(--rv-ink-2);
+  }
+
+  .rv-crumbs span {
+    display: inline;
+    margin-inline: 0.5cqw;
+    opacity: 0.6;
+  }
+
+  .rv-h1 {
+    position: absolute;
+    left: 7cqw;
+    top: 17.5cqw;
+    color: var(--rv-green);
+    font-family: var(--serif);
+    font-size: 7.4cqw;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .rv-h1--low {
+    top: 19.5cqw;
+  }
+
+  .rv-lead {
+    position: absolute;
+    left: 56cqw;
+    right: 7cqw;
+    top: 17.8cqw;
+    color: var(--rv-ink-2);
+    font-size: 1.55cqw;
+    line-height: 1.55;
+  }
+
+  .rv-media {
+    position: absolute;
+    overflow: hidden;
+    border-radius: 0.5cqw;
+  }
+
+  .rv-media--wide {
+    left: 7cqw;
+    right: 7cqw;
+    top: 31.5cqw;
+    height: 40cqw;
+  }
+
+  .rv-media--left {
+    left: 7cqw;
+    width: 40cqw;
+    top: 35cqw;
+    height: 32cqw;
+  }
+
+  .rv-media--g1 {
+    left: 7cqw;
+    width: 48cqw;
+    top: 34cqw;
+    height: 34cqw;
+  }
+
+  .rv-media--g2 {
+    left: 58cqw;
+    right: 7cqw;
+    top: 34cqw;
+    height: 34cqw;
+  }
+
+  .rv-chips {
+    position: absolute;
+    left: 56cqw;
+    right: 5cqw;
+    top: 24.5cqw;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8cqw;
+  }
+
+  .rv-chips span {
+    padding: 0.6cqw 1.2cqw;
+    border: max(1px, 0.1cqw) solid rgb(30 51 40 / 0.3);
+    border-radius: 99px;
+    font-size: 1.1cqw;
+  }
+
+  .rv-service {
+    position: absolute;
+    left: 52cqw;
+    right: 7cqw;
+    top: 36cqw;
+  }
+
+  .rv-service__num {
+    display: block;
+    color: var(--rv-ink-2);
+    font-family: var(--serif);
+    font-size: 1.3cqw;
+    font-style: italic;
+  }
+
+  .rv-service__title {
+    display: block;
+    margin-top: 1cqw;
+    color: var(--rv-green);
+    font-family: var(--serif);
+    font-size: 3.7cqw;
+    line-height: 1.05;
+  }
+
+  .rv-service__text {
+    display: block;
+    margin-top: 1.6cqw;
+    color: var(--rv-ink-2);
+    font-size: 1.35cqw;
+    line-height: 1.55;
+  }
+
+  .rv-note {
+    position: absolute;
+    left: 56cqw;
+    right: 7cqw;
+    top: 26.4cqw;
+    padding-left: 1.2cqw;
+    border-left: max(1px, 0.12cqw) solid var(--rv-ink-2);
+    color: var(--rv-ink-2);
+    font-size: 1.1cqw;
+    line-height: 1.5;
+  }
+
+  .rv-form {
+    position: absolute;
+    left: 7cqw;
+    width: 47cqw;
+    top: 30cqw;
+    height: 40cqw;
+    padding: 3cqw;
+    border: max(1px, 0.1cqw) solid var(--rv-line);
+    border-radius: 0.5cqw;
+    background: #fbf8f1;
+    box-shadow: 0 1.5cqw 3cqw -2cqw rgb(30 51 40 / 0.25);
+  }
+
+  .rv-form__notice {
+    display: block;
+    padding: 1.2cqw 1.6cqw;
+    border: max(1px, 0.1cqw) solid rgb(30 51 40 / 0.3);
+    border-radius: 0.25cqw;
+    background: #e7ece2;
+    font-size: 1.1cqw;
+    font-weight: 600;
+  }
+
+  .rv-form__title {
+    display: block;
+    margin-top: 2.6cqw;
+    color: var(--rv-green);
+    font-family: var(--serif);
+    font-size: 2.5cqw;
+  }
+
+  .rv-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6cqw;
+  }
+
+  .rv-field {
+    display: block;
+    margin-top: 2cqw;
+    font-size: 1.05cqw;
+    font-weight: 600;
+  }
+
+  .rv-field__box {
+    display: block;
+    height: 3.4cqw;
+    margin-top: 1cqw;
+    border: max(1px, 0.1cqw) dashed rgb(30 51 40 / 0.32);
+    border-radius: 0.2cqw;
+    background: #f4efe5;
+  }
+
+  .rv-next {
+    position: absolute;
+    left: 61cqw;
+    right: 6cqw;
+    top: 31cqw;
+  }
+
+  .rv-next__title {
+    display: block;
+    color: var(--rv-green);
+    font-family: var(--serif);
+    font-size: 3cqw;
+  }
+
+  .rv-step {
+    display: flex;
+    align-items: center;
+    gap: 1.6cqw;
+    margin-top: 2.4cqw;
+    font-family: var(--serif);
+    font-size: 1.75cqw;
+  }
+
+  .rv-step__n {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3.2cqw;
+    height: 3.2cqw;
+    border: max(1px, 0.1cqw) solid rgb(30 51 40 / 0.35);
+    border-radius: 50%;
+    font-size: 1.3cqw;
+  }
+
+  /* ---------- Faîtage : atelier et contact ---------- */
+  .ft-split {
+    position: absolute;
+    left: 4.5cqw;
+    width: 34cqw;
+    top: 22cqw;
+  }
+
+  .ft-split__title {
+    display: block;
+    margin-top: 2cqw;
+    color: var(--ft-ink);
+    font-family: var(--serif);
+    font-size: 5.6cqw;
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .ft-split__text {
+    display: block;
+    margin-top: 2.6cqw;
+    color: var(--ft-ink-2);
+    font-size: 1.4cqw;
+    line-height: 1.55;
+  }
+
+  .ft-split__img {
+    position: absolute;
+    left: 42.5cqw;
+    right: 0;
+    top: 8.2cqw;
+    bottom: 0;
+  }
+
+  .ft-contact-head {
+    position: absolute;
+    inset: 8.2cqw 0 auto;
+    height: 27cqw;
+    padding: 5.5cqw 4.5cqw 0;
+    border-bottom: max(1px, 0.1cqw) solid var(--ft-line);
+  }
+
+  .ft-contact-head .ft-split__title {
+    margin-top: 1.6cqw;
+    font-size: 5cqw;
+  }
+
+  .ft-contact-lead {
+    position: absolute;
+    left: 55cqw;
+    right: 6cqw;
+    top: 11cqw;
+    color: var(--ft-ink-2);
+    font-size: 1.4cqw;
+    line-height: 1.55;
+  }
+
+  .ft-contact-body {
+    position: absolute;
+    inset: 35.2cqw 0 0;
+    background: var(--ft-sand);
+  }
+
+  .ft-form {
+    position: absolute;
+    left: 4.5cqw;
+    width: 47cqw;
+    top: 4cqw;
+    height: 30cqw;
+    padding: 2.6cqw 3cqw;
+    border: max(1px, 0.1cqw) solid var(--ft-line);
+    border-top: 0.35cqw solid var(--ft-charcoal);
+    background: var(--ft-white);
+  }
+
+  .ft-form__title {
+    display: block;
+    font-family: var(--serif);
+    font-size: 2.5cqw;
+  }
+
+  .ft-form__notice {
+    display: block;
+    margin-top: 1.6cqw;
+    padding: 1.1cqw 1.5cqw;
+    border: max(1px, 0.1cqw) solid #e8cfb0;
+    background: #f6e9da;
+    font-size: 1.05cqw;
+    font-weight: 600;
+  }
+
+  .ft-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6cqw;
+  }
+
+  .ft-field {
+    display: block;
+    margin-top: 1.8cqw;
+    font-size: 1.05cqw;
+    font-weight: 600;
+  }
+
+  .ft-field__box {
+    display: block;
+    height: 3.2cqw;
+    margin-top: 0.9cqw;
+    border: max(1px, 0.1cqw) solid var(--ft-line);
+    background: repeating-linear-gradient(135deg, #f1ede6 0 0.6cqw, #f8f5f0 0.6cqw 1.2cqw);
+  }
+
+  .ft-prep {
+    position: absolute;
+    left: 57cqw;
+    right: 4.5cqw;
+    top: 4.6cqw;
+  }
+
+  .ft-prep__title {
+    display: block;
+    padding-bottom: 1.2cqw;
+    border-bottom: max(1px, 0.1cqw) solid var(--ft-line);
+    font-size: 1.05cqw;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ft-prep__item {
+    display: block;
+    position: relative;
+    margin-top: 1.8cqw;
+    padding-left: 2.4cqw;
+    font-size: 1.4cqw;
+  }
+
+  .ft-prep__item::before {
+    content: '';
+    position: absolute;
+    left: 0.3cqw;
+    top: 0.75cqw;
+    width: 0.9cqw;
+    height: 0.9cqw;
+    border-top: 0.2cqw solid var(--ft-wood);
+    border-left: 0.2cqw solid var(--ft-wood);
+    transform: rotate(45deg);
+  }
+
+  /* Petites fenêtres (téléphone) : on retire les textes devenus illisibles. */
+  @container (max-width: 25rem) {
+    .w .w-text,
+    .rv-links,
+    .ft-links,
+    .rv-chips,
+    .rv-aside,
+    .ft-caption,
+    .rv-form__row,
+    .ft-form__row,
+    .rv-step,
+    .ft-prep__item {
+      display: none;
+    }
+
+    .rv-nav,
+    .ft-nav {
+      height: 11cqw;
+      font-size: 2.6cqw;
+    }
+
+    .rv-logo,
+    .ft-logo {
+      font-size: 5.4cqw;
+    }
+
+    .ft-ridge {
+      width: 2.2cqw;
+      height: 2.2cqw;
+      border-width: 0.35cqw;
+    }
+
+    .w-img--below-rv,
+    .w-img--below-ft {
+      top: 11cqw;
+    }
+
+    .w-title {
+      font-size: 9cqw;
+    }
+
+    .w-btn {
+      padding: 2cqw 3cqw;
+      font-size: 2.6cqw;
+    }
+
+    .ft-kicker {
+      font-size: 2cqw;
+    }
+
+    .rv-crumbs {
+      top: 15cqw;
+      font-size: 2.2cqw;
+    }
+
+    .rv-h1,
+    .rv-h1--low {
+      top: 20cqw;
+      font-size: 9.5cqw;
+    }
+
+    .rv-media--wide,
+    .rv-media--g1,
+    .rv-media--g2,
+    .rv-media--left {
+      top: 34cqw;
+    }
+
+    .rv-media--left {
+      width: auto;
+      right: 7cqw;
+    }
+
+    .rv-service {
+      display: none;
+    }
+
+    .rv-form,
+    .ft-form {
+      width: auto;
+      right: 7cqw;
+    }
+
+    .rv-form__notice,
+    .ft-form__notice {
+      font-size: 2cqw;
+    }
+
+    .rv-form__title,
+    .ft-form__title {
+      font-size: 4cqw;
+    }
+
+    .rv-next,
+    .ft-prep,
+    .ft-contact-lead {
+      display: none;
+    }
+
+    .ft-split {
+      width: 36cqw;
+      top: 20cqw;
+    }
+
+    .ft-split__title {
+      font-size: 6.4cqw;
+    }
+
+    .ft-contact-head .ft-split__title {
+      font-size: 7cqw;
+    }
+
+    .ft-contact-head {
+      padding-top: 4.5cqw;
+      height: 30cqw;
+    }
+
+    .ft-contact-body {
+      top: 38.2cqw;
+    }
+
+    .w-copy--mid {
+      top: 19cqw;
+    }
+  }
+</style>
