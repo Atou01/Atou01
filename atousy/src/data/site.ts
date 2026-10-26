@@ -36,12 +36,13 @@ export const legalNav: NavItem[] = [
   { label: 'Confidentialité', href: '/confidentialite/' },
 ];
 
-// Prix de travail validés dans le brief. Le marché choisi à la main prime
-// toujours sur la détection (voir src/scripts/market.ts).
+// Prix de travail validés dans le brief. Le pays est détecté automatiquement
+// (Suisse → CHF, Europe → EUR) ; un choix manuel prime toujours (src/scripts/market.ts).
+// Identifiants internes : 'fr' = marché euro (France et reste de l'Europe), 'ch' = Suisse.
 export type MarketId = 'fr' | 'ch';
 
 export const markets: Record<MarketId, { id: MarketId; country: string; currency: string; label: string; price: string }> = {
-  fr: { id: 'fr', country: 'France', currency: 'EUR', label: 'France · EUR', price: '1 490 €' },
+  fr: { id: 'fr', country: 'Europe', currency: 'EUR', label: 'Europe · EUR', price: '1 490 €' },
   ch: { id: 'ch', country: 'Suisse', currency: 'CHF', label: 'Suisse · CHF', price: '1 990 CHF' },
 };
 

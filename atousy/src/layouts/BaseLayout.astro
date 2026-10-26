@@ -46,8 +46,10 @@ const ogImage = new URL('/og-image.jpg', site.url).href;
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
+        var m = null;
         try {
-          var m = localStorage.getItem('atousy-market');
+          // Choix manuel en priorité, sinon pays déjà détecté pendant la session.
+          m = localStorage.getItem('atousy-market') || sessionStorage.getItem('atousy-market-auto');
         } catch (e) {}
         // Sans JavaScript, aucun marché n'est posé : les deux prix restent visibles.
         d.setAttribute('data-market', m === 'ch' ? 'ch' : 'fr');
