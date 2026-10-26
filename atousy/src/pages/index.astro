@@ -5,6 +5,17 @@ import Gallery from '../components/home/Gallery.astro';
 import OfferBand from '../components/home/OfferBand.astro';
 import Method from '../components/home/Method.astro';
 import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+
+// Données structurées volontairement minimales : rien d'invérifiable (ni adresse, ni avis).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: site.url,
+  logo: new URL('/icon-512.png', site.url).href,
+  description: 'Studio web & design : création et refonte de sites vitrines pour artisans, TPE et PME.',
+};
 ---
 
 <BaseLayout
@@ -12,6 +23,7 @@ import CtaBand from '../components/CtaBand.astro';
   description="Studio web & design : création et refonte de sites vitrines pour artisans, TPE et PME. Un devis clair, une maquette à valider, un site pensé pour obtenir des demandes de devis."
   overlayHeader
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <Hero />
   <Gallery />
   <OfferBand />

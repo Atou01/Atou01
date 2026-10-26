@@ -15,7 +15,7 @@ interface Props {
 
 const { title, description, overlayHeader = false, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
-const ogImage = new URL('/icon-512.png', site.url).href;
+const ogImage = new URL('/og-image.jpg', site.url).href;
 ---
 
 <!doctype html>
@@ -38,6 +38,9 @@ const ogImage = new URL('/icon-512.png', site.url).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>
       // Avant l'affichage : active le mode JS et reprend le marché choisi (évite un saut de prix).
       (function () {
