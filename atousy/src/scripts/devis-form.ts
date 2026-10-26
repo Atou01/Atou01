@@ -318,10 +318,12 @@ function setup(root: HTMLElement, form: HTMLFormElement) {
             widgetError = false;
             if (isCaptchaAlert()) clearAlert();
           },
+          // Turnstile réessaie seul (retry « auto » par défaut, quelle que soit la valeur renvoyée).
+          // Renvoyer true signale l'erreur comme traitée : pas d'avertissement dans la console.
           'error-callback': () => {
             widgetError = true;
             upgradePending('captchaError');
-            return false; // valeur fausse : Turnstile garde sa nouvelle tentative automatique
+            return true;
           },
         }) ?? undefined;
     } catch {

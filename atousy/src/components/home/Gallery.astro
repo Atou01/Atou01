@@ -11,6 +11,7 @@ import '@fontsource-variable/newsreader/wght.css';
 const photo = { formats: ['avif', 'webp'] as const, alt: '', widths: photoWidths };
 // Téléphone de la carte Faîtage : la photo 3:2 couvre un écran en portrait, elle est donc
 // rendue bien plus large que l'écran (hauteur × 1,5) : d'où 66vw puis 28vw.
+// Carte Rivage : au-delà de 93em, le conteneur (84rem) ne grandit plus et la photo reste à 780 px.
 ---
 
 <section class="gallery" aria-labelledby="gallery-title">
@@ -36,7 +37,7 @@ const photo = { formats: ['avif', 'webp'] as const, alt: '', widths: photoWidths
             <span class="b-cta">Nous contacter</span>
           </span>
           <span class="b-hero">
-            <span class="b-img"><Picture src={rivageImg} {...photo} sizes="(max-width: 62.49em) 92vw, 52vw" /></span>
+            <span class="b-img"><Picture src={rivageImg} {...photo} sizes="(max-width: 62.49em) 92vw, (min-width: 93em) 780px, 52vw" /></span>
             <span class="b-copy">
               <span class="b-title">Le jardin<br />vous appelle.</span>
               <span class="b-text">Des lieux pour ralentir, se retrouver et regarder les saisons passer. Le paysage commence avec votre façon de vivre.</span>

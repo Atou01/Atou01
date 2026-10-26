@@ -132,8 +132,8 @@ ne s'applique qu'au **déploiement suivant**. En local : copier `.dev.vars.examp
   fournisseur d'e-mail avec la Production. La clé de site de test `1x00000000000000000000AA` ne
   fonctionne donc, elle aussi, qu'en local.
 - **Build sans `PUBLIC_TURNSTILE_SITE_KEY`** : la page Devis n'a pas de widget, chaque envoi est
-  refusé et la page affiche « Le formulaire n'est pas encore en service » avec l'adresse de
-  contact. Le build Cloudflare l'écrit en avertissement (`PUBLIC_TURNSTILE_SITE_KEY absente`) :
+  refusé et, au clic sur « Envoyer ma demande », la page affiche « Le formulaire n'est pas
+  encore en service » avec l'adresse de contact. Le build Cloudflare l'écrit en avertissement (`PUBLIC_TURNSTILE_SITE_KEY absente`) :
   relire le journal du build et faire un envoi réel avant la mise en ligne.
 
 ## Mise en place de Turnstile
@@ -219,6 +219,8 @@ une **page HTML lisible** au lieu du JSON, avec le même code HTTP (`server/html
 confirmation uniquement après un envoi accepté par le service d'e-mail (même texte qu'avec
 JavaScript, sans délai de réponse promis), sinon l'explication (champs à corriger, anti-spam qui
 nécessite JavaScript, service non raccordé, erreur technique) et un lien de retour au formulaire.
+Sur la page Devis, sans JavaScript, le bouton d'envoi est masqué et l'adresse de contact est
+proposée à la place : cette réponse HTML reste un filet de sécurité pour un envoi direct.
 Cette page porte ses propres en-têtes de sécurité (voir plus bas). Le script de la page continue de recevoir du JSON
 (`Accept: application/json`). Tests : `tests/html.test.js`.
 
@@ -286,8 +288,10 @@ Ce qui est en place ou à activer :
     `buildCsp` dans `astro.config.mjs`. **Cloudflare Web Analytics** en injection automatique :
     ajouter `https://static.cloudflareinsights.com` à `script-src` et
     `https://cloudflareinsights.com` à `connect-src`. **Rocket Loader** et **Zaraz** : à laisser
-    désactivés. L'obfuscation des adresses e-mail de Cloudflare fonctionne (script servi par le
-    site lui-même, sous `/cdn-cgi/`).
+    désactivés. **Bot Fight Mode** (détections JavaScript) ajoute à chaque page un petit script
+    en ligne, différent à chaque requête, que la CSP bloque : s'il est activé, relire la console
+    du navigateur sur le site en ligne. L'obfuscation des adresses e-mail de Cloudflare
+    fonctionne (script servi par le site lui-même, sous `/cdn-cgi/`).
   - En cas de doute après un changement : remplacer temporairement le nom de l'en-tête par
     `Content-Security-Policy-Report-Only` dans `addCspToHeaders` (les violations s'affichent dans
     la console du navigateur sans rien bloquer).

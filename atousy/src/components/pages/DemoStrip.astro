@@ -138,7 +138,7 @@ const total = demoWindows.length;
     // Boutons et indicateur. Aux extrémités, les boutons sont marqués aria-disabled au lieu
     // de disabled : ils gardent le focus clavier (sinon il tomberait sur <body>).
     const setOff = (b: HTMLButtonElement | null, off: boolean) => b?.setAttribute('aria-disabled', String(off));
-    const isOff = (b: HTMLButtonElement) => b.getAttribute('aria-disabled') === 'true';
+    const isOff = (b: HTMLButtonElement | null) => b?.getAttribute('aria-disabled') === 'true';
     const update = () => {
       const x = track.scrollLeft;
       const max = maxLeft();
@@ -443,9 +443,11 @@ const total = demoWindows.length;
     margin-top: 0.75rem;
   }
 
+  /* Passe à la ligne s'il y a beaucoup de démos (petits écrans) */
   .dw__jumps {
     display: flex;
-    gap: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
   }
 
   .dw__jump {

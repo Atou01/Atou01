@@ -120,6 +120,8 @@ const { title, description, heading, crumb, lead, toc } = Astro.props;
   /* Texte courant */
   .legal__body {
     max-width: 46rem;
+    /* Le tableau s'empile selon la largeur réelle de la colonne de texte (voir plus bas). */
+    container: legal-body / inline-size;
   }
 
   .legal__body :global(h2) {
@@ -249,7 +251,10 @@ const { title, description, heading, crumb, lead, toc } = Astro.props;
     }
   }
 
-  @media (max-width: 40em) {
+  /* Colonne de texte étroite (téléphone, ou tablette avec le sommaire à côté) : une carte par
+     prestataire. Requête sur le conteneur et non sur l'écran : entre 52em et ~68em de large,
+     le sommaire réduit la colonne sous la largeur minimale du tableau. */
+  @container legal-body (max-width: 40rem) {
     .legal__body :global(.legal-table thead) {
       position: absolute;
       width: 1px;
