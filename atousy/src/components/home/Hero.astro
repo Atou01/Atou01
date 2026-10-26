@@ -8,24 +8,17 @@ import { Picture } from 'astro:assets';
 import Icon from '../Icon.astro';
 import heroImg from '../../assets/photos/hero-architecture.jpg';
 import rivage1 from '../../assets/photos/rivage-1.jpg';
-import rivage2 from '../../assets/photos/rivage-2.jpg';
-import rivage4 from '../../assets/photos/rivage-4.jpg';
-import rivage5 from '../../assets/photos/rivage-5.jpg';
 import faitage1 from '../../assets/photos/faitage-1.jpg';
-import faitage3 from '../../assets/photos/faitage-3.jpg';
-import faitage4 from '../../assets/photos/faitage-4.jpg';
 import '@fontsource-variable/newsreader/wght.css';
 
 const wide = '(max-width: 62.49em) 70vw, 38vw';
-const narrow = '(max-width: 62.49em) 32vw, 16vw';
 const pic = { formats: ['avif', 'webp'] as const, alt: '' };
 
+// Une fenêtre par entreprise fictive. Trois démos de plus (plombier-chauffagiste,
+// électricien, maçon) viendront compléter le carrousel quand leurs photos seront prêtes.
 const windows = [
-  { id: 'rivage-accueil', shape: 'wide', href: '/exemples/rivage/', label: 'Rivage · Paysagiste — Accueil' },
-  { id: 'faitage-savoir-faire', shape: 'tall', href: '/exemples/faitage/savoir-faire/', label: 'Faîtage · Charpentier — Savoir-faire' },
-  { id: 'faitage-accueil', shape: 'wide', href: '/exemples/faitage/', label: 'Faîtage · Charpentier — Accueil' },
-  { id: 'rivage-jardins', shape: 'wide', href: '/exemples/rivage/jardins/', label: 'Rivage · Paysagiste — Votre jardin' },
-  { id: 'faitage-realisations', shape: 'wide', href: '/exemples/faitage/realisations/', label: 'Faîtage · Charpentier — Réalisations' },
+  { id: 'rivage-accueil', shape: 'wide', href: '/exemples/rivage/', label: 'Rivage · Paysagiste' },
+  { id: 'faitage-accueil', shape: 'wide', href: '/exemples/faitage/', label: 'Faîtage · Charpentier' },
 ];
 ---
 
@@ -79,17 +72,6 @@ const windows = [
                       <span class="m-aside">Des paysages pour<br />vivre dehors.<br />En toute saison.</span>
                     </>
                   )}
-                  {w.id === 'faitage-savoir-faire' && (
-                    <>
-                      <span class="screen__img"><Picture src={faitage3} {...pic} widths={[320, 520, 760]} sizes={narrow} /></span>
-                      <span class="m-shade m-shade--bottom" />
-                      <span class="m-nav m-nav--paper m-nav--end"><span>Savoir-faire</span><span>Réalisations</span><span>Contact</span></span>
-                      <span class="m-hero m-hero--tall">
-                        <span class="m-title">Des structures durables.</span>
-                        <span class="m-btn">Voir le projet <Icon name="arrow" /></span>
-                      </span>
-                    </>
-                  )}
                   {w.id === 'faitage-accueil' && (
                     <>
                       <span class="screen__img screen__img--below-nav"><Picture src={faitage1} {...pic} widths={[480, 800, 1200]} sizes={wide} /></span>
@@ -102,38 +84,6 @@ const windows = [
                         <span class="m-title">Des charpentes<br />pour demain.</span>
                         <span class="m-text">Construire, rénover, transmettre.<br />Un savoir-faire local au service de vos projets.</span>
                         <span class="m-btn m-btn--solid">Découvrir le projet <Icon name="arrow" /></span>
-                      </span>
-                    </>
-                  )}
-                  {w.id === 'rivage-jardins' && (
-                    <span class="m-page m-page--ivory">
-                      <span class="m-nav m-nav--green">
-                        <span class="m-logo">rivage</span>
-                        <span class="m-links"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
-                        <span class="m-cta">Nous contacter</span>
-                      </span>
-                      <span class="m-gallery-head">
-                        <span class="m-title m-title--dark">Votre jardin</span>
-                        <span class="m-kicker">Projets types · démonstration</span>
-                      </span>
-                      <span class="m-gallery">
-                        <span class="m-tile"><Picture src={rivage2} {...pic} widths={[240, 400]} sizes="(max-width: 62.49em) 24vw, 12vw" /><span>Terrasse et massifs</span></span>
-                        <span class="m-tile"><Picture src={rivage4} {...pic} widths={[240, 400]} sizes="(max-width: 62.49em) 24vw, 12vw" /><span>Muret en pierre sèche</span></span>
-                        <span class="m-tile"><Picture src={rivage5} {...pic} widths={[240, 400]} sizes="(max-width: 62.49em) 24vw, 12vw" /><span>Bassin naturel</span></span>
-                      </span>
-                    </span>
-                  )}
-                  {w.id === 'faitage-realisations' && (
-                    <>
-                      <span class="screen__img"><Picture src={faitage4} {...pic} widths={[480, 800, 1200]} sizes={wide} /></span>
-                      <span class="m-shade m-shade--bottom" />
-                      <span class="m-nav m-nav--glass">
-                        <span class="m-logo m-logo--faitage"><span class="m-ridge" />Faîtage</span>
-                        <span class="m-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
-                      </span>
-                      <span class="m-hero">
-                        <span class="m-kicker m-kicker--light">Projet type · Maison ossature bois</span>
-                        <span class="m-title">Nos réalisations</span>
                       </span>
                     </>
                   )}
@@ -446,6 +396,48 @@ const windows = [
 
     .showcase__item > .screen {
       animation-timeline: --win;
+    }
+
+    /* La fenêtre la plus proche du centre passe devant ses voisines. */
+    .showcase__item {
+      animation-name: win-z;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .showcase__track > .showcase__item {
+      animation-timeline: --win;
+    }
+  }
+
+  @keyframes win-z {
+    0% {
+      z-index: 1;
+    }
+    50% {
+      z-index: 9;
+    }
+    100% {
+      z-index: 1;
+    }
+  }
+
+  /* Téléphone : rotations plus douces, voisines plus petites (pas de chevauchement). */
+  @keyframes win-tilt-sm {
+    0% {
+      transform: perspective(150cqw) rotateY(-40deg) scale(0.72);
+    }
+    30% {
+      transform: perspective(150cqw) rotateY(-24deg) scale(0.86);
+    }
+    50% {
+      transform: perspective(150cqw) rotateY(-6deg) scale(1);
+    }
+    70% {
+      transform: perspective(150cqw) rotateY(22deg) scale(0.86);
+    }
+    100% {
+      transform: perspective(150cqw) rotateY(38deg) scale(0.72);
     }
   }
 
@@ -876,10 +868,10 @@ const windows = [
 
     .showcase__track {
       --w-wide: 66cqw;
-      --w-tall: 28cqw;
+      --w-tall: 30cqw;
       --peek: 0cqw;
       --side: calc((100cqw - var(--w-wide)) / 2);
-      gap: 5cqw;
+      gap: 9cqw;
       padding-bottom: 9cqw;
       -webkit-mask-image: none;
       mask-image: none;
@@ -939,7 +931,19 @@ const windows = [
     }
   }
 
+  @media (max-width: 62.49em) {
+    @supports (animation-timeline: view()) {
+      .screen {
+        animation-name: win-tilt-sm;
+      }
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .showcase__item {
+      animation: none;
+    }
+
     .screen {
       animation: none;
       transform: perspective(90cqw) rotateY(-10deg);
