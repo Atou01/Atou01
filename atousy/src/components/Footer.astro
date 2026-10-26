@@ -19,6 +19,7 @@ const year = new Date().getFullYear();
   </div>
   <div class="container site-footer__legal">
     <p>© {year} {site.name} · Studio web & design · Création et refonte de sites</p>
+    <a class="site-footer__mail" href="mailto:contact@atousy.com">contact@atousy.com</a>
     <ul>
       {legalNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
     </ul>

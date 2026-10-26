@@ -116,19 +116,19 @@ Votre message est trop long. Raccourcissez-le, puis réessayez.
 ### Erreur technique (réponses `delivery_failed`, autres erreurs, réseau)
 
 - **Titre :** Votre demande n’est pas partie.
-- **Texte :** Un problème technique a empêché l’envoi. Vos réponses sont conservées : réessayez dans un instant. Si le problème continue, écrivez-nous à [contact@atousy.com — à activer quand la boîte est testée].
+- **Texte :** Un problème technique a empêché l’envoi. Vos réponses sont conservées : réessayez dans un instant. Si le problème continue, écrivez-nous à contact@atousy.com.
 - **Sans connexion :** Connexion impossible. Vérifiez votre connexion Internet, puis réessayez.
 
 ### Service pas encore configuré (réponse `not_configured`)
 
 - **Titre :** Le formulaire n’est pas encore en service.
-- **Texte :** Votre demande n’a pas été envoyée. Écrivez-nous directement à [contact@atousy.com — à activer quand la boîte est testée].
+- **Texte :** Votre demande n’a pas été envoyée. Écrivez-nous directement à contact@atousy.com.
 
 ### JavaScript désactivé
 
-Ce formulaire a besoin de JavaScript pour sa vérification anti-spam. Vous pouvez aussi nous écrire à [contact@atousy.com — à activer quand la boîte est testée].
+Ce formulaire a besoin de JavaScript pour sa vérification anti-spam. Vous pouvez aussi nous écrire à contact@atousy.com.
 
-> À valider : contact@atousy.com ne doit apparaître sur le site qu’une fois la boîte testée de bout en bout (envoi et réception). D’ici là, laisser l’emplacement vide plutôt que de publier une adresse qui ne répond pas.
+> Décision du fondateur : l’adresse de contact affichée est contact@atousy.com.
 
 ## Encart « Et ensuite ? »
 

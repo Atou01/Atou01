@@ -6,7 +6,7 @@
  * À activer quand la boîte est testée de bout en bout (envoi et réception) :
  * tant qu'elle vaut '', aucune adresse n'est publiée.
  */
-export const CONTACT_EMAIL = '';
+export const CONTACT_EMAIL = 'contact@atousy.com';
 
 /** Messages d'erreur des champs : mot pour mot ceux de server/devis.js (à modifier aux deux endroits). */
 export const FIELD_MSG = {

@@ -9,10 +9,10 @@ réellement en ligne avec un compte configuré. Rien n'est publié ni raccordé 
 - [ ] Adresse du siège ou de domiciliation (non affichée ailleurs que dans les mentions légales)
 - [ ] Directeur / responsable de la publication
 - [ ] Régime de TVA (franchise en base ou numéro de TVA intracommunautaire)
-- [ ] E-mail de contact officiel (contact@atousy.com une fois testée) — téléphone facultatif
+- [x] E-mail de contact : contact@atousy.com (affiché sur le site) — reste à tester l'envoi et la réception
 - [ ] Hébergeur : Cloudflare (coordonnées à reporter dans les mentions légales)
 - [ ] Durée de conservation des demandes de devis (politique de confidentialité)
-- [ ] Crédits : visuels générés par IA (Genspark) — vérifier les conditions d'usage commercial
+- [ ] Visuels Genspark : vérifier en interne les conditions d'usage commercial (pas de mention sur le site, décision du fondateur)
 - [ ] Décision HT / TTC : le site n'en affiche aucune, à trancher dans le devis
 - [ ] Mention suisse affichée près du prix en CHF (« sans TVA suisse… impôt sur les acquisitions »)
       et mention « Offre réservée aux professionnels » : à faire valider par l'expert-comptable

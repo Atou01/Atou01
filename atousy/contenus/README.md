@@ -59,13 +59,13 @@ Titres SEO : 60 caractères au plus, terminés par « | Atousy ». Méta-descrip
 
 **Devis**
 15. « Gratuit et sans engagement » : à écrire seulement si c’est décidé.
-16. contact@atousy.com : à afficher seulement quand la boîte est testée de bout en bout.
+16. contact@atousy.com : adresse de contact validée par le fondateur, affichée sur le site. Tester l’envoi et la réception avant le lancement.
 17. Pas de case de consentement sur le formulaire (base : mesures précontractuelles) : à confirmer.
 
 **Légal**
 18. Toutes les données de l’éditeur (dénomination, statut, SIREN/SIRET, adresse, directeur de la publication, TVA).
 19. Coordonnées exactes de l’hébergeur Cloudflare (entité contractante, adresse, téléphone), relevées au moment de la publication.
-20. Conditions d’usage commercial des visuels générés par IA (Genspark) et mention éventuellement exigée.
+20. Crédits : pas de mention des visuels sur le site (décision du fondateur). Vérifier en interne les conditions d’usage commercial de Genspark.
 21. Durées de conservation des demandes de devis.
 22. Prestataire d’envoi d’e-mails (Brevo ou Resend) et fournisseur de la boîte de réception ; garanties en cas de transfert hors UE / Suisse.
 23. Liste réelle des cookies et du stockage après déploiement (Cloudflare, Turnstile).

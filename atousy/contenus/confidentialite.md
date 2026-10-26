@@ -15,7 +15,7 @@ Dernière mise à jour : [À COMPLÉTER : date]
 
 [À COMPLÉTER : dénomination de l’éditeur]
 [À COMPLÉTER : adresse]
-[À COMPLÉTER : e-mail de contact pour les données personnelles]
+contact@atousy.com
 
 ## Les données que nous recevons
 
@@ -102,7 +102,7 @@ Vous pouvez effacer ces éléments à tout moment dans les réglages de votre na
 
 Vous pouvez demander à accéder à vos données, les faire corriger ou effacer, vous opposer à leur traitement, en limiter l’usage ou les récupérer. En Suisse, vous disposez notamment d’un droit d’accès, de rectification et d’effacement.
 
-Pour exercer vos droits, écrivez à [À COMPLÉTER : e-mail de contact]. Nous répondons dans un délai d’un mois.
+Pour exercer vos droits, écrivez à contact@atousy.com. Nous répondons dans un délai d’un mois.
 
 ## Réclamation
 

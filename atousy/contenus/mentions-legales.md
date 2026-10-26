@@ -19,7 +19,7 @@ Dernière mise à jour : [À COMPLÉTER : date]
 - **SIREN / SIRET :** [À COMPLÉTER]
 - **Immatriculation :** [À COMPLÉTER : RCS ou RNE et ville d’immatriculation, le cas échéant]
 - **Adresse :** [À COMPLÉTER : adresse du siège ou de domiciliation]
-- **E-mail :** [À COMPLÉTER : contact@atousy.com, une fois la boîte testée]
+- **E-mail :** contact@atousy.com
 - **Téléphone :** [À COMPLÉTER : facultatif]
 - **TVA :** [À COMPLÉTER : numéro de TVA intracommunautaire, ou mention de la franchise en base de TVA]
 
@@ -50,7 +50,6 @@ Les sites « Rivage » (paysagiste) et « Faîtage » (charpentier) présentés 
 ## Crédits
 
 - **Conception et réalisation :** Atousy.
-- **Visuels :** images générées par intelligence artificielle (Genspark) pour ce site. *À confirmer : conditions d’usage commercial de ces visuels.*
 - **Polices de caractères :** Figtree et Newsreader, sous licence SIL Open Font License, hébergées avec le site.
 - **Icônes :** dessinées pour le site.
 
@@ -62,7 +61,7 @@ Le traitement des données envoyées par le formulaire de devis est décrit dans
 
 ## Nous signaler une erreur
 
-Une information vous semble inexacte ? Écrivez-nous à [À COMPLÉTER : e-mail de contact].
+Une information vous semble inexacte ? Écrivez-nous à contact@atousy.com.
 
 ---
 
