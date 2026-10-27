@@ -69,33 +69,45 @@ const windows = [
                   <span class="screen__face" aria-hidden="true">
                     {w.id === 'rivage-accueil' && (
                       <>
-                        <span class="screen__img"><Picture src={rivage1} {...pic} loading="eager" /></span>
-                        <span class="m-shade m-shade--left" />
-                        <span class="m-nav m-nav--green">
-                          <span class="m-logo">rivage</span>
-                          <span class="m-links"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
-                          <span class="m-cta">Nous contacter</span>
+                        <span class="screen__img screen__img--below-nav screen__img--rivage"><Picture src={rivage1} {...pic} loading="eager" /></span>
+                        <span class="m-shade m-shade--below-nav m-shade--rivage" />
+                        <span class="m-nav m-nav--rivage">
+                          <span class="m-logo m-logo--rivage">
+                            <svg class="m-wave" viewBox="0 0 22 14">
+                              <path d="M1.5 4.6c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+                              <path d="M1.5 10.4c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+                            </svg>
+                            rivage
+                          </span>
+                          <span class="m-links m-links--rivage"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
+                          <span class="m-cta m-cta--rivage">Nous contacter</span>
                         </span>
-                        <span class="m-hero">
-                          <span class="m-title">Le jardin<br />vous appelle.</span>
-                          <span class="m-btn">Entrer dans le jardin <Icon name="arrow" /></span>
+                        <span class="m-hero m-hero--rivage">
+                          <span class="m-title m-title--rivage">Le jardin<br />vous appelle.</span>
+                          <span class="m-text m-text--rivage">Des lieux pour ralentir, se retrouver et regarder les saisons passer. Le paysage commence avec votre façon de vivre.</span>
+                          <span class="m-btn m-btn--rivage">Entrer dans le jardin <Icon name="arrow" /></span>
                         </span>
-                        <span class="m-aside">Des paysages pour<br />vivre dehors.<br />En toute saison.</span>
+                        <span class="m-aside">Des paysages pour vivre dehors.<br />En toute saison.</span>
                       </>
                     )}
                     {w.id === 'faitage-accueil' && (
                       <>
-                        <span class="screen__img screen__img--below-nav"><Picture src={faitage1} {...pic} /></span>
-                        <span class="m-shade m-shade--left m-shade--below-nav" />
-                        <span class="m-nav m-nav--white">
-                          <span class="m-logo m-logo--faitage"><span class="m-ridge" />Faîtage</span>
-                          <span class="m-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
+                        <span class="screen__img screen__img--below-nav screen__img--faitage"><Picture src={faitage1} {...pic} /></span>
+                        <span class="m-shade m-shade--below-nav m-shade--faitage" />
+                        <span class="m-nav m-nav--faitage">
+                          <span class="m-logo m-logo--faitage">
+                            <svg class="m-ridge" viewBox="0 0 26 14"><path d="M2 12.5 13 2.5l11 10" /></svg>
+                            Faîtage
+                          </span>
+                          <span class="m-links m-links--faitage"><span class="is-on">Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>L’atelier</span></span>
+                          <span class="m-cta m-cta--faitage">Contact <Icon name="arrow" /></span>
                         </span>
-                        <span class="m-hero">
-                          <span class="m-title">Des charpentes<br />pour demain.</span>
-                          <span class="m-text">Construire, rénover, transmettre.<br />Un savoir-faire local au service de vos projets.</span>
-                          <span class="m-btn m-btn--solid">Découvrir le projet <Icon name="arrow" /></span>
+                        <span class="m-hero m-hero--faitage">
+                          <span class="m-title m-title--faitage">Des charpentes<br />pour demain.</span>
+                          <span class="m-text m-text--faitage">Construire, rénover, transmettre.<br />Un savoir-faire local au service de vos projets.</span>
+                          <span class="m-btn m-btn--faitage">Découvrir le projet <Icon name="arrow" /></span>
                         </span>
+                        <span class="m-caption">Projet type · Préau en bois massif</span>
                       </>
                     )}
                     {w.id === 'ecluse-accueil' && (
@@ -682,17 +694,9 @@ const windows = [
     inset: 0;
   }
 
-  .m-shade--left {
-    background: linear-gradient(20deg, rgb(10 25 18 / 0.72) 0%, rgb(10 25 18 / 0.28) 42%, transparent 62%);
-  }
-
   .m-shade--below-nav {
     top: 10.5cqw;
     background: linear-gradient(90deg, rgb(28 20 12 / 0.7) 0%, rgb(28 20 12 / 0.25) 50%, transparent 72%);
-  }
-
-  .m-shade--bottom {
-    background: linear-gradient(0deg, rgb(25 18 12 / 0.72) 0%, rgb(25 18 12 / 0.28) 42%, transparent 64%);
   }
 
   .m-nav {
@@ -708,34 +712,6 @@ const windows = [
     white-space: nowrap;
   }
 
-  .m-nav--green {
-    background: #1e3328;
-    color: #fff;
-  }
-
-  .m-nav--white {
-    background: #fbf9f5;
-    color: #2b2219;
-  }
-
-  .m-nav--glass {
-    background: linear-gradient(180deg, rgb(20 14 8 / 0.55), transparent);
-    color: #fff;
-  }
-
-  .m-nav--paper {
-    background: #f7f4ee;
-    color: #2b2219;
-  }
-
-  .m-nav--end {
-    justify-content: flex-end;
-    gap: 6cqw;
-    height: 14cqw;
-    padding-inline: 6cqw;
-    font-size: 4.4cqw;
-  }
-
   .m-logo {
     display: inline-flex;
     align-items: center;
@@ -745,19 +721,6 @@ const windows = [
     font-size: 5.2cqw;
     font-weight: 450;
     letter-spacing: -0.01em;
-  }
-
-  .m-logo--faitage {
-    font-size: 4.4cqw;
-    font-weight: 520;
-  }
-
-  .m-ridge {
-    width: 3cqw;
-    height: 3cqw;
-    border-top: 0.45cqw solid currentColor;
-    border-left: 0.45cqw solid currentColor;
-    transform: translateY(0.9cqw) rotate(45deg);
   }
 
   .m-links {
@@ -791,10 +754,6 @@ const windows = [
     letter-spacing: -0.02em;
   }
 
-  .m-title--dark {
-    color: #1d2a24;
-  }
-
   .m-text {
     margin-top: -1cqw;
     font-size: 2.1cqw;
@@ -812,47 +771,9 @@ const windows = [
     font-size: 2cqw;
   }
 
-  .m-btn--solid {
-    background: #fff;
-    color: #2b2219;
-    border-color: #fff;
-  }
-
   .m-btn :global(svg) {
     width: 2.4cqw;
     height: 2.4cqw;
-  }
-
-  .m-aside {
-    position: absolute;
-    z-index: 1;
-    right: 6cqw;
-    bottom: 7cqw;
-    font-size: 2.4cqw;
-    line-height: 1.45;
-  }
-
-  .m-hero--tall {
-    left: 8cqw;
-    right: 8cqw;
-    bottom: 12cqw;
-    gap: 9cqw;
-  }
-
-  .m-hero--tall .m-title {
-    font-size: 14cqw;
-  }
-
-  .m-hero--tall .m-btn {
-    gap: 6cqw;
-    padding: 3.5cqw 6cqw;
-    font-size: 4.6cqw;
-    border-width: 0.6cqw;
-  }
-
-  .m-hero--tall .m-btn :global(svg) {
-    width: 5cqw;
-    height: 5cqw;
   }
 
   .m-kicker {
@@ -860,67 +781,6 @@ const windows = [
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #5a6a60;
-  }
-
-  .m-kicker--light {
-    color: rgb(255 255 255 / 0.85);
-  }
-
-  .m-page {
-    position: absolute;
-    inset: 0;
-    display: block;
-  }
-
-  .m-page--ivory {
-    background: #f6f2ea;
-  }
-
-  .m-gallery-head {
-    position: absolute;
-    left: 5cqw;
-    right: 5cqw;
-    top: 16cqw;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-  }
-
-  .m-gallery {
-    position: absolute;
-    left: 5cqw;
-    right: 5cqw;
-    top: 29cqw;
-    bottom: 5cqw;
-    display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr;
-    gap: 2.4cqw;
-  }
-
-  .m-tile {
-    position: relative;
-    display: block;
-    overflow: hidden;
-    border-radius: 0.4cqw;
-  }
-
-  .m-tile :global(picture),
-  .m-tile :global(img) {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .m-tile > span {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 4cqw 1.8cqw 1.6cqw;
-    background: linear-gradient(0deg, rgb(10 25 18 / 0.7), transparent);
-    font-size: 1.8cqw;
   }
 
   /* Flèches et pictogrammes dessinés en ligne (ceux des démos, simplifiés). */
@@ -947,6 +807,251 @@ const windows = [
   .m-hero--wide {
     max-width: 66cqw;
     gap: 3cqw;
+  }
+
+  /* --- Rivage : en-tête ivoire (vague + « rivage »), photo du jardin sous un voile vert, phrase en italique à droite --- */
+  .screen__img--rivage :global(img) {
+    object-position: 50% 55%;
+  }
+
+  .m-shade--rivage {
+    background:
+      linear-gradient(90deg, rgb(10 25 18 / 0.72) 0%, rgb(10 25 18 / 0.42) 38%, rgb(10 25 18 / 0) 64%),
+      linear-gradient(0deg, rgb(10 25 18 / 0.55) 0%, rgb(10 25 18 / 0.2) 22%, rgb(10 25 18 / 0) 45%);
+  }
+
+  .m-nav--rivage {
+    gap: 3.6cqw;
+    background: #f6f1e6;
+    border-bottom: 0.15cqw solid rgb(30 51 40 / 0.14);
+    color: #1b2620;
+    font-size: 1.85cqw;
+    font-weight: 500;
+  }
+
+  .m-logo--rivage {
+    gap: 1.3cqw;
+    font-size: 4.9cqw;
+    font-weight: 430;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    color: #1e3328;
+  }
+
+  .m-wave {
+    flex: none;
+    width: 2.75cqw;
+    height: auto;
+    margin-top: 0.55cqw;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0.75;
+  }
+
+  .m-links--rivage {
+    gap: 3.6cqw;
+  }
+
+  .m-cta--rivage {
+    padding: 1.35cqw 2.2cqw;
+    border: 0;
+    border-radius: 0.5cqw;
+    background: #1e3328;
+    color: #f6f1e6;
+    font-size: 1.8cqw;
+    font-weight: 550;
+  }
+
+  .m-hero--rivage {
+    left: 4.5cqw;
+    gap: 2.6cqw;
+    max-width: 50cqw;
+  }
+
+  .m-title--rivage {
+    font-size: 8.6cqw;
+    font-weight: 380;
+    line-height: 0.95;
+    letter-spacing: -0.032em;
+  }
+
+  .m-text--rivage {
+    max-width: 24em;
+    margin-top: 0;
+    font-size: 2cqw;
+    line-height: 1.6;
+    color: rgb(255 255 255 / 0.92);
+    opacity: 1;
+    text-wrap: pretty;
+  }
+
+  .m-btn--rivage {
+    margin-top: 0.6cqw;
+    gap: 1.6cqw;
+    padding: 1.8cqw 2.75cqw;
+    border: 0;
+    border-radius: 0.48cqw;
+    background: #fff;
+    color: #1b2620;
+    font-size: 1.9cqw;
+    font-weight: 550;
+  }
+
+  /* Phrase d'accroche en bas à droite, alignée sur le bas du bouton, sous un filet clair. */
+  .m-aside {
+    position: absolute;
+    z-index: 1;
+    right: 4.5cqw;
+    bottom: 7cqw;
+    padding-top: 1.5cqw;
+    border-top: 0.15cqw solid rgb(255 255 255 / 0.55);
+    font-family: var(--serif);
+    font-size: 2.2cqw;
+    font-style: italic;
+    font-weight: 350;
+    line-height: 1.35;
+    text-shadow: 0 0.1cqw 1.2cqw rgb(10 25 18 / 0.45);
+  }
+
+  /* --- Faîtage : en-tête blanc cassé (chevron bois + « Faîtage »), Contact en bouton sombre, photo du préau --- */
+  .screen--faitage-accueil .screen__face {
+    background: #221f1c;
+  }
+
+  .screen__img--faitage :global(img) {
+    object-position: 30% 50%;
+  }
+
+  .m-shade--faitage {
+    background:
+      linear-gradient(90deg, rgb(28 20 12 / 0.74) 0%, rgb(28 20 12 / 0.4) 42%, rgb(28 20 12 / 0) 72%),
+      linear-gradient(0deg, rgb(28 20 12 / 0.55) 0%, rgb(28 20 12 / 0) 40%);
+  }
+
+  .m-nav--faitage {
+    gap: 3.4cqw;
+    padding-inline: 4.4cqw;
+    background: #fbf9f5;
+    border-bottom: 0.15cqw solid rgb(43 34 25 / 0.14);
+    color: #2b2219;
+    font-size: 1.85cqw;
+    font-weight: 550;
+  }
+
+  .m-logo--faitage {
+    align-items: flex-end;
+    gap: 1.3cqw;
+    font-size: 4.2cqw;
+    font-weight: 520;
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+
+  .m-ridge {
+    flex: none;
+    width: 3.6cqw;
+    height: auto;
+    margin-bottom: 0.9cqw;
+    fill: none;
+    stroke: #b06d34;
+    stroke-width: 2.4;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  /* Liens sur toute la hauteur de l'en-tête : le trait de la page courante se pose sur son bord bas. */
+  .m-links--faitage {
+    align-self: stretch;
+    gap: 3.4cqw;
+  }
+
+  .m-links--faitage > span {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .m-links--faitage > .is-on::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.15cqw;
+    height: 0.3cqw;
+    background: #b06d34;
+  }
+
+  .m-cta--faitage {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    margin-left: 0.8cqw;
+    padding: 1.3cqw 2.1cqw;
+    border: 0;
+    border-radius: 0.25cqw;
+    background: #221f1c;
+    color: #fbf9f5;
+  }
+
+  .m-cta--faitage :global(svg) {
+    width: 1.9cqw;
+    height: 1.9cqw;
+  }
+
+  .m-hero--faitage {
+    left: 4.4cqw;
+    bottom: 12cqw;
+    gap: 0;
+    max-width: 62cqw;
+  }
+
+  .m-title--faitage {
+    font-size: 7.6cqw;
+    font-weight: 420;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: #fbf9f5;
+  }
+
+  .m-text--faitage {
+    margin-top: 2.7cqw;
+    font-size: 2cqw;
+    line-height: 1.55;
+    color: rgb(251 249 245 / 0.92);
+    opacity: 1;
+  }
+
+  .m-btn--faitage {
+    margin-top: 3.8cqw;
+    gap: 1.7cqw;
+    padding: 1.6cqw 2.65cqw;
+    border: 0;
+    border-radius: 0.25cqw;
+    background: #fbf9f5;
+    color: #2b2219;
+    font-size: 1.9cqw;
+    font-weight: 600;
+  }
+
+  .m-btn--rivage :global(svg),
+  .m-btn--faitage :global(svg) {
+    width: 2.1cqw;
+    height: 2.1cqw;
+  }
+
+  /* Légende de la photo, en bas à droite sous le bouton (comme sur la démo). */
+  .m-caption {
+    position: absolute;
+    z-index: 1;
+    right: 4.4cqw;
+    bottom: 5.8cqw;
+    font-size: 1.55cqw;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(251 249 245 / 0.85);
   }
 
   /* --- Écluse : en-tête blanc, navigation en pilule grise, ouverture en panneau clair « texte | photo » --- */

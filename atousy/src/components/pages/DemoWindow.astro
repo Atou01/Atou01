@@ -1,7 +1,7 @@
 ---
 // Aperçu de la page d'accueil d'une démonstration fictive, dessiné en HTML (pas une capture d'écran).
 // Purement décoratif (aria-hidden) : le lien et son libellé sont posés par le parent.
-// Toutes les mesures sont en cqw (largeur de la fenêtre), format 16:10.
+// Toutes les mesures suivent la largeur de la fenêtre (cqw, ou em d'un texte en cqw), format 16:10.
 // Chaque aperçu reprend l'ouverture réelle de la démo (src/pages/exemples/<id>/index.astro) :
 // mêmes mots, mêmes couleurs, même logo, même photo, en grossissant un peu les textes.
 import { Picture } from 'astro:assets';
@@ -44,7 +44,12 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
       <>
         <span class="rv-nav">
           <span class="rv-logo">
-            <span class="rv-wave">≈</span>rivage
+            {/* Vague reprise de src/components/demos/rivage/Logo.astro */}
+            <svg class="rv-wave" viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M1.5 4.6c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+              <path d="M1.5 10.4c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+            </svg>
+            rivage
           </span>
           <span class="rv-links">
             {rivageLinks.map((l) => (
@@ -56,15 +61,15 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
         <span class="w-img w-img--below-rv">
           <Picture src={rivage1} {...full} />
         </span>
-        <span class="w-shade w-shade--left w-img--below-rv" />
-        <span class="w-copy">
-          <span class="w-title">
+        <span class="w-shade rv-shade w-img--below-rv" />
+        <span class="rv-copy">
+          <span class="rv-title">
             Le jardin
             <br />
             vous appelle.
           </span>
-          <span class="w-text">Des lieux pour ralentir, se retrouver et regarder les saisons passer.</span>
-          <span class="w-btn">
+          <span class="w-text rv-text">Des lieux pour ralentir, se retrouver et regarder les saisons passer. Le paysage commence avec votre façon de vivre.</span>
+          <span class="rv-btn">
             Entrer dans le jardin <Icon name="arrow" />
           </span>
         </span>
@@ -82,7 +87,10 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
       <>
         <span class="ft-nav">
           <span class="ft-logo">
-            <span class="ft-ridge" />
+            {/* Ligne de faîtage reprise de src/components/demos/faitage/Logo.astro */}
+            <svg class="ft-ridge" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="miter">
+              <path d="M2 12.5 13 2.5l11 10" />
+            </svg>
             Faîtage
           </span>
           <span class="ft-links">
@@ -97,19 +105,19 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
         <span class="w-img w-img--below-ft">
           <Picture src={faitage1} {...full} />
         </span>
-        <span class="w-shade w-shade--wood w-img--below-ft" />
-        <span class="w-copy w-copy--ft">
-          <span class="w-title">
+        <span class="w-shade ft-shade w-img--below-ft" />
+        <span class="ft-copy">
+          <span class="ft-title">
             Des charpentes
             <br />
             pour demain.
           </span>
-          <span class="w-text">
+          <span class="w-text ft-text">
             Construire, rénover, transmettre.
             <br />
             Un savoir-faire local au service de vos projets.
           </span>
-          <span class="w-btn w-btn--square">
+          <span class="ft-btn">
             Découvrir le projet <Icon name="arrow" />
           </span>
         </span>
@@ -259,10 +267,11 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
 <style>
   .w {
     --serif: 'Newsreader Variable', Georgia, serif;
+    /* Rivage, Faîtage : jetons repris de leur gabarit (src/components/demos/<id>/*Layout.astro) */
     --rv-green: #1e3328;
     --rv-ivory: #f6f1e6;
     --rv-ink: #1b2620;
-    --rv-line: rgb(30 51 40 / 0.16);
+    --rv-line: rgb(30 51 40 / 0.14);
     --ft-white: #fbf9f5;
     --ft-ink: #2b2219;
     --ft-charcoal: #221f1c;
@@ -345,36 +354,42 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
     flex: none;
   }
 
-  /* ---------- Rivage : navigation ---------- */
+  /* ---------- Rivage : ivoire et vert profond ; mesures reprises de la démo à 1440 px de large ---------- */
   .rv-nav {
     position: absolute;
     inset: 0 0 auto;
     z-index: 2;
     display: flex;
     align-items: center;
-    gap: 3.2cqw;
-    height: 8.6cqw;
-    padding-inline: 5.5cqw;
+    gap: 3.8cqw;
+    height: 7.6cqw;
+    padding-inline: 7.2cqw;
     border-bottom: max(1px, 0.1cqw) solid var(--rv-line);
     background: var(--rv-ivory);
-    font-size: 1.5cqw;
+    font-size: 1.35cqw;
+    font-weight: 500;
     white-space: nowrap;
   }
 
   .rv-logo {
     display: inline-flex;
-    align-items: baseline;
-    gap: 0.7cqw;
+    align-items: center;
+    gap: 0.27em;
     margin-right: auto;
+    color: var(--rv-green);
     font-family: var(--serif);
-    font-size: 3.9cqw;
-    font-weight: 420;
-    letter-spacing: -0.01em;
+    font-size: 2.9cqw;
+    font-weight: 430;
+    line-height: 1;
+    letter-spacing: -0.015em;
   }
 
-  .rv-wave {
-    font-size: 2.3cqw;
-    opacity: 0.7;
+  /* Vague : mêmes proportions que dans le logo de la démo (1,05rem pour un mot de 1,875rem) */
+  .w .rv-wave {
+    width: 0.56em;
+    height: auto;
+    margin-top: 0.11em;
+    opacity: 0.75;
   }
 
   .rv-links {
@@ -382,67 +397,92 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
     gap: 3.2cqw;
   }
 
+  /* Bouton « Nous contacter » : marges en em, comme rv-btn--sm dans la démo */
   .rv-cta {
-    padding: 1.1cqw 1.8cqw;
-    border-radius: 0.4cqw;
+    padding: 0.75em 1.23em;
+    border-radius: 0.27em;
     background: var(--rv-green);
-    color: #fff;
-    font-weight: 500;
+    color: var(--rv-ivory);
+    font-size: 0.97em;
+    font-weight: 550;
   }
 
-  /* ---------- Faîtage : navigation ---------- */
+  /* ---------- Faîtage : blanc cassé, brun, bois ; mesures reprises de la démo à 1440 px de large ---------- */
   .ft-nav {
     position: absolute;
     inset: 0 0 auto;
     z-index: 2;
     display: flex;
     align-items: center;
-    gap: 2.5cqw;
-    height: 8.2cqw;
-    padding-inline: 4.5cqw;
+    gap: 2.75cqw;
+    height: 8cqw;
+    padding-inline: 4.45cqw;
     border-bottom: max(1px, 0.1cqw) solid var(--ft-line);
     background: var(--ft-white);
-    font-size: 1.4cqw;
+    font-size: 1.35cqw;
+    font-weight: 550;
     white-space: nowrap;
   }
 
   .ft-logo {
     display: inline-flex;
-    align-items: center;
-    gap: 1.2cqw;
+    align-items: flex-end;
+    gap: 0.31em;
     margin-right: auto;
     font-family: var(--serif);
-    font-size: 3.3cqw;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-size: 2.5cqw;
+    font-weight: 520;
+    line-height: 1;
+    letter-spacing: -0.015em;
   }
 
-  .ft-ridge {
-    width: 1.5cqw;
-    height: 1.5cqw;
-    border-top: 0.24cqw solid var(--ft-wood);
-    border-left: 0.24cqw solid var(--ft-wood);
-    transform: translateY(0.45cqw) rotate(45deg);
+  /* Ligne de faîtage : mêmes proportions que dans le logo de la démo (1,35rem pour un mot de 1,6rem) */
+  .w .ft-ridge {
+    width: 0.84em;
+    height: auto;
+    margin-bottom: 0.21em;
+    color: var(--ft-wood);
   }
 
   .ft-links {
     display: flex;
-    gap: 2.5cqw;
+    align-self: stretch;
+    gap: 2.75cqw;
   }
 
-  .ft-links .is-on {
-    box-shadow: 0 0.35cqw 0 -0.15cqw var(--ft-wood);
+  .ft-links span {
+    position: relative;
+    display: flex;
+    align-items: center;
   }
 
+  /* Page courante : trait bois posé sur le filet bas de l'en-tête, comme dans la démo */
+  .ft-links .is-on::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(-1 * max(1px, 0.1cqw));
+    height: max(1px, 0.2cqw);
+    background: var(--ft-wood);
+  }
+
+  /* Contact : bouton brun foncé, marges en em comme dans la démo */
   .ft-cta {
     display: inline-flex;
     align-items: center;
-    gap: 1cqw;
-    padding: 1.15cqw 1.9cqw;
-    border: max(1px, 0.1cqw) solid transparent;
+    gap: 0.5em;
+    height: 3em;
+    margin-left: 0.75em;
+    padding-inline: 1.15em;
+    border-radius: 0.13em;
     background: var(--ft-charcoal);
-    color: #fff;
-    font-weight: 500;
+    color: var(--ft-white);
+  }
+
+  .ft-cta :global(svg) {
+    width: 1.05em;
+    height: 1.05em;
   }
 
   /* ---------- Héros photo (Rivage, Faîtage, Lueur, Moellon) ---------- */
@@ -452,11 +492,11 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
   }
 
   .w-img--below-rv {
-    top: 8.6cqw;
+    top: 7.6cqw;
   }
 
   .w-img--below-ft {
-    top: 8.2cqw;
+    top: 8cqw;
   }
 
   .w-shade {
@@ -464,91 +504,148 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
     inset: 0;
   }
 
-  .w-shade--left {
+  /* Rivage : cadrage, voile et ouverture de la démo, alignés sur l'en-tête */
+  .w--rivage :global(img) {
+    object-position: 50% 55%;
+  }
+
+  .rv-shade {
     background:
-      linear-gradient(90deg, rgb(10 25 18 / 0.62) 0%, rgb(10 25 18 / 0.25) 45%, transparent 68%),
-      linear-gradient(0deg, rgb(10 25 18 / 0.35) 0%, transparent 40%);
+      linear-gradient(90deg, rgb(10 25 18 / 0.72) 0%, rgb(10 25 18 / 0.42) 38%, rgb(10 25 18 / 0) 64%),
+      linear-gradient(0deg, rgb(10 25 18 / 0.55) 0%, rgb(10 25 18 / 0.2) 22%, rgb(10 25 18 / 0) 45%);
   }
 
-  .w-shade--wood {
-    background: linear-gradient(90deg, rgb(28 20 12 / 0.68) 0%, rgb(28 20 12 / 0.28) 48%, transparent 72%);
-  }
-
-  .w-copy {
+  .rv-copy {
     position: absolute;
     z-index: 1;
-    left: 7cqw;
-    bottom: 6.5cqw;
+    left: 7.2cqw;
+    bottom: 5cqw;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2.2cqw;
-    max-width: 52cqw;
+    gap: 2cqw;
+    max-width: 44cqw;
     color: #fff;
   }
 
-  .w-copy--ft {
-    left: 4.5cqw;
-  }
-
-  .w-title {
+  .rv-title {
     display: block;
     font-family: var(--serif);
-    font-size: 7.2cqw;
-    font-weight: 400;
-    line-height: 0.98;
-    letter-spacing: -0.02em;
+    font-size: 8cqw;
+    font-weight: 380;
+    line-height: 0.95;
+    letter-spacing: -0.032em;
   }
 
-  .w-copy .w-text {
+  /* 24em : la largeur de la démo (30rem pour un texte de 1,25rem), donc les mêmes retours à la ligne */
+  .rv-text {
     display: block;
-    max-width: 40cqw;
+    max-width: 24em;
+    color: rgb(255 255 255 / 0.92);
     font-size: 1.55cqw;
-    line-height: 1.5;
-    opacity: 0.94;
+    line-height: 1.6;
   }
 
-  .w-btn {
+  .rv-btn {
     display: inline-flex;
     align-items: center;
-    gap: 1.6cqw;
-    margin-top: 0.4cqw;
-    padding: 1.3cqw 2.2cqw;
-    border-radius: 0.35cqw;
+    gap: 0.85em;
+    margin-top: 0.5cqw;
+    padding: 0.95em 1.45em;
+    border-radius: 0.25em;
     background: #fff;
     color: var(--rv-ink);
     font-size: 1.45cqw;
-    font-weight: 500;
-  }
-
-  .w-btn--square {
-    border-radius: 0;
-    color: var(--ft-ink);
+    font-weight: 550;
+    line-height: 1.2;
   }
 
   .rv-aside {
     position: absolute;
     z-index: 1;
-    right: 6cqw;
-    bottom: 7cqw;
-    padding-top: 1cqw;
+    right: 7.2cqw;
+    bottom: 5cqw;
+    padding-top: 1.1cqw;
     border-top: max(1px, 0.1cqw) solid rgb(255 255 255 / 0.55);
     color: #fff;
     font-family: var(--serif);
-    font-size: 1.85cqw;
+    font-size: 1.75cqw;
     font-style: italic;
+    font-weight: 350;
     line-height: 1.35;
+    text-shadow: 0 0.07cqw 0.85cqw rgb(10 25 18 / 0.45);
+  }
+
+  /* Faîtage : cadrage, voile et ouverture de la démo ; la légende passe sous le bouton, à droite */
+  .w--faitage :global(img) {
+    object-position: 30% 50%;
+  }
+
+  .ft-shade {
+    background:
+      linear-gradient(90deg, rgb(28 20 12 / 0.74) 0%, rgb(28 20 12 / 0.4) 42%, rgb(28 20 12 / 0) 72%),
+      linear-gradient(0deg, rgb(28 20 12 / 0.55) 0%, rgb(28 20 12 / 0) 40%);
+  }
+
+  .ft-copy {
+    position: absolute;
+    z-index: 1;
+    left: 4.45cqw;
+    bottom: 8.3cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 52cqw;
+    color: var(--ft-white);
+  }
+
+  .ft-title {
+    display: block;
+    font-family: var(--serif);
+    font-size: 7.1cqw;
+    font-weight: 420;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .ft-text {
+    display: block;
+    margin-top: 2cqw;
+    color: rgb(251 249 245 / 0.92);
+    font-size: 1.55cqw;
+    line-height: 1.55;
+  }
+
+  .ft-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9em;
+    min-height: 3.25em;
+    margin-top: 2.8cqw;
+    padding: 0.85em 1.4em;
+    border-radius: 0.13em;
+    background: var(--ft-white);
+    color: var(--ft-ink);
+    font-size: 1.45cqw;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .rv-btn :global(svg),
+  .ft-btn :global(svg) {
+    width: 1.1em;
+    height: 1.1em;
   }
 
   .ft-caption {
     position: absolute;
     z-index: 1;
-    right: 4.5cqw;
-    bottom: 4cqw;
-    color: rgb(255 255 255 / 0.88);
-    font-size: 1cqw;
+    right: 4.45cqw;
+    bottom: 3.9cqw;
+    color: rgb(251 249 245 / 0.85);
+    font-size: 1.05cqw;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
 
@@ -1095,16 +1192,8 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
       font-size: 2.6cqw;
     }
 
-    .rv-logo,
-    .ft-logo,
     .mo-logo {
       font-size: 5.4cqw;
-    }
-
-    .ft-ridge {
-      width: 2.2cqw;
-      height: 2.2cqw;
-      border-width: 0.35cqw;
     }
 
     .w-img--below-rv,
@@ -1113,18 +1202,38 @@ const moellonLinks = ['Accueil', 'Savoir-faire', 'Chantiers', 'Notre approche'];
       top: 11cqw;
     }
 
-    .w-title {
-      font-size: 9cqw;
+    /* Rivage, Faîtage : logo un peu grossi, à hauteur des logos des autres fenêtres */
+    .rv-logo {
+      font-size: 5.2cqw;
     }
 
-    /* Le titre garde ses deux lignes (« Des charpentes / pour demain. ») */
-    .w-copy {
+    .ft-logo {
+      font-size: 4.8cqw;
+    }
+
+    .rv-copy,
+    .ft-copy {
+      bottom: 6cqw;
       max-width: 76cqw;
     }
 
-    .w-btn {
-      padding: 2cqw 3cqw;
+    /* Le titre garde ses deux lignes (« Des charpentes / pour demain. ») */
+    .rv-title,
+    .ft-title {
+      font-size: 9cqw;
+    }
+
+    .rv-btn,
+    .ft-btn {
       font-size: 2.6cqw;
+    }
+
+    .rv-btn {
+      margin-top: 1.5cqw;
+    }
+
+    .ft-btn {
+      margin-top: 4cqw;
     }
 
     /* Écluse */
