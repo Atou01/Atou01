@@ -1,0 +1,582 @@
+---
+// Galerie « Des sites pensés pour votre activité. » : aperçus HTML de deux des cinq démos fictives (Rivage et Faîtage).
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import rivageImg from '../../assets/photos/rivage-1.jpg';
+import faitageImg from '../../assets/photos/faitage-1.jpg';
+import Olivier from '../../assets/deco/olivier.svg';
+import { photoWidths } from './photo-widths';
+import '@fontsource-variable/newsreader/wght.css';
+
+const photo = { formats: ['avif', 'webp'] as const, alt: '', widths: photoWidths };
+// Téléphone de la carte Faîtage : la photo 3:2 couvre un écran en portrait, elle est donc
+// rendue bien plus large que l'écran (hauteur × 1,5) : d'où 66vw puis 28vw.
+// Carte Rivage : au-delà de 93em, le conteneur (84rem) ne grandit plus et la photo reste à 780 px.
+---
+
+<section class="gallery" aria-labelledby="gallery-title">
+  <div class="gallery__deco" aria-hidden="true">
+    <Olivier />
+  </div>
+
+  <div class="container">
+    <div class="gallery__head">
+      <h2 id="gallery-title">Des sites pensés<br /> pour votre activité.</h2>
+      <div class="gallery__aside">
+        <a class="link-arrow" href="/exemples/"><span>Explorer les démonstrations</span><Icon name="arrow" /></a>
+        <p>Maquettes fictives de démonstration.</p>
+      </div>
+    </div>
+
+    <div class="gallery__grid">
+      <a class="demo-card demo-card--rivage" href="/exemples/rivage/">
+        <span class="browser browser--rivage" aria-hidden="true">
+          <span class="b-nav">
+            <span class="b-logo"><span class="b-wave">≈</span>rivage</span>
+            <span class="b-links"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
+            <span class="b-cta">Nous contacter</span>
+          </span>
+          <span class="b-hero">
+            <span class="b-img"><Picture src={rivageImg} {...photo} sizes="(max-width: 62.49em) 92vw, (min-width: 93em) 780px, 52vw" /></span>
+            <span class="b-copy">
+              <span class="b-title">Le jardin<br />vous appelle.</span>
+              <span class="b-text">Des lieux pour ralentir, se retrouver et regarder les saisons passer. Le paysage commence avec votre façon de vivre.</span>
+              <span class="b-btn">Entrer dans le jardin <Icon name="arrow" /></span>
+            </span>
+          </span>
+        </span>
+        <span class="demo-card__caption">
+          <span class="demo-card__name">Rivage</span>
+          <span class="demo-card__meta">Paysagiste · démonstration fictive</span>
+        </span>
+      </a>
+
+      <a class="demo-card demo-card--faitage" href="/exemples/faitage/">
+        <span class="faitage-stage" aria-hidden="true">
+          <span class="browser browser--faitage">
+            <span class="b-nav b-nav--light">
+              <span class="b-logo b-logo--faitage">Faîtage</span>
+              <span class="b-links"><span>Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>Contact</span></span>
+            </span>
+            <span class="b-hero">
+              <span class="b-img"><Picture src={faitageImg} {...photo} sizes="(max-width: 62.49em) 80vw, 32vw" /></span>
+              <span class="b-copy">
+                <span class="b-title">Des charpentes<br />pour demain.</span>
+                <span class="b-text">Construire, rénover, transmettre. Un savoir-faire local au service de vos projets.</span>
+                <span class="b-btn">Découvrir le projet <Icon name="arrow" /></span>
+              </span>
+            </span>
+          </span>
+          <span class="phone">
+            <span class="phone__screen">
+              <span class="p-bar"><span class="p-mark"></span><span class="p-burger"></span></span>
+              <span class="p-img"><Picture src={faitageImg} {...photo} sizes="(max-width: 62.49em) 66vw, 28vw" /></span>
+              <span class="p-copy">
+                <span class="p-title">Des charpentes pour demain.</span>
+                <span class="p-btn">Voir le projet <Icon name="arrow" /></span>
+              </span>
+            </span>
+          </span>
+        </span>
+        <span class="demo-card__caption">
+          <span class="demo-card__name">Faîtage</span>
+          <span class="demo-card__meta">Charpentier · démonstration fictive</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    --serif: 'Newsreader Variable', Georgia, serif;
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3rem, 5.2vw, 5.5rem) clamp(2.5rem, 4vw, 4rem);
+    background:
+      radial-gradient(60% 50% at 85% 75%, rgb(255 255 255 / 0.65), transparent 70%),
+      linear-gradient(180deg, var(--ivory) 0%, #f5efe6 100%);
+  }
+
+  /* Rameau d'olivier (dessin vectoriel détouré), légèrement flou comme au premier plan.
+     Calé sur le bord gauche de la carte Rivage, qui le recouvre en partie. */
+  .gallery__deco {
+    --deco-w: clamp(8rem, 11vw, 12rem);
+    position: absolute;
+    left: calc(max(var(--gutter), (100% - var(--container)) / 2) + clamp(0rem, 3vw, 2.5rem) - var(--deco-w) * 0.72);
+    top: 38%;
+    width: var(--deco-w);
+    opacity: 0.85;
+    filter: blur(1.2px);
+    pointer-events: none;
+  }
+
+  .gallery__deco :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .gallery__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+  }
+
+  h2 {
+    font-size: var(--fs-h2);
+  }
+
+  .gallery__aside {
+    padding-top: 0.6rem;
+    padding-right: 1rem;
+  }
+
+  .gallery__aside .link-arrow {
+    font-size: 1.0625rem;
+  }
+
+  .gallery__aside p {
+    margin-top: 0.85rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: 1.62fr 1fr;
+    align-items: end;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin-top: clamp(2rem, 2.6vw, 3rem);
+    padding-left: clamp(0rem, 3vw, 2.5rem);
+  }
+
+  .demo-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--radius);
+  }
+
+  .demo-card__caption {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 1rem;
+  }
+
+  .demo-card__name {
+    font-size: 1.125rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .demo-card__meta {
+    width: max-content;
+    padding-bottom: 0.55rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+    background: linear-gradient(var(--coral), var(--coral)) left bottom / 2.6rem 2px no-repeat;
+    transition: background-size 0.3s var(--ease);
+  }
+
+  .demo-card:hover .demo-card__meta {
+    background-size: 100% 2px;
+  }
+
+  /* Fenêtre de site (unités = cqw de la fenêtre) */
+  .browser {
+    position: relative;
+    display: block;
+    container-type: inline-size;
+    overflow: hidden;
+    background: #fbf9f5;
+    border-radius: 3px;
+    box-shadow:
+      0 0 0 1px rgb(15 35 41 / 0.08),
+      0 30px 60px -30px rgb(40 30 20 / 0.45),
+      0 12px 24px -16px rgb(40 30 20 / 0.25);
+    transition: transform 0.5s var(--ease);
+  }
+
+  .demo-card--rivage:hover .browser {
+    transform: translateY(-4px);
+  }
+
+  .b-nav {
+    display: flex;
+    align-items: center;
+    gap: 3.4cqw;
+    height: 7cqw;
+    padding-inline: 3.2cqw;
+    color: #1d2a24;
+    font-size: 1.45cqw;
+  }
+
+  .b-logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6cqw;
+    margin-right: auto;
+    font-family: var(--serif);
+    font-size: 3.6cqw;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+
+  .b-wave {
+    font-size: 2.2cqw;
+    opacity: 0.7;
+  }
+
+  .b-links {
+    display: flex;
+    gap: 3.4cqw;
+  }
+
+  .b-cta {
+    padding: 1.1cqw 1.9cqw;
+    background: #1e3328;
+    color: #fff;
+    border-radius: 0.4cqw;
+  }
+
+  .b-hero {
+    position: relative;
+    display: block;
+    aspect-ratio: 2.04;
+    color: #fff;
+  }
+
+  .b-img,
+  .b-img :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .b-img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .b-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(10 25 18 / 0.66) 0%, rgb(10 25 18 / 0.3) 40%, transparent 60%);
+  }
+
+  .b-copy {
+    position: absolute;
+    z-index: 1;
+    left: 4.8cqw;
+    bottom: 5.5cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2.2cqw;
+    max-width: 42cqw;
+  }
+
+  .b-title {
+    font-family: var(--serif);
+    font-size: 6.4cqw;
+    font-weight: 420;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .b-text {
+    font-size: 1.55cqw;
+    line-height: 1.5;
+    opacity: 0.92;
+  }
+
+  .b-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 2cqw;
+    margin-top: 0.6cqw;
+    padding: 1.4cqw 2.3cqw;
+    background: #fff;
+    color: #1d2a24;
+    border-radius: 0.35cqw;
+    font-size: 1.45cqw;
+    font-weight: 500;
+  }
+
+  .b-btn :global(svg) {
+    width: 1.7cqw;
+    height: 1.7cqw;
+  }
+
+  /* Faîtage : fenêtre en légère perspective + téléphone */
+  .faitage-stage {
+    position: relative;
+    display: block;
+    padding-right: 9%;
+    padding-bottom: 6%;
+    perspective: 1600px;
+  }
+
+  .browser--faitage {
+    transform: rotateY(-11deg) rotateX(1deg);
+    transform-origin: 0 50%;
+  }
+
+  .demo-card--faitage:hover .browser--faitage {
+    transform: rotateY(-7deg) rotateX(1deg);
+  }
+
+  .b-nav--light {
+    height: 11cqw;
+    padding-inline: 5cqw;
+    gap: 5.5cqw;
+    font-size: 2.3cqw;
+    color: #2b2219;
+    background: #fff;
+  }
+
+  .b-logo--faitage {
+    font-size: 4.6cqw;
+    font-weight: 500;
+  }
+
+  .browser--faitage .b-hero {
+    aspect-ratio: 1.3;
+  }
+
+  .browser--faitage .b-hero::after {
+    background: linear-gradient(90deg, rgb(28 20 12 / 0.7) 0%, rgb(28 20 12 / 0.25) 50%, transparent 70%);
+  }
+
+  .browser--faitage .b-copy {
+    left: 6cqw;
+    bottom: 8cqw;
+    gap: 3.4cqw;
+    max-width: 60cqw;
+  }
+
+  .browser--faitage .b-title {
+    font-size: 9.6cqw;
+  }
+
+  .browser--faitage .b-text {
+    font-size: 2.5cqw;
+  }
+
+  .browser--faitage .b-btn {
+    padding: 2.2cqw 3.6cqw;
+    gap: 3cqw;
+    font-size: 2.3cqw;
+  }
+
+  .browser--faitage .b-btn :global(svg) {
+    width: 2.6cqw;
+    height: 2.6cqw;
+  }
+
+  .phone {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    aspect-ratio: 0.49;
+    padding: 2.4%;
+    background: #15191b;
+    border-radius: 14% / 7%;
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.08) inset,
+      0 24px 40px -18px rgb(20 15 10 / 0.6);
+    transform: rotate(2deg);
+    transition: transform 0.5s var(--ease);
+  }
+
+  .demo-card--faitage:hover .phone {
+    transform: rotate(0deg) translateY(-4px);
+  }
+
+  .phone__screen {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    container-type: inline-size;
+    background: #f7f4ee;
+    border-radius: 11% / 5.5%;
+  }
+
+  .p-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 18cqw;
+    padding: 4cqw 9cqw 0;
+  }
+
+  .p-mark {
+    width: 10cqw;
+    height: 8cqw;
+    border-top: 1.4cqw solid #2b2219;
+    border-left: 1.4cqw solid #2b2219;
+    transform: rotate(45deg) translate(2cqw, 2cqw);
+  }
+
+  .p-burger {
+    width: 10cqw;
+    height: 6cqw;
+    border-block: 1.2cqw solid #2b2219;
+    background: linear-gradient(#2b2219, #2b2219) center / 100% 1.2cqw no-repeat;
+  }
+
+  .p-img {
+    position: absolute;
+    inset: 18cqw 0 0;
+  }
+
+  .p-img :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .p-img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 22% 50%;
+  }
+
+  .p-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgb(28 20 12 / 0.8) 0%, rgb(28 20 12 / 0.2) 55%, transparent 75%);
+  }
+
+  .p-copy {
+    position: absolute;
+    z-index: 1;
+    left: 9cqw;
+    right: 9cqw;
+    bottom: 12cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8cqw;
+    color: #fff;
+  }
+
+  .p-title {
+    font-family: var(--serif);
+    font-size: 15cqw;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .p-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5cqw;
+    padding: 4cqw 6cqw;
+    border: 0.8cqw solid rgb(255 255 255 / 0.85);
+    border-radius: 1.5cqw;
+    font-size: 5.4cqw;
+  }
+
+  .p-btn :global(svg) {
+    width: 6cqw;
+    height: 6cqw;
+  }
+
+  @media (max-width: 62.49em) {
+    .gallery__grid {
+      grid-template-columns: 1fr;
+      padding-left: 0;
+      gap: 2.5rem;
+    }
+
+    .gallery__deco {
+      display: none;
+    }
+
+    .faitage-stage {
+      padding-right: 14%;
+    }
+
+    .browser--faitage {
+      transform: rotateY(-6deg);
+    }
+
+    .phone {
+      width: 28%;
+    }
+  }
+
+  @media (max-width: 34em) {
+    .b-links,
+    .b-text {
+      display: none;
+    }
+
+    /* Le texte d'accroche est masqué : le titre prend la place (pas de mot isolé). */
+    .b-copy {
+      max-width: 72cqw;
+    }
+
+    .b-wave {
+      font-size: 3.6cqw;
+    }
+
+    .b-nav {
+      height: 11cqw;
+      font-size: 2.8cqw;
+    }
+
+    .b-logo {
+      font-size: 6cqw;
+    }
+
+    .b-cta {
+      padding: 1.8cqw 3cqw;
+    }
+
+    .b-hero {
+      aspect-ratio: 1.45;
+    }
+
+    .b-title {
+      font-size: 9cqw;
+    }
+
+    .b-btn {
+      padding: 2.4cqw 3.6cqw;
+      font-size: 3cqw;
+      gap: 3cqw;
+    }
+
+    .b-btn :global(svg) {
+      width: 3.2cqw;
+      height: 3.2cqw;
+    }
+
+    .browser--faitage .b-links {
+      display: flex;
+      gap: 4cqw;
+      font-size: 3.2cqw;
+    }
+
+    .browser--faitage .b-links span:nth-child(-n + 2) {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .demo-card--rivage:hover .browser,
+    .demo-card--faitage:hover .phone {
+      transform: none;
+    }
+  }
+</style>

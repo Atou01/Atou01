@@ -1,0 +1,717 @@
+---
+// Rivage — paysagiste fictif : page d'accueil (démonstration Atousy).
+import { Picture } from 'astro:assets';
+import RivageLayout from '../../../components/demos/rivage/RivageLayout.astro';
+import ContactBand from '../../../components/demos/rivage/ContactBand.astro';
+import Icon from '../../../components/Icon.astro';
+import heroImg from '../../../assets/photos/rivage-1.jpg';
+import terraceImg from '../../../assets/photos/rivage-2.jpg';
+import grassesImg from '../../../assets/photos/rivage-3.jpg';
+import wallImg from '../../../assets/photos/rivage-4.jpg';
+import pondImg from '../../../assets/photos/rivage-5.jpg';
+import winterImg from '../../../assets/photos/rivage-6.jpg';
+
+const crafts = [
+  {
+    title: 'Conception et plantation',
+    text: 'Un plan dessiné pour votre terrain, des vivaces et des graminées choisies pour s’y plaire.',
+    href: '/exemples/rivage/savoir-faire/#plantation',
+    img: grassesImg,
+    alt: 'Échinacées, sauges et graminées dorées dans la lumière du soir.',
+  },
+  {
+    title: 'Murets en pierre sèche',
+    text: 'Montés sans mortier, ils tiennent les pentes et accueillent plantes et petite faune.',
+    href: '/exemples/rivage/savoir-faire/#pierre-seche',
+    img: wallImg,
+    alt: 'Muret en pierre sèche planté de thym, de fougères et de petites fleurs.',
+  },
+  {
+    title: 'Bassins naturels',
+    text: 'De l’eau claire filtrée par les plantes, des nénuphars et de la fraîcheur en été.',
+    href: '/exemples/rivage/savoir-faire/#bassins',
+    img: pondImg,
+    alt: 'Bassin naturel bordé de pierres, avec des nénuphars en fleur.',
+  },
+];
+
+const principles = [
+  {
+    title: 'Observer',
+    text: 'Le sol, la lumière, le vent, les vues : nous lisons le terrain avant de tracer la moindre ligne.',
+  },
+  {
+    title: 'Composer',
+    text: 'Des plantes adaptées au lieu, associées pour se relayer au fil de l’année et demander peu d’eau.',
+  },
+  {
+    title: 'Accompagner',
+    text: 'Un jardin met quelques saisons à s’installer. Nous restons là pour le voir grandir avec vous.',
+  },
+];
+
+const seasons = [
+  { name: 'Printemps', text: 'Les premières floraisons, les jeunes pousses.' },
+  { name: 'Été', text: 'L’ombre des arbres, la fraîcheur de l’eau.' },
+  { name: 'Automne', text: 'Les couleurs chaudes, les graines dorées.' },
+  { name: 'Hiver', text: 'Les silhouettes, le givre sur les graminées.' },
+];
+---
+
+<RivageLayout
+  title="Rivage — démonstration fictive | Atousy"
+  description="Rivage, paysagiste fictif : site de démonstration réalisé par Atousy. Conception de jardins, plantation, murets en pierre sèche, bassins naturels et entretien."
+  current="accueil"
+>
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <Picture
+        src={heroImg}
+        alt="Allée en pierre qui serpente entre graminées et lavandes, sous les arbres, dans la lumière dorée du soir ; un lac et des montagnes au loin."
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1680, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="rv-container hero__inner">
+      <div class="hero__copy">
+        <h1 id="hero-title">Le jardin<br /> vous appelle.</h1>
+        <p class="hero__text">
+          Des lieux pour ralentir, se retrouver et regarder les saisons passer. Le paysage commence avec votre façon de vivre.
+        </p>
+        <a class="rv-btn rv-btn--light hero__btn" href="/exemples/rivage/jardins/">Entrer dans le jardin <Icon name="arrow" /></a>
+      </div>
+      <p class="hero__aside">Des paysages pour vivre dehors.<br /> En toute saison.</p>
+    </div>
+  </section>
+
+  <!-- Approche -->
+  <section class="rv-section approach" aria-labelledby="approach-title">
+    <div class="rv-container">
+      <div class="approach__head">
+        <div>
+          <p class="rv-eyebrow">Notre approche</p>
+          <h2 id="approach-title" class="rv-h2">Un jardin se dessine d’abord avec vous.</h2>
+        </div>
+        <div class="approach__text">
+          <p class="rv-lead">
+            Avant les plans et les plantes, il y a votre façon d’habiter le lieu : le café du matin au soleil, les repas
+            à l’ombre, le chemin que l’on prend sans y penser.
+          </p>
+          <p>
+            Nous partons de ces habitudes pour composer un jardin simple à vivre, qui vous ressemble et qui s’embellit avec
+            le temps.
+          </p>
+          <a class="rv-link" href="/exemples/rivage/approche/">Découvrir notre approche <Icon name="arrow" /></a>
+        </div>
+      </div>
+
+      <ol class="principles">
+        {
+          principles.map((p, i) => (
+            <li>
+              <span class="principles__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Savoir-faire -->
+  <section class="rv-section crafts" aria-labelledby="crafts-title">
+    <div class="rv-container">
+      <div class="section-head">
+        <div>
+          <p class="rv-eyebrow">Savoir-faire</p>
+          <h2 id="crafts-title" class="rv-h2">Du premier croquis aux saisons qui passent.</h2>
+        </div>
+        <a class="rv-link" href="/exemples/rivage/savoir-faire/">Tous nos savoir-faire <Icon name="arrow" /></a>
+      </div>
+
+      <ul class="cards">
+        {
+          crafts.map((c) => (
+            <li class="card">
+              <div class="card__media">
+                <Picture
+                  src={c.img}
+                  alt={c.alt}
+                  formats={['avif', 'webp']}
+                  widths={[400, 640, 900]}
+                  sizes="(max-width: 48em) calc(100vw - 2.5rem), (max-width: 80em) 31vw, 24rem"
+                />
+              </div>
+              <h3>
+                <a href={c.href}>{c.title}</a>
+              </h3>
+              <p>{c.text}</p>
+              <span class="card__more" aria-hidden="true">
+                En savoir plus <Icon name="arrow" />
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="crafts__more">
+        Et aussi&nbsp;: <a href="/exemples/rivage/savoir-faire/#terrasses">terrasses et cheminements</a>{', '}<a href="/exemples/rivage/savoir-faire/#entretien">entretien au fil des saisons</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Saisons -->
+  <section class="seasons rv-dark" aria-labelledby="seasons-title">
+    <div class="seasons__media">
+      <Picture
+        src={winterImg}
+        alt="Jardin en hiver : graminées et vivaces couvertes de givre le long d’une allée en pierre, au lever du soleil."
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600]}
+        sizes="(max-width: 56em) 100vw, 50vw"
+      />
+    </div>
+    <div class="seasons__panel">
+      <p class="rv-eyebrow">En toute saison</p>
+      <h2 id="seasons-title" class="rv-h2">L’hiver aussi a sa beauté.</h2>
+      <p class="rv-lead">
+        Nous choisissons des végétaux qui gardent une silhouette quand tout se repose : graminées qui retiennent le givre,
+        écorces colorées, persistants. Le jardin reste un paysage, toute l’année.
+      </p>
+      <dl class="seasons__list">
+        {
+          seasons.map((s) => (
+            <div>
+              <dt>{s.name}</dt>
+              <dd>{s.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Projets types -->
+  <section class="rv-section projects" aria-labelledby="projects-title">
+    <div class="rv-container">
+      <div class="section-head">
+        <div>
+          <p class="rv-eyebrow">Votre jardin</p>
+          <h2 id="projects-title" class="rv-h2">Imaginer le vôtre.</h2>
+        </div>
+        <p class="projects__intro">
+          Terrasse tournée vers la vue, allée de graminées, bassin naturel… Parcourez nos projets types pour trouver
+          l’inspiration.
+        </p>
+      </div>
+
+      <figure class="feature">
+        <div class="feature__media">
+          <Picture
+            src={terraceImg}
+            alt="Terrasse en pierre avec deux fauteuils en bois, entourée de lavandes et de rosiers, face au lac et aux montagnes."
+            formats={['avif', 'webp']}
+            widths={[640, 960, 1280, 1600, 2200]}
+            sizes="(max-width: 80em) calc(100vw - 2.5rem), 77rem"
+          />
+        </div>
+        <figcaption>
+          <span class="feature__tag">Projet type · Terrasse et massifs</span>
+          <span class="feature__text">Une terrasse en pierre tournée vers la vue, des lavandes et des vivaces tout autour.</span>
+        </figcaption>
+      </figure>
+
+      <div class="projects__cta">
+        <a class="rv-btn rv-btn--ghost" href="/exemples/rivage/jardins/">Voir les projets types <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand />
+</RivageLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(34rem, calc(100svh - 7.5rem), 54rem);
+    padding-block: 6rem clamp(2.5rem, 5vw, 4.5rem);
+    color: #fff;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--rv-green);
+  }
+
+  .hero__media,
+  .hero__media :global(picture) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 55%;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgb(10 25 18 / 0.72) 0%, rgb(10 25 18 / 0.42) 38%, rgb(10 25 18 / 0) 64%),
+      linear-gradient(0deg, rgb(10 25 18 / 0.55) 0%, rgb(10 25 18 / 0.2) 22%, rgb(10 25 18 / 0) 45%);
+  }
+
+  .hero__inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem 3rem;
+  }
+
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+    max-width: 38rem;
+  }
+
+  .hero h1 {
+    color: #fff;
+    font-size: clamp(3.4rem, 1.6rem + 6.4vw, 7.25rem);
+    font-weight: 380;
+    line-height: 0.95;
+    letter-spacing: -0.032em;
+    text-wrap: initial;
+  }
+
+  .hero__text {
+    max-width: 30rem;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.6;
+    color: rgb(255 255 255 / 0.92);
+  }
+
+  .hero__btn {
+    margin-top: 0.4rem;
+  }
+
+  .hero :global(:focus-visible) {
+    outline-color: #fff;
+  }
+
+  .hero__aside {
+    flex: none;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgb(255 255 255 / 0.55);
+    font-family: var(--rv-serif);
+    font-size: 1.3125rem;
+    font-style: italic;
+    font-weight: 350;
+    line-height: 1.35;
+    color: #fff;
+    text-shadow: 0 1px 12px rgb(10 25 18 / 0.45);
+  }
+
+  /* Approche */
+  .approach__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .approach__head h2 {
+    max-width: 14ch;
+  }
+
+  .approach__text {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    padding-top: 2.6rem;
+    color: var(--rv-ink-2);
+  }
+
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem clamp(1.5rem, 4vw, 3.5rem);
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .principles li {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rv-line);
+  }
+
+  .principles__num {
+    display: block;
+    margin-bottom: 1.1rem;
+    font-family: var(--rv-serif);
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--rv-green-3);
+  }
+
+  .principles h3 {
+    margin-bottom: 0.6rem;
+    font-size: 1.75rem;
+  }
+
+  .principles p {
+    color: var(--rv-ink-2);
+  }
+
+  /* Têtes de section */
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+  }
+
+  .section-head h2 {
+    max-width: 16ch;
+  }
+
+  /* Savoir-faire */
+  .crafts {
+    background: var(--rv-ivory-2);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem clamp(1.25rem, 2.6vw, 2.25rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .card__media {
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    margin-bottom: 0.9rem;
+    border-radius: var(--rv-radius);
+    background: var(--rv-ivory);
+  }
+
+  .card__media :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  .card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--rv-ease);
+  }
+
+  .card:hover .card__media :global(img) {
+    transform: scale(1.04);
+  }
+
+  .card h3 {
+    font-size: 1.75rem;
+  }
+
+  .card h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--rv-radius);
+  }
+
+  .card h3 a:focus-visible {
+    outline: none;
+  }
+
+  .card h3 a:focus-visible::after {
+    outline: 2px solid var(--rv-green);
+    outline-offset: 6px;
+  }
+
+  .card p {
+    color: var(--rv-ink-2);
+  }
+
+  .card__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+    color: var(--rv-green);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .card__more :global(svg) {
+    transition: transform 0.3s var(--rv-ease);
+  }
+
+  .card:hover .card__more :global(svg) {
+    transform: translate(2px, -2px);
+  }
+
+  .crafts__more {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rv-line);
+    color: var(--rv-ink-2);
+  }
+
+  .crafts__more a {
+    color: var(--rv-green);
+    font-weight: 600;
+    text-underline-offset: 0.25em;
+  }
+
+  /* Saisons */
+  .seasons {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    background: var(--rv-green);
+    color: var(--rv-ivory);
+  }
+
+  .seasons__media {
+    position: relative;
+    min-height: 36rem;
+  }
+
+  .seasons__media :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .seasons__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 50%;
+  }
+
+  .seasons__panel {
+    align-self: center;
+    max-width: 38rem;
+    padding: clamp(3.5rem, 7vw, 6.5rem) var(--rv-gutter) clamp(3.5rem, 7vw, 6.5rem) clamp(2rem, 6vw, 6rem);
+  }
+
+  .seasons__panel h2 {
+    margin-bottom: 1.4rem;
+  }
+
+  .seasons__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+    margin: 2.75rem 0 0;
+  }
+
+  .seasons__list div {
+    padding-top: 1rem;
+    border-top: 1px solid rgb(216 197 154 / 0.4);
+  }
+
+  .seasons__list dt {
+    font-family: var(--rv-serif);
+    font-size: 1.375rem;
+    color: var(--rv-wheat);
+  }
+
+  .seasons__list dd {
+    margin: 0.3rem 0 0;
+    font-size: 0.9688rem;
+    color: rgb(246 241 230 / 0.8);
+  }
+
+  /* Projets types */
+  .projects__intro {
+    max-width: 27rem;
+    color: var(--rv-ink-2);
+  }
+
+  .feature {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--rv-radius);
+    background: var(--rv-ivory-2);
+  }
+
+  .feature__media {
+    aspect-ratio: 2.2;
+  }
+
+  .feature__media :global(picture) {
+    display: block;
+    height: 100%;
+  }
+
+  .feature__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+  }
+
+  .feature figcaption {
+    position: absolute;
+    left: clamp(1rem, 3vw, 2rem);
+    bottom: clamp(1rem, 3vw, 2rem);
+    display: grid;
+    gap: 0.35rem;
+    max-width: 26rem;
+    padding: 1.1rem 1.35rem;
+    background: rgb(251 248 241 / 0.94);
+    border-radius: 4px;
+    box-shadow: 0 18px 40px -24px rgb(20 35 28 / 0.55);
+  }
+
+  .feature__tag {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rv-green-3);
+  }
+
+  .feature__text {
+    font-family: var(--rv-serif);
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--rv-green);
+  }
+
+  .projects__cta {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(2.25rem, 4vw, 3rem);
+  }
+
+  /* Responsive */
+  @media (max-width: 56em) {
+    .approach__head {
+      grid-template-columns: 1fr;
+    }
+
+    .approach__text {
+      padding-top: 0;
+    }
+
+    .principles {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .cards {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .seasons {
+      grid-template-columns: 1fr;
+    }
+
+    .seasons__media {
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+    }
+
+    .seasons__panel {
+      max-width: none;
+      padding-inline: var(--rv-gutter);
+    }
+
+    .feature__media {
+      aspect-ratio: 4 / 3;
+    }
+
+    .feature figcaption {
+      position: static;
+      max-width: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  @media (max-width: 40em) {
+    .hero {
+      min-height: clamp(32rem, calc(100svh - 8rem), 46rem);
+      padding-top: 4rem;
+    }
+
+    /* Le texte occupe presque toute la hauteur sur les petits écrans : voile prolongé vers le haut
+       pour que le titre et la phrase d'accroche restent lisibles sur le ciel clair de la photo. */
+    .hero::after {
+      background: linear-gradient(
+        0deg,
+        rgb(10 25 18 / 0.82) 0%,
+        rgb(10 25 18 / 0.6) 45%,
+        rgb(10 25 18 / 0.45) 75%,
+        rgb(10 25 18 / 0.2) 100%
+      );
+    }
+
+    .hero__media :global(img) {
+      object-position: 46% 50%;
+    }
+
+    .hero__inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    /* Phrase d'accroche sous le bouton, comme en grand écran : bas du hero, là où le voile est le plus dense */
+    .hero__aside {
+      padding-top: 0.6rem;
+      font-size: 1.0625rem;
+    }
+
+    .cards {
+      grid-template-columns: 1fr;
+    }
+
+    .card__media {
+      aspect-ratio: 3 / 2;
+    }
+
+    .seasons__list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover .card__media :global(img),
+    .card:hover .card__more :global(svg) {
+      transform: none;
+    }
+  }
+</style>

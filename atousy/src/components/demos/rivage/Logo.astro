@@ -1,0 +1,55 @@
+---
+// Logo Rivage : petite vague (≈) dessinée au trait + mot-symbole « rivage » en Newsreader.
+interface Props {
+  tone?: 'green' | 'ivory';
+  size?: 'md' | 'lg';
+}
+const { tone = 'green', size = 'md' } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${tone}`, `logo--${size}`]}>
+  <svg class="logo__wave" viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false">
+    <path d="M1.5 4.6c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+    <path d="M1.5 10.4c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+  </svg>
+  <span class="logo__word">rivage</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1;
+  }
+
+  .logo--green {
+    color: var(--rv-green);
+  }
+
+  .logo--ivory {
+    color: var(--rv-ivory);
+  }
+
+  .logo__wave {
+    width: 1.05rem;
+    height: auto;
+    margin-top: 0.2em;
+    opacity: 0.75;
+  }
+
+  .logo__word {
+    font-family: var(--rv-serif);
+    font-size: 1.875rem;
+    font-weight: 430;
+    letter-spacing: -0.015em;
+  }
+
+  .logo--lg .logo__wave {
+    width: 1.35rem;
+  }
+
+  .logo--lg .logo__word {
+    font-size: 2.5rem;
+  }
+</style>

@@ -1,0 +1,197 @@
+---
+// Gabarit commun des démonstrations fictives (Rivage, Faîtage, Écluse, Lueur, Moellon).
+// Bandeau « démonstration fictive » non masquable, page exclue des moteurs de recherche.
+// Le lien « Aller au contenu » est fourni ici, avant le bandeau : c'est le premier arrêt
+// au clavier, et le seul (les gabarits de marque n'en ajoutent pas). Il vise
+// <main id="contenu"> du gabarit de marque.
+import '@fontsource-variable/figtree/wght.css';
+import '@fontsource-variable/newsreader/wght.css';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  brand: 'rivage' | 'faitage' | 'ecluse' | 'lueur' | 'moellon';
+}
+const { title, description, brand } = Astro.props;
+// Aperçu de partage : l'image d'Atousy (jamais une photo du faux client) et un titre
+// qui dit toujours « démonstration fictive ».
+const ogTitle = /fictiv/i.test(title) ? title : `${title} (démonstration fictive)`;
+const ogUrl = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og-image.jpg', site.url).href;
+const ogImageAlt = 'Atousy, studio web & design : « Votre métier. Un site à part. » Création et refonte de sites pour artisans, TPE et PME.';
+---
+
+<!doctype html>
+<html lang="fr" data-demo={brand}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="demo-skip" href="#contenu">Aller au contenu</a>
+    <aside class="demo-banner" aria-label="Démonstration fictive">
+      <p>
+        <strong>Démonstration fictive réalisée par Atousy</strong>
+        <span> — cette entreprise n’existe pas.</span>
+      </p>
+      <a href="/exemples/">Retour à Atousy</a>
+    </aside>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img,
+  svg,
+  picture {
+    display: block;
+    max-width: 100%;
+  }
+
+  img {
+    height: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  ol,
+  figure {
+    margin: 0;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+
+<style>
+  .demo-skip {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.75rem;
+    z-index: 1000;
+    padding: 0.65rem 1.1rem;
+    border-radius: 4px;
+    /* Clair sur le bandeau sombre, qu'il recouvre en haut de page. */
+    background: #f8f4ee;
+    color: #0f2329;
+    box-shadow: 0 2px 10px rgb(15 35 41 / 0.25);
+    font-family: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+
+  .demo-skip:not(:focus) {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Focus : l'anneau du site Atousy, marine avec un liseré clair (l'un des deux contraste
+     toujours avec le fond, bandeau sombre ou page claire de la marque). */
+  .demo-skip:focus-visible,
+  .demo-banner a:focus-visible {
+    outline: 2.5px solid #0f2329;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px #fffdfa;
+  }
+
+  .demo-banner {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem 1.25rem;
+    padding: 0.45rem 1.25rem;
+    background: #0f2329;
+    color: #f8f4ee;
+    font-family: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .demo-banner strong {
+    font-weight: 650;
+  }
+
+  /* Cible d'au moins 24 px de haut sans grossir le texte ; le bandeau garde sa hauteur
+     (marges verticales réduites d'autant). */
+  .demo-banner a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    color: #f8f4ee;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Survol : soulignement corail plus épais, le texte reste ivoire (comme sur le site). */
+  .demo-banner a:hover {
+    text-decoration-color: #f07a5f;
+    text-decoration-thickness: 2px;
+  }
+</style>

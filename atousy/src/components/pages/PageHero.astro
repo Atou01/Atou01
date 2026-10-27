@@ -1,0 +1,200 @@
+---
+// En-tête des pages intérieures : fil d'Ariane, grand H1, chapeau, actions.
+// Avec un slot « media » : texte à gauche, visuel à droite (comme l'accueil).
+// Sans : H1 à gauche, chapeau et actions à droite.
+interface Props {
+  crumb: string;
+  /** Un « \n » force un retour à la ligne dans le H1. */
+  title: string;
+  lead: string;
+  /** Petite étiquette au-dessus du H1 (ex. « Démonstrations fictives »). */
+  tag?: string;
+  /** Fin du titre mise en corail (ex. « projet. »), comme « part. » sur l'accueil. */
+  accent?: string;
+}
+const { crumb, title, lead, tag, accent } = Astro.props;
+const hasMedia = Astro.slots.has('media');
+const titleLines = title.split('\n');
+const lastLine = titleLines.length - 1;
+const accented = Boolean(accent) && titleLines[lastLine].endsWith(accent!);
+---
+
+<section class:list={['ph', hasMedia ? 'ph--media' : 'ph--split']} aria-labelledby="page-title">
+  <div class="container ph__inner">
+    <div class="ph__main">
+      <nav class="ph__crumbs" aria-label="Fil d’Ariane">
+        <ol>
+          <li><a href="/">Accueil</a></li>
+          <li aria-current="page">{crumb}</li>
+        </ol>
+      </nav>
+      {tag && <p class="ph__tag">{tag}</p>}
+      <h1 id="page-title" class:list={{ 'is-broken': titleLines.length > 1 }}>
+        {titleLines.map((line, i) => (
+          <>
+            {i > 0 && <br />}
+            {accented && i === lastLine ? (
+              <>
+                {line.slice(0, -accent!.length)}
+                <span class="ph__accent">{accent}</span>
+              </>
+            ) : (
+              line
+            )}
+          </>
+        ))}
+      </h1>
+    </div>
+    <div class="ph__aside">
+      <p class="ph__lead">{lead}</p>
+      <slot name="after-lead" />
+      {
+        Astro.slots.has('actions') && (
+          <div class="ph__actions">
+            <slot name="actions" />
+          </div>
+        )
+      }
+      <slot name="note" />
+    </div>
+    {
+      hasMedia && (
+        <div class="ph__media">
+          <slot name="media" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .ph {
+    /* Écart entre le fil d'Ariane et le H1 (ou l'étiquette) */
+    --ph-title-gap: clamp(1.75rem, 3.5vw, 3.25rem);
+    padding-block: clamp(1.5rem, 3vw, 2.75rem) clamp(3rem, 6vw, 6rem);
+  }
+
+  .ph__inner {
+    display: grid;
+    gap: 1.75rem clamp(2rem, 6vw, 6.5rem);
+  }
+
+  .ph__crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--ink-3);
+  }
+
+  .ph__crumbs li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    opacity: 0.6;
+  }
+
+  /* Marge intérieure verticale : cible tactile d'au moins 24 px, sans décaler la ligne (lien en ligne) */
+  .ph__crumbs a {
+    padding-block: 0.25rem;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  /* Survol : soulignement corail, le texte garde un contraste ≥ 4,5:1 */
+  .ph__crumbs a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+
+  .ph__tag {
+    display: inline-block;
+    margin-top: var(--ph-title-gap);
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  h1 {
+    max-width: 13.5ch;
+    margin-top: var(--ph-title-gap);
+    font-size: var(--fs-h2);
+  }
+
+  h1.is-broken {
+    max-width: none;
+  }
+
+  /* Corail du titre : contraste ≥ 3:1 sur ivoire, admis pour un texte de cette taille */
+  .ph__accent {
+    color: var(--coral-text);
+  }
+
+  .ph__tag + h1 {
+    margin-top: 1.25rem;
+  }
+
+  .ph__lead {
+    max-width: 34rem;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .ph__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: clamp(1.5rem, 2.3vw, 2.25rem);
+  }
+
+  /* H1 à gauche, chapeau à droite (posé sur la ligne de base du titre).
+     Le fil d'Ariane et le H1 restent en haut, à la même hauteur sur toutes les pages ;
+     un chapeau plus long que le titre commence au niveau du H1, jamais au-dessus. */
+  @media (min-width: 62.5em) {
+    .ph--split .ph__inner {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+
+    .ph--split .ph__main {
+      align-self: start;
+    }
+
+    .ph--split .ph__aside {
+      align-self: end;
+      margin-top: calc(0.875rem * 1.55 + var(--ph-title-gap));
+      padding-bottom: 0.35rem;
+    }
+
+    .ph--media .ph__inner {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      grid-template-rows: auto 1fr;
+      align-items: start;
+    }
+
+    .ph--media .ph__main,
+    .ph--media .ph__aside {
+      grid-column: 1;
+    }
+
+    .ph--media .ph__media {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: end;
+    }
+  }
+
+  @media (max-width: 30em) {
+    .ph__actions :global(.btn) {
+      flex: 1 1 100%;
+    }
+  }
+</style>

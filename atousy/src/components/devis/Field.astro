@@ -1,0 +1,45 @@
+---
+// Champ du formulaire de devis : libellé toujours visible, aide, erreur, contrôle.
+// L'erreur est placée avant le contrôle et lue en premier (aria-describedby).
+// Styles : devis-form.css (classes dv-*), importé par DevisForm.astro.
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props {
+  name: string;
+  label: string;
+  optional?: boolean;
+  help?: string;
+  placeholder?: string;
+  /** Zone de texte multiligne au lieu d'un champ sur une ligne. */
+  multiline?: boolean;
+  /** Demi-largeur à partir des écrans moyens. */
+  half?: boolean;
+  /** Compteur de caractères (zone de texte). */
+  counter?: boolean;
+  attrs?: HTMLAttributes<'input'> & HTMLAttributes<'textarea'>;
+}
+
+const { name, label, optional = false, help, placeholder, multiline = false, half = false, counter = false, attrs = {} } = Astro.props;
+const id = `devis-${name}`;
+const helpId = help ? `${id}-help` : undefined;
+const errorId = `${id}-error`;
+const describedBy = [errorId, helpId].filter(Boolean).join(' ');
+const common = { id, name, placeholder, 'aria-describedby': describedBy, class: 'dv-control' };
+---
+
+<div class:list={['dv-field', `dv-field--${name}`, { 'dv-field--half': half }]} data-field={name} data-label={label}>
+  <label class="dv-label" for={id}>
+    {label}
+    {optional && <span class="dv-label__opt"> (facultatif)</span>}
+  </label>
+  {help ? <p class="dv-help" id={helpId}>{help}</p> : <span class="dv-help" aria-hidden="true"></span>}
+  <p class="dv-error" id={errorId} data-error-for={name}></p>
+  {multiline ? <textarea {...attrs} {...common} /> : <input {...attrs} {...common} />}
+  {
+    counter && attrs.maxlength && (
+      <p class="dv-counter js-only" aria-hidden="true">
+        <span data-counter-for={name}>0</span> / {attrs.maxlength}
+      </p>
+    )
+  }
+</div>

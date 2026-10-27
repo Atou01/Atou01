@@ -1,0 +1,432 @@
+---
+// En-tête Lueur : logo à gauche, navigation à droite (Contact en pastille ambrée).
+// Variante « overlay » : posée en transparence sur la photo d'ouverture de l'accueil.
+// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
+// Sans JavaScript, la navigation reste visible (liens repliés sous le logo).
+import Icon from '../../Icon.astro';
+import Logo from './Logo.astro';
+import { lueurNav, type LueurPage } from './nav';
+
+interface Props {
+  current: LueurPage;
+  variant?: 'solid' | 'overlay';
+}
+const { current, variant = 'solid' } = Astro.props;
+---
+
+<header class:list={['header', `header--${variant}`]} data-lu-header>
+  <div class="bar lu-container">
+    <a class="brand" href="/exemples/lueur/" aria-label="Lueur, accueil">
+      <Logo />
+    </a>
+
+    <button class="burger" type="button" aria-expanded="false" aria-controls="lu-menu" data-lu-toggle hidden>
+      <span class="burger__label">Menu</span>
+      <span class="burger__icon" aria-hidden="true">
+        <Icon name="menu" class="i-open" />
+        <Icon name="close" class="i-close" />
+      </span>
+    </button>
+
+    <nav id="lu-menu" class="nav" aria-label="Navigation principale">
+      <ul class="nav__list">
+        {
+          lueurNav.map((item) => (
+            <li class:list={[item.key === 'contact' && 'nav__item--contact']}>
+              <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                <span class="nav__text">{item.label}</span>
+                {item.key === 'contact' && <Icon name="arrow" class="nav__arrow" />}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var header = document.querySelector('[data-lu-header]');
+    if (!header) return;
+    var btn = header.querySelector('[data-lu-toggle]');
+    var panel = document.getElementById('lu-menu');
+    if (!btn || !panel) return;
+
+    header.classList.add('is-enhanced');
+    btn.hidden = false;
+
+    function isOpen() {
+      return btn.getAttribute('aria-expanded') === 'true';
+    }
+    function setOpen(open, returnFocus) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      header.classList.toggle('is-open', open);
+      if (!open && returnFocus) btn.focus();
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(!isOpen(), false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) setOpen(false, true);
+    });
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !header.contains(e.target)) setOpen(false, false);
+    });
+    // Élément de l'en-tête masqué alors qu'il avait le focus (changement de taille d'écran) :
+    // le focus passe à celui qui le remplace au même endroit (premier lien du menu à la place
+    // du bouton Menu en grand écran, bouton Menu à la place d'un lien du menu en petit écran).
+    function refocus(el) {
+      if (!el || el.getClientRects().length > 0) return;
+      var target = el === btn ? panel.querySelector('a') : btn;
+      if (target && target.getClientRects().length > 0) target.focus();
+    }
+    header.addEventListener('focusout', function (e) {
+      // Sans destination : le navigateur a retiré le focus d'un élément devenu invisible.
+      if (!e.relatedTarget) refocus(e.target);
+      else if (isOpen() && !header.contains(e.relatedTarget)) setOpen(false, false);
+    });
+    // Clic sur un lien de l'en-tête (logo ou menu) : le menu se referme avant de quitter la page.
+    header.addEventListener('click', function (e) {
+      if (isOpen() && e.target.closest && e.target.closest('a')) setOpen(false, false);
+    });
+    // Retour arrière depuis le cache du navigateur : la page revient avec le menu fermé.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && isOpen()) setOpen(false, false);
+    });
+    // Changement de taille d'écran : le menu se referme. Les navigateurs qui laissent le focus
+    // sur l'élément masqué passent ici ; les autres le retirent et passent par « focusout ».
+    var mq = window.matchMedia('(min-width: 60.01em)');
+    var onChange = function () {
+      var active = document.activeElement;
+      setOpen(false, false);
+      if (active && header.contains(active)) refocus(active);
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  })();
+</script>
+
+<style>
+  .header {
+    z-index: 50;
+    color: var(--lu-ivory);
+  }
+
+  .header--solid {
+    position: sticky;
+    top: 0;
+    background: rgb(20 26 36 / 0.94);
+    border-bottom: 1px solid var(--lu-line-dark);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .header--solid {
+      background: rgb(20 26 36 / 0.86);
+      backdrop-filter: saturate(140%) blur(14px);
+    }
+  }
+
+  .header--overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgb(12 16 23 / 0.9) 0%, rgb(12 16 23 / 0.74) 60%, rgb(12 16 23 / 0) 100%);
+  }
+
+  .header--overlay .nav__list li:not(.nav__item--contact) a,
+  .header--overlay .brand {
+    text-shadow: 0 1px 14px rgb(12 16 23 / 0.7);
+  }
+
+  .bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 4.75rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    margin-right: auto;
+    padding-block: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.25rem, 1.2vw, 1rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav__list a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 0.7rem;
+    color: rgb(245 239 228 / 0.86);
+    font-size: 0.9375rem;
+    font-weight: 550;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition: color 0.25s var(--lu-ease);
+  }
+
+  .nav__list a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0.3rem;
+    width: 0.3rem;
+    height: 0.3rem;
+    margin-left: -0.15rem;
+    border-radius: 50%;
+    background: var(--lu-amber);
+    box-shadow: 0 0 10px 2px rgb(242 180 90 / 0.65);
+    opacity: 0;
+    transform: scale(0.4);
+    transition:
+      opacity 0.3s var(--lu-ease),
+      transform 0.3s var(--lu-ease);
+  }
+
+  .nav__list a:hover {
+    color: var(--lu-ivory);
+  }
+
+  .nav__list a:hover::after {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
+
+  .nav__list a[aria-current='page'] {
+    color: var(--lu-ivory);
+  }
+
+  .nav__list a[aria-current='page']::after {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Contact : pastille ambrée */
+  .nav__item--contact {
+    margin-left: clamp(0.25rem, 1vw, 0.75rem);
+  }
+
+  .nav__item--contact a {
+    padding: 0 1.15rem;
+    background: var(--lu-amber);
+    border-radius: 999px;
+    color: var(--lu-night);
+    font-weight: 650;
+    box-shadow: 0 0 0 0 rgb(242 180 90 / 0);
+    transition:
+      background-color 0.25s var(--lu-ease),
+      box-shadow 0.3s var(--lu-ease);
+  }
+
+  .nav__item--contact a:hover,
+  .nav__item--contact a[aria-current='page'] {
+    background: var(--lu-amber-soft);
+    color: var(--lu-night);
+    box-shadow: 0 0 26px 2px rgb(242 180 90 / 0.35);
+  }
+
+  .nav__item--contact a::after {
+    display: none;
+  }
+
+  .nav__item--contact :global(.nav__arrow) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .nav__list a:focus-visible {
+    outline-offset: 2px;
+    border-radius: 999px;
+  }
+
+  .burger {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    padding: 0 0.4rem 0 1.05rem;
+    background: rgb(245 239 228 / 0.06);
+    border: 1px solid rgb(245 239 228 / 0.3);
+    border-radius: 999px;
+    color: var(--lu-ivory);
+    font-size: 0.875rem;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .burger__icon {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--lu-amber);
+    color: var(--lu-night);
+  }
+
+  .burger__icon :global(svg) {
+    grid-area: 1 / 1;
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .burger :global(.i-close),
+  .is-open .burger :global(.i-open) {
+    display: none;
+  }
+
+  .is-open .burger :global(.i-close) {
+    display: block;
+  }
+
+  @media (max-width: 60em) {
+    .bar {
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      min-height: 4.25rem;
+    }
+
+    /* Sans JavaScript : liens visibles, repliés sous le logo, en-tête non collant */
+    .header--solid:not(.is-enhanced) {
+      position: relative;
+    }
+
+    .header:not(.is-enhanced) .bar {
+      padding-top: 0.6rem;
+    }
+
+    .nav {
+      width: 100%;
+      padding-bottom: 0.6rem;
+    }
+
+    .nav__list {
+      flex-wrap: wrap;
+      gap: 0.25rem 0.5rem;
+      margin-left: -0.7rem;
+    }
+
+    .nav__item--contact {
+      margin-left: 0.7rem;
+    }
+
+    /* Avec JavaScript : panneau déroulant */
+    .is-enhanced .burger:not([hidden]) {
+      display: inline-flex;
+    }
+
+    .header--overlay.is-open {
+      background: var(--lu-night);
+    }
+
+    .is-enhanced .nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: calc(-1 * var(--lu-gutter));
+      right: calc(-1 * var(--lu-gutter));
+      width: auto;
+      max-height: calc(100svh - 4.25rem);
+      overflow-y: auto;
+      padding: 0.75rem var(--lu-gutter) 2rem;
+      background:
+        radial-gradient(70% 60% at 90% 0%, rgb(242 180 90 / 0.12), transparent 70%),
+        var(--lu-night);
+      border-top: 1px solid var(--lu-line-dark);
+      border-bottom: 1px solid var(--lu-line-dark);
+      box-shadow: 0 32px 48px -24px rgb(0 0 0 / 0.6);
+    }
+
+    .is-enhanced.is-open .nav {
+      display: block;
+    }
+
+    .is-enhanced .nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      margin-left: 0;
+    }
+
+    .is-enhanced .nav__list li {
+      border-bottom: 1px solid var(--lu-line-dark);
+    }
+
+    .is-enhanced .nav__list a {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 0;
+      padding: 1.05rem 0;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      color: var(--lu-ivory);
+    }
+
+    .is-enhanced .nav__list a::after {
+      position: static;
+      flex: none;
+      width: 0.5rem;
+      height: 0.5rem;
+      margin: 0 0.25rem 0 0;
+      opacity: 0;
+    }
+
+    .is-enhanced .nav__list a[aria-current='page'] {
+      color: var(--lu-amber);
+    }
+
+    .is-enhanced .nav__list a[aria-current='page']::after {
+      opacity: 1;
+    }
+
+    .is-enhanced .nav__list li.nav__item--contact {
+      margin: 1.75rem 0 0;
+      border-bottom: 0;
+    }
+
+    .is-enhanced .nav__item--contact a {
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1rem;
+      color: var(--lu-night);
+      font-size: 1rem;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+    }
+
+    .is-enhanced .nav__item--contact a[aria-current='page'] {
+      color: var(--lu-night);
+    }
+  }
+
+  @media (max-width: 60em) and (prefers-reduced-motion: no-preference) {
+    .is-enhanced.is-open .nav {
+      animation: lu-drop 0.28s var(--lu-ease);
+    }
+  }
+
+  @keyframes lu-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+  }
+</style>

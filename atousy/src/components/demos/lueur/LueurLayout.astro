@@ -1,0 +1,405 @@
+---
+// Gabarit des pages Lueur (électricien fictif) : DemoLayout + en-tête + pied de page
+// + jetons de couleur et utilitaires partagés, limités à html[data-demo='lueur'].
+// Ambiance « soirée » : fonds nuit, accents ambrés, texte ivoire ; sections sombres et claires en alternance.
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import type { LueurPage } from './nav';
+
+interface Props {
+  title: string;
+  description: string;
+  current: LueurPage;
+  /** 'overlay' : en-tête transparent posé sur la photo d'ouverture (accueil). */
+  header?: 'solid' | 'overlay';
+}
+const { title, description, current, header = 'solid' } = Astro.props;
+---
+
+<DemoLayout title={title} description={description} brand="lueur">
+  <Header current={current} variant={header} />
+  <main id="contenu" tabindex="-1">
+    <slot />
+  </main>
+  <Footer />
+</DemoLayout>
+
+<style is:global>
+  html[data-demo='lueur'] {
+    --lu-night: #141a24;
+    --lu-night-2: #1a222f;
+    --lu-night-3: #232d3c;
+    --lu-deep: #0e131b;
+    --lu-ivory: #f5efe4;
+    --lu-dim: rgb(245 239 228 / 0.76);
+    --lu-paper: #f3ede3;
+    --lu-paper-2: #e9e1d4;
+    --lu-card: #fbf8f3;
+    --lu-ink: #161d28;
+    --lu-ink-2: #4a5260;
+    --lu-amber: #f2b45a;
+    --lu-amber-soft: #f7c982;
+    --lu-amber-ink: #8a520c;
+    --lu-line-dark: rgb(245 239 228 / 0.11);
+    --lu-line-light: rgb(22 29 40 / 0.13);
+    --lu-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    --lu-ease: cubic-bezier(0.22, 0.7, 0.2, 1);
+    --lu-gutter: clamp(1rem, 4.5vw, 3.5rem);
+    --lu-max: 80rem;
+    --lu-radius: 18px;
+    background: var(--lu-night);
+    scroll-padding-top: 6rem;
+  }
+
+  html[data-demo='lueur'] body {
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+
+  html[data-demo='lueur'] main:focus {
+    outline: none;
+  }
+
+  html[data-demo='lueur'] ::selection {
+    background: var(--lu-amber);
+    color: var(--lu-night);
+  }
+
+  html[data-demo='lueur'] :focus-visible {
+    outline: 2px solid var(--lu-amber);
+    outline-offset: 3px;
+  }
+
+  html[data-demo='lueur'] .lu-light :focus-visible {
+    outline-color: var(--lu-ink);
+  }
+
+  html[data-demo='lueur'] h1,
+  html[data-demo='lueur'] h2 {
+    font-family: var(--lu-sans);
+    font-weight: 380;
+    line-height: 1.04;
+    letter-spacing: -0.032em;
+    text-wrap: balance;
+  }
+
+  html[data-demo='lueur'] h3 {
+    font-family: var(--lu-sans);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  html[data-demo='lueur'] p {
+    text-wrap: pretty;
+  }
+
+  /* ——— Utilitaires ——— */
+  .lu-container {
+    width: min(var(--lu-max), 100% - 2 * var(--lu-gutter));
+    margin-inline: auto;
+  }
+
+  .lu-section {
+    padding-block: clamp(4.5rem, 9vw, 8.5rem);
+  }
+
+  .lu-dark {
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+  }
+
+  .lu-light {
+    background: var(--lu-paper);
+    color: var(--lu-ink);
+  }
+
+  .lu-light h2,
+  .lu-light h3 {
+    color: var(--lu-ink);
+  }
+
+  .lu-dark h2,
+  .lu-dark h3 {
+    color: var(--lu-ivory);
+  }
+
+  /* Étiquette en petites capitales espacées, précédée d'un point lumineux */
+  .lu-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.4rem;
+    font-family: var(--lu-sans);
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.24em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--lu-amber);
+  }
+
+  .lu-label::before {
+    content: '';
+    flex: none;
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: var(--lu-amber);
+    box-shadow:
+      0 0 0 3px rgb(242 180 90 / 0.16),
+      0 0 14px 2px rgb(242 180 90 / 0.55);
+  }
+
+  .lu-light .lu-label {
+    color: var(--lu-amber-ink);
+  }
+
+  .lu-light .lu-label::before {
+    background: #d48a22;
+    box-shadow: 0 0 0 3px rgb(212 138 34 / 0.18);
+  }
+
+  .lu-h2 {
+    font-size: clamp(2.1rem, 1.35rem + 2.7vw, 3.6rem);
+  }
+
+  .lu-lead {
+    font-size: clamp(1.0938rem, 1.02rem + 0.3vw, 1.25rem);
+    line-height: 1.65;
+  }
+
+  .lu-dark .lu-lead,
+  .lu-dark .lu-muted {
+    color: var(--lu-dim);
+  }
+
+  .lu-light .lu-lead,
+  .lu-light .lu-muted {
+    color: var(--lu-ink-2);
+  }
+
+  /* Boutons pastille */
+  .lu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.8rem 1.6rem;
+    background: var(--lu-amber);
+    color: var(--lu-night);
+    border: 1px solid var(--lu-amber);
+    border-radius: 999px;
+    font-family: var(--lu-sans);
+    font-size: 1rem;
+    font-weight: 650;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: 0 10px 30px -12px rgb(242 180 90 / 0.55);
+    transition:
+      background-color 0.25s var(--lu-ease),
+      border-color 0.25s var(--lu-ease),
+      color 0.25s var(--lu-ease),
+      box-shadow 0.35s var(--lu-ease);
+  }
+
+  .lu-btn:hover {
+    background: var(--lu-amber-soft);
+    border-color: var(--lu-amber-soft);
+    box-shadow: 0 0 36px 2px rgb(242 180 90 / 0.42);
+  }
+
+  .lu-btn svg {
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
+    transition: transform 0.3s var(--lu-ease);
+  }
+
+  .lu-btn:hover svg,
+  .lu-link:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  .lu-btn--ghost {
+    background: transparent;
+    color: var(--lu-ivory);
+    border-color: rgb(245 239 228 / 0.38);
+    box-shadow: none;
+  }
+
+  .lu-btn--ghost:hover {
+    background: var(--lu-ivory);
+    border-color: var(--lu-ivory);
+    color: var(--lu-night);
+    box-shadow: none;
+  }
+
+  .lu-btn--ink {
+    background: var(--lu-night);
+    border-color: var(--lu-night);
+    color: var(--lu-ivory);
+    box-shadow: none;
+  }
+
+  .lu-btn--ink:hover {
+    background: var(--lu-night-3);
+    border-color: var(--lu-night-3);
+    box-shadow: none;
+  }
+
+  .lu-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding-block: 0.25rem;
+    color: var(--lu-ivory);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgb(242 180 90 / 0.7);
+    text-underline-offset: 0.42em;
+    transition:
+      color 0.25s var(--lu-ease),
+      text-decoration-color 0.25s var(--lu-ease);
+  }
+
+  .lu-link:hover {
+    color: var(--lu-amber);
+    text-decoration-color: var(--lu-amber);
+  }
+
+  .lu-link svg {
+    width: 1.05em;
+    height: 1.05em;
+    flex: none;
+    color: var(--lu-amber);
+    transition: transform 0.3s var(--lu-ease);
+  }
+
+  .lu-light .lu-link {
+    color: var(--lu-ink);
+    text-decoration-color: #d48a22;
+  }
+
+  .lu-light .lu-link:hover {
+    color: var(--lu-amber-ink);
+  }
+
+  .lu-light .lu-link svg {
+    color: var(--lu-amber-ink);
+  }
+
+  /* Cadre photo : coins arrondis et halo de lumière chaude */
+  .lu-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--lu-radius);
+    background: var(--lu-night-2);
+  }
+
+  .lu-dark .lu-frame,
+  .lu-frame--glow {
+    box-shadow:
+      0 0 0 1px rgb(245 239 228 / 0.06),
+      0 40px 90px -40px rgb(242 180 90 / 0.38);
+  }
+
+  .lu-light .lu-frame {
+    box-shadow: 0 30px 60px -36px rgb(20 26 36 / 0.45);
+  }
+
+  .lu-frame picture {
+    width: 100%;
+    height: 100%;
+  }
+
+  .lu-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Légende « Projet type · … » */
+  .lu-caption {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    color: var(--lu-dim);
+  }
+
+  .lu-caption::before {
+    content: '';
+    flex: none;
+    width: 1.25rem;
+    height: 1px;
+    background: var(--lu-amber);
+    box-shadow: 0 0 8px rgb(242 180 90 / 0.8);
+  }
+
+  .lu-light .lu-caption {
+    color: var(--lu-ink-2);
+  }
+
+  .lu-light .lu-caption::before {
+    background: #d48a22;
+    box-shadow: none;
+  }
+
+  .lu-ticks {
+    display: grid;
+    gap: 0.7rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lu-ticks li {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .lu-ticks li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.42em;
+    width: 0.75rem;
+    height: 0.42rem;
+    border-left: 2px solid var(--lu-amber);
+    border-bottom: 2px solid var(--lu-amber);
+    transform: rotate(-45deg);
+  }
+
+  .lu-light .lu-ticks li::before {
+    border-color: var(--lu-amber-ink);
+  }
+
+  .lu-visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lu-btn:hover svg,
+    .lu-link:hover svg {
+      transform: none;
+    }
+  }
+</style>

@@ -1,0 +1,441 @@
+---
+// Démonstration fictive « Faîtage » (charpentier) — page L'atelier.
+import { Picture } from 'astro:assets';
+import FaitageLayout from '../../../../components/demos/faitage/FaitageLayout.astro';
+import ContactBand from '../../../../components/demos/faitage/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/faitage/RealSiteNote.astro';
+import faitage3 from '../../../../assets/photos/faitage-3.jpg';
+import faitage5 from '../../../../assets/photos/faitage-5.jpg';
+
+const stages = [
+  {
+    title: 'Choisir',
+    text: 'Chaque pièce est triée à la main : droiture du fil, nœuds, humidité. Le bon bois va au bon endroit de la charpente.',
+  },
+  {
+    title: 'Tracer',
+    text: 'À partir des plans, nous reportons l’épure à taille réelle : longueurs, coupes et emplacement de chaque assemblage.',
+  },
+  {
+    title: 'Tailler',
+    text: 'Tenons, mortaises, entailles : la taille associe les outils traditionnels et les machines de l’atelier, pour la précision.',
+  },
+  {
+    title: 'Pré-monter',
+    text: 'Les éléments sont assemblés à blanc et numérotés. Sur le chantier, le levage se fait alors sans surprise.',
+  },
+];
+
+const values = [
+  {
+    title: 'Le bois d’ici',
+    text: 'Nous privilégions des essences locales et des circuits courts, pour des structures adaptées au climat de montagne.',
+  },
+  {
+    title: 'Le geste juste',
+    text: 'Une coupe nette, un assemblage serré : la qualité d’une charpente se joue au millimètre, bien avant le chantier.',
+  },
+  {
+    title: 'Transmettre',
+    text: 'Former des apprentis et expliquer nos choix aux clients : un métier se garde vivant en le partageant.',
+  },
+];
+---
+
+<FaitageLayout
+  title="L’atelier — Faîtage, démonstration fictive | Atousy"
+  description="L’atelier de Faîtage, charpentier fictif : choix des bois, tracé, taille et pré-montage des charpentes. Démonstration Atousy."
+  current="atelier"
+>
+  <!-- Ouverture -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__text">
+      <p class="ft-label">L’atelier</p>
+      <h1 id="hero-title">Là où le bois prend forme.</h1>
+      <p class="ft-lead">
+        Avant d’être levée sur votre chantier, chaque charpente passe par notre atelier. C’est ici qu’elle est tracée,
+        taillée et assemblée une première fois, à l’abri.
+      </p>
+    </div>
+    <figure class="hero__media">
+      <Picture
+        src={faitage5}
+        alt="Atelier de charpente baigné de lumière : poutres sur tréteaux, établi couvert de copeaux et d’outils"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600, 2000]}
+        sizes="(max-width: 60em) 100vw, 58vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+  </section>
+
+  <!-- Étapes -->
+  <section class="ft-section stages" aria-labelledby="stages-title">
+    <div class="ft-container stages__grid">
+      <div class="stages__head">
+        <p class="ft-label"><span class="ft-label__num">01</span>À l’atelier</p>
+        <h2 id="stages-title" class="ft-h2">Le chemin d’une pièce de bois.</h2>
+        <p class="ft-lead">Quatre étapes, toujours les mêmes, pour que le levage sur site soit rapide, propre et précis.</p>
+      </div>
+      <ol class="stage-list">
+        {
+          stages.map((s, i) => (
+            <li class="stage">
+              <span class="stage__num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Assemblage -->
+  <section class="joint ft-dark" aria-labelledby="joint-title">
+    <figure class="joint__media">
+      <Picture
+        src={faitage3}
+        alt="Gros plan d’un assemblage tenon-mortaise en chêne, bloqué par une cheville en bois"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600]}
+        sizes="(max-width: 60em) 100vw, 50vw"
+      />
+    </figure>
+    <div class="joint__body">
+      <p class="ft-label"><span class="ft-label__num">02</span>L’assemblage</p>
+      <h2 id="joint-title" class="ft-h2">Un tenon, une mortaise, une cheville.</h2>
+      <p class="ft-lead">
+        Sans vis ni ferrure apparente, l’assemblage chevillé tient par la seule précision de la taille. Il travaille avec
+        le bois, se resserre avec le temps et peut être démonté pour être réparé.
+      </p>
+      <dl class="parts">
+        <div>
+          <dt>Le tenon</dt>
+          <dd>L’extrémité amincie de la pièce, taillée pour entrer au plus juste.</dd>
+        </div>
+        <div>
+          <dt>La mortaise</dt>
+          <dd>La cavité qui l’accueille, creusée dans la pièce voisine.</dd>
+        </div>
+        <div>
+          <dt>La cheville</dt>
+          <dd>Une tige de bois dur qui traverse l’ensemble et le verrouille.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Valeurs & équipe -->
+  <section class="ft-section values" aria-labelledby="values-title">
+    <div class="ft-container">
+      <p class="ft-label"><span class="ft-label__num">03</span>Ce qui nous guide</p>
+      <h2 id="values-title" class="ft-h2 values__title">Un métier de patience et de précision.</h2>
+      <ul class="value-list">
+        {
+          values.map((v) => (
+            <li class="value">
+              <svg class="value__ridge" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true" focusable="false">
+                <path d="M2 12.5 13 2.5l11 10" />
+              </svg>
+              <h3>{v.title}</h3>
+              <p>{v.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="team">
+        <h3 class="team__title">L’équipe</h3>
+        <RealSiteNote>les portraits et le parcours de l’équipe, photographiés à l’atelier ou sur un chantier.</RealSiteNote>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand title="Envie de voir votre charpente prendre forme ?" />
+</FaitageLayout>
+
+<style>
+  /* ——— Ouverture ——— */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+    min-height: clamp(32rem, calc(100svh - 7.5rem), 48rem);
+    background: var(--ft-white);
+    border-bottom: 1px solid var(--ft-line);
+  }
+
+  .hero__text {
+    align-self: center;
+    display: grid;
+    justify-items: start;
+    padding: clamp(3rem, 7vw, 6rem) clamp(2rem, 5vw, 5rem) clamp(3rem, 7vw, 6rem) max(var(--ft-gutter), (100vw - var(--ft-max)) / 2);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.9rem, 1.7rem + 4.2vw, 5.6rem);
+    font-weight: 420;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .hero .ft-lead {
+    max-width: 30rem;
+    margin-top: 1.75rem;
+  }
+
+  .hero__media {
+    position: relative;
+    min-height: 22rem;
+  }
+
+  .hero__media :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 50%;
+  }
+
+  /* ——— Étapes ——— */
+  .stages {
+    background: var(--ft-sand);
+  }
+
+  .stages__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3rem clamp(3rem, 8vw, 8rem);
+    align-items: start;
+  }
+
+  .stages__head {
+    position: sticky;
+    top: 7.5rem;
+  }
+
+  .stages__head .ft-lead {
+    margin-top: 1.5rem;
+  }
+
+  .stage-list {
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ft-line-strong);
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: clamp(1.75rem, 3vw, 2.5rem);
+    border-bottom: 1px solid var(--ft-line-strong);
+  }
+
+  .stage__num {
+    font-family: var(--ft-serif);
+    font-size: clamp(2.75rem, 2.2rem + 1.6vw, 3.75rem);
+    font-weight: 350;
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+    color: var(--ft-wood-ink);
+  }
+
+  .stage h3 {
+    font-family: var(--ft-serif);
+    font-size: clamp(1.6rem, 1.3rem + 0.9vw, 2.1rem);
+    font-weight: 450;
+    letter-spacing: -0.02em;
+  }
+
+  .stage p {
+    max-width: 34rem;
+    margin-top: 0.6rem;
+    color: var(--ft-ink-2);
+  }
+
+  /* ——— Assemblage ——— */
+  .joint {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .joint__media {
+    position: relative;
+    min-height: 30rem;
+  }
+
+  .joint__media :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .joint__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .joint__body {
+    align-self: center;
+    display: grid;
+    justify-items: start;
+    gap: 1.5rem;
+    max-width: 40rem;
+    padding: clamp(3.5rem, 8vw, 7rem) var(--ft-gutter);
+  }
+
+  .joint__body .ft-label {
+    margin-bottom: 0;
+  }
+
+  .parts {
+    display: grid;
+    width: 100%;
+    margin: 0.5rem 0 0;
+    border-top: 1px solid var(--ft-line-light);
+  }
+
+  .parts > div {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--ft-line-light);
+  }
+
+  .parts dt {
+    font-weight: 650;
+    color: var(--ft-wood-light);
+  }
+
+  .parts dd {
+    margin: 0;
+    color: rgb(251 249 245 / 0.8);
+  }
+
+  /* ——— Valeurs ——— */
+  .values__title {
+    max-width: 18ch;
+  }
+
+  .value-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem clamp(1.5rem, 4vw, 4rem);
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .value__ridge {
+    width: 1.9rem;
+    margin-bottom: 1.25rem;
+    color: var(--ft-wood);
+  }
+
+  .value h3 {
+    font-family: var(--ft-serif);
+    font-size: clamp(1.6rem, 1.3rem + 0.9vw, 2.1rem);
+    font-weight: 450;
+    letter-spacing: -0.02em;
+  }
+
+  .value p {
+    max-width: 34ch;
+    margin-top: 0.75rem;
+    color: var(--ft-ink-2);
+  }
+
+  .team {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 1rem 3rem;
+    align-items: center;
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--ft-line-strong);
+  }
+
+  .team__title {
+    font-family: var(--ft-serif);
+    font-size: 1.75rem;
+    font-weight: 450;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 60em) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .hero__text {
+      padding: clamp(2.5rem, 7vw, 4rem) var(--ft-gutter);
+    }
+
+    .hero__media {
+      min-height: 0;
+    }
+
+    .hero__media :global(picture) {
+      position: static;
+    }
+
+    .hero__media :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+
+    .stages__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stages__head {
+      position: static;
+    }
+
+    .joint {
+      grid-template-columns: 1fr;
+    }
+
+    .joint__media {
+      min-height: 0;
+    }
+
+    .joint__media :global(picture) {
+      position: static;
+    }
+
+    .joint__media :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+
+    .value-list {
+      grid-template-columns: 1fr;
+    }
+
+    .team {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 34em) {
+    .stage {
+      grid-template-columns: 3.5rem minmax(0, 1fr);
+      gap: 1rem;
+    }
+
+    .parts > div {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>

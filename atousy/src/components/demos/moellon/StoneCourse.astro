@@ -1,0 +1,19 @@
+---
+// Frise décorative : deux assises de moellons à joints décalés (motif répété, sans texte),
+// posée sur fond sombre (pied de page).
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<div class:list={['course', className]} aria-hidden="true"></div>
+
+<style>
+  .course {
+    height: 1.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='28' viewBox='0 0 420 28'%3E%3Cg fill='%23e9dfcf'%3E%3Crect x='1' y='1' width='38' height='11' rx='2.5' opacity='0.1'/%3E%3Crect x='42' y='1' width='30' height='11' rx='2.5' opacity='0.22'/%3E%3Crect x='75' y='1' width='46' height='11' rx='2.5' opacity='0.1'/%3E%3Crect x='124' y='1' width='62' height='11' rx='2.5' opacity='0.13'/%3E%3Crect x='189' y='1' width='22' height='11' rx='2.5' opacity='0.22'/%3E%3Crect x='214' y='1' width='22' height='11' rx='2.5' opacity='0.1'/%3E%3Crect x='239' y='1' width='70' height='11' rx='2.5' opacity='0.22'/%3E%3Crect x='312' y='1' width='54' height='11' rx='2.5' opacity='0.22'/%3E%3Crect x='369' y='1' width='22' height='11' rx='2.5' opacity='0.19'/%3E%3Crect x='394' y='1' width='24' height='11' rx='2.5' opacity='0.1'/%3E%3Crect x='1' y='15' width='54' height='12' rx='2.5' opacity='0.13'/%3E%3Crect x='58' y='15' width='22' height='12' rx='2.5' opacity='0.1'/%3E%3Crect x='83' y='15' width='54' height='12' rx='2.5' opacity='0.22'/%3E%3Crect x='173' y='15' width='22' height='12' rx='2.5' opacity='0.13'/%3E%3Crect x='198' y='15' width='22' height='12' rx='2.5' opacity='0.16'/%3E%3Crect x='223' y='15' width='46' height='12' rx='2.5' opacity='0.19'/%3E%3Crect x='272' y='15' width='46' height='12' rx='2.5' opacity='0.13'/%3E%3Crect x='321' y='15' width='22' height='12' rx='2.5' opacity='0.22'/%3E%3Crect x='346' y='15' width='30' height='12' rx='2.5' opacity='0.1'/%3E%3Crect x='379' y='15' width='22' height='12' rx='2.5' opacity='0.22'/%3E%3Crect x='404' y='15' width='14' height='12' rx='2.5' opacity='0.16'/%3E%3C/g%3E%3Crect x='140' y='15' width='30' height='12' rx='2.5' fill='%23d99a6c' opacity='.55'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+  }
+</style>

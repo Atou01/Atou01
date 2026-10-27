@@ -1,0 +1,546 @@
+---
+// Bande des fenêtres de démonstration : une fenêtre par démo (sa page d'accueil), dans l'ordre
+// de demoWindows (src/data/pages/demos.ts). Ajouter une démo : ses données dans ce fichier,
+// sa miniature dans DemoWindow.astro.
+// Chaque fenêtre est un vrai lien vers l'accueil de sa démo (même onglet).
+// Défilement : glisser à la souris, doigt, pavé tactile (geste horizontal), Maj + molette,
+// flèches du clavier, boutons précédent / suivant. La molette verticale fait toujours défiler
+// la page, jamais la bande. Un glisser n'ouvre jamais la démo sous le curseur.
+// Sans JavaScript : la bande défile nativement (barre de défilement visible), les liens marchent.
+import Icon from '../Icon.astro';
+import DemoWindow from './DemoWindow.astro';
+import { demoWindows } from '../../data/pages/demos';
+
+interface Props {
+  id?: string;
+  title?: string;
+}
+const { id = 'parcourir', title = 'Parcourez les démos' } = Astro.props;
+const total = demoWindows.length;
+---
+
+<section class="dw" aria-labelledby={`${id}-title`} data-dw>
+  <div class="container dw__head">
+    <h2 id={`${id}-title`}>{title}</h2>
+    <p class="dw__help">
+      <span class="dw__help-mouse js-only">Faites glisser la bande ou utilisez les flèches. Cliquez sur une fenêtre pour ouvrir la démo.</span>
+      <span class="dw__help-mouse nojs-only">Faites défiler la bande pour voir les autres démos. Cliquez sur une fenêtre pour ouvrir la démo.</span>
+      <span class="dw__help-touch">Glissez pour voir les autres démos. Touchez une fenêtre pour ouvrir la démo.</span>
+    </p>
+  </div>
+
+  <div
+    class="dw__viewport"
+    role="region"
+    aria-roledescription="carrousel"
+    aria-label="Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site"
+  >
+    <ul class="dw__track" data-dw-track>
+      {
+        demoWindows.map((w, i) => (
+          <li class="dw__item" data-label={w.label}>
+            <a class="dw__link" href={w.href} draggable="false">
+              <span class="visually-hidden">Ouvrir la démonstration fictive {w.label}</span>
+              <span class="dw__frame">
+                <DemoWindow id={w.id} eager={i < 3} priority={i === 0} sizes="(max-width: 40em) 80vw, (max-width: 62.49em) 46vw, 36vw" />
+              </span>
+              <span class="dw__caption" aria-hidden="true">
+                <span class="dw__label">{w.label}</span>
+                <span class="dw__meta">Démonstration fictive</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="container dw__bar js-only">
+    <p class="dw__count" aria-hidden="true" data-dw-count>1 / {total}</p>
+    <div class="dw__rail" aria-hidden="true"><span class="dw__thumb" data-dw-thumb></span></div>
+    <div class="dw__nav">
+      <button type="button" class="dw__btn" data-dw-prev aria-label="Fenêtre précédente" aria-disabled="true">
+        <Icon name="chevron" class="dw__chev dw__chev--prev" />
+      </button>
+      <button type="button" class="dw__btn" data-dw-next aria-label="Fenêtre suivante" aria-disabled="false">
+        <Icon name="chevron" class="dw__chev dw__chev--next" />
+      </button>
+    </div>
+  </div>
+  <p class="visually-hidden" aria-live="polite" data-dw-live data-total={total}></p>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-dw]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-dw-track]');
+    if (!track) return;
+    const items = Array.from(track.children) as HTMLElement[];
+    // Les liens portent l'accroche (scroll-snap) : leurs positions servent de repères.
+    const links = items.map((el) => el.querySelector<HTMLAnchorElement>('a') as HTMLAnchorElement);
+    const prev = root.querySelector<HTMLButtonElement>('[data-dw-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-dw-next]');
+    const thumb = root.querySelector<HTMLElement>('[data-dw-thumb]');
+    const live = root.querySelector<HTMLElement>('[data-dw-live]');
+    const count = root.querySelector<HTMLElement>('[data-dw-count]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const total = items.length;
+
+    const behavior = (): ScrollBehavior => (reduce.matches ? 'auto' : 'smooth');
+    const maxLeft = () => Math.max(0, track.scrollWidth - track.clientWidth);
+    // Marge de départ = position de la 1re fenêtre (alignée sur le contenu de la page).
+    const pad = () => links[0].offsetLeft;
+    const posOf = (i: number) => Math.min(maxLeft(), Math.max(0, links[i].offsetLeft - pad()));
+    const nearest = () => {
+      const x = track.scrollLeft;
+      let best = 0;
+      for (let i = 1; i < total; i++) if (Math.abs(posOf(i) - x) < Math.abs(posOf(best) - x)) best = i;
+      return best;
+    };
+    const announce = (i: number) => {
+      if (live) live.textContent = `Fenêtre ${i + 1} sur ${total} : ${items[i].dataset.label ?? ''}`;
+    };
+
+    // Fenêtre visée par le dernier déplacement demandé (bouton, clavier).
+    // Les clics rapprochés partent de cette cible, pas de la position en cours d'animation :
+    // aucun pas n'est perdu. Elle est oubliée à l'arrivée ou dès que le visiteur fait
+    // défiler la bande lui-même.
+    let target: number | null = null;
+    const from = () => (target !== null ? posOf(target) : track.scrollLeft);
+
+    // Accroche coupée pendant le glisser, puis rétablie en douceur.
+    let freeTimer = 0;
+    const setFree = (on: boolean) => track.classList.toggle('is-free', on);
+    const go = (i: number, say = false) => {
+      const j = Math.max(0, Math.min(total - 1, i));
+      target = j;
+      track.scrollTo({ left: posOf(j), behavior: behavior() });
+      if (say) announce(j);
+    };
+    const settle = () => {
+      go(nearest());
+      clearTimeout(freeTimer);
+      freeTimer = window.setTimeout(() => setFree(false), reduce.matches ? 0 : 450);
+    };
+
+    // Fenêtres entièrement visibles (à 4 px près) quand la bande est à la position x.
+    const visibleAt = (x: number) => {
+      const w = track.clientWidth;
+      return links.flatMap((el, i) => (el.offsetLeft - x >= -4 && el.offsetLeft + el.offsetWidth - x <= w + 4 ? [i] : []));
+    };
+    // Compteur : « 1–2 / 5 » sur grand écran, « 3 / 5 » au téléphone.
+    // Pendant un défilement où aucune fenêtre n'est entière, la plus proche.
+    const shown = () => {
+      const on = visibleAt(track.scrollLeft);
+      return on.length ? [on[0], on[on.length - 1]] : [nearest(), nearest()];
+    };
+
+    // Boutons et indicateurs. Aux extrémités, les boutons sont marqués aria-disabled au lieu
+    // de disabled : ils gardent le focus clavier (sinon il tomberait sur <body>).
+    const setOff = (b: HTMLButtonElement | null, off: boolean) => b?.setAttribute('aria-disabled', String(off));
+    const isOff = (b: HTMLButtonElement | null) => b?.getAttribute('aria-disabled') === 'true';
+    const update = () => {
+      const x = track.scrollLeft;
+      const max = maxLeft();
+      if (target !== null && Math.abs(x - posOf(target)) <= 2) target = null;
+      setOff(prev, x <= 2);
+      setOff(next, x >= max - 2);
+      if (thumb) {
+        const sw = track.scrollWidth || 1;
+        thumb.style.width = `${(track.clientWidth / sw) * 100}%`;
+        thumb.style.left = `${(x / sw) * 100}%`;
+      }
+      if (count) {
+        const [a, b] = shown();
+        count.textContent = a === b ? `${a + 1} / ${total}` : `${a + 1}–${b + 1} / ${total}`;
+      }
+    };
+    let raf = 0;
+    const schedule = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    track.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+
+    // Fin de bande : « suivant » va directement au bout dès que la dernière fenêtre est entière à la
+    // position visée, et c'est elle qu'il annonce (sur grand écran, les deux dernières partagent la
+    // même position). « Précédent » saute une position qui laisserait voir les mêmes fenêtres
+    // entières (sur tablette, elle n'est qu'à quelques pixels du bout).
+    prev?.addEventListener('click', () => {
+      if (isOff(prev)) return;
+      const x = from();
+      const now = visibleAt(x).join();
+      for (let i = total - 1; i >= 0; i--) {
+        if (posOf(i) < x - 4 && visibleAt(posOf(i)).join() !== now) {
+          go(i, true);
+          return;
+        }
+      }
+      if (x > 4) go(0, true);
+    });
+    next?.addEventListener('click', () => {
+      if (isOff(next)) return;
+      const x = from();
+      const i = items.findIndex((_, k) => posOf(k) > x + 4);
+      if (i >= 0) go(visibleAt(posOf(i)).includes(total - 1) ? total - 1 : i, true);
+    });
+
+    // Clavier : flèches, Début, Fin quand une fenêtre a le focus.
+    track.addEventListener('keydown', (e) => {
+      const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
+      if (!keys.includes(e.key)) return;
+      const i = items.findIndex((el) => el.contains(document.activeElement));
+      if (i < 0) return;
+      e.preventDefault();
+      const j =
+        e.key === 'Home' ? 0 : e.key === 'End' ? total - 1 : Math.max(0, Math.min(total - 1, i + (e.key === 'ArrowRight' ? 1 : -1)));
+      links[j].focus({ preventScroll: true });
+      go(j, true);
+    });
+    // Une fenêtre qui reçoit le focus au clavier (Tab) est ramenée entièrement à l'écran.
+    // Pas au clic : la bande bougerait entre l'appui et le relâchement, et le clic serait perdu.
+    const keyboardFocus = (el: Element) => {
+      try {
+        return el.matches(':focus-visible');
+      } catch {
+        return true;
+      }
+    };
+    track.addEventListener('focusin', (e) => {
+      if (!keyboardFocus(e.target as Element)) return;
+      const i = items.findIndex((el) => el.contains(e.target as Node));
+      if (i < 0) return;
+      const el = links[i];
+      const left = el.offsetLeft - track.scrollLeft;
+      if (left < pad() - 4 || left + el.offsetWidth > track.clientWidth + 4) go(i);
+    });
+
+    // La molette verticale n'est pas détournée : elle fait défiler la page. Le geste
+    // horizontal du pavé tactile, Maj + molette et le doigt font défiler la bande nativement.
+    // Tout défilement lancé par le visiteur remplace la cible des boutons.
+    const forget = () => (target = null);
+    track.addEventListener('wheel', forget, { passive: true });
+    track.addEventListener('touchstart', forget, { passive: true });
+
+    // Glisser à la souris (le doigt et le pavé tactile défilent nativement).
+    let drag: { x: number; left: number; moved: boolean } | null = null;
+    let suppressClick = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      forget();
+      drag = { x: e.clientX, left: track.scrollLeft, moved: false };
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) > 6) {
+        drag.moved = true;
+        clearTimeout(freeTimer);
+        setFree(true);
+        track.classList.add('is-dragging');
+      }
+      if (drag.moved) track.scrollLeft = drag.left - dx;
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      if (drag.moved) {
+        // Le clic qui suit immédiatement le relâchement est ignoré.
+        suppressClick = true;
+        window.setTimeout(() => (suppressClick = false), 0);
+        track.classList.remove('is-dragging');
+        settle();
+      }
+      drag = null;
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    track.addEventListener(
+      'click',
+      (e) => {
+        if (!suppressClick) return;
+        e.preventDefault();
+        e.stopPropagation();
+        suppressClick = false;
+      },
+      true,
+    );
+    track.addEventListener('dragstart', (e) => e.preventDefault());
+
+    update();
+  });
+</script>
+
+<style>
+  .dw {
+    position: relative;
+    padding-block: clamp(2.5rem, 4.5vw, 4.5rem) clamp(2.75rem, 4.5vw, 4.5rem);
+    background:
+      radial-gradient(60% 55% at 80% 70%, rgb(255 255 255 / 0.6), transparent 70%),
+      linear-gradient(180deg, var(--ivory-deep) 0%, #f5efe6 100%);
+  }
+
+  .dw__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 3rem;
+  }
+
+  h2 {
+    font-size: var(--fs-h2-sm);
+  }
+
+  .dw__help {
+    max-width: 26rem;
+    padding-bottom: 0.3rem;
+    font-size: 1rem;
+    color: var(--ink-2);
+  }
+
+  .dw__help-touch {
+    display: none;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .dw__help-mouse {
+      display: none;
+    }
+
+    .dw__help-touch {
+      display: inline;
+    }
+  }
+
+  /* ---------- Bande ---------- */
+  .dw__track {
+    /* Marge alignée sur le conteneur de la page */
+    --dw-pad: max(var(--gutter), calc((100% - var(--container)) / 2));
+    --dw-w: clamp(17rem, 36vw, 35rem);
+    --dw-gap: clamp(1.25rem, 2.2vw, 2.25rem);
+    position: relative;
+    display: flex;
+    gap: var(--dw-gap);
+    margin: 0;
+    padding: clamp(1.75rem, 2.6vw, 2.5rem) var(--dw-pad) 1.25rem;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--dw-pad);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  :global(html.js) .dw__track {
+    scrollbar-width: none;
+    cursor: grab;
+  }
+
+  :global(html.js) .dw__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dw__track.is-free {
+    scroll-snap-type: none;
+  }
+
+  .dw__track.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .dw__item {
+    flex: none;
+    width: var(--dw-w);
+  }
+
+  .dw__link {
+    display: block;
+    scroll-snap-align: start;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--radius);
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dw__link:focus-visible {
+    outline-offset: 6px;
+  }
+
+  .dw__frame {
+    display: block;
+    border-radius: 3px;
+    box-shadow:
+      0 0 0 1px rgb(15 35 41 / 0.08),
+      0 26px 50px -28px rgb(40 30 20 / 0.5),
+      0 10px 22px -16px rgb(40 30 20 / 0.28);
+    transition:
+      transform 0.45s var(--ease),
+      box-shadow 0.45s var(--ease);
+  }
+
+  .dw__link:hover .dw__frame,
+  .dw__link:focus-visible .dw__frame {
+    transform: translateY(-5px);
+    box-shadow:
+      0 0 0 1px rgb(15 35 41 / 0.1),
+      0 34px 60px -30px rgb(40 30 20 / 0.55),
+      0 14px 26px -16px rgb(40 30 20 / 0.3);
+  }
+
+  .dw__track.is-dragging .dw__frame {
+    transform: none;
+  }
+
+  .dw__caption {
+    display: grid;
+    gap: 0.2rem;
+    margin-top: 1.1rem;
+  }
+
+  .dw__label {
+    font-size: 1.0625rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .dw__meta {
+    width: max-content;
+    padding-bottom: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+    background: linear-gradient(var(--coral), var(--coral)) left bottom / 2.4rem 2px no-repeat;
+    transition: background-size 0.3s var(--ease);
+  }
+
+  .dw__link:hover .dw__meta,
+  .dw__link:focus-visible .dw__meta {
+    background-size: 100% 2px;
+  }
+
+  /* ---------- Barre : compteur, indicateur, boutons ---------- */
+  .dw__bar {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem 2rem;
+    margin-top: 0.75rem;
+  }
+
+  /* Largeur fixe : la barre ne bouge pas quand le compteur passe de « 1 / 5 » à « 1–2 / 5 » */
+  .dw__count {
+    flex: none;
+    min-width: 4.5em;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+  }
+
+  .dw__rail {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: var(--line-strong);
+  }
+
+  .dw__thumb {
+    position: absolute;
+    top: -0.5px;
+    left: 0;
+    width: 30%;
+    height: 2px;
+    background: var(--marine);
+    transition:
+      left 0.12s linear,
+      width 0.2s var(--ease);
+  }
+
+  .dw__nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .dw__btn {
+    display: grid;
+    place-items: center;
+    width: 2.9rem;
+    height: 2.9rem;
+    padding: 0;
+    border: 1.5px solid var(--marine);
+    border-radius: 50%;
+    background: rgb(255 253 250 / 0.75);
+    color: var(--marine);
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease),
+      color 0.2s var(--ease);
+  }
+
+  .dw__btn:hover:not([aria-disabled='true']) {
+    background: var(--marine);
+    color: var(--paper);
+  }
+
+  /* Bout de la bande : bouton estompé, mais l'anneau de focus reste net (pas d'opacity). */
+  .dw__btn[aria-disabled='true'] {
+    border-color: rgb(15 35 41 / 0.3);
+    color: rgb(15 35 41 / 0.35);
+    cursor: default;
+  }
+
+  .dw__btn :global(.dw__chev) {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .dw__btn :global(.dw__chev--prev) {
+    transform: rotate(90deg);
+  }
+
+  .dw__btn :global(.dw__chev--next) {
+    transform: rotate(-90deg);
+  }
+
+  /* Tablette */
+  @media (max-width: 62.49em) {
+    .dw__track {
+      --dw-w: clamp(17rem, 46vw, 30rem);
+    }
+  }
+
+  /* Téléphone : une fenêtre et le début de la suivante */
+  @media (max-width: 40em) {
+    .dw__track {
+      --dw-w: calc(100vw - 2 * var(--gutter) - 2.75rem);
+      --dw-gap: 1rem;
+    }
+
+    .dw__bar {
+      flex-wrap: wrap;
+    }
+
+    .dw__rail {
+      order: -1;
+      flex-basis: 100%;
+    }
+
+    .dw__nav {
+      margin-left: auto;
+    }
+
+    .dw__label {
+      font-size: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dw__link:hover .dw__frame,
+    .dw__link:focus-visible .dw__frame {
+      transform: none;
+    }
+  }
+</style>

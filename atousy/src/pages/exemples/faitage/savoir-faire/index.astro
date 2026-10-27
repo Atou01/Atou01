@@ -1,0 +1,612 @@
+---
+// Démonstration fictive « Faîtage » (charpentier) — page Savoir-faire.
+import { Picture } from 'astro:assets';
+import FaitageLayout from '../../../../components/demos/faitage/FaitageLayout.astro';
+import ContactBand from '../../../../components/demos/faitage/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/faitage/RealSiteNote.astro';
+import Icon from '../../../../components/Icon.astro';
+import faitage3 from '../../../../assets/photos/faitage-3.jpg';
+
+// Petits dessins au trait (style « plan ») propres à chaque métier.
+const crafts = [
+  {
+    id: 'charpente',
+    title: 'Charpente traditionnelle',
+    text: 'Fermes, pannes, chevrons : la charpente traditionnelle reste la plus belle façon de couvrir une maison. Nous la dessinons selon la portée, la pente et les charges propres à votre terrain, puis nous la taillons à l’atelier, assemblage par assemblage.',
+    items: ['Étude et plans de charpente', 'Taille traditionnelle, assemblages tenon-mortaise', 'Levage et contreventement', 'Charpentes apparentes pour combles aménagés'],
+    drawing: '<path d="M4 50h72M4 50 40 8l36 42M40 8v42M40 42 23 30M40 42l17-12"/>',
+  },
+  {
+    id: 'ossature',
+    title: 'Ossature bois',
+    text: 'Une maison à ossature bois se construit vite et proprement, et offre un excellent confort thermique. Murs, planchers et toiture sont préparés à l’atelier pour réduire la durée du chantier et les nuisances pour le voisinage.',
+    items: ['Murs à ossature, isolation et pare-pluie', 'Planchers et solivages', 'Bardages bois : mélèze, douglas…', 'Coordination avec les autres corps de métier'],
+    drawing: '<path d="M6 10h68M6 14h68M6 48h68M10 14v34M24 14v34M38 14v34M52 14v34M66 14v34M10 48 38 14"/>',
+  },
+  {
+    id: 'extensions',
+    title: 'Extensions et surélévations',
+    text: 'Gagner une chambre, agrandir le séjour, créer un bureau : léger et posé à sec, le bois permet de greffer une extension sur une maison existante sans fondations lourdes ni long temps de séchage.',
+    items: ['Étude de faisabilité sur l’existant', 'Extension de plain-pied ou surélévation', 'Grandes baies et menuiseries', 'Raccords soignés avec la pierre ou l’enduit'],
+    drawing: '<path d="M6 50V26L24 10l18 16v24M4 50h72M42 30h30v20M48 37h18v13"/>',
+  },
+  {
+    id: 'renovation',
+    title: 'Rénovation de charpente',
+    text: 'Une charpente ancienne mérite souvent d’être sauvée. Nous diagnostiquons son état, remplaçons uniquement les pièces abîmées et renforçons la structure pour un nouvel usage, comme l’aménagement des combles.',
+    items: ['Diagnostic et relevé de l’existant', 'Traitement préventif et curatif du bois', 'Remplacement de pièces, greffes et moisages', 'Renforcement pour aménager les combles'],
+    drawing: '<path d="M4 50h72M4 50 40 8l36 42M40 8v42"/><path d="M40 42 23 30M40 42l17-12" stroke-dasharray="3 3"/>',
+  },
+  {
+    id: 'couverture',
+    title: 'Couverture',
+    text: 'Une charpente ne vaut que par le toit qui la protège. Nous assurons donc aussi la couverture : écran sous-toiture, liteaunage, pose des tuiles, ardoises ou bac acier, et finitions de zinguerie jusqu’au faîtage.',
+    items: ['Couverture neuve et réfection', 'Tuiles, ardoises ou bac acier', 'Isolation de toiture par l’extérieur', 'Fenêtres de toit et zinguerie'],
+    drawing: '<path d="M4 46 40 10l36 36M12 46h56M14 38h52M22 30h36M30 22h20M4 46h72"/>',
+  },
+  {
+    id: 'preaux',
+    title: 'Préaux, auvents et terrasses couvertes',
+    text: 'Un préau pour la voiture, un auvent pour le bois de chauffage, une terrasse couverte face à la vue : de petits ouvrages en bois massif, conçus avec le même soin qu’une charpente de maison.',
+    items: ['Préaux et carports', 'Auvents et abris', 'Pergolas et terrasses couvertes', 'Escaliers et garde-corps extérieurs'],
+    drawing: '<path d="M4 16h72M8 12h64M12 16v34M68 16v34M12 26l10-10M68 26 58 16M4 50h72"/>',
+  },
+];
+
+const woods = [
+  { name: 'Épicéa', use: 'Léger et régulier : charpentes courantes et ossatures.' },
+  { name: 'Douglas', use: 'Naturellement résistant : structures apparentes, extérieurs abrités.' },
+  { name: 'Mélèze', use: 'Dense et résineux : bardages et ouvrages exposés aux intempéries.' },
+  { name: 'Chêne', use: 'Dur et durable : pièces maîtresses, assemblages et rénovations anciennes.' },
+];
+
+const faq = [
+  {
+    q: 'Faut-il une autorisation pour une extension ou un préau ?',
+    a: 'Le plus souvent, oui : déclaration préalable ou permis de construire selon la surface et votre commune. Nous vous aidons à constituer le dossier technique (plans, coupes, descriptif).',
+  },
+  {
+    q: 'Intervenez-vous sur des charpentes anciennes ?',
+    a: 'Oui. Après un diagnostic sur place, nous conservons tout ce qui peut l’être et ne remplaçons que les pièces réellement abîmées.',
+  },
+  {
+    q: 'Combien de temps dure un chantier ?',
+    a: 'Cela dépend du projet. Comme les pièces sont taillées à l’atelier, la phase sur site est courte ; un planning précis accompagne chaque devis.',
+  },
+  {
+    q: 'Le devis est-il détaillé ?',
+    a: 'Chaque devis présente les postes un par un : bois, taille, levage, couverture, finitions. Vous savez exactement ce que vous payez.',
+  },
+];
+---
+
+<FaitageLayout
+  title="Savoir-faire — Faîtage, démonstration fictive | Atousy"
+  description="Charpente traditionnelle, ossature bois, extensions, rénovation de charpente et couverture : le savoir-faire de Faîtage, charpentier fictif. Démonstration Atousy."
+  current="savoir-faire"
+>
+  <!-- Ouverture -->
+  <section class="hero ft-on-photo" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <Picture
+        src={faitage3}
+        alt="Assemblage tenon-mortaise en chêne maintenu par une cheville en bois"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600, 2000, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hero__shade" aria-hidden="true"></div>
+    <div class="ft-container hero__inner">
+      <p class="hero__kicker">Savoir-faire</p>
+      <h1 id="hero-title">Des structures durables.</h1>
+      <p class="hero__text">Charpente, ossature, extension, couverture : une seule équipe, du premier croquis à la pose du faîtage.</p>
+      <a class="ft-btn ft-btn--light" href="/exemples/faitage/realisations/">Voir les réalisations <Icon name="arrow" /></a>
+    </div>
+  </section>
+
+  <!-- Métiers -->
+  <section class="ft-section trades" aria-labelledby="trades-title">
+    <div class="ft-container trades__grid">
+      <nav class="toc" aria-labelledby="toc-title">
+        <p id="toc-title" class="toc__title">Nos métiers</p>
+        <ol class="toc__list">
+          {
+            crafts.map((c, i) => (
+              <li>
+                <a href={`#${c.id}`}>
+                  <span class="toc__num" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  {c.title}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="trades__main">
+        <div class="trades__intro">
+          <p class="ft-label"><span class="ft-label__num">01</span>Nos métiers</p>
+          <h2 id="trades-title" class="ft-h2">Six métiers, une même exigence.</h2>
+          <p class="ft-lead">
+            Que vous construisiez, agrandissiez ou rénoviez, nous prenons en charge la structure bois et la toiture de A à Z,
+            avec des assemblages pensés pour durer et pouvoir être réparés.
+          </p>
+        </div>
+
+        <ol class="trade-list">
+          {
+            crafts.map((c, i) => (
+              <li class="trade" id={c.id}>
+                <div class="trade__head">
+                  <span class="trade__num" aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <svg class="trade__drawing" viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false" set:html={c.drawing}></svg>
+                </div>
+                <div class="trade__body">
+                  <h3>{c.title}</h3>
+                  <p>{c.text}</p>
+                  <ul class="trade__items">
+                    {c.items.map((item) => <li>{item}</li>)}
+                  </ul>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Matériaux -->
+  <section class="ft-section woods ft-dark" aria-labelledby="woods-title">
+    <div class="ft-container">
+      <div class="woods__head">
+        <div>
+          <p class="ft-label"><span class="ft-label__num">02</span>Matériaux</p>
+          <h2 id="woods-title" class="ft-h2">Le bon bois au bon endroit.</h2>
+        </div>
+        <p class="ft-lead">
+          Chaque essence a ses qualités. Nous la choisissons selon l’exposition, la portée et l’aspect recherché, en
+          privilégiant des bois issus de forêts proches.
+        </p>
+      </div>
+      <ul class="wood-list">
+        {
+          woods.map((w) => (
+            <li class="wood">
+              <h3>{w.name}</h3>
+              <p>{w.use}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <RealSiteNote tone="dark" class="woods__note">l’origine réelle de vos bois, vos fournisseurs et vos éventuelles certifications.</RealSiteNote>
+    </div>
+  </section>
+
+  <!-- Questions fréquentes -->
+  <section class="ft-section faq" aria-labelledby="faq-title">
+    <div class="ft-container faq__grid">
+      <div>
+        <p class="ft-label"><span class="ft-label__num">03</span>Questions fréquentes</p>
+        <h2 id="faq-title" class="ft-h2">Avant de vous lancer.</h2>
+        <p class="faq__aside">Une autre question ? <a class="ft-link" href="/exemples/faitage/contact/">Écrivez-nous <Icon name="arrow" /></a></p>
+      </div>
+      <div class="faq__list">
+        {
+          faq.map((f) => (
+            <details class="qa">
+              <summary>
+                <span>{f.q}</span>
+                <span class="qa__icon" aria-hidden="true" />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <ContactBand />
+</FaitageLayout>
+
+<style>
+  /* ——— Ouverture ——— */
+  .hero {
+    position: relative;
+    display: flex;
+    min-height: clamp(30rem, calc(88svh - 7.5rem), 44rem);
+    color: var(--ft-white);
+    background: var(--ft-charcoal);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero__media :global(picture) {
+    height: 100%;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 55% 50%;
+  }
+
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(0deg, rgb(25 18 12 / 0.82) 0%, rgb(25 18 12 / 0.4) 45%, rgb(25 18 12 / 0.05) 75%),
+      linear-gradient(90deg, rgb(25 18 12 / 0.45) 0%, rgb(25 18 12 / 0) 60%);
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .hero__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ft-wood-light);
+  }
+
+  .hero__kicker::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-top: 2px solid currentColor;
+    border-left: 2px solid currentColor;
+    transform: translateY(0.15rem) rotate(45deg);
+  }
+
+  .hero h1 {
+    max-width: 12ch;
+    color: var(--ft-white);
+    font-size: clamp(3rem, 1.6rem + 5.4vw, 6.4rem);
+    font-weight: 420;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  .hero__text {
+    max-width: 36rem;
+    margin-top: 1.5rem;
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem);
+    color: rgb(251 249 245 / 0.9);
+  }
+
+  .hero .ft-btn {
+    margin-top: 2rem;
+  }
+
+  /* ——— Métiers ——— */
+  .trades__grid {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 3rem clamp(3rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .toc {
+    position: sticky;
+    top: 7.5rem;
+  }
+
+  .toc__title {
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--ft-line-strong);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .toc__list {
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc__list a {
+    display: flex;
+    gap: 0.75rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--ft-line);
+    color: var(--ft-ink);
+    font-size: 0.9688rem;
+    font-weight: 550;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .toc__list a:hover {
+    color: var(--ft-wood-ink);
+  }
+
+  .toc__num {
+    flex: none;
+    width: 1.5rem;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.7;
+    color: var(--ft-wood-ink);
+  }
+
+  .trades__intro {
+    max-width: 46rem;
+  }
+
+  .trades__intro .ft-lead {
+    margin-top: 1.5rem;
+  }
+
+  .trade-list {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ft-line-strong);
+  }
+
+  .trade {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1.5rem clamp(1.5rem, 4vw, 3.5rem);
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-bottom: 1px solid var(--ft-line-strong);
+  }
+
+  .trade__head {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .trade__num {
+    font-size: 0.875rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    color: var(--ft-wood-ink);
+  }
+
+  .trade__drawing {
+    width: 7rem;
+    height: auto;
+    color: var(--ft-wood);
+  }
+
+  .trade h3 {
+    font-family: var(--ft-serif);
+    font-size: clamp(1.75rem, 1.35rem + 1.3vw, 2.4rem);
+    font-weight: 450;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .trade__body > p {
+    max-width: 44rem;
+    margin-top: 1rem;
+    color: var(--ft-ink-2);
+  }
+
+  .trade__items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem 2rem;
+    margin-top: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .trade__items li {
+    position: relative;
+    padding-left: 1.4rem;
+    font-size: 0.9688rem;
+    font-weight: 550;
+  }
+
+  .trade__items li::before {
+    content: '';
+    position: absolute;
+    left: 0.1rem;
+    top: 0.62em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-top: 2px solid var(--ft-wood);
+    border-left: 2px solid var(--ft-wood);
+    transform: rotate(45deg);
+  }
+
+  /* ——— Matériaux ——— */
+  .woods__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+  }
+
+  .wood-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ft-line-light);
+    border-left: 1px solid var(--ft-line-light);
+  }
+
+  .wood {
+    padding: clamp(1.5rem, 2.5vw, 2.25rem);
+    border-right: 1px solid var(--ft-line-light);
+    border-bottom: 1px solid var(--ft-line-light);
+  }
+
+  .wood h3 {
+    font-family: var(--ft-serif);
+    font-size: clamp(1.6rem, 1.3rem + 0.9vw, 2.1rem);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    color: var(--ft-wood-light);
+  }
+
+  .wood p {
+    margin-top: 0.75rem;
+    font-size: 0.9688rem;
+    color: rgb(251 249 245 / 0.78);
+  }
+
+  .woods :global(.woods__note) {
+    margin-top: 2rem;
+    max-width: 44rem;
+  }
+
+  /* ——— FAQ ——— */
+  .faq__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 2.5rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .faq__aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    margin-top: 1.75rem;
+    color: var(--ft-ink-2);
+  }
+
+  .faq__list {
+    border-top: 1px solid var(--ft-line-strong);
+  }
+
+  .qa {
+    border-bottom: 1px solid var(--ft-line-strong);
+  }
+
+  .qa summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.4rem;
+    font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .qa summary:hover {
+    color: var(--ft-wood-ink);
+  }
+
+  .qa__icon {
+    position: relative;
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .qa__icon::before,
+  .qa__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+    background: var(--ft-wood-ink);
+    transition: transform 0.3s var(--ft-ease);
+  }
+
+  .qa__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .qa[open] .qa__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .qa p {
+    max-width: 40rem;
+    padding-bottom: 1.5rem;
+    color: var(--ft-ink-2);
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 64em) {
+    .trades__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .toc {
+      display: none;
+    }
+
+    .wood-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 48em) {
+    .trade {
+      grid-template-columns: 1fr;
+    }
+
+    .trade__head {
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      align-items: end;
+    }
+
+    .trade__drawing {
+      width: 5.5rem;
+    }
+
+    .trade__items {
+      grid-template-columns: 1fr;
+    }
+
+    .woods__head,
+    .faq__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 34em) {
+    .wood-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

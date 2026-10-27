@@ -1,0 +1,1709 @@
+---
+// Hero : scène architecturale (photo) + carrousel de fenêtres de démonstration.
+// Ce n'est pas une scène 3D interactive : chaque fenêtre est un vrai bloc HTML
+// cliquable, incliné en perspective CSS. L'inclinaison suit le défilement horizontal
+// (scroll-driven animations) quand le navigateur le permet ; sinon elle reste fixe.
+// Positions exprimées en cqw (largeur de la scène, plafonnée à 120rem sur très grand écran).
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import heroImg from '../../assets/photos/hero-architecture.jpg';
+import rivage1 from '../../assets/photos/rivage-1.jpg';
+import faitage1 from '../../assets/photos/faitage-1.jpg';
+import ecluse1 from '../../assets/photos/ecluse-1.jpg';
+import lueur1 from '../../assets/photos/lueur-1.jpg';
+import moellon1 from '../../assets/photos/moellon-1.jpg';
+import { photoWidths } from './photo-widths';
+import '@fontsource-variable/newsreader/wght.css';
+
+// Largeur rendue d'une fenêtre (--w-wide) : 66 % (téléphone), 52 % (tablette), 36 % de la scène.
+const wide = '(max-width: 40em) 66vw, (max-width: 62.49em) 52vw, (min-width: 120em) 692px, 36vw';
+const pic = { formats: ['avif', 'webp'] as const, alt: '', widths: photoWidths, sizes: wide };
+
+// Une fenêtre par entreprise fictive. Le carrousel s'adapte au nombre de fenêtres
+// (compteur, boutons, annonces) : d'autres démos peuvent s'ajouter ici.
+// Seule la première image est chargée tout de suite ; les suivantes, hors champ, attendent
+// d'approcher de l'écran (chargement différé natif).
+const windows = [
+  { id: 'rivage-accueil', shape: 'wide', href: '/exemples/rivage/', label: 'Rivage · Paysagiste' },
+  { id: 'faitage-accueil', shape: 'wide', href: '/exemples/faitage/', label: 'Faîtage · Charpentier' },
+  { id: 'ecluse-accueil', shape: 'wide', href: '/exemples/ecluse/', label: 'Écluse · Plombier-chauffagiste' },
+  { id: 'lueur-accueil', shape: 'wide', href: '/exemples/lueur/', label: 'Lueur · Électricien' },
+  { id: 'moellon-accueil', shape: 'wide', href: '/exemples/moellon/', label: 'Moellon · Maçon / rénovation' },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__stage">
+    <div class="container hero__content">
+      <h1 id="hero-title">Votre métier.<br /> Un site à <span class="accent">part.</span></h1>
+      <p class="hero__lead">
+        <strong>Création et refonte de sites pour artisans, TPE et PME.</strong>
+        <span>Une image professionnelle. Un parcours clair vers la demande de&nbsp;devis.</span>
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--coral" href="/devis/">Demander un devis <Icon name="arrow" /></a>
+        <a class="btn btn--outline" href="/exemples/">Voir les exemples <Icon name="arrow" /></a>
+      </div>
+    </div>
+
+    <div class="showcase" data-showcase>
+      <div class="hero__bg" aria-hidden="true">
+        <Picture
+          src={heroImg}
+          alt=""
+          formats={['avif', 'webp']}
+          widths={[800, 1200, 1600, 2000, 2880]}
+          sizes="(max-width: 40em) 170vw, (max-width: 62.49em) 150vw, (min-width: 120em) 1920px, 100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+
+      <div class="showcase__frame" role="region" aria-roledescription="carrousel" aria-label="Démonstrations fictives : faites défiler les fenêtres, cliquez pour ouvrir un site">
+        <ul class="showcase__track" data-showcase-track>
+          {
+            windows.map((w, i) => (
+              <li class:list={['showcase__item', `showcase__item--${w.shape}`]} data-label={w.label} data-active={i === 0 ? '' : undefined}>
+                <a class:list={['screen', `screen--${w.id}`]} href={w.href} draggable="false">
+                  <span class="visually-hidden">Ouvrir la démonstration fictive {w.label}</span>
+                  <span class="screen__face" aria-hidden="true">
+                    {w.id === 'rivage-accueil' && (
+                      <>
+                        <span class="screen__img screen__img--below-nav screen__img--rivage"><Picture src={rivage1} {...pic} loading="eager" /></span>
+                        <span class="m-shade m-shade--below-nav m-shade--rivage" />
+                        <span class="m-nav m-nav--rivage">
+                          <span class="m-logo m-logo--rivage">
+                            <svg class="m-wave" viewBox="0 0 22 14">
+                              <path d="M1.5 4.6c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+                              <path d="M1.5 10.4c2.2-2.4 4.4-2.4 6.6 0s4.4 2.4 6.6 0 4.4-2.4 6.6 0" />
+                            </svg>
+                            rivage
+                          </span>
+                          <span class="m-links m-links--rivage"><span>Notre approche</span><span>Savoir-faire</span><span>Votre jardin</span></span>
+                          <span class="m-cta m-cta--rivage">Nous contacter</span>
+                        </span>
+                        <span class="m-hero m-hero--rivage">
+                          <span class="m-title m-title--rivage">Le jardin<br />vous appelle.</span>
+                          <span class="m-text m-text--rivage">Des lieux pour ralentir, se retrouver et regarder les saisons passer. Le paysage commence avec votre façon de vivre.</span>
+                          <span class="m-btn m-btn--rivage">Entrer dans le jardin <Icon name="arrow" /></span>
+                        </span>
+                        <span class="m-aside">Des paysages pour vivre dehors.<br />En toute saison.</span>
+                      </>
+                    )}
+                    {w.id === 'faitage-accueil' && (
+                      <>
+                        <span class="screen__img screen__img--below-nav screen__img--faitage"><Picture src={faitage1} {...pic} /></span>
+                        <span class="m-shade m-shade--below-nav m-shade--faitage" />
+                        <span class="m-nav m-nav--faitage">
+                          <span class="m-logo m-logo--faitage">
+                            <svg class="m-ridge" viewBox="0 0 26 14"><path d="M2 12.5 13 2.5l11 10" /></svg>
+                            Faîtage
+                          </span>
+                          <span class="m-links m-links--faitage"><span class="is-on">Accueil</span><span>Réalisations</span><span>Savoir-faire</span><span>L’atelier</span></span>
+                          <span class="m-cta m-cta--faitage">Contact <Icon name="arrow" /></span>
+                        </span>
+                        <span class="m-hero m-hero--faitage">
+                          <span class="m-title m-title--faitage">Des charpentes<br />pour demain.</span>
+                          <span class="m-text m-text--faitage">Construire, rénover, transmettre.<br />Un savoir-faire local au service de vos projets.</span>
+                          <span class="m-btn m-btn--faitage">Découvrir le projet <Icon name="arrow" /></span>
+                        </span>
+                        <span class="m-caption">Projet type · Préau en bois massif</span>
+                      </>
+                    )}
+                    {w.id === 'ecluse-accueil' && (
+                      <>
+                        <span class="m-nav m-nav--ecluse">
+                          <span class="m-logo m-logo--ecluse">
+                            <svg class="m-glyph" viewBox="0 0 28 28">
+                              <rect x="0.5" y="0.5" width="27" height="27" rx="8" fill="#2f4a5a" />
+                              <path d="M14 4.8c3.5 4.3 6.4 7.8 6.4 11.5a6.4 6.4 0 0 1-12.8 0c0-3.7 2.9-7.2 6.4-11.5z" fill="#fff" />
+                              <path d="M7.66 17.1H14v-3.3h6.27c.09.84.13 1.67.13 2.5a6.4 6.4 0 0 1-12.8 0c0-.43.02-.83.06-1.2z" fill="#b38f58" />
+                            </svg>
+                            écluse
+                          </span>
+                          <span class="m-pills"><span class="is-on">Accueil</span><span>Services</span><span>Réalisations</span><span>Entretien</span></span>
+                          <span class="m-cta m-cta--ecluse">Contact <svg class="m-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6" /></svg></span>
+                        </span>
+                        <span class="m-ec-frame">
+                          <span class="m-ec-copy">
+                            <span class="m-title m-title--ecluse">La chaleur et l’eau, <span class="m-nowrap">bien installées.</span></span>
+                            <span class="m-text m-text--ecluse">Salles de bain, chauffage, pompes à chaleur et dépannage&nbsp;: un artisan qui explique avant d’intervenir.</span>
+                            <span class="m-btn m-btn--ecluse">Voir nos réalisations <span class="m-btn__dot"><svg class="m-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6" /></svg></span></span>
+                          </span>
+                          <span class="screen__img m-ec-photo"><Picture src={ecluse1} {...pic} /></span>
+                        </span>
+                      </>
+                    )}
+                    {w.id === 'lueur-accueil' && (
+                      <>
+                        <span class="screen__img screen__img--lueur"><Picture src={lueur1} {...pic} /></span>
+                        <span class="m-shade m-shade--lueur" />
+                        <span class="m-nav m-nav--lueur">
+                          <span class="m-logo m-logo--lueur">
+                            <svg class="m-filament" viewBox="0 0 28 28">
+                              <path class="m-filament__arc" d="M7.5 19.5c0-6.2 2.9-10.5 6.5-10.5s6.5 4.3 6.5 10.5" />
+                              <path d="M7.5 19.5v5M20.5 19.5v5" />
+                              <circle cx="14" cy="3.6" r="1.6" />
+                            </svg>
+                            Lueur
+                          </span>
+                          <span class="m-links m-links--lueur"><span class="is-on">Accueil</span><span>Prestations</span><span>Réalisations</span><span>Conseils</span></span>
+                          <span class="m-cta m-cta--lueur">Contact <Icon name="arrow" /></span>
+                        </span>
+                        <span class="m-hero m-hero--wide">
+                          <span class="m-title m-title--lueur">Une maison <span class="m-glow">bien éclairée</span>, une installation sûre.</span>
+                          <span class="m-text m-text--lueur">Rénovation électrique, tableaux, éclairage et bornes de recharge&nbsp;: un travail propre et expliqué.</span>
+                          <span class="m-btn m-btn--lueur">Découvrir nos prestations <Icon name="arrow" /></span>
+                        </span>
+                      </>
+                    )}
+                    {w.id === 'moellon-accueil' && (
+                      <>
+                        <span class="screen__img screen__img--below-nav screen__img--moellon"><Picture src={moellon1} {...pic} /></span>
+                        <span class="m-shade m-shade--below-nav m-shade--moellon" />
+                        <span class="m-nav m-nav--moellon">
+                          <span class="m-logo m-logo--moellon">
+                            <svg class="m-stones" viewBox="0 0 31 28">
+                              <path fill="#a4532c" d="M10 2.2c3-.9 8.5-.8 11.6.2 1.4.5 1.9 1.7 1.6 3.1l-.5 2.3c-.3 1.1-1.2 1.7-2.3 1.7H9.7c-1.2 0-2.1-.8-2.2-2l-.2-2.2C7.2 3.9 8.3 2.7 10 2.2Z" />
+                              <path fill="#2b211a" d="M2.6 11.6c2.7-.7 7.6-.8 10.6-.2 1.2.3 1.8 1.2 1.8 2.4v3.4c0 1.2-.9 2.1-2.1 2.1H3c-1.3 0-2.3-1-2.2-2.3l.1-3.3c.1-1 .7-1.8 1.7-2.1Z" />
+                              <path fill="#b88a5e" d="M18.3 11.3c3-.5 7.4-.3 9.9.4 1.1.3 1.8 1.3 1.7 2.5l-.2 3.1c-.1 1.2-1 2.1-2.2 2.1h-9.2c-1.2 0-2.1-1-2-2.2l.2-3.6c.1-1.2.7-2.1 1.8-2.3Z" />
+                              <path fill="#2b211a" d="M1.9 21.5c4.1-.6 11.3-.6 15.3 0 1.2.2 2 1.1 2 2.3v1.3c0 1.3-1 2.3-2.3 2.3H2c-1.2 0-2-.9-2-2.1l.1-1.7c0-1.1.7-1.9 1.8-2.1Z" />
+                              <path fill="#a4532c" d="M23 21.4c2.1-.3 4.5-.2 6 .2 1 .3 1.6 1.1 1.6 2.1v1.6c0 1.2-1 2.2-2.2 2.2h-5.5c-1.2 0-2.1-1-2.1-2.2l.1-1.8c.1-1.1.9-1.9 2.1-2.1Z" />
+                            </svg>
+                            Moellon
+                          </span>
+                          <span class="m-links m-links--moellon"><span class="is-on">Accueil</span><span>Savoir-faire</span><span>Chantiers</span><span>Notre approche</span></span>
+                          <span class="m-cta m-cta--moellon">Contact <svg class="m-arrow m-arrow--square" viewBox="0 0 24 24"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" /></svg></span>
+                        </span>
+                        <span class="m-hero m-hero--wide">
+                          <span class="m-kicker m-kicker--moellon">Maçonnerie &amp; rénovation</span>
+                          <span class="m-title m-title--moellon">Rénover la pierre, bâtir pour durer.</span>
+                          <span class="m-text m-text--moellon">Maçonnerie, extensions, ouvertures et rénovation de maisons anciennes, avec des matériaux qui respectent le bâti.</span>
+                          <span class="m-btn m-btn--moellon">Voir les chantiers <svg class="m-arrow m-arrow--square" viewBox="0 0 24 24"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" /></svg></span>
+                        </span>
+                      </>
+                    )}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="showcase__bar">
+        <p class="showcase__status">
+          <span>Démonstrations fictives</span>
+          <span class="js-only showcase__current" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-label>{windows[0].label}</span></span><span class="js-only showcase__count" aria-hidden="true"><span class="showcase__sep"> · </span><span data-showcase-count>1/{windows.length}</span></span>
+        </p>
+        <div class="showcase__nav js-only">
+          <button type="button" class="showcase__btn" data-showcase-prev aria-label="Fenêtre précédente" aria-disabled="true"><Icon name="chevron" class="showcase__chev showcase__chev--prev" /></button>
+          <button type="button" class="showcase__btn" data-showcase-next aria-label="Fenêtre suivante" aria-disabled={windows.length < 2 ? 'true' : 'false'}><Icon name="chevron" class="showcase__chev showcase__chev--next" /></button>
+        </div>
+      </div>
+      <p class="visually-hidden" aria-live="polite" data-showcase-live></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Carrousel : boutons, glisser à la souris, flèches du clavier, fenêtre active.
+  // Le nombre de fenêtres est lu dans la page : rien n'est figé dans ce script.
+  const root = document.querySelector<HTMLElement>('[data-showcase]');
+  const track = root?.querySelector<HTMLElement>('[data-showcase-track]');
+  if (root && track) {
+    const items = Array.from(track.children) as HTMLElement[];
+    const total = items.length;
+    const label = root.querySelector('[data-showcase-label]');
+    const count = root.querySelector('[data-showcase-count]');
+    const live = root.querySelector('[data-showcase-live]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-showcase-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-showcase-next]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let active = -1;
+    // Fenêtre visée par le défilement en cours : des clics rapprochés sur les boutons
+    // s'additionnent au lieu de repartir de la fenêtre encore active pendant l'animation.
+    let pending = -1;
+
+    const clamp = (i: number) => Math.max(0, Math.min(total - 1, i));
+    const centerOf = (el: HTMLElement) => el.offsetLeft + el.offsetWidth / 2;
+    // Centre de la zone d'accroche (la marge droite laisse voir la fenêtre suivante).
+    const snapMid = () => (track.clientWidth - (parseFloat(getComputedStyle(track).scrollPaddingRight) || 0)) / 2;
+    const scrollToItem = (i: number, announce = false) => {
+      const j = clamp(i);
+      pending = j;
+      track.scrollTo({ left: centerOf(items[j]) - snapMid(), behavior: reduce.matches ? 'auto' : 'smooth' });
+      // Annonce pour les lecteurs d'écran (le compteur visible est masqué pour eux).
+      if (announce && live) live.textContent = `Fenêtre ${j + 1} sur ${total} : ${items[j].dataset.label ?? ''}`;
+    };
+    // aria-disabled plutôt que disabled : le bouton garde le focus clavier en bout de course.
+    const setOff = (btn: HTMLButtonElement | null, off: boolean) => btn?.setAttribute('aria-disabled', String(off));
+    const update = () => {
+      const mid = track.scrollLeft + snapMid();
+      let best = 0;
+      items.forEach((el, i) => {
+        if (Math.abs(centerOf(el) - mid) < Math.abs(centerOf(items[best]) - mid)) best = i;
+      });
+      if (best === pending) pending = -1;
+      if (best === active) return;
+      active = best;
+      items.forEach((el, i) => el.toggleAttribute('data-active', i === best));
+      if (label) label.textContent = items[best].dataset.label ?? '';
+      if (count) count.textContent = `${best + 1}/${total}`;
+      setOff(prev, best === 0);
+      setOff(next, best === total - 1);
+    };
+
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    }, { passive: true });
+    const from = () => (pending >= 0 ? pending : active);
+    prev?.addEventListener('click', () => {
+      if (from() > 0) scrollToItem(from() - 1, true);
+    });
+    next?.addEventListener('click', () => {
+      if (from() < total - 1) scrollToItem(from() + 1, true);
+    });
+    // Le visiteur reprend la main (souris, toucher, molette) : la destination en cours est oubliée.
+    const forget = () => (pending = -1);
+    track.addEventListener('pointerdown', forget);
+    track.addEventListener('touchstart', forget, { passive: true });
+    track.addEventListener('wheel', forget, { passive: true });
+
+    // Flèches gauche/droite quand une fenêtre a le focus.
+    track.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const i = items.findIndex((el) => el.contains(document.activeElement));
+      if (i < 0) return;
+      e.preventDefault();
+      const j = clamp(i + (e.key === 'ArrowRight' ? 1 : -1));
+      items[j].querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
+      scrollToItem(j, true);
+    });
+    // Focus au clavier (Tab) : la fenêtre est ramenée au centre. Au clic ou au toucher,
+    // on ne fait rien : faire défiler entre l'appui et le relâchement annulerait le clic.
+    track.addEventListener('focusin', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.matches(':focus-visible')) return;
+      const i = items.findIndex((el) => el.contains(target));
+      if (i >= 0 && i !== active) scrollToItem(i);
+    });
+
+    // Glisser à la souris (le tactile et le pavé tactile défilent nativement).
+    let drag: { x: number; left: number; moved: boolean } | null = null;
+    let suppressClick = false;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      drag = { x: e.clientX, left: track.scrollLeft, moved: false };
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (!drag.moved && Math.abs(dx) > 6) {
+        drag.moved = true;
+        track.classList.add('is-dragging');
+      }
+      if (drag.moved) track.scrollLeft = drag.left - dx;
+    });
+    const endDrag = () => {
+      if (!drag) return;
+      if (drag.moved) {
+        // Seul le clic qui suit immédiatement le relâchement est ignoré : un glisser
+        // n'ouvre pas la démo sous le curseur, et ne bloque ni le clavier ni le toucher ensuite.
+        suppressClick = true;
+        window.setTimeout(() => (suppressClick = false), 0);
+        track.classList.remove('is-dragging');
+        update();
+        scrollToItem(active);
+      }
+      drag = null;
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    track.addEventListener('click', (e) => {
+      if (!suppressClick) return;
+      e.preventDefault();
+      e.stopPropagation();
+      suppressClick = false;
+    }, true);
+
+    update();
+  }
+</script>
+
+<style>
+  .hero {
+    --serif: 'Newsreader Variable', Georgia, serif;
+    position: relative;
+    container: hero / inline-size;
+    /* clip (et non hidden) : rien ne déborde sur les côtés, mais le hero peut grandir
+       en hauteur si le texte s'agrandit (espacement du texte, zoom). */
+    overflow-x: clip;
+    background: #f4ece1;
+  }
+
+  /* Scène : toutes les positions sont en cqw de cette boîte. Au-delà de 120rem, elle reste
+     centrée et ne grandit plus (la photo garde ses proportions, le texte reste aligné sur l'en-tête). */
+  .hero__stage {
+    --scene-x: 0cqw;
+    position: relative;
+    container-type: inline-size;
+    max-width: 120rem;
+    margin-inline: auto;
+  }
+
+  /* ---------- Texte ---------- */
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    padding-top: max(calc(var(--header-h) + 1.5rem), 11.5cqw);
+    padding-bottom: 5cqw;
+    pointer-events: none;
+  }
+
+  .hero__content > * {
+    pointer-events: auto;
+  }
+
+  h1 {
+    font-size: var(--fs-hero);
+    font-weight: 780;
+    letter-spacing: -0.052em;
+    line-height: 0.95;
+  }
+
+  .accent {
+    color: var(--coral-text);
+  }
+
+  .hero__lead {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 34rem;
+    margin-top: clamp(1.25rem, 1.9cqw, 2rem);
+    font-size: var(--fs-lead);
+    line-height: 1.45;
+  }
+
+  /* pretty : pas de mot isolé en fin de ligne (« devis. », « PME. »). */
+  .hero__lead > * {
+    text-wrap: pretty;
+  }
+
+  .hero__lead strong {
+    font-weight: 600;
+  }
+
+  .hero__lead span {
+    color: var(--ink-2);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: clamp(1.5rem, 2.3cqw, 2.5rem);
+  }
+
+  /* ---------- Scène ---------- */
+  .showcase {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero__bg :global(img) {
+    position: absolute;
+    top: var(--bg-top, -3cqw);
+    left: var(--bg-left, 0);
+    width: var(--bg-w, 100cqw);
+    max-width: none;
+    height: auto;
+    /* Si le hero grandit (texte agrandi), la photo couvre toujours toute la hauteur. */
+    min-height: calc(100% - var(--bg-top, -3cqw));
+    object-fit: cover;
+  }
+
+  /* Voile ivoire sous le texte (lisibilité du titre et du corail sur la photo) */
+  .hero__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(248 244 238 / 0.82) 0%, rgb(248 244 238 / 0.8) 34%, rgb(248 244 238 / 0.62) 41%, transparent 48%);
+  }
+
+  /* Très grand écran : les bords de la photo se fondent dans le fond du hero. */
+  @container hero (min-width: 121rem) {
+    .hero__bg {
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+    }
+  }
+
+  .showcase__frame {
+    position: absolute;
+    left: var(--scene-x);
+    right: 0;
+    top: 4cqw;
+    bottom: 2cqw;
+  }
+
+  .showcase__track {
+    /* Fenêtre active décalée vers la gauche : la suivante se voit à droite (--peek). */
+    --w-wide: 36cqw;
+    --w-tall: 15.5cqw;
+    --ratio-wide: 1.1;
+    --peek: 12cqw;
+    --gap: 3cqw;
+    /* Hauteur du sol sous les fenêtres (assez pour que la barre du carrousel ne les touche pas) */
+    --floor: max(4cqw, 3.4rem);
+    --side: calc((100cqw - var(--scene-x) - var(--peek) - var(--w-wide)) / 2);
+    display: flex;
+    align-items: flex-end;
+    gap: var(--gap);
+    height: 100%;
+    margin: 0;
+    padding: 0 calc(var(--side) + var(--peek)) var(--floor) var(--side);
+    scroll-padding-right: var(--peek);
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+    /* Les fenêtres (win-z) restent sous la barre du carrousel : ni la mention
+       « Démonstrations fictives » ni les boutons ne sont jamais recouverts. */
+    isolation: isolate;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 100%);
+  }
+
+  /* Avec JavaScript : boutons, glisser et flèches remplacent la barre de défilement.
+     Sans JavaScript, la barre reste visible pour atteindre les autres fenêtres. */
+  :global(html.js) .showcase__track {
+    scrollbar-width: none;
+    cursor: grab;
+  }
+
+  :global(html.js) .showcase__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .showcase__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  .showcase__track.is-dragging .screen {
+    pointer-events: none;
+  }
+
+  .showcase__item {
+    position: relative;
+    flex: none;
+    scroll-snap-align: center;
+    view-timeline-name: --win;
+    view-timeline-axis: inline;
+  }
+
+  .showcase__item--wide {
+    width: var(--w-wide);
+    aspect-ratio: var(--ratio-wide);
+  }
+
+  .showcase__item--tall {
+    width: var(--w-tall);
+    aspect-ratio: 0.72;
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform-style: preserve-3d;
+    transform-origin: 50% 100%;
+    transform: perspective(90cqw) rotateY(-14deg);
+    border-radius: 0.25cqw;
+    color: #fff;
+    text-decoration: none;
+    transition: translate 0.4s var(--ease);
+    -webkit-user-drag: none;
+  }
+
+  /* Ombre portée au sol : sur la fenêtre elle-même, pour la suivre quand elle se déplace. */
+  .screen::before {
+    content: '';
+    position: absolute;
+    left: -4%;
+    right: -6%;
+    bottom: -2.2cqw;
+    height: 4cqw;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(70 52 34 / 0.34), rgb(70 52 34 / 0.1) 60%, transparent);
+    filter: blur(0.35cqw);
+    transition: translate 0.4s var(--ease);
+  }
+
+  /* Deux règles distinctes : le minifieur fusionnerait sinon animation-timeline
+     dans le raccourci « animation », ce qui invalide la déclaration. */
+  @supports (animation-timeline: view()) {
+    .screen {
+      animation-name: win-tilt;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .showcase__item > .screen {
+      animation-timeline: --win;
+    }
+
+    /* La fenêtre la plus proche de la position active passe devant ses voisines. */
+    .showcase__item {
+      animation-name: win-z;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .showcase__track > .showcase__item {
+      animation-timeline: --win;
+    }
+  }
+
+  /* Repères de la frise (grand écran) : la progression d'une fenêtre vaut 0 % quand elle
+     entre par la droite de la bande et 100 % quand elle sort à gauche.
+     Avec les mesures ci-dessus (bande 56cqw, fenêtre 36cqw, écart 3cqw, marge droite 12cqw) :
+     fenêtre active ≈ 56 %, fenêtre suivante ≈ 14 %, précédente ≈ 99 %. */
+  @keyframes win-z {
+    0% {
+      z-index: 1;
+    }
+    56% {
+      z-index: 9;
+    }
+    100% {
+      z-index: 1;
+    }
+  }
+
+  @keyframes win-tilt {
+    0% {
+      transform: perspective(90cqw) translateX(-46%) rotateY(-58deg) scale(0.76);
+    }
+    /* Fenêtre suivante : ramenée vers la gauche, de biais, lisible au bord de la scène. */
+    14% {
+      transform: perspective(90cqw) translateX(-40%) rotateY(-46deg) scale(0.9);
+    }
+    /* Fenêtre active : posée sur le sol, nettement de biais comme sur la maquette. */
+    56% {
+      transform: perspective(90cqw) translateX(0) rotateY(-19deg) scale(1);
+    }
+    100% {
+      transform: perspective(90cqw) translateX(0) rotateY(40deg) scale(0.8);
+    }
+  }
+
+  /* Téléphone et tablette : rotations plus douces, voisines plus petites. Fenêtre active à 50 %.
+     Les voisines sont ramenées vers le centre (--pull) juste assez pour dépasser au bord de
+     la scène, sans jamais toucher la fenêtre active (vérifié pas à pas de 360 à 834 px). */
+  @keyframes win-tilt-sm {
+    0% {
+      transform: perspective(150cqw) translateX(calc(-1 * var(--pull))) rotateY(-40deg) scale(0.72);
+    }
+    30% {
+      transform: perspective(150cqw) translateX(calc(-0.3 * var(--pull))) rotateY(-24deg) scale(0.86);
+    }
+    50% {
+      transform: perspective(150cqw) translateX(0) rotateY(-6deg) scale(1);
+    }
+    70% {
+      transform: perspective(150cqw) translateX(calc(0.3 * var(--pull))) rotateY(22deg) scale(0.86);
+    }
+    100% {
+      transform: perspective(150cqw) translateX(var(--pull)) rotateY(38deg) scale(0.72);
+    }
+  }
+
+  /* Tranche de l'écran (épaisseur) */
+  .screen::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0.9cqw;
+    height: 100%;
+    background: linear-gradient(90deg, #cfcac2, #f3f0ea 45%, #dcd7cf);
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+  }
+
+  .screen:hover,
+  .screen:focus-visible {
+    translate: 0 -0.8cqw;
+  }
+
+  /* L'ombre reste au sol quand la fenêtre se soulève. */
+  .screen:hover::before,
+  .screen:focus-visible::before {
+    translate: 0 0.8cqw;
+  }
+
+  .screen:focus-visible {
+    outline-offset: 0.5cqw;
+  }
+
+  .screen__face {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+    border-radius: inherit;
+    container-type: inline-size;
+    background: #1e3328;
+    box-shadow:
+      0 0 0 0.12cqw rgb(255 255 255 / 0.9),
+      0 2cqw 4cqw -1.5cqw rgb(40 30 20 / 0.35);
+  }
+
+  .screen__img,
+  .screen__img :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .screen__img--below-nav {
+    top: 10.5cqw;
+  }
+
+  .screen__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Mini-sites (unités = cqw de la fenêtre) ---------- */
+  .m-shade {
+    position: absolute;
+    inset: 0;
+  }
+
+  .m-shade--below-nav {
+    top: 10.5cqw;
+    background: linear-gradient(90deg, rgb(28 20 12 / 0.7) 0%, rgb(28 20 12 / 0.25) 50%, transparent 72%);
+  }
+
+  .m-nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 4cqw;
+    height: 10.5cqw;
+    padding-inline: 4.5cqw;
+    font-size: 2.1cqw;
+    white-space: nowrap;
+  }
+
+  .m-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2cqw;
+    margin-right: auto;
+    font-family: var(--serif);
+    font-size: 5.2cqw;
+    font-weight: 450;
+    letter-spacing: -0.01em;
+  }
+
+  .m-links {
+    display: flex;
+    gap: 4cqw;
+  }
+
+  .m-cta {
+    padding: 1.1cqw 2.2cqw;
+    border: 0.25cqw solid rgb(255 255 255 / 0.7);
+    border-radius: 0.6cqw;
+  }
+
+  .m-hero {
+    position: absolute;
+    z-index: 1;
+    left: 4.8cqw;
+    bottom: 7cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3.6cqw;
+    max-width: 60cqw;
+  }
+
+  .m-title {
+    font-family: var(--serif);
+    font-size: 7.6cqw;
+    font-weight: 420;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .m-text {
+    margin-top: -1cqw;
+    font-size: 2.1cqw;
+    line-height: 1.5;
+    opacity: 0.92;
+  }
+
+  .m-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.4cqw;
+    padding: 1.5cqw 2.6cqw;
+    border: 0.25cqw solid rgb(255 255 255 / 0.85);
+    border-radius: 0.6cqw;
+    font-size: 2cqw;
+  }
+
+  .m-btn :global(svg) {
+    width: 2.4cqw;
+    height: 2.4cqw;
+  }
+
+  .m-kicker {
+    font-size: 2cqw;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #5a6a60;
+  }
+
+  /* Flèches et pictogrammes dessinés en ligne (ceux des démos, simplifiés). */
+  .m-arrow {
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .m-arrow--square {
+    stroke-width: 1.8;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  .m-nowrap {
+    white-space: nowrap;
+  }
+
+  /* Variante plus large du bloc de texte (titres sur une seule colonne, comme sur les démos). */
+  .m-hero--wide {
+    max-width: 66cqw;
+    gap: 3cqw;
+  }
+
+  /* --- Rivage : en-tête ivoire (vague + « rivage »), photo du jardin sous un voile vert, phrase en italique à droite --- */
+  .screen__img--rivage :global(img) {
+    object-position: 50% 55%;
+  }
+
+  .m-shade--rivage {
+    background:
+      linear-gradient(90deg, rgb(10 25 18 / 0.72) 0%, rgb(10 25 18 / 0.42) 38%, rgb(10 25 18 / 0) 64%),
+      linear-gradient(0deg, rgb(10 25 18 / 0.55) 0%, rgb(10 25 18 / 0.2) 22%, rgb(10 25 18 / 0) 45%);
+  }
+
+  .m-nav--rivage {
+    gap: 3.6cqw;
+    background: #f6f1e6;
+    border-bottom: 0.15cqw solid rgb(30 51 40 / 0.14);
+    color: #1b2620;
+    font-size: 1.85cqw;
+    font-weight: 500;
+  }
+
+  .m-logo--rivage {
+    gap: 1.3cqw;
+    font-size: 4.9cqw;
+    font-weight: 430;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    color: #1e3328;
+  }
+
+  .m-wave {
+    flex: none;
+    width: 2.75cqw;
+    height: auto;
+    margin-top: 0.55cqw;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0.75;
+  }
+
+  .m-links--rivage {
+    gap: 3.6cqw;
+  }
+
+  .m-cta--rivage {
+    padding: 1.35cqw 2.2cqw;
+    border: 0;
+    border-radius: 0.5cqw;
+    background: #1e3328;
+    color: #f6f1e6;
+    font-size: 1.8cqw;
+    font-weight: 550;
+  }
+
+  .m-hero--rivage {
+    left: 4.5cqw;
+    gap: 2.6cqw;
+    max-width: 50cqw;
+  }
+
+  .m-title--rivage {
+    font-size: 8.6cqw;
+    font-weight: 380;
+    line-height: 0.95;
+    letter-spacing: -0.032em;
+  }
+
+  .m-text--rivage {
+    max-width: 24em;
+    margin-top: 0;
+    font-size: 2cqw;
+    line-height: 1.6;
+    color: rgb(255 255 255 / 0.92);
+    opacity: 1;
+    text-wrap: pretty;
+  }
+
+  .m-btn--rivage {
+    margin-top: 0.6cqw;
+    gap: 1.6cqw;
+    padding: 1.8cqw 2.75cqw;
+    border: 0;
+    border-radius: 0.48cqw;
+    background: #fff;
+    color: #1b2620;
+    font-size: 1.9cqw;
+    font-weight: 550;
+  }
+
+  /* Phrase d'accroche en bas à droite, alignée sur le bas du bouton, sous un filet clair. */
+  .m-aside {
+    position: absolute;
+    z-index: 1;
+    right: 4.5cqw;
+    bottom: 7cqw;
+    padding-top: 1.5cqw;
+    border-top: 0.15cqw solid rgb(255 255 255 / 0.55);
+    font-family: var(--serif);
+    font-size: 2.2cqw;
+    font-style: italic;
+    font-weight: 350;
+    line-height: 1.35;
+    text-shadow: 0 0.1cqw 1.2cqw rgb(10 25 18 / 0.45);
+  }
+
+  /* --- Faîtage : en-tête blanc cassé (chevron bois + « Faîtage »), Contact en bouton sombre, photo du préau --- */
+  .screen--faitage-accueil .screen__face {
+    background: #221f1c;
+  }
+
+  .screen__img--faitage :global(img) {
+    object-position: 30% 50%;
+  }
+
+  .m-shade--faitage {
+    background:
+      linear-gradient(90deg, rgb(28 20 12 / 0.74) 0%, rgb(28 20 12 / 0.4) 42%, rgb(28 20 12 / 0) 72%),
+      linear-gradient(0deg, rgb(28 20 12 / 0.55) 0%, rgb(28 20 12 / 0) 40%);
+  }
+
+  .m-nav--faitage {
+    gap: 3.4cqw;
+    padding-inline: 4.4cqw;
+    background: #fbf9f5;
+    border-bottom: 0.15cqw solid rgb(43 34 25 / 0.14);
+    color: #2b2219;
+    font-size: 1.85cqw;
+    font-weight: 550;
+  }
+
+  .m-logo--faitage {
+    align-items: flex-end;
+    gap: 1.3cqw;
+    font-size: 4.2cqw;
+    font-weight: 520;
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+
+  .m-ridge {
+    flex: none;
+    width: 3.6cqw;
+    height: auto;
+    margin-bottom: 0.9cqw;
+    fill: none;
+    stroke: #b06d34;
+    stroke-width: 2.4;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  /* Liens sur toute la hauteur de l'en-tête : le trait de la page courante se pose sur son bord bas. */
+  .m-links--faitage {
+    align-self: stretch;
+    gap: 3.4cqw;
+  }
+
+  .m-links--faitage > span {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .m-links--faitage > .is-on::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.15cqw;
+    height: 0.3cqw;
+    background: #b06d34;
+  }
+
+  .m-cta--faitage {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    margin-left: 0.8cqw;
+    padding: 1.3cqw 2.1cqw;
+    border: 0;
+    border-radius: 0.25cqw;
+    background: #221f1c;
+    color: #fbf9f5;
+  }
+
+  .m-cta--faitage :global(svg) {
+    width: 1.9cqw;
+    height: 1.9cqw;
+  }
+
+  .m-hero--faitage {
+    left: 4.4cqw;
+    bottom: 12cqw;
+    gap: 0;
+    max-width: 62cqw;
+  }
+
+  .m-title--faitage {
+    font-size: 7.6cqw;
+    font-weight: 420;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: #fbf9f5;
+  }
+
+  .m-text--faitage {
+    margin-top: 2.7cqw;
+    font-size: 2cqw;
+    line-height: 1.55;
+    color: rgb(251 249 245 / 0.92);
+    opacity: 1;
+  }
+
+  .m-btn--faitage {
+    margin-top: 3.8cqw;
+    gap: 1.7cqw;
+    padding: 1.6cqw 2.65cqw;
+    border: 0;
+    border-radius: 0.25cqw;
+    background: #fbf9f5;
+    color: #2b2219;
+    font-size: 1.9cqw;
+    font-weight: 600;
+  }
+
+  .m-btn--rivage :global(svg),
+  .m-btn--faitage :global(svg) {
+    width: 2.1cqw;
+    height: 2.1cqw;
+  }
+
+  /* Légende de la photo, en bas à droite sous le bouton (comme sur la démo). */
+  .m-caption {
+    position: absolute;
+    z-index: 1;
+    right: 4.4cqw;
+    bottom: 5.8cqw;
+    font-size: 1.55cqw;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(251 249 245 / 0.85);
+  }
+
+  /* --- Écluse : en-tête blanc, navigation en pilule grise, ouverture en panneau clair « texte | photo » --- */
+  .screen--ecluse-accueil .screen__face {
+    background: #fff;
+  }
+
+  .m-nav--ecluse {
+    gap: 2.2cqw;
+    padding-inline: 3.8cqw;
+    background: #fff;
+    border-bottom: 0.15cqw solid rgb(29 50 64 / 0.12);
+    color: #142430;
+    font-size: 1.75cqw;
+    font-weight: 600;
+  }
+
+  .m-logo--ecluse {
+    gap: 1cqw;
+    font-family: var(--font-sans);
+    font-size: 4cqw;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .m-glyph {
+    flex: none;
+    width: 4.4cqw;
+    height: 4.4cqw;
+  }
+
+  .m-pills {
+    display: flex;
+    gap: 0.2cqw;
+    padding: 0.5cqw;
+    border: 0.15cqw solid rgb(29 50 64 / 0.12);
+    border-radius: 99cqw;
+    background: #f2f5f7;
+    color: #44535e;
+  }
+
+  .m-pills > span {
+    padding: 0.9cqw 1.45cqw;
+    border-radius: 99cqw;
+  }
+
+  .m-pills > .is-on {
+    background: #fff;
+    color: #142430;
+    box-shadow: 0 0 0 0.15cqw rgb(29 50 64 / 0.12);
+  }
+
+  .m-cta--ecluse {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    padding: 1.3cqw 2cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #2f4a5a;
+    color: #fff;
+    font-weight: 650;
+  }
+
+  .m-cta--ecluse .m-arrow {
+    width: 1.8cqw;
+    height: 1.8cqw;
+    color: #dcc394;
+  }
+
+  .m-ec-frame {
+    position: absolute;
+    inset: 13.5cqw 3.5cqw 3.5cqw;
+    border: 0.15cqw solid rgb(29 50 64 / 0.12);
+    border-radius: 3.6cqw;
+    background: #f2f5f7;
+  }
+
+  .screen__img.m-ec-photo {
+    inset: 1.3cqw 1.3cqw 1.3cqw 51%;
+    overflow: hidden;
+    border-radius: 2.4cqw;
+  }
+
+  .m-ec-photo :global(img) {
+    object-position: 60% 50%;
+  }
+
+  .m-ec-copy {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 4.2cqw;
+    width: calc(51% - 6.4cqw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 3cqw;
+  }
+
+  .m-title--ecluse {
+    font-family: var(--font-sans);
+    font-size: 5.9cqw;
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.048em;
+    color: #142430;
+    text-wrap: balance;
+  }
+
+  .m-text--ecluse {
+    font-size: 1.85cqw;
+    color: #44535e;
+    opacity: 1;
+  }
+
+  .m-btn--ecluse {
+    gap: 1.6cqw;
+    padding: 0.7cqw 0.7cqw 0.7cqw 2.6cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #2f4a5a;
+    color: #fff;
+    font-size: 1.9cqw;
+    font-weight: 650;
+  }
+
+  .m-btn__dot {
+    display: grid;
+    place-items: center;
+    width: 4.4cqw;
+    height: 4.4cqw;
+    border-radius: 50%;
+    background: #dcc394;
+    color: #142430;
+  }
+
+  .m-btn .m-btn__dot .m-arrow {
+    width: 2cqw;
+    height: 2cqw;
+  }
+
+  /* --- Lueur : scène de nuit, photo pleine fenêtre sous un voile bleu nuit, accent ambré --- */
+  .screen--lueur-accueil .screen__face {
+    background: #141a24;
+  }
+
+  .screen__img--lueur :global(img) {
+    object-position: 62% 50%;
+  }
+
+  .m-shade--lueur {
+    background:
+      linear-gradient(90deg, rgb(14 19 27 / 0.92) 0%, rgb(14 19 27 / 0.8) 40%, rgb(14 19 27 / 0.45) 64%, rgb(14 19 27 / 0) 90%),
+      linear-gradient(0deg, rgb(14 19 27 / 0.7) 0%, rgb(14 19 27 / 0) 38%);
+  }
+
+  .m-nav--lueur {
+    gap: 3cqw;
+    background: linear-gradient(180deg, rgb(12 16 23 / 0.9) 0%, rgb(12 16 23 / 0.7) 60%, rgb(12 16 23 / 0) 100%);
+    color: rgb(245 239 228 / 0.86);
+    font-size: 1.85cqw;
+  }
+
+  .m-logo--lueur {
+    gap: 1.3cqw;
+    font-family: var(--font-sans);
+    font-size: 2.4cqw;
+    font-weight: 650;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: #f5efe4;
+  }
+
+  .m-filament {
+    flex: none;
+    width: 3.8cqw;
+    height: 3.8cqw;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  .m-filament__arc {
+    stroke: #f2b45a;
+    stroke-width: 2.3;
+    filter: drop-shadow(0 0 0.5cqw rgb(242 180 90 / 0.7));
+  }
+
+  .m-filament circle {
+    fill: #f2b45a;
+    stroke: none;
+  }
+
+  .m-links--lueur {
+    gap: 3cqw;
+  }
+
+  /* Page courante : un point ambré lumineux sous le libellé. */
+  .m-links--lueur > .is-on {
+    position: relative;
+    color: #f5efe4;
+  }
+
+  .m-links--lueur > .is-on::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -1.4cqw;
+    width: 0.6cqw;
+    height: 0.6cqw;
+    margin-left: -0.3cqw;
+    border-radius: 50%;
+    background: #f2b45a;
+    box-shadow: 0 0 1cqw 0.2cqw rgb(242 180 90 / 0.65);
+  }
+
+  .m-cta--lueur {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9cqw;
+    padding: 1.3cqw 2.2cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #f2b45a;
+    color: #141a24;
+    font-weight: 650;
+  }
+
+  .m-cta--lueur :global(svg) {
+    width: 1.8cqw;
+    height: 1.8cqw;
+  }
+
+  .m-title--lueur {
+    max-width: 7.3em;
+    font-family: var(--font-sans);
+    font-size: 6.6cqw;
+    font-weight: 340;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #f5efe4;
+  }
+
+  .m-glow {
+    white-space: nowrap;
+    color: #f2b45a;
+    font-weight: 420;
+    text-shadow:
+      0 0 1.4cqw rgb(242 180 90 / 0.45),
+      0 0 3.6cqw rgb(242 180 90 / 0.25);
+  }
+
+  .m-text--lueur {
+    max-width: 50cqw;
+    font-size: 1.9cqw;
+    line-height: 1.6;
+    color: rgb(245 239 228 / 0.9);
+    opacity: 1;
+  }
+
+  .m-btn--lueur {
+    gap: 1.6cqw;
+    padding: 1.6cqw 3cqw;
+    border: 0;
+    border-radius: 99cqw;
+    background: #f2b45a;
+    color: #141a24;
+    font-weight: 650;
+    box-shadow: 0 1cqw 3cqw -1.2cqw rgb(242 180 90 / 0.6);
+  }
+
+  /* --- Moellon : en-tête calcaire à double trait, photo sous un voile clair, titres Newsreader --- */
+  .screen--moellon-accueil .screen__face {
+    background: #e9dfcf;
+  }
+
+  .screen__img--moellon :global(img) {
+    object-position: 62% 55%;
+  }
+
+  .m-shade--moellon {
+    background:
+      linear-gradient(90deg, rgb(233 223 207 / 0.97) 0%, rgb(233 223 207 / 0.93) 52%, rgb(233 223 207 / 0.55) 66%, rgb(233 223 207 / 0) 86%),
+      linear-gradient(0deg, rgb(233 223 207 / 0.35) 0%, rgb(233 223 207 / 0) 30%);
+  }
+
+  .m-nav--moellon {
+    gap: 2.6cqw;
+    padding-inline: 4cqw;
+    background: #e9dfcf;
+    color: #2b211a;
+    font-size: 1.75cqw;
+    font-weight: 560;
+    /* Double trait sous l'en-tête, comme un lit de mortier. */
+    box-shadow:
+      0 0.15cqw 0 rgb(43 33 26 / 0.3),
+      0 0.6cqw 0 #e9dfcf,
+      0 0.75cqw 0 rgb(43 33 26 / 0.14);
+  }
+
+  .m-logo--moellon {
+    gap: 1.1cqw;
+    font-size: 4.2cqw;
+    font-weight: 520;
+    letter-spacing: -0.02em;
+  }
+
+  .m-stones {
+    flex: none;
+    width: 4.4cqw;
+    height: auto;
+  }
+
+  .m-links--moellon {
+    gap: 2.6cqw;
+  }
+
+  .m-links--moellon > .is-on {
+    position: relative;
+    color: #2b211a;
+  }
+
+  /* Page courante : une petite pierre terre cuite sous le libellé. */
+  .m-links--moellon > .is-on::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -1.3cqw;
+    width: 2cqw;
+    height: 0.55cqw;
+    margin-left: -1cqw;
+    border-radius: 0.2cqw 0.3cqw 0.2cqw 0.3cqw;
+    background: #a4532c;
+  }
+
+  .m-cta--moellon {
+    display: inline-flex;
+    align-items: center;
+    gap: 1cqw;
+    padding: 1.3cqw 2cqw;
+    border: 0;
+    border-radius: 0.15cqw;
+    background: #a4532c;
+    color: #faf6ef;
+    font-weight: 620;
+  }
+
+  .m-cta--moellon .m-arrow {
+    width: 1.8cqw;
+    height: 1.8cqw;
+  }
+
+  .m-kicker--moellon {
+    display: flex;
+    align-items: center;
+    gap: 1.2cqw;
+    font-size: 1.5cqw;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    color: #7f3b1d;
+  }
+
+  .m-kicker--moellon::before {
+    content: '';
+    flex: none;
+    width: 2.1cqw;
+    height: 0.9cqw;
+    border-radius: 0.2cqw 0.3cqw 0.2cqw 0.4cqw;
+    background: #a4532c;
+  }
+
+  .m-title--moellon {
+    max-width: 7.1em;
+    margin-top: -1cqw;
+    font-size: 7.4cqw;
+    font-weight: 370;
+    line-height: 0.97;
+    letter-spacing: -0.036em;
+    color: #2b211a;
+  }
+
+  .m-text--moellon {
+    max-width: 54cqw;
+    font-size: 1.9cqw;
+    color: #5a4a3d;
+    opacity: 1;
+  }
+
+  .m-btn--moellon {
+    gap: 1.8cqw;
+    padding: 1.6cqw 2.8cqw;
+    border: 0;
+    border-radius: 0.15cqw;
+    background: #a4532c;
+    color: #faf6ef;
+    font-weight: 620;
+    box-shadow: inset 0 -0.5cqw 0 rgb(43 33 26 / 0.22);
+  }
+
+  /* ---------- Barre du carrousel ---------- */
+  .showcase__bar {
+    position: absolute;
+    /* Alignée sur le bord droit du contenu (comme le bouton de l'en-tête). */
+    right: max(var(--gutter), (100cqw - var(--container)) / 2);
+    bottom: 1.6cqw;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Fond ivoire : la mention « Démonstrations fictives » reste lisible sur la photo. */
+  .showcase__status {
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius);
+    background: rgb(248 244 238 / 0.9);
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+
+  .showcase__nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .showcase__btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1.5px solid var(--marine);
+    border-radius: 50%;
+    background: rgb(255 253 250 / 0.75);
+    color: var(--marine);
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease),
+      color 0.2s var(--ease);
+  }
+
+  .showcase__btn:hover:not([aria-disabled='true']) {
+    background: var(--marine);
+    color: var(--paper);
+  }
+
+  /* Bouton en bout de course : estompé par ses couleurs et non par opacity,
+     pour que l'anneau de focus (le bouton garde le focus) reste net. */
+  .showcase__btn[aria-disabled='true'] {
+    border-color: rgb(15 35 41 / 0.3);
+    background: rgb(255 253 250 / 0.4);
+    color: rgb(15 35 41 / 0.38);
+    cursor: default;
+  }
+
+  .showcase__btn :global(.showcase__chev) {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .showcase__btn :global(.showcase__chev--prev) {
+    transform: rotate(90deg);
+  }
+
+  .showcase__btn :global(.showcase__chev--next) {
+    transform: rotate(-90deg);
+  }
+
+  /* ---------- Grand écran : le hero suit les proportions de la scène ---------- */
+  @media (min-width: 62.5em) {
+    .hero__stage {
+      /* Début de la bande de fenêtres ; le texte s'arrête avant. */
+      --scene-x: 44cqw;
+      --text-max: calc(var(--scene-x) - max(var(--gutter), (100cqw - var(--container)) / 2) - 1.5rem);
+      /* Pas de min-height ni de max-height : la hauteur suit la largeur, et grandit
+         d'elle-même si le texte en a besoin. */
+      aspect-ratio: 1.92;
+    }
+
+    /* « Un site à part. » mesure environ 5,7 em : le titre ne déborde jamais sur les fenêtres. */
+    h1 {
+      font-size: min(var(--fs-hero), calc(var(--text-max) / 5.75));
+    }
+
+    /* Sur la photo (même sous le voile), le corail du titre est à peine plus soutenu
+       que --coral-text pour garder un contraste d'au moins 3:1. */
+    .accent {
+      color: #d9593d;
+    }
+
+    /* Le titre, le texte et les boutons restent dans leur colonne (ils passent à la ligne
+       plutôt que de déborder sur les fenêtres, même avec un espacement du texte agrandi). */
+    .hero__content > h1,
+    .hero__content > .hero__actions {
+      max-width: var(--text-max);
+    }
+
+    .hero__content > .hero__lead {
+      max-width: min(34rem, var(--text-max));
+    }
+  }
+
+  /* ---------- Téléphone et tablette ---------- */
+  @media (max-width: 62.49em) {
+    .hero {
+      background: var(--ivory);
+    }
+
+    .hero__content {
+      padding-top: 1.75rem;
+      padding-bottom: 1.75rem;
+    }
+
+    .showcase {
+      position: relative;
+      inset: auto;
+      height: 84cqw;
+      max-height: 40rem;
+      --bg-w: 170cqw;
+      --bg-left: -66cqw;
+      --bg-top: -22cqw;
+    }
+
+    .hero__bg::after {
+      display: none;
+    }
+
+    .showcase__frame {
+      top: 3cqw;
+      bottom: 13cqw;
+    }
+
+    .showcase__track {
+      --w-wide: 66cqw;
+      --w-tall: 30cqw;
+      --ratio-wide: 1.3;
+      --peek: 0cqw;
+      --gap: 9cqw;
+      --floor: 9cqw;
+      /* Déplacement des voisines vers le centre (animation win-tilt-sm). */
+      --pull: 30%;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .screen::before {
+      bottom: -3.4cqw;
+      height: 6cqw;
+    }
+
+    .screen::after {
+      width: 1.4cqw;
+    }
+
+    .showcase__bar {
+      left: var(--gutter);
+      right: var(--gutter);
+      bottom: 3cqw;
+      justify-content: space-between;
+    }
+
+    /* Deux lignes au plus, même avec un long libellé (« Écluse · Plombier-chauffagiste ») :
+       le compteur rejoint la première ligne, le nom de la démo occupe la seconde. */
+    .showcase__status {
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+      column-gap: 0.75rem;
+    }
+
+    .showcase__current {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+
+    .showcase__count {
+      grid-row: 1;
+      grid-column: 2;
+    }
+
+    .showcase__sep {
+      display: none;
+    }
+  }
+
+  @media (min-width: 40em) and (max-width: 62.49em) {
+    .showcase {
+      height: 64cqw;
+      --bg-w: 150cqw;
+      --bg-left: -46cqw;
+      --bg-top: -20cqw;
+    }
+
+    .showcase__frame {
+      bottom: 9cqw;
+    }
+
+    .showcase__track {
+      --w-wide: 52cqw;
+      --w-tall: 22cqw;
+      --floor: 6cqw;
+      --pull: 10%;
+    }
+
+    .showcase__bar {
+      bottom: 2cqw;
+    }
+  }
+
+  /* Très petit écran (moins de 360 px) : le nom de la démo quitte la mention, qui reste sur
+     deux lignes au-dessous de la fenêtre. Il reste lisible sur la fenêtre (logo), dans le texte
+     du lien et dans l'annonce vocale. */
+  @media (max-width: 22.49em) {
+    .showcase__current {
+      display: none;
+    }
+  }
+
+  @media (max-width: 30em) {
+    .hero__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (max-width: 62.49em) {
+    @supports (animation-timeline: view()) {
+      .screen {
+        animation-name: win-tilt-sm;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase__item {
+      animation: none;
+    }
+
+    .screen {
+      animation: none;
+      transform: perspective(90cqw) rotateY(-10deg);
+    }
+
+    .screen:hover,
+    .screen:focus-visible,
+    .screen:hover::before,
+    .screen:focus-visible::before {
+      translate: none;
+    }
+  }
+</style>

@@ -1,0 +1,152 @@
+---
+// Pied de page Écluse : marque, navigation, services, encart « dans un vrai site », mention fictive.
+import Logo from './Logo.astro';
+import RealSiteNote from './RealSiteNote.astro';
+import { ecluseNav, ecluseServices } from './nav';
+---
+
+<footer class="footer">
+  <div class="ec-wide">
+    <div class="top">
+      <div class="brand">
+        <a class="brand__link" href="/exemples/ecluse/" aria-label="Écluse, accueil">
+          <Logo size="lg" />
+        </a>
+        <p class="brand__tagline">La chaleur et l’eau, bien installées.</p>
+        <p class="brand__text">
+          Plomberie, salles de bain, chauffage, pompes à chaleur et entretien, dans votre secteur.
+        </p>
+      </div>
+
+      <nav class="col" aria-label="Pied de page">
+        <p class="col__title">Le site</p>
+        <ul>
+          {ecluseNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div class="col">
+        <p class="col__title">Services</p>
+        <ul>
+          {ecluseServices.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="col col--info">
+        <p class="col__title">Nous joindre</p>
+        <RealSiteNote>vos coordonnées, vos horaires, votre zone d’intervention et vos mentions légales.</RealSiteNote>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <p>Écluse est une entreprise fictive. Ce site est une démonstration conçue par Atousy, studio web &amp; design.</p>
+      <a href="/exemples/">Voir les autres démonstrations</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: clamp(3.5rem, 7vw, 5rem) 2rem;
+    background: var(--ec-mist);
+    border-top: 1px solid var(--ec-line);
+    color: var(--ec-ink-2);
+  }
+
+  .top {
+    display: grid;
+    grid-template-columns: 1.4fr 0.7fr 0.95fr 1.2fr;
+    gap: 2.75rem clamp(2rem, 4vw, 4rem);
+  }
+
+  .brand__link {
+    display: inline-flex;
+    border-radius: var(--ec-radius-sm);
+    color: var(--ec-ink);
+    text-decoration: none;
+  }
+
+  .brand__tagline {
+    margin-top: 1.4rem;
+    font-size: 1.25rem;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    line-height: 1.3;
+    color: var(--ec-ink);
+  }
+
+  .brand__text {
+    max-width: 34ch;
+    margin-top: 0.5rem;
+    font-size: 0.9688rem;
+  }
+
+  .col__title {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ec-ink);
+  }
+
+  .col ul {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .col a {
+    display: inline-block;
+    padding-block: 0.2rem;
+    color: var(--ec-ink-2);
+    font-size: 0.9688rem;
+    text-decoration: none;
+  }
+
+  .col a:hover {
+    color: var(--ec-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--ec-brass);
+    text-underline-offset: 0.3em;
+  }
+
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 2rem;
+    margin-top: clamp(3rem, 6vw, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ec-line);
+    font-size: 0.875rem;
+  }
+
+  .bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.75rem;
+    color: var(--ec-slate);
+    font-weight: 650;
+    text-decoration-color: var(--ec-brass);
+    text-underline-offset: 0.3em;
+  }
+
+  @media (max-width: 64em) {
+    .top {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .brand,
+    .col--info {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Les deux listes de liens restent côte à côte sur mobile ; une seule colonne sur très petit écran */
+  @media (max-width: 22em) {
+    .top {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

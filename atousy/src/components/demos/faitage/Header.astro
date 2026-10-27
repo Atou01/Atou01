@@ -1,0 +1,451 @@
+---
+// En-tête Faîtage : logo à gauche, navigation à droite (Contact mis en avant).
+// Variante « overlay » : posée en transparence sur la photo d'ouverture.
+// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
+// Le menu se referme aussi au clic sur un lien, au retour arrière (cache du navigateur) et au passage en grand écran.
+// Sans JavaScript, la navigation reste visible (liens repliés sous le logo).
+import Icon from '../../Icon.astro';
+import Logo from './Logo.astro';
+import { faitageNav, type FaitagePage } from './nav';
+
+interface Props {
+  current: FaitagePage;
+  variant?: 'solid' | 'overlay';
+}
+const { current, variant = 'solid' } = Astro.props;
+---
+
+<header class:list={['header', `header--${variant}`, variant === 'overlay' && 'ft-on-photo']} data-ft-header>
+  <div class="bar ft-container">
+    <a class="brand" href="/exemples/faitage/" aria-label="Faîtage, accueil">
+      <Logo tone="inherit" />
+    </a>
+
+    <button class="burger" type="button" aria-expanded="false" aria-controls="ft-menu" data-ft-toggle hidden>
+      <span class="burger__label">Menu</span>
+      <span class="burger__icon" aria-hidden="true">
+        <Icon name="menu" class="i-open" />
+        <Icon name="close" class="i-close" />
+      </span>
+    </button>
+
+    <nav id="ft-menu" class="nav" aria-label="Navigation principale">
+      <ul class="nav__list">
+        {
+          faitageNav.map((item, i) => (
+            <li class:list={[item.key === 'contact' && 'nav__item--contact']}>
+              <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                <span class="nav__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="nav__text">{item.label}</span>
+                {item.key === 'contact' && <Icon name="arrow" class="nav__arrow" />}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var header = document.querySelector('[data-ft-header]');
+    if (!header) return;
+    var btn = header.querySelector('[data-ft-toggle]');
+    var panel = document.getElementById('ft-menu');
+    if (!btn || !panel) return;
+
+    header.classList.add('is-enhanced');
+    btn.hidden = false;
+
+    function isOpen() {
+      return btn.getAttribute('aria-expanded') === 'true';
+    }
+    function setOpen(open, returnFocus) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      header.classList.toggle('is-open', open);
+      if (!open && returnFocus) btn.focus();
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(!isOpen(), false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) setOpen(false, true);
+    });
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !header.contains(e.target)) setOpen(false, false);
+    });
+    // Élément de l'en-tête masqué alors qu'il avait le focus (changement de taille d'écran) :
+    // le focus passe à celui qui le remplace au même endroit (premier lien du menu à la place
+    // du bouton Menu en grand écran, bouton Menu à la place d'un lien du menu en petit écran).
+    function refocus(el) {
+      if (!el || el.getClientRects().length > 0) return;
+      var target = el === btn ? panel.querySelector('a') : btn;
+      if (target && target.getClientRects().length > 0) target.focus();
+    }
+    header.addEventListener('focusout', function (e) {
+      // Sans destination : le navigateur a retiré le focus d'un élément devenu invisible.
+      if (!e.relatedTarget) refocus(e.target);
+      else if (isOpen() && !header.contains(e.relatedTarget)) setOpen(false, false);
+    });
+    // Clic sur un lien de l'en-tête (logo ou menu) : le menu se referme avant de quitter la page.
+    header.addEventListener('click', function (e) {
+      if (isOpen() && e.target.closest && e.target.closest('a')) setOpen(false, false);
+    });
+    // Retour arrière depuis le cache du navigateur : la page revient avec le menu fermé.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && isOpen()) setOpen(false, false);
+    });
+    // Changement de taille d'écran : le menu se referme. Les navigateurs qui laissent le focus
+    // sur l'élément masqué passent ici ; les autres le retirent et passent par « focusout ».
+    var mq = window.matchMedia('(min-width: 60.01em)');
+    var onChange = function () {
+      var active = document.activeElement;
+      setOpen(false, false);
+      if (active && header.contains(active)) refocus(active);
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  })();
+</script>
+
+<style>
+  .header {
+    z-index: 50;
+    color: var(--ft-ink);
+  }
+
+  .header--solid {
+    position: sticky;
+    top: 0;
+    background: var(--ft-white);
+    border-bottom: 1px solid var(--ft-line);
+  }
+
+  .header--overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    color: var(--ft-white);
+    --logo-ridge: var(--ft-wood-light);
+    background: linear-gradient(180deg, rgb(20 14 8 / 0.62) 0%, rgb(20 14 8 / 0.28) 65%, transparent 100%);
+  }
+
+  .header--overlay .bar {
+    border-bottom: 1px solid rgb(251 249 245 / 0.22);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 5rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    margin-right: auto;
+    padding-block: 0.4rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .nav__list {
+    display: flex;
+    align-items: stretch;
+    gap: clamp(1.1rem, 2.2vw, 2.25rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav__list li {
+    display: flex;
+  }
+
+  .nav__list a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 5rem;
+    color: inherit;
+    font-size: 0.9688rem;
+    font-weight: 550;
+    text-decoration: none;
+  }
+
+  .nav__num {
+    display: none;
+  }
+
+  .nav__list a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--ft-wood);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s var(--ft-ease);
+  }
+
+  .header--overlay .nav__list a::after {
+    background: var(--ft-wood-light);
+  }
+
+  .nav__list a:hover::after,
+  .nav__list a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .nav__list a:focus-visible {
+    outline-offset: -2px;
+  }
+
+  /* Contact : bouton */
+  .nav__item--contact {
+    align-items: center;
+    margin-left: clamp(0rem, 1vw, 0.75rem);
+  }
+
+  .nav__item--contact a {
+    min-height: 2.9rem;
+    padding: 0 1.1rem;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    transition:
+      background-color 0.25s var(--ft-ease),
+      color 0.25s var(--ft-ease),
+      border-color 0.25s var(--ft-ease);
+  }
+
+  .nav__item--contact a::after {
+    display: none;
+  }
+
+  .header--solid .nav__item--contact a {
+    background: var(--ft-charcoal);
+    border-color: var(--ft-charcoal);
+    color: var(--ft-white);
+  }
+
+  .header--solid .nav__item--contact a:hover,
+  .header--solid .nav__item--contact a[aria-current='page'] {
+    background: var(--ft-wood-ink);
+    border-color: var(--ft-wood-ink);
+  }
+
+  .header--overlay .nav__item--contact a:hover {
+    background: var(--ft-white);
+    border-color: var(--ft-white);
+    color: var(--ft-ink);
+  }
+
+  .nav__item--contact :global(.nav__arrow) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .burger {
+    display: none;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.75rem;
+    padding: 0 0 0 0.9rem;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+    color: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .header--solid .burger {
+    border-color: var(--ft-line-strong);
+  }
+
+  .burger__icon {
+    display: grid;
+    place-items: center;
+    align-self: stretch;
+    width: 2.75rem;
+    border-left: 1px solid currentColor;
+  }
+
+  .header--solid .burger__icon {
+    border-left-color: var(--ft-line-strong);
+  }
+
+  .burger__icon :global(svg) {
+    grid-area: 1 / 1;
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .burger :global(.i-close),
+  .is-open .burger :global(.i-open) {
+    display: none;
+  }
+
+  .is-open .burger :global(.i-close) {
+    display: block;
+  }
+
+  @media (max-width: 60em) {
+    .bar {
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      min-height: 4.25rem;
+    }
+
+    /* Sans JavaScript : liens visibles, repliés sous le logo, en-tête non collant */
+    .header--solid:not(.is-enhanced) {
+      position: relative;
+    }
+
+    .header:not(.is-enhanced) .bar {
+      padding-top: 0.6rem;
+    }
+
+    .nav {
+      width: 100%;
+      padding-bottom: 0.6rem;
+    }
+
+    .nav__list {
+      flex-wrap: wrap;
+      gap: 0.25rem 1.25rem;
+    }
+
+    .nav__list a {
+      min-height: 2.75rem;
+    }
+
+    .nav__item--contact {
+      margin-left: 0;
+    }
+
+    /* Avec JavaScript : panneau déroulant */
+    .is-enhanced .burger:not([hidden]) {
+      display: inline-flex;
+    }
+
+    .header--overlay.is-open {
+      background: var(--ft-white);
+      color: var(--ft-ink);
+      --logo-ridge: var(--ft-wood);
+    }
+
+    .header--overlay.is-open .bar {
+      border-bottom-color: var(--ft-line);
+    }
+
+    .is-enhanced .nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      width: auto;
+      max-height: calc(100svh - 4.25rem);
+      overflow-y: auto;
+      padding: 0.5rem var(--ft-gutter) 2rem;
+      background: var(--ft-white);
+      color: var(--ft-ink);
+      border-bottom: 1px solid var(--ft-line);
+      box-shadow: 0 28px 40px -28px rgb(34 31 28 / 0.45);
+    }
+
+    .is-enhanced.is-open .nav {
+      display: block;
+    }
+
+    .is-enhanced .nav__list {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .is-enhanced .nav__list li {
+      display: block;
+      border-bottom: 1px solid var(--ft-line);
+    }
+
+    .is-enhanced .nav__list a {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      width: 100%;
+      min-height: 0;
+      padding-block: 1rem;
+      font-family: var(--ft-serif);
+      font-size: 1.75rem;
+      font-weight: 450;
+      letter-spacing: -0.015em;
+      color: var(--ft-ink);
+    }
+
+    .is-enhanced .nav__num {
+      display: inline;
+      min-width: 1.6rem;
+      font-family: var(--ft-sans);
+      font-size: 0.8125rem;
+      font-weight: 650;
+      letter-spacing: 0.06em;
+      font-variant-numeric: tabular-nums;
+      color: var(--ft-wood-ink);
+    }
+
+    .is-enhanced .nav__list a::after {
+      display: none;
+    }
+
+    .is-enhanced .nav__list a[aria-current='page'] .nav__text {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-decoration-color: var(--ft-wood);
+      text-underline-offset: 0.22em;
+    }
+
+    .is-enhanced .nav__item--contact {
+      border-bottom: 0;
+      margin-top: 1.5rem;
+    }
+
+    .is-enhanced .nav__item--contact a,
+    .header--overlay.is-enhanced .nav__item--contact a {
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      background: var(--ft-charcoal);
+      border-color: var(--ft-charcoal);
+      color: var(--ft-white);
+      font-family: var(--ft-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .is-enhanced .nav__item--contact .nav__num {
+      display: none;
+    }
+  }
+
+  @media (max-width: 60em) and (prefers-reduced-motion: no-preference) {
+    .is-enhanced.is-open .nav {
+      animation: ft-drop 0.28s var(--ft-ease);
+    }
+  }
+
+  @keyframes ft-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+  }
+</style>

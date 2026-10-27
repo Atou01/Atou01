@@ -1,0 +1,1001 @@
+---
+// Démonstration fictive « Écluse » (plombier-chauffagiste) — page d'accueil.
+import { Picture } from 'astro:assets';
+import EcluseLayout from '../../../components/demos/ecluse/EcluseLayout.astro';
+import ContactBand from '../../../components/demos/ecluse/ContactBand.astro';
+import EIcon, { type EIconName } from '../../../components/demos/ecluse/EIcon.astro';
+import ecluse1 from '../../../assets/photos/ecluse-1.jpg';
+import ecluse2 from '../../../assets/photos/ecluse-2.jpg';
+import ecluse3 from '../../../assets/photos/ecluse-3.jpg';
+import ecluse4 from '../../../assets/photos/ecluse-4.jpg';
+import ecluse5 from '../../../assets/photos/ecluse-5.jpg';
+import ecluse6 from '../../../assets/photos/ecluse-6.jpg';
+
+const promises: { icon: EIconName; title: string; text: string }[] = [
+  { icon: 'chat', title: 'On explique d’abord', text: 'Le diagnostic et les solutions possibles, avant toute intervention.' },
+  { icon: 'clipboard', title: 'Un devis lisible', text: 'Chaque poste détaillé, en mots simples.' },
+  { icon: 'home', title: 'Un chantier respecté', text: 'Sols protégés et pièce rendue propre.' },
+  { icon: 'calendar', title: 'Un suivi dans le temps', text: 'Des conseils d’entretien adaptés à vos équipements.' },
+];
+
+const services: { id: string; icon: EIconName; title: string; text: string; featured?: boolean }[] = [
+  {
+    id: 'depannage',
+    icon: 'wrench',
+    title: 'Dépannage',
+    text: 'Fuite, robinet qui goutte, chasse d’eau, chauffe-eau en panne : on cherche l’origine avant de réparer.',
+    featured: true,
+  },
+  {
+    id: 'salle-de-bain',
+    icon: 'shower',
+    title: 'Salle de bain',
+    text: 'Rénovation complète ou douche à l’italienne, de la plomberie aux finitions.',
+  },
+  {
+    id: 'chauffage',
+    icon: 'flame',
+    title: 'Chauffage & chaudière',
+    text: 'Installation, remplacement et réglage de chaudières, radiateurs et ballons d’eau chaude.',
+  },
+  {
+    id: 'pompe-a-chaleur',
+    icon: 'heatpump',
+    title: 'Pompe à chaleur',
+    text: 'Étude de votre logement, choix du matériel et installation d’une pompe à chaleur adaptée.',
+  },
+  {
+    id: 'entretien',
+    icon: 'calendar',
+    title: 'Entretien',
+    text: 'Visites d’entretien de chaudières et de pompes à chaleur, réglages et conseils d’utilisation.',
+  },
+];
+
+const steps = [
+  { title: 'Vous décrivez la situation', text: 'Quelques lignes, une photo de la fuite ou de la plaque de l’appareil : c’est un bon début.' },
+  { title: 'Diagnostic sur place', text: 'Nous cherchons la cause, pas seulement le symptôme, et vérifions l’installation autour.' },
+  { title: 'Options et devis expliqués', text: 'Réparer ou remplacer, les avantages de chaque solution, et un devis détaillé.' },
+  { title: 'Intervention et essais', text: 'Travail soigné, mise en service devant vous et conseils pour la suite.' },
+];
+---
+
+<EcluseLayout
+  title="Écluse — démonstration fictive | Atousy"
+  description="Écluse, plombier-chauffagiste fictif : salles de bain, chauffage, pompes à chaleur, dépannage et entretien. Site de démonstration réalisé par Atousy."
+  current="accueil"
+>
+  <!-- Ouverture -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="ec-wide">
+      <div class="hero__frame">
+        <div class="hero__content">
+          <h1 id="hero-title">La chaleur et l’eau, <span class="hero__nowrap">bien installées.</span></h1>
+          <p class="hero__text">
+            Salles de bain, chauffage, pompes à chaleur et dépannage : un artisan qui explique avant d’intervenir.
+          </p>
+          <a class="ec-btn hero__btn" href="/exemples/ecluse/realisations/">
+            Voir nos réalisations
+            <span class="ec-btn__icon"><EIcon name="arrow" /></span>
+          </a>
+        </div>
+        <figure class="hero__media">
+          <Picture
+            src={ecluse1}
+            alt="Salle de bain rénovée et lumineuse : douche à l’italienne vitrée, robinetterie noire mate, meuble vasque gris-bleu et olivier en pot près de la fenêtre"
+            formats={['avif', 'webp']}
+            widths={[640, 960, 1280, 1600, 2000, 2400]}
+            sizes="(max-width: 48em) calc(100vw - 2rem), (max-width: 75em) 52vw, min(90rem, 100vw - 6rem)"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <figcaption class="hero__caption">Projet type · Douche à l’italienne</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Engagements de méthode -->
+  <section class="promises" aria-labelledby="promises-title">
+    <div class="ec-container">
+      <h2 id="promises-title" class="ec-visually-hidden">Notre façon de travailler</h2>
+      <ul class="promises__list">
+        {
+          promises.map((p) => (
+            <li class="promise">
+              <span class="promise__icon" aria-hidden="true">
+                <EIcon name={p.icon} />
+              </span>
+              <span class="promise__body">
+                <strong>{p.title}</strong>
+                <span>{p.text}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="ec-section services" aria-labelledby="services-title">
+    <div class="ec-container">
+      <div class="head">
+        <div>
+          <p class="ec-chip">Services</p>
+          <h2 id="services-title" class="ec-h2">De la petite fuite au chauffage complet.</h2>
+        </div>
+        <div class="head__side">
+          <p>
+            Un seul interlocuteur pour l’eau et la chaleur de la maison : réparer ce qui fuit, rénover ce qui a fait son
+            temps, installer ce qui chauffera mieux demain.
+          </p>
+          <a class="ec-link" href="/exemples/ecluse/services/">Tous nos services <EIcon name="arrow" /></a>
+        </div>
+      </div>
+
+      <ul class="grid">
+        {
+          services.map((s) => (
+            <li class:list={['card', s.featured && 'card--featured ec-dark']}>
+              <span class="card__icon" aria-hidden="true">
+                <EIcon name={s.icon} />
+              </span>
+              <h3 class="card__title">
+                <a href={`/exemples/ecluse/services/#${s.id}`}>{s.title}</a>
+              </h3>
+              <p class="card__text">{s.text}</p>
+              <span class="card__more" aria-hidden="true">
+                En savoir plus <EIcon name="arrow" />
+              </span>
+            </li>
+          ))
+        }
+        <li class="tile">
+          <figure>
+            <Picture
+              src={ecluse3}
+              alt="Gros plan sur des tuyaux en cuivre et un collecteur en laiton équipé de vannes à poignée noire"
+              formats={['avif', 'webp']}
+              widths={[400, 640, 900]}
+              sizes="(max-width: 40em) calc(100vw - 2rem), (max-width: 64em) 45vw, 26rem"
+            />
+            <figcaption>Des réseaux nets, faciles à entretenir.</figcaption>
+          </figure>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Méthode -->
+  <section class="ec-section method" aria-labelledby="method-title">
+    <div class="ec-container method__grid">
+      <figure class="method__media">
+        <Picture
+          src={ecluse4}
+          alt="Plombier vu de dos, agenouillé sur un tapis de protection, en train de resserrer le siphon sous un lavabo"
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960, 1280]}
+          sizes="(max-width: 60em) calc(100vw - 2rem), 38vw"
+        />
+        <figcaption class="ec-caption">Projet type · Réparation sous un lavabo</figcaption>
+      </figure>
+      <div class="method__body">
+        <p class="ec-chip">Notre méthode</p>
+        <h2 id="method-title" class="ec-h2">Comprendre d’abord, intervenir ensuite.</h2>
+        <p class="ec-lead">
+          Une installation de plomberie ou de chauffage, ça s’explique. Vous savez ce que nous faisons, pourquoi, et ce que
+          cela change pour vous.
+        </p>
+        <ol class="steps">
+          {
+            steps.map((s, i) => (
+              <li class="step">
+                <span class="step__num" aria-hidden="true">{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Réalisations -->
+  <section class="ec-section works" aria-labelledby="works-title">
+    <div class="ec-container">
+      <div class="head">
+        <div>
+          <p class="ec-chip">Réalisations</p>
+          <h2 id="works-title" class="ec-h2">Des chantiers pensés pour durer.</h2>
+        </div>
+        <div class="head__side">
+          <p>Projets types présentés à titre d’illustration : salles de bain, cuisines, chauffage et pompes à chaleur.</p>
+        </div>
+      </div>
+
+      <div class="works__grid">
+        <a class="work work--main" href="/exemples/ecluse/realisations/#cuisine">
+          <span class="work__img">
+            <Picture
+              src={ecluse6}
+              alt="Cuisine rénovée aux façades en chêne clair, plan de travail en pierre, évier inox et mitigeur col de cygne sous la fenêtre"
+              formats={['avif', 'webp']}
+              widths={[640, 960, 1280, 1600]}
+              sizes="(max-width: 48em) calc(100vw - 2rem), 56vw"
+            />
+          </span>
+          <span class="work__meta">
+            <span class="ec-caption">Projet type · Cuisine</span>
+            <span class="work__title">Une cuisine raccordée de l’arrivée d’eau à l’évacuation</span>
+          </span>
+        </a>
+        <a class="work" href="/exemples/ecluse/realisations/#pompe-a-chaleur">
+          <span class="work__img">
+            <Picture
+              src={ecluse2}
+              alt="Unité extérieure de pompe à chaleur grise posée sur un socle en béton, le long du mur d’une maison, au bord d’une pelouse"
+              formats={['avif', 'webp']}
+              widths={[480, 720, 960, 1200]}
+              sizes="(max-width: 48em) calc(100vw - 2rem), 36vw"
+            />
+          </span>
+          <span class="work__meta">
+            <span class="ec-caption">Projet type · Pompe à chaleur</span>
+            <span class="work__title">Une pompe à chaleur à la place d’une chaudière ancienne</span>
+          </span>
+        </a>
+      </div>
+
+      <a class="ec-btn ec-btn--ghost works__cta" href="/exemples/ecluse/realisations/">
+        Voir toutes les réalisations
+        <span class="ec-btn__icon"><EIcon name="arrow" /></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Entretien -->
+  <section class="care-wrap" aria-labelledby="care-title">
+    <div class="ec-wide">
+      <div class="care">
+        <div class="care__body">
+          <p class="ec-chip">Entretien</p>
+          <h2 id="care-title" class="ec-h2">L’entretien, ça se prévoit.</h2>
+          <p class="ec-lead">
+            L’entretien régulier est recommandé, pour une chaudière comme pour une pompe à chaleur : un appareil
+            vérifié et bien réglé fonctionne dans de meilleures conditions. Nous vous aidons à savoir quand prévoir une
+            visite et ce qu’elle comprend.
+          </p>
+          <ul class="ec-checks">
+            <li>Contrôle des organes de sécurité et des réglages</li>
+            <li>Nettoyage des éléments accessibles</li>
+            <li>Conseils d’utilisation pour votre logement</li>
+          </ul>
+          <a class="ec-link" href="/exemples/ecluse/entretien/">Tout savoir sur l’entretien <EIcon name="arrow" /></a>
+        </div>
+        <figure class="care__media">
+          <Picture
+            src={ecluse5}
+            alt="Local technique lumineux avec chaudière murale blanche, ballon d’eau chaude et tuyauteries en cuivre"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 60em) calc(100vw - 2rem), 42vw"
+          />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand />
+</EcluseLayout>
+
+<style>
+  /* ——— Ouverture ———
+     ≥ 75em : texte posé sur la zone calme (mur blanc) de la photo, sous un voile clair borné à la colonne.
+     48–75em : panneau partagé texte | photo.  < 48em : texte puis photo. */
+  .hero {
+    padding-top: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+
+  .hero__frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(36rem, calc(100svh - 8.5rem), 46rem);
+    border-radius: var(--ec-radius-lg);
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--ec-mist);
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero__media :global(picture) {
+    height: 100%;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+  }
+
+  .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgb(255 255 255 / 0.94) 0%,
+      rgb(255 255 255 / 0.9) 38%,
+      rgb(255 255 255 / 0.62) 49%,
+      rgb(255 255 255 / 0.18) 58%,
+      rgb(255 255 255 / 0) 66%
+    );
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: min(46%, 40rem);
+    padding: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.6rem, 4.4vw, 4.1rem);
+    line-height: 0.98;
+    letter-spacing: -0.048em;
+  }
+
+  .hero__nowrap {
+    white-space: nowrap;
+  }
+
+  .hero__text {
+    max-width: 31rem;
+    margin-top: clamp(1.25rem, 2.5vw, 1.6rem);
+    font-size: clamp(1.0938rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--ec-ink-2);
+  }
+
+  .hero__btn {
+    margin-top: clamp(1.75rem, 3vw, 2.25rem);
+  }
+
+  .hero__caption {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    padding: 0.45rem 0.9rem;
+    background: rgb(255 255 255 / 0.94);
+    border-radius: 999px;
+    color: var(--ec-ink);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 75em) {
+    .hero__frame {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      align-items: center;
+      gap: clamp(1rem, 3vw, 2.5rem);
+      min-height: clamp(30rem, 72svh, 38rem);
+      padding: clamp(0.6rem, 1vw, 0.75rem);
+      border: 1px solid var(--ec-line);
+    }
+
+    .hero__content {
+      width: auto;
+      padding: clamp(1.5rem, 3.5vw, 3rem) 0 clamp(1.5rem, 3.5vw, 3rem) clamp(1rem, 3.5vw, 3rem);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 0.6rem + 3.6vw, 3.4rem);
+    }
+
+    .hero__nowrap {
+      white-space: normal;
+    }
+
+    .hero__media {
+      position: relative;
+      inset: auto;
+      z-index: auto;
+      align-self: stretch;
+      border-radius: calc(var(--ec-radius-lg) - 0.6rem);
+      overflow: hidden;
+    }
+
+    .hero__media::after {
+      display: none;
+    }
+
+    .hero__media :global(picture) {
+      position: absolute;
+      inset: 0;
+    }
+
+    .hero__media :global(img) {
+      object-position: 60% 50%;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .hero__frame {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      min-height: 0;
+      padding: 0;
+      background: none;
+      border: 0;
+      border-radius: 0;
+      overflow: visible;
+    }
+
+    .hero__content {
+      padding: clamp(1.75rem, 6vw, 3rem) 0.25rem clamp(1.75rem, 5vw, 2.5rem);
+    }
+
+    .hero__media {
+      border-radius: var(--ec-radius-lg);
+    }
+
+    .hero__media :global(picture) {
+      position: static;
+    }
+
+    .hero__media :global(img) {
+      aspect-ratio: 4 / 3;
+      object-position: 62% 50%;
+    }
+  }
+
+  /* ——— Engagements ——— */
+  .promises {
+    padding-block: clamp(2.5rem, 5vw, 3.75rem);
+    border-bottom: 1px solid var(--ec-line);
+  }
+
+  .promises__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem clamp(1.25rem, 3vw, 2.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .promise {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .promise__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--ec-brass-soft);
+    color: var(--ec-brass-ink);
+  }
+
+  .promise__icon :global(svg) {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .promise__body {
+    display: grid;
+    gap: 0.15rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .promise__body strong {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ec-ink);
+  }
+
+  /* ——— En-têtes de section ——— */
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 1.5rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+  }
+
+  .head h2 {
+    max-width: 17ch;
+  }
+
+  .head__side {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+    max-width: 32rem;
+  }
+
+  /* ——— Services ——— */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.9rem, 1.6vw, 1.25rem);
+    margin-top: clamp(2.5rem, 5vw, 3.75rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 17rem;
+    padding: clamp(1.5rem, 2.5vw, 2rem);
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+    transition:
+      border-color 0.25s var(--ec-ease),
+      box-shadow 0.25s var(--ec-ease),
+      transform 0.25s var(--ec-ease);
+  }
+
+  .card:hover {
+    border-color: var(--ec-line-strong);
+    box-shadow: var(--ec-shadow);
+    transform: translateY(-2px);
+  }
+
+  .card:focus-within {
+    border-color: var(--ec-slate);
+  }
+
+  .card__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--ec-radius-sm);
+    background: var(--ec-mist);
+    color: var(--ec-slate);
+  }
+
+  .card__icon :global(svg) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .card__title {
+    margin-top: 2rem;
+    font-size: 1.375rem;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+  }
+
+  .card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .card__title a:focus-visible {
+    outline: none;
+  }
+
+  .card__title a:focus-visible::after {
+    outline: 2px solid var(--ec-slate);
+    outline-offset: 3px;
+  }
+
+  .card__text {
+    margin-top: 0.5rem;
+    font-size: 0.9688rem;
+  }
+
+  .card__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    color: var(--ec-slate);
+    font-size: 0.9375rem;
+    font-weight: 650;
+  }
+
+  .card__more :global(svg) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--ec-brass-ink);
+    transition: transform 0.3s var(--ec-ease);
+  }
+
+  .card:hover .card__more :global(svg) {
+    transform: translateX(3px);
+  }
+
+  .card--featured {
+    background: var(--ec-slate-deep);
+    border-color: var(--ec-slate-deep);
+  }
+
+  .card--featured .card__icon {
+    background: rgb(255 255 255 / 0.08);
+    color: var(--ec-brass-light);
+  }
+
+  .card--featured .card__text {
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  .card--featured .card__more,
+  .card--featured .card__more :global(svg) {
+    color: var(--ec-brass-light);
+  }
+
+  .card--featured .card__title a:focus-visible::after {
+    outline-color: var(--ec-brass);
+  }
+
+  .tile figure {
+    position: relative;
+    height: 100%;
+    min-height: 17rem;
+    border-radius: var(--ec-radius);
+    overflow: hidden;
+    background: var(--ec-mist-2);
+  }
+
+  .tile :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .tile :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tile figcaption {
+    position: absolute;
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: 0.85rem;
+    padding: 0.7rem 0.95rem;
+    background: rgb(255 255 255 / 0.95);
+    border-radius: var(--ec-radius-sm);
+    color: var(--ec-ink);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  /* ——— Méthode ——— */
+  .method {
+    background: var(--ec-mist);
+  }
+
+  .method__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    gap: 3rem clamp(2.5rem, 7vw, 7rem);
+    align-items: center;
+  }
+
+  .method__media {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .method__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 62% 50%;
+    border-radius: var(--ec-radius-lg);
+  }
+
+  .method__body .ec-lead {
+    margin-top: 1.25rem;
+    max-width: 34rem;
+  }
+
+  .steps {
+    position: relative;
+    display: grid;
+    gap: 1.6rem;
+    margin-top: clamp(2rem, 4vw, 2.75rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 1.2rem;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    width: 2px;
+    background: linear-gradient(var(--ec-brass), var(--ec-mist-3));
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    gap: 1.1rem;
+  }
+
+  .step__num {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--ec-white);
+    border: 2px solid var(--ec-brass);
+    color: var(--ec-ink);
+    font-size: 0.9688rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .step h3 {
+    padding-top: 0.35rem;
+    font-size: 1.125rem;
+  }
+
+  .step p {
+    margin-top: 0.3rem;
+    font-size: 0.9688rem;
+  }
+
+  /* ——— Réalisations ——— */
+  .works__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 2rem clamp(1rem, 2.5vw, 2rem);
+    align-items: start;
+    margin-top: clamp(2.5rem, 5vw, 3.75rem);
+  }
+
+  .work {
+    display: grid;
+    gap: 1rem;
+    color: var(--ec-ink);
+    text-decoration: none;
+    border-radius: var(--ec-radius);
+  }
+
+  .work__img {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--ec-radius-lg);
+    background: var(--ec-mist);
+  }
+
+  .work__img :global(img) {
+    width: 100%;
+    height: clamp(20rem, 32vw, 28rem);
+    object-fit: cover;
+    transition: transform 0.8s var(--ec-ease);
+  }
+
+  .work:hover .work__img :global(img) {
+    transform: scale(1.03);
+  }
+
+  .work__meta {
+    display: grid;
+    gap: 0.4rem;
+    padding-inline: 0.25rem;
+  }
+
+  .work__title {
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+    font-weight: 750;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.25s var(--ec-ease);
+  }
+
+  .work:hover .work__title {
+    text-decoration-color: var(--ec-brass);
+  }
+
+  .works__cta {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  /* ——— Entretien ——— */
+  .care-wrap {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  .care {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: stretch;
+    padding: clamp(0.6rem, 1vw, 0.75rem);
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius-lg);
+  }
+
+  .care__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(1.75rem, 5vw, 4.5rem) clamp(1rem, 4vw, 3.5rem);
+  }
+
+  .care__body h2 {
+    max-width: 18ch;
+  }
+
+  .care__body .ec-lead {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+  }
+
+  .care__body .ec-checks {
+    margin-block: 1.75rem 2rem;
+    color: var(--ec-ink);
+  }
+
+  .care__media {
+    position: relative;
+    min-height: 24rem;
+    border-radius: calc(var(--ec-radius-lg) - 0.6rem);
+    overflow: hidden;
+  }
+
+  .care__media :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .care__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% 50%;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 64em) {
+    .promises__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 60em) {
+    .head,
+    .method__grid,
+    .care {
+      grid-template-columns: 1fr;
+    }
+
+    .method__media :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+
+    .care__body {
+      padding: 1.75rem 0.9rem 0.75rem;
+    }
+
+    .care__media {
+      min-height: 0;
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .works__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .work__img :global(img) {
+      height: auto;
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  @media (max-width: 40em) {
+    .promises__list,
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__media :global(img) {
+      aspect-ratio: 1 / 1;
+    }
+
+    .hero__caption {
+      left: 0.85rem;
+      right: auto;
+      bottom: 0.85rem;
+    }
+
+    /* Cartes plus compactes : pictogramme et titre sur une même ligne */
+    .card {
+      display: grid;
+      grid-template-columns: 2.75rem minmax(0, 1fr);
+      align-items: center;
+      column-gap: 1rem;
+      min-height: 0;
+      padding: 1.35rem 1.25rem 1.25rem;
+    }
+
+    .card__icon {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+
+    .card__title {
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+
+    .card__text,
+    .card__more {
+      grid-column: 1 / -1;
+    }
+
+    .card__text {
+      margin-top: 0.85rem;
+    }
+
+    .card__more {
+      padding-top: 0.9rem;
+    }
+
+    .method__media :global(img),
+    .care__media {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover,
+    .work:hover .work__img :global(img),
+    .card:hover .card__more :global(svg) {
+      transform: none;
+    }
+  }
+</style>

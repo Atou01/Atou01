@@ -1,0 +1,329 @@
+---
+// Gabarit des pages Faîtage (charpentier fictif) : DemoLayout + en-tête + pied de page
+// + jetons de couleur et utilitaires partagés, limités à html[data-demo='faitage'].
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import type { FaitagePage } from './nav';
+
+interface Props {
+  title: string;
+  description: string;
+  current: FaitagePage;
+  /** 'overlay' : en-tête transparent posé sur la photo d'ouverture (desktop). */
+  header?: 'solid' | 'overlay';
+}
+const { title, description, current, header = 'solid' } = Astro.props;
+---
+
+<DemoLayout title={title} description={description} brand="faitage">
+  <Header current={current} variant={header} />
+  <main id="contenu" tabindex="-1">
+    <slot />
+  </main>
+  <Footer />
+</DemoLayout>
+
+<style is:global>
+  html[data-demo='faitage'] {
+    --ft-paper: #f7f4ee;
+    --ft-white: #fbf9f5;
+    --ft-sand: #ede6da;
+    --ft-sand-2: #e2d8c7;
+    --ft-ink: #2b2219;
+    --ft-ink-2: #5b5047;
+    --ft-charcoal: #221f1c;
+    --ft-charcoal-2: #2f2a25;
+    --ft-wood: #b06d34;
+    --ft-wood-ink: #8f5426;
+    --ft-wood-light: #d9a66d;
+    --ft-line: rgb(43 34 25 / 0.14);
+    --ft-line-strong: rgb(43 34 25 / 0.28);
+    --ft-line-light: rgb(251 249 245 / 0.16);
+    --ft-serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+    --ft-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    --ft-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --ft-gutter: clamp(1rem, 4.5vw, 3.5rem);
+    --ft-max: 82rem;
+    background: var(--ft-paper);
+    scroll-padding-top: 6rem;
+  }
+
+  html[data-demo='faitage'] body {
+    background: var(--ft-paper);
+    color: var(--ft-ink);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+
+  html[data-demo='faitage'] main:focus {
+    outline: none;
+  }
+
+  html[data-demo='faitage'] ::selection {
+    background: #ecd3b4;
+    color: var(--ft-ink);
+  }
+
+  html[data-demo='faitage'] :focus-visible {
+    outline: 2px solid var(--ft-wood-ink);
+    outline-offset: 3px;
+  }
+
+  html[data-demo='faitage'] .ft-dark :focus-visible,
+  html[data-demo='faitage'] .ft-on-photo :focus-visible {
+    outline-color: var(--ft-wood-light);
+  }
+
+  html[data-demo='faitage'] h1,
+  html[data-demo='faitage'] h2 {
+    font-family: var(--ft-serif);
+    font-weight: 450;
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+    color: var(--ft-ink);
+    text-wrap: balance;
+  }
+
+  html[data-demo='faitage'] h3 {
+    font-family: var(--ft-sans);
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--ft-ink);
+    text-wrap: balance;
+  }
+
+  html[data-demo='faitage'] p {
+    text-wrap: pretty;
+  }
+
+  html[data-demo='faitage'] .ft-dark,
+  html[data-demo='faitage'] .ft-dark h2,
+  html[data-demo='faitage'] .ft-dark h3 {
+    color: var(--ft-white);
+  }
+
+  /* ——— Utilitaires ——— */
+  .ft-container {
+    width: min(var(--ft-max), 100% - 2 * var(--ft-gutter));
+    margin-inline: auto;
+  }
+
+  .ft-section {
+    padding-block: clamp(4.5rem, 9vw, 8.5rem);
+  }
+
+  .ft-dark {
+    background: var(--ft-charcoal);
+  }
+
+  /* Le lien « Aller au contenu » est fourni par DemoLayout, avant le bandeau (premier arrêt au clavier). */
+
+  /* Étiquette numérotée : « 01 / Savoir-faire » */
+  .ft-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+    font-family: var(--ft-sans);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--ft-ink);
+  }
+
+  .ft-label__num {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--ft-wood-ink);
+  }
+
+  .ft-label__num::after {
+    content: '/';
+    margin-left: 0.6rem;
+    color: var(--ft-line-strong);
+  }
+
+  .ft-dark .ft-label {
+    color: var(--ft-white);
+  }
+
+  .ft-dark .ft-label__num {
+    color: var(--ft-wood-light);
+  }
+
+  .ft-dark .ft-label__num::after {
+    color: rgb(251 249 245 / 0.35);
+  }
+
+  .ft-h2 {
+    font-size: clamp(2.2rem, 1.4rem + 2.8vw, 3.7rem);
+  }
+
+  .ft-lead {
+    font-size: clamp(1.125rem, 1.03rem + 0.35vw, 1.3125rem);
+    line-height: 1.6;
+    color: var(--ft-ink-2);
+  }
+
+  .ft-dark .ft-lead {
+    color: rgb(251 249 245 / 0.8);
+  }
+
+  .ft-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.4rem;
+    background: var(--ft-charcoal);
+    color: var(--ft-white);
+    border: 1px solid var(--ft-charcoal);
+    border-radius: 2px;
+    font-family: var(--ft-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      background-color 0.25s var(--ft-ease),
+      color 0.25s var(--ft-ease),
+      border-color 0.25s var(--ft-ease);
+  }
+
+  .ft-btn:hover {
+    background: var(--ft-wood-ink);
+    border-color: var(--ft-wood-ink);
+  }
+
+  .ft-btn svg {
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
+    transition: transform 0.3s var(--ft-ease);
+  }
+
+  .ft-btn:hover svg,
+  .ft-link:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  .ft-btn--light {
+    background: var(--ft-white);
+    color: var(--ft-ink);
+    border-color: var(--ft-white);
+  }
+
+  .ft-btn--light:hover {
+    background: var(--ft-sand);
+    border-color: var(--ft-sand);
+    color: var(--ft-ink);
+  }
+
+  .ft-btn--outline {
+    background: transparent;
+    color: var(--ft-ink);
+    border-color: var(--ft-line-strong);
+  }
+
+  .ft-btn--outline:hover {
+    background: var(--ft-charcoal);
+    border-color: var(--ft-charcoal);
+    color: var(--ft-white);
+  }
+
+  .ft-dark .ft-btn--outline {
+    color: var(--ft-white);
+    border-color: rgb(251 249 245 / 0.4);
+  }
+
+  .ft-dark .ft-btn--outline:hover {
+    background: var(--ft-white);
+    border-color: var(--ft-white);
+    color: var(--ft-ink);
+  }
+
+  .ft-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding-block: 0.25rem;
+    color: var(--ft-ink);
+    font-weight: 650;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.4em;
+    text-decoration-color: var(--ft-wood);
+    transition: color 0.25s var(--ft-ease);
+  }
+
+  .ft-link:hover {
+    color: var(--ft-wood-ink);
+  }
+
+  .ft-link svg {
+    width: 1.05em;
+    height: 1.05em;
+    flex: none;
+    color: var(--ft-wood-ink);
+    transition: transform 0.3s var(--ft-ease);
+  }
+
+  .ft-dark .ft-link {
+    color: var(--ft-white);
+    text-decoration-color: var(--ft-wood-light);
+  }
+
+  .ft-dark .ft-link svg {
+    color: var(--ft-wood-light);
+  }
+
+  .ft-dark .ft-link:hover {
+    color: var(--ft-wood-light);
+  }
+
+  /* Légende « Projet type · … » sur les photos */
+  .ft-caption {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ft-ink-2);
+  }
+
+  .ft-caption::before {
+    content: '';
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-top: 2px solid var(--ft-wood);
+    border-left: 2px solid var(--ft-wood);
+    transform: translateY(0.05rem) rotate(45deg);
+  }
+
+  .ft-visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ft-btn:hover svg,
+    .ft-link:hover svg {
+      transform: none;
+    }
+  }
+</style>

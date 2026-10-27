@@ -1,0 +1,481 @@
+---
+// Démonstration fictive « Moellon » (maçon, rénovation) — page Chantiers (projets types).
+// Aucun chantier réel : chaque projet est présenté comme « Projet type ».
+import { Picture } from 'astro:assets';
+import MoellonLayout from '../../../../components/demos/moellon/MoellonLayout.astro';
+import PageHead from '../../../../components/demos/moellon/PageHead.astro';
+import ContactBand from '../../../../components/demos/moellon/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/moellon/RealSiteNote.astro';
+import MIcon from '../../../../components/demos/moellon/MIcon.astro';
+import moellon1 from '../../../../assets/photos/moellon-1.jpg';
+import moellon2 from '../../../../assets/photos/moellon-2.jpg';
+import moellon4 from '../../../../assets/photos/moellon-4.jpg';
+import moellon5 from '../../../../assets/photos/moellon-5.jpg';
+import moellon6 from '../../../../assets/photos/moellon-6.jpg';
+
+type Spec = [string, string];
+const projects: Record<string, { kind: string; title: string; text: string; specs: Spec[] }> = {
+  maison: {
+    kind: 'Rénovation d’une maison ancienne',
+    title: 'Une maison de pierre retrouve sa lumière',
+    text: 'Une maison ancienne aux enduits ciment fatigués : décroûtage, rejointoiement à la chaux, reprise des encadrements en pierre de taille et remplacement des appuis abîmés. La façade respire à nouveau et retrouve la teinte chaude de sa pierre.',
+    specs: [
+      ['Travaux', 'Décroûtage, rejointoiement, reprise des encadrements'],
+      ['Matériaux', 'Chaux naturelle, pierre de réemploi'],
+      ['Esprit', 'Garder la patine, corriger les désordres'],
+    ],
+  },
+  baie: {
+    kind: 'Ouverture dans un mur porteur',
+    title: 'Une baie entre la grange et le jardin',
+    text: 'Dans une ancienne grange transformée en pièce de vie, un large passage est créé vers l’extérieur : étaiement, poutre métallique sur appuis repris, puis tableaux reconstitués en pierre.',
+    specs: [
+      ['Travaux', 'Étaiement, linteau acier, jambages'],
+      ['Matériaux', 'Acier, pierre de réemploi, chaux'],
+      ['Point clé', 'Descente de charges étudiée en amont'],
+    ],
+  },
+  extension: {
+    kind: 'Extension maçonnée',
+    title: 'Une pièce de vie accolée à la maison',
+    text: 'Fondations, élévation en blocs, chaînages et dalle haute pour une extension de plain-pied ouverte sur le jardin, raccordée à la maison existante et prête à recevoir menuiseries et couverture.',
+    specs: [
+      ['Travaux', 'Fondations, élévation, chaînages, dalle'],
+      ['Matériaux', 'Béton armé, blocs béton'],
+      ['Point clé', 'Une liaison soignée avec l’existant'],
+    ],
+  },
+  interieur: {
+    kind: 'Rénovation intérieure',
+    title: 'Un mur de pierre remis à nu',
+    text: 'Dans un séjour, un mur en moellons longtemps caché sous le plâtre est dégagé, nettoyé et rejointoyé à la chaux ; une nouvelle baie est percée et le sol repris pour recevoir un parquet.',
+    specs: [
+      ['Travaux', 'Piquage, rejointoiement, ouverture, sol'],
+      ['Matériaux', 'Chaux, pierre, chape'],
+      ['Esprit', 'Une pièce claire, une pierre qui respire'],
+    ],
+  },
+  joints: {
+    kind: 'Murs et joints à la chaux',
+    title: 'Des joints refaits à la main',
+    text: 'Sur une façade aux joints creusés par le temps : dégarnissage, nettoyage, puis regarnissage à la chaux, joint par joint, avec une finition brossée qui laisse la pierre au premier plan.',
+    specs: [
+      ['Travaux', 'Dégarnissage, regarnissage, finition brossée'],
+      ['Matériaux', 'Chaux naturelle, sables choisis'],
+      ['Point clé', 'Une teinte validée sur échantillon'],
+    ],
+  },
+};
+---
+
+<MoellonLayout
+  title="Chantiers — Moellon, démonstration fictive | Atousy"
+  description="Chantiers types de Moellon, maçon fictif : rénovation de maison en pierre, ouverture de mur porteur, extension maçonnée, rejointoiement à la chaux. Démonstration Atousy."
+  current="chantiers"
+>
+  <PageHead
+    kicker="Chantiers"
+    title="Des chantiers à hauteur de maison."
+    lead="Ces projets types illustrent notre travail : rénovation, ouverture, extension, rejointoiement. Ils ne décrivent pas des chantiers réels, mais la façon dont nous les menons."
+  >
+    <RealSiteNote>vos chantiers réels, photographiés et décrits avec l’accord de vos clients.</RealSiteNote>
+  </PageHead>
+
+  <!-- 01 — grande photo d'ouverture -->
+  <article class="feature" id="maison-pierre" aria-labelledby="p1-title">
+    <div class="mo-container">
+      <div class="feature__media">
+        <Picture
+          src={moellon1}
+          alt="Façade d’une maison ancienne en pierre calcaire restaurée, encadrements de fenêtres en pierre de taille, cour en gravier et lumière du soir"
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280, 1680, 2200]}
+          sizes="(max-width: 84rem) 92vw, 84rem"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <span class="feature__num" aria-hidden="true">01</span>
+      </div>
+      <div class="feature__row">
+        <div class="feature__head">
+          <p class="mo-caption">Projet type · {projects.maison.kind}</p>
+          <h2 id="p1-title" class="proj__title proj__title--lg">{projects.maison.title}</h2>
+        </div>
+        <p class="proj__text">{projects.maison.text}</p>
+        <dl class="specs">
+          {projects.maison.specs.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      </div>
+    </div>
+  </article>
+
+  <!-- 02 + 03 — deux colonnes décalées -->
+  <section class="mo-section pair" aria-label="Projets types 02 et 03">
+    <div class="mo-container pair__grid">
+      <article class="proj" id="baie" aria-labelledby="p2-title">
+        <div class="proj__img">
+          <Picture
+            src={moellon5}
+            alt="Large ouverture créée dans un mur porteur en pierre d’une ancienne grange, poutre métallique sur étais, jardin en arrière-plan"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 48em) 100vw, 45vw"
+          />
+        </div>
+        <span class="proj__num" aria-hidden="true">02</span>
+        <p class="mo-caption">Projet type · {projects.baie.kind}</p>
+        <h2 id="p2-title" class="proj__title">{projects.baie.title}</h2>
+        <p class="proj__text">{projects.baie.text}</p>
+        <dl class="specs">
+          {projects.baie.specs.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      </article>
+
+      <article class="proj proj--offset" id="extension" aria-labelledby="p3-title">
+        <div class="proj__img">
+          <Picture
+            src={moellon2}
+            alt="Extension maçonnée en blocs béton en cours de construction contre une maison, échafaudages et palettes de blocs"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 48em) 100vw, 45vw"
+          />
+        </div>
+        <span class="proj__num" aria-hidden="true">03</span>
+        <p class="mo-caption">Projet type · {projects.extension.kind}</p>
+        <h2 id="p3-title" class="proj__title">{projects.extension.title}</h2>
+        <p class="proj__text">{projects.extension.text}</p>
+        <dl class="specs">
+          {projects.extension.specs.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <!-- 04 — photo pleine largeur et carte superposée -->
+  <article class="overlay" id="interieur" aria-labelledby="p4-title">
+    <div class="overlay__media">
+      <Picture
+        src={moellon6}
+        alt="Séjour rénové, mur en moellons apparent rejointoyé à la chaux, grande baie vitrée sur le jardin et parquet de chêne clair"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1680, 2200]}
+        sizes="100vw"
+      />
+    </div>
+    <div class="mo-container overlay__row">
+      <div class="overlay__card">
+        <span class="proj__num" aria-hidden="true">04</span>
+        <p class="mo-caption">Projet type · {projects.interieur.kind}</p>
+        <h2 id="p4-title" class="proj__title">{projects.interieur.title}</h2>
+        <p class="proj__text">{projects.interieur.text}</p>
+        <dl class="specs">
+          {projects.interieur.specs.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      </div>
+      <RealSiteNote class="overlay__note">les photos avant et après de chaque chantier, publiées avec l’accord de vos clients.</RealSiteNote>
+    </div>
+  </article>
+
+  <!-- 05 — photo et texte côte à côte -->
+  <article class="mo-section split" id="rejointoiement" aria-labelledby="p5-title">
+    <div class="mo-container split__grid">
+      <div class="proj__img split__media">
+        <Picture
+          src={moellon4}
+          alt="Mains d’un maçon regarnissant à la truelle les joints d’un mur en pierre, taloche de mortier de chaux à la main"
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960, 1280]}
+          sizes="(max-width: 56em) 100vw, 42vw"
+        />
+      </div>
+      <div class="split__body">
+        <span class="proj__num" aria-hidden="true">05</span>
+        <p class="mo-caption">Projet type · {projects.joints.kind}</p>
+        <h2 id="p5-title" class="proj__title">{projects.joints.title}</h2>
+        <p class="proj__text">{projects.joints.text}</p>
+        <dl class="specs">
+          {projects.joints.specs.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+        <a class="mo-btn mo-btn--ink split__btn" href="/exemples/moellon/savoir-faire/">Découvrir notre savoir-faire <MIcon name="arrow" /></a>
+      </div>
+    </div>
+  </article>
+
+  <ContactBand title="Votre maison pourrait être le prochain chantier." />
+</MoellonLayout>
+
+<style>
+  /* ——— Éléments communs ——— */
+  .proj__num {
+    display: block;
+    font-family: var(--mo-serif);
+    font-size: clamp(2.75rem, 2rem + 2.4vw, 4.25rem);
+    font-weight: 250;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--mo-terra);
+  }
+
+  .proj__title {
+    margin-top: 0.85rem;
+    font-size: clamp(1.85rem, 1.3rem + 1.7vw, 2.75rem);
+  }
+
+  .proj__title--lg {
+    font-size: clamp(2.2rem, 1.4rem + 2.6vw, 3.6rem);
+  }
+
+  .proj__text {
+    margin-top: 1rem;
+    color: var(--mo-ink-2);
+  }
+
+  .proj__img :global(img) {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .specs {
+    display: grid;
+    margin: 1.5rem 0 0;
+    border-top: 1px solid var(--mo-line-strong);
+  }
+
+  .specs div {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--mo-line);
+  }
+
+  .specs dt {
+    padding-top: 0.15rem;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mo-terra-ink);
+  }
+
+  .specs dd {
+    margin: 0;
+    font-size: 0.975rem;
+  }
+
+  /* ——— 01 ——— */
+  .feature__media {
+    position: relative;
+  }
+
+  .feature__media :global(img) {
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+    object-position: 60% 55%;
+  }
+
+  .feature__num {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0.9rem 1.25rem 0.6rem;
+    background-color: var(--mo-lime);
+    background-image: var(--mo-grain);
+    font-family: var(--mo-serif);
+    font-size: clamp(2.75rem, 2rem + 2.4vw, 4.25rem);
+    font-weight: 250;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--mo-terra-ink);
+  }
+
+  .feature__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.95fr);
+    gap: 2rem clamp(2rem, 4vw, 4rem);
+    align-items: start;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .feature__row .proj__text {
+    margin-top: 0.15rem;
+  }
+
+  .feature__row .specs {
+    margin-top: 0.4rem;
+  }
+
+  /* ——— 02 + 03 ——— */
+  .pair__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3.5rem clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .proj {
+    display: grid;
+    justify-items: start;
+  }
+
+  .proj .proj__img {
+    width: 100%;
+    margin-bottom: 1.75rem;
+  }
+
+  .proj .proj__img :global(img) {
+    aspect-ratio: 4 / 5;
+  }
+
+  .proj .proj__num {
+    margin-bottom: 1rem;
+  }
+
+  .proj .specs {
+    width: 100%;
+  }
+
+  .proj--offset {
+    margin-top: clamp(4rem, 12vw, 10rem);
+  }
+
+  /* ——— 04 ——— */
+  .overlay {
+    position: relative;
+    padding-bottom: clamp(1rem, 3vw, 2rem);
+  }
+
+  .overlay__media :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    min-height: 26rem;
+    object-fit: cover;
+    object-position: 50% 55%;
+  }
+
+  .overlay__row {
+    display: grid;
+    grid-template-columns: minmax(0, 40rem) minmax(0, 22rem);
+    justify-content: space-between;
+    align-items: end;
+    gap: 2rem;
+  }
+
+  .overlay__row :global(.overlay__note) {
+    margin-bottom: 0.5rem;
+  }
+
+  .overlay__card {
+    position: relative;
+    max-width: 40rem;
+    margin-top: clamp(-12rem, -14vw, -6rem);
+    padding: clamp(1.75rem, 4vw, 3rem);
+    background: var(--mo-cream);
+    box-shadow: 0 30px 50px -36px rgb(43 33 26 / 0.55);
+  }
+
+  .overlay__card .proj__num {
+    margin-bottom: 1rem;
+  }
+
+  /* ——— 05 ——— */
+  .split {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    background-color: var(--mo-lime-deep);
+  }
+
+  .split__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3rem clamp(2.5rem, 7vw, 7rem);
+    align-items: center;
+  }
+
+  .split__media :global(img) {
+    aspect-ratio: 1 / 1;
+    object-position: 45% 50%;
+  }
+
+  .split__body {
+    max-width: 34rem;
+  }
+
+  .split__body .proj__num {
+    margin-bottom: 1rem;
+  }
+
+  .split__btn {
+    margin-top: 2.25rem;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 60em) {
+    .feature__row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .feature__head {
+      grid-column: 1 / -1;
+    }
+
+    /* Projet 04 : la carte garde sa largeur de lecture, l'encart passe dessous */
+    .overlay__row {
+      grid-template-columns: minmax(0, 40rem);
+    }
+  }
+
+  @media (max-width: 56em) {
+    .split__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .split__media :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .feature__row,
+    .pair__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .feature__media :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+
+    .proj--offset {
+      margin-top: 1rem;
+    }
+
+    .proj .proj__img :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+
+    .overlay__media :global(img) {
+      aspect-ratio: 4 / 3;
+      min-height: 0;
+    }
+
+    .overlay__card {
+      margin-top: -3rem;
+    }
+
+    .overlay__row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 36em) {
+    .specs div {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+
+    .overlay__card {
+      margin-inline: calc(-0.5 * var(--mo-gutter));
+    }
+  }
+</style>

@@ -1,0 +1,178 @@
+---
+// Ouverture des pages intérieures Lueur : fond nuit, halo ambré, titre + chapeau, photo optionnelle (chargée en priorité).
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  label: string;
+  title: string;
+  lead: string;
+  image?: ImageMetadata;
+  alt?: string;
+  caption?: string;
+  /** position de l'image dans son cadre (object-position) */
+  focus?: string;
+}
+const { label, title, lead, image, alt = '', caption, focus = '50% 50%' } = Astro.props;
+---
+
+<section class:list={['phero', image ? 'phero--media' : 'phero--text']} aria-labelledby="page-title">
+  <div class="phero__glow" aria-hidden="true"></div>
+  {
+    !image && (
+      <svg class="phero__filament" viewBox="0 0 280 300" fill="none" stroke-linecap="round" aria-hidden="true" focusable="false">
+        <path class="phero__filament-halo" d="M60 230c0-118 36-180 80-180s80 62 80 180" />
+        <path class="phero__filament-arc" d="M60 230c0-118 36-180 80-180s80 62 80 180" />
+        <path class="phero__filament-leads" d="M60 230v70M220 230v70" />
+        <circle class="phero__filament-spark" cx="140" cy="14" r="5" />
+      </svg>
+    )
+  }
+  <div class="lu-container phero__grid">
+    <div class="phero__copy">
+      <p class="lu-label">{label}</p>
+      <h1 id="page-title">{title}</h1>
+      <p class="phero__lead">{lead}</p>
+      <slot />
+    </div>
+    {
+      image && (
+        <figure class="phero__media">
+          <div class="lu-frame phero__frame" style={`--focus: ${focus}`}>
+            <Picture
+              src={image}
+              alt={alt}
+              formats={['avif', 'webp']}
+              widths={[480, 720, 960, 1280, 1600]}
+              sizes="(max-width: 60em) calc(100vw - 2rem), 44vw"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+          {caption && <figcaption class="lu-caption">{caption}</figcaption>}
+        </figure>
+      )
+    }
+  </div>
+  <slot name="after" />
+</section>
+
+<style>
+  .phero {
+    position: relative;
+    padding-block: clamp(3.5rem, 8vw, 6.5rem) clamp(3.5rem, 7vw, 6rem);
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .phero__glow {
+    position: absolute;
+    z-index: -1;
+    top: -30%;
+    right: -10%;
+    width: min(60rem, 120vw);
+    aspect-ratio: 1;
+    background: radial-gradient(closest-side, rgb(242 180 90 / 0.16), rgb(242 180 90 / 0.05) 50%, transparent 100%);
+  }
+
+  .phero--text .phero__glow {
+    right: auto;
+    left: 50%;
+    transform: translateX(-20%);
+  }
+
+  .phero__filament {
+    position: absolute;
+    z-index: -1;
+    right: max(var(--lu-gutter), calc((100% - var(--lu-max)) / 2 + 2rem));
+    bottom: 0;
+    width: clamp(10rem, 22vw, 18rem);
+    height: auto;
+    overflow: visible;
+    -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 96%);
+    mask-image: linear-gradient(180deg, #000 72%, transparent 96%);
+  }
+
+  .phero__filament-halo {
+    stroke: var(--lu-amber);
+    stroke-width: 16;
+    opacity: 0.12;
+    filter: blur(10px);
+  }
+
+  .phero__filament-arc {
+    stroke: var(--lu-amber);
+    stroke-width: 2;
+    opacity: 0.75;
+  }
+
+  .phero__filament-leads {
+    stroke: rgb(245 239 228 / 0.28);
+    stroke-width: 2;
+  }
+
+  .phero__filament-spark {
+    fill: var(--lu-amber);
+    filter: drop-shadow(0 0 8px rgb(242 180 90 / 0.9));
+  }
+
+  .phero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .phero--text .phero__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .phero h1 {
+    max-width: 14ch;
+    font-size: clamp(2.6rem, 1.5rem + 4vw, 5rem);
+    font-weight: 360;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--lu-ivory);
+  }
+
+  .phero--text h1 {
+    max-width: 18ch;
+  }
+
+  .phero__lead {
+    max-width: 40ch;
+    margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--lu-dim);
+  }
+
+  .phero__frame {
+    aspect-ratio: 5 / 4;
+  }
+
+  .phero__frame :global(img) {
+    object-position: var(--focus);
+  }
+
+  .phero__media .lu-caption {
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 60em) {
+    .phero__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .phero__filament {
+      display: none;
+    }
+
+    .phero__frame {
+      aspect-ratio: 3 / 2;
+    }
+  }
+</style>

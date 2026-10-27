@@ -1,0 +1,255 @@
+---
+import InnerLayout from '../../components/pages/InnerLayout.astro';
+import PageHero from '../../components/pages/PageHero.astro';
+import Section from '../../components/pages/Section.astro';
+import DemoWindow from '../../components/pages/DemoWindow.astro';
+import Price from '../../components/Price.astro';
+import Icon from '../../components/Icon.astro';
+import { offerExclusions } from '../../data/site';
+
+const included = [
+  'Jusqu’à 5 pages, dans une langue',
+  'L’adaptation au mobile',
+  'Des textes préparés à partir des informations que vous validez',
+  'Un formulaire de contact ou de demande de devis',
+  'Les bases du référencement local',
+  'Deux séries de corrections groupées',
+  'La mise en ligne et la remise de tous les accès',
+];
+
+const features = [
+  { title: 'L’essentiel, tout de suite', text: 'Ce que vous faites, où vous intervenez, comment vous joindre.' },
+  { title: 'Un chemin clair vers le devis', text: 'Chaque page mène à la prise de contact.' },
+  { title: 'Votre travail, présenté avec soin', text: 'Une mise en page soignée, des photos légères, une lecture confortable.' },
+];
+
+const steps = ['Le devis', 'La maquette', 'La livraison'];
+---
+
+<InnerLayout
+  title="Création de site vitrine pour artisans | Atousy"
+  description="Atousy crée votre site vitrine : jusqu’à 5 pages, adapté au mobile, avec formulaire de devis et bases du référencement local. Un cadre clair, étape par étape."
+  crumb="Création de site"
+  ctaTitle="Parlons de votre projet."
+  ctaText="Dites-nous ce que vous faites et ce que votre site doit apporter."
+  ctaHref="/devis/?type=creation"
+>
+  <PageHero
+    crumb="Création de site"
+    title={'Un site neuf,\npensé pour votre métier.'}
+    lead="Pas encore de site ? Nous créons votre site vitrine : une image professionnelle et un chemin simple vers la demande de devis."
+  >
+    <Fragment slot="actions">
+      <a class="btn btn--coral" href="/devis/?type=creation">Demander un devis <Icon name="arrow" /></a>
+      <a class="btn btn--outline" href="/exemples/">Voir les exemples <Icon name="arrow" /></a>
+    </Fragment>
+    <a slot="media" class="preview" href="/exemples/faitage/">
+      <span class="visually-hidden">Voir la démonstration fictive Faîtage, charpentier</span>
+      <span class="preview__frame">
+        <DemoWindow
+          id="faitage-accueil"
+          eager
+          priority
+          sizes="(max-width: 62.49em) 92vw, 50vw"
+        />
+      </span>
+      <span class="preview__caption" aria-hidden="true">
+        <span class="preview__name">Faîtage · Charpentier</span>
+        <span class="preview__meta">Démonstration fictive</span>
+      </span>
+    </a>
+  </PageHero>
+
+  <Section id="pour-qui" title="Pour qui ?">
+    <div class="ip-text">
+      <p class="big">Les artisans, les TPE et les PME. En priorité les métiers du bâtiment et les services de proximité.</p>
+    </div>
+    <p class="aside-link">
+      Vous avez déjà un site ?{' '}
+      <a class="link-arrow" href="/refonte/"><span>Découvrir la refonte</span><Icon name="arrow" /></a>
+    </p>
+  </Section>
+
+  <Section id="comprend" title="Ce que comprend votre site">
+    <ul class="ip-list ip-list--num">
+      {included.map((item) => <li>{item}</li>)}
+    </ul>
+    <ul class="ip-links">
+      <li><a class="link-arrow" href="/offre/"><span>Voir le détail de l’offre</span><Icon name="arrow" /></a></li>
+    </ul>
+  </Section>
+
+  <Section id="pense-pour-vous" title="Pensé pour votre activité" layout="stack">
+    <ul class="features">
+      {
+        features.map((f) => (
+          <li>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section id="deroulement" title="Comment ça se passe" lead="Vous validez à chaque étape." layout="stack">
+    <ol class="steps">
+      {
+        steps.map((s, i) => (
+          <li>
+            <span class="steps__num" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span class="steps__title">{s}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <ul class="ip-links">
+      <li><a class="link-arrow" href="/methode/"><span>Découvrir la méthode</span><Icon name="arrow" /></a></li>
+    </ul>
+  </Section>
+
+  <Section id="tarif" title="Le tarif" tone="marine">
+    <Price />
+    <p class="ip-exclusions">{offerExclusions} Ils sont chiffrés à part.</p>
+    <ul class="ip-links">
+      <li><a class="link-arrow" href="/offre/"><span>Voir le détail de l’offre</span><Icon name="arrow" /></a></li>
+    </ul>
+  </Section>
+</InnerLayout>
+
+<style>
+  /* Aperçu de démo dans l'en-tête */
+  .preview {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    border-radius: var(--radius);
+  }
+
+  .preview:focus-visible {
+    outline-offset: 6px;
+  }
+
+  .preview__frame {
+    display: block;
+    border-radius: 3px;
+    box-shadow:
+      0 0 0 1px rgb(15 35 41 / 0.08),
+      0 30px 60px -30px rgb(40 30 20 / 0.45),
+      0 12px 24px -16px rgb(40 30 20 / 0.25);
+    transition: transform 0.45s var(--ease);
+  }
+
+  .preview:hover .preview__frame {
+    transform: translateY(-4px);
+  }
+
+  .preview__caption {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 1rem;
+  }
+
+  .preview__name {
+    font-size: 1.0625rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .preview__meta {
+    width: max-content;
+    padding-bottom: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+    background: linear-gradient(var(--coral), var(--coral)) left bottom / 2.4rem 2px no-repeat;
+    transition: background-size 0.3s var(--ease);
+  }
+
+  .preview:hover .preview__meta {
+    background-size: 100% 2px;
+  }
+
+  .ip-text .big {
+    font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .aside-link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    margin-top: 2rem;
+    font-size: 1.0625rem;
+    color: var(--ink-2);
+  }
+
+  .aside-link .link-arrow {
+    color: var(--ink);
+  }
+
+  /* Trois atouts (même écriture que les étapes de l'accueil) */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem clamp(1.5rem, 4.5vw, 4.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .features h3 {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--line-strong);
+    font-size: clamp(1.15rem, 1.45vw, 1.375rem);
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .features p {
+    margin-top: 0.85rem;
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem clamp(1.5rem, 4.5vw, 4.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(1rem, 2vw, 2rem);
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .steps__num {
+    font-size: clamp(1.5rem, 1.9vw, 1.9rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #75828a;
+  }
+
+  .steps__title {
+    font-size: clamp(1.15rem, 1.45vw, 1.375rem);
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+
+  @media (max-width: 52em) {
+    .features,
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

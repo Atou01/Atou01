@@ -1,0 +1,145 @@
+---
+import { footerNav, legalNav, site } from '../data/site';
+import MarketSelect from './MarketSelect.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__main">
+    <a class="site-footer__logo" href="/">
+      <img src="/brand/atousy-logo-complet.svg" width="150" height="66" alt="Atousy, studio web & design — accueil" loading="lazy" />
+    </a>
+    <nav aria-label="Pied de page">
+      <ul class="site-footer__nav">
+        {footerNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <MarketSelect id="market-footer" class="site-footer__market" />
+  </div>
+  <div class="container site-footer__legal">
+    <p>© {year} {site.name} · Studio web & design · Création et refonte de sites</p>
+    <a class="site-footer__mail" href="mailto:contact@atousy.com">contact@atousy.com</a>
+    <ul>
+      {legalNav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+    </ul>
+    <p class="site-footer__note">Les exemples présentés sont des démonstrations fictives.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ivory);
+    padding-block: 2.25rem 1.75rem;
+  }
+
+  .site-footer__main {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem 3rem;
+  }
+
+  .site-footer__logo img {
+    width: clamp(7.5rem, 10.5vw, 9.4rem);
+  }
+
+  nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .site-footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem clamp(1.5rem, 3.5vw, 3.75rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Cible d'au moins 24 px de haut (le texte, lui, garde sa taille). */
+  .site-footer__nav a,
+  .site-footer__legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  /* Survol : soulignement corail, le texte reste en encre (contraste). */
+  .site-footer__nav a:hover,
+  .site-footer__legal a:hover {
+    text-decoration: underline 2px var(--coral);
+    text-underline-offset: 0.3em;
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 2rem;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+
+  /* Trois liens légaux : sur un téléphone, ils passent à la ligne entiers plutôt que de
+     couper « Mentions légales » ou « Conditions générales de vente » sur deux lignes. */
+  .site-footer__legal ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__legal a {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+
+  .site-footer__note {
+    margin-left: auto;
+  }
+
+  /* Tablette : logo et pays sur la première ligne, les six liens sur une seule ligne dessous
+     (sinon « Devis » passait seul à la ligne). */
+  @media (min-width: 48em) and (max-width: 62.49em) {
+    nav {
+      order: 3;
+      flex-basis: 100%;
+      justify-content: flex-start;
+    }
+
+    :global(.site-footer__market) {
+      margin-left: auto;
+    }
+  }
+
+  @media (max-width: 47.99em) {
+    nav {
+      flex-basis: 100%;
+      justify-content: flex-start;
+    }
+
+    .site-footer__nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem 1.5rem;
+      width: 100%;
+    }
+
+    .site-footer__nav a {
+      font-size: 1rem;
+    }
+
+    .site-footer__note {
+      margin-left: 0;
+    }
+  }
+</style>

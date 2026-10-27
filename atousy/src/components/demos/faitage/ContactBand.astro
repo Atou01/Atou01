@@ -1,0 +1,84 @@
+---
+// Bandeau d'appel à l'action, en fin de page : vers la page Contact de la démo.
+import Icon from '../../Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'Un projet de charpente, d’extension ou de rénovation ?',
+  text = 'Décrivez-nous votre projet en quelques lignes : nous revenons vers vous pour organiser une première visite.',
+} = Astro.props;
+---
+
+<section class="band" aria-labelledby="ft-band-title">
+  <div class="ft-container band__inner">
+    <svg class="band__ridge" viewBox="0 0 120 52" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" aria-hidden="true" focusable="false">
+      <path d="M4 48 60 4l56 44" />
+      <path d="M22 48 60 18l38 30" />
+      <path d="M40 48 60 32l20 16" />
+    </svg>
+    <div class="band__text">
+      <h2 id="ft-band-title" class="band__title">{title}</h2>
+      <p>{text}</p>
+    </div>
+    <a class="ft-btn ft-btn--light band__btn" href="/exemples/faitage/contact/">
+      Parler de votre projet <Icon name="arrow" />
+    </a>
+  </div>
+</section>
+
+<style>
+  .band {
+    padding-block: clamp(3.5rem, 7vw, 5.5rem);
+    background: var(--ft-wood-ink);
+    color: var(--ft-white);
+  }
+
+  .band__inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 2rem clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .band__ridge {
+    width: clamp(4.5rem, 8vw, 7rem);
+    color: rgb(251 249 245 / 0.55);
+  }
+
+  .band__title {
+    max-width: 22ch;
+    font-size: clamp(1.9rem, 1.3rem + 2vw, 2.9rem);
+    color: var(--ft-white);
+  }
+
+  .band__text p {
+    max-width: 52ch;
+    margin-top: 1rem;
+    color: rgb(251 249 245 / 0.9);
+  }
+
+  .band__btn {
+    justify-self: end;
+  }
+
+  .band :global(:focus-visible) {
+    outline-color: var(--ft-white);
+  }
+
+  @media (max-width: 60em) {
+    .band__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .band__ridge {
+      width: 4.5rem;
+    }
+
+    .band__btn {
+      justify-self: start;
+    }
+  }
+</style>

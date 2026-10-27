@@ -1,0 +1,107 @@
+---
+// Bandeau d'appel à l'action, en fin de page : un halo ambré, vers la page Contact de la démo.
+import Icon from '../../Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+  button?: string;
+}
+const {
+  title = 'Un projet électrique en tête ?',
+  text = 'Décrivez-nous votre besoin en quelques lignes : nous revenons vers vous pour en parler et, si besoin, organiser une visite.',
+  button = 'Décrire votre projet',
+} = Astro.props;
+---
+
+<section class="band" aria-labelledby="lu-band-title">
+  <div class="band__glow" aria-hidden="true"></div>
+  <div class="band__arch" aria-hidden="true"></div>
+  <div class="lu-container band__inner">
+    <p class="lu-label">Contact</p>
+    <h2 id="lu-band-title" class="band__title">{title}</h2>
+    <p class="band__text">{text}</p>
+    <a class="lu-btn" href="/exemples/lueur/contact/">
+      {button} <Icon name="arrow" />
+    </a>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    padding-block: clamp(4.5rem, 10vw, 8rem);
+    background: var(--lu-night);
+    color: var(--lu-ivory);
+    text-align: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .band__glow {
+    position: absolute;
+    left: 50%;
+    bottom: -40%;
+    z-index: -1;
+    width: min(64rem, 140%);
+    aspect-ratio: 1.6;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgb(242 180 90 / 0.24), rgb(242 180 90 / 0.08) 55%, transparent 100%);
+  }
+
+  /* Grand arc de filament qui enveloppe tout le bandeau (le texte reste à l'intérieur, sans croisement) */
+  .band__arch {
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    top: clamp(0.6rem, 2.2vw, 2.5rem);
+    bottom: -1px;
+    width: min(74rem, 100% + 4.5rem);
+    transform: translateX(-50%);
+    border: 1px solid rgb(242 180 90 / 0.34);
+    border-bottom: 0;
+    border-radius: 999rem 999rem 0 0;
+  }
+
+  /* étincelle posée au sommet de l'arc, comme sur le logo */
+  .band__arch::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: var(--lu-amber);
+    box-shadow: 0 0 12px 3px rgb(242 180 90 / 0.55);
+  }
+
+  .band__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .band .lu-label {
+    justify-content: center;
+  }
+
+  .band__title {
+    /* un peu plus étroit que le bandeau sur mobile : le titre reste sous l'arc */
+    max-width: min(18ch, 100% - 2.5rem);
+    font-size: clamp(2.2rem, 1.4rem + 3vw, 3.9rem);
+    color: var(--lu-ivory);
+  }
+
+  .band__text {
+    max-width: 46ch;
+    margin-top: 1.25rem;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    color: var(--lu-dim);
+  }
+
+  .band .lu-btn {
+    margin-top: 2.25rem;
+  }
+</style>

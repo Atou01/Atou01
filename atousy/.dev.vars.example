@@ -1,0 +1,37 @@
+# Variables des Pages Functions pour le développement local (wrangler pages dev).
+# Copier ce fichier en .dev.vars (ignoré par git) et remplir les valeurs.
+# Ne jamais y mettre de vraies clés dans le dépôt. En production, les définir
+# dans Cloudflare Pages > Settings > Variables and Secrets (voir docs/formulaire-et-fonctions.md).
+
+# --- Turnstile (anti-robot) -------------------------------------------------
+# Clé secrète Turnstile, vérifiée côté serveur. Obligatoire : sans elle, /api/devis
+# répond 503 not_configured. Clés de test officielles de Cloudflare :
+#   1x0000000000000000000000000000000AA  → toujours valide
+#   2x0000000000000000000000000000000AA  → toujours refusée
+# TURNSTILE_SECRET_KEY=
+
+# --- Envoi de l'e-mail --------------------------------------------------------
+# Fournisseur : brevo ou resend.
+# EMAIL_PROVIDER=brevo
+
+# Clé d'API du fournisseur choisi (une seule est nécessaire).
+# BREVO_API_KEY=
+# RESEND_API_KEY=
+
+# Destinataire(s) des demandes de devis (séparés par des virgules).
+# MAIL_TO=
+
+# Expéditeur, sur un domaine authentifié chez le fournisseur (SPF/DKIM).
+# Format : adresse@domaine  ou  Nom <adresse@domaine>
+# MAIL_FROM=
+
+# --- Sécurité ------------------------------------------------------------------
+# Origines supplémentaires autorisées à poster le formulaire (séparées par des
+# virgules), en plus de l'origine de la requête elle-même. Facultatif.
+# ALLOWED_ORIGINS=
+
+# --- Tests uniquement ------------------------------------------------------------
+# Remplace l'URL de base du fournisseur (ex. faux serveur local qui répond 201).
+# N'est accepté que vers localhost / 127.0.0.1 / [::1]. Ne jamais le définir
+# en Production ni en Preview.
+# EMAIL_API_BASE=

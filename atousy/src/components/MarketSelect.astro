@@ -1,0 +1,68 @@
+---
+// Sélecteur de marché (Europe · EUR / Suisse · CHF). Masqué sans JavaScript :
+// dans ce cas les deux prix sont affichés côte à côte.
+import { markets, defaultMarket } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  id: string;
+  class?: string;
+}
+const { id, class: className } = Astro.props;
+---
+
+<div class:list={['market-select js-only', className]}>
+  <label class="visually-hidden" for={id}>Pays et devise</label>
+  <select id={id} data-market-select>
+    {Object.values(markets).map((m) => <option value={m.id} selected={m.id === defaultMarket}>{m.label}</option>)}
+  </select>
+  <Icon name="chevron" class="market-select__chevron" />
+</div>
+
+<style>
+  .market-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0.5rem 1.6rem 0.5rem 0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: var(--radius);
+  }
+
+  /* Survol : trait corail sous le libellé, comme les liens de la navigation
+     (le texte reste en encre : le corail ne contraste pas assez en petit corps). */
+  .market-select::after {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    right: 1.6rem;
+    bottom: 0.3rem;
+    height: 2px;
+    background: var(--coral);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s var(--ease);
+    pointer-events: none;
+  }
+
+  .market-select:hover::after {
+    transform: scaleX(1);
+  }
+
+  .market-select :global(.market-select__chevron) {
+    position: absolute;
+    right: 0.2rem;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+  }
+</style>

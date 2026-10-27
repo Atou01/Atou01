@@ -1,0 +1,80 @@
+---
+// Logo Moellon : petits moellons bombés empilés en trois assises à joints décalés
+// + mot-symbole « Moellon » en Newsreader.
+interface Props {
+  tone?: 'ink' | 'light';
+  size?: 'md' | 'lg';
+}
+const { tone = 'ink', size = 'md' } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${tone}`, `logo--${size}`]}>
+  <svg class="logo__stones" viewBox="0 0 31 28" aria-hidden="true" focusable="false">
+    <!-- assise haute -->
+    <path class="s s--a" d="M10 2.2c3-.9 8.5-.8 11.6.2 1.4.5 1.9 1.7 1.6 3.1l-.5 2.3c-.3 1.1-1.2 1.7-2.3 1.7H9.7c-1.2 0-2.1-.8-2.2-2l-.2-2.2C7.2 3.9 8.3 2.7 10 2.2Z" />
+    <!-- assise médiane -->
+    <path class="s s--b" d="M2.6 11.6c2.7-.7 7.6-.8 10.6-.2 1.2.3 1.8 1.2 1.8 2.4v3.4c0 1.2-.9 2.1-2.1 2.1H3c-1.3 0-2.3-1-2.2-2.3l.1-3.3c.1-1 .7-1.8 1.7-2.1Z" />
+    <path class="s s--c" d="M18.3 11.3c3-.5 7.4-.3 9.9.4 1.1.3 1.8 1.3 1.7 2.5l-.2 3.1c-.1 1.2-1 2.1-2.2 2.1h-9.2c-1.2 0-2.1-1-2-2.2l.2-3.6c.1-1.2.7-2.1 1.8-2.3Z" />
+    <!-- assise basse -->
+    <path class="s s--b" d="M1.9 21.5c4.1-.6 11.3-.6 15.3 0 1.2.2 2 1.1 2 2.3v1.3c0 1.3-1 2.3-2.3 2.3H2c-1.2 0-2-.9-2-2.1l.1-1.7c0-1.1.7-1.9 1.8-2.1Z" />
+    <path class="s s--a" d="M23 21.4c2.1-.3 4.5-.2 6 .2 1 .3 1.6 1.1 1.6 2.1v1.6c0 1.2-1 2.2-2.2 2.2h-5.5c-1.2 0-2.1-1-2.1-2.2l.1-1.8c.1-1.1.9-1.9 2.1-2.1Z" />
+  </svg>
+  <span class="logo__word">Moellon</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    line-height: 1;
+  }
+
+  .logo--ink {
+    color: var(--mo-ink);
+    --stone-a: var(--mo-terra);
+    --stone-b: var(--mo-ink);
+    --stone-c: #b88a5e;
+  }
+
+  .logo--light {
+    color: var(--mo-cream);
+    --stone-a: var(--mo-ochre-light);
+    --stone-b: var(--mo-cream);
+    --stone-c: #b9a68f;
+  }
+
+  .logo__stones {
+    width: 1.75rem;
+    height: auto;
+    flex: none;
+  }
+
+  .s--a {
+    fill: var(--stone-a);
+  }
+
+  .s--b {
+    fill: var(--stone-b);
+  }
+
+  .s--c {
+    fill: var(--stone-c);
+  }
+
+  .logo__word {
+    font-family: var(--mo-serif);
+    font-size: 1.7rem;
+    font-weight: 520;
+    letter-spacing: -0.02em;
+    padding-bottom: 0.08em;
+  }
+
+  .logo--lg .logo__stones {
+    width: 2.25rem;
+  }
+
+  .logo--lg .logo__word {
+    font-size: 2.3rem;
+  }
+</style>

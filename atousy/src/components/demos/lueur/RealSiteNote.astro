@@ -1,0 +1,72 @@
+---
+// Encart honnête : ce qu'un vrai site afficherait à cet endroit (coordonnées, qualifications, chantiers réels…).
+import LueurIcon from './LueurIcon.astro';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+const { tone = 'light', class: className } = Astro.props;
+---
+
+<div class:list={['note', `note--${tone}`, className]} role="note">
+  <span class="note__icon"><LueurIcon name="info" /></span>
+  <p><strong>Dans un vrai site :</strong> <slot /></p>
+</div>
+
+<style>
+  .note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 1.05rem 1.2rem;
+    border: 1px dashed;
+    border-radius: 14px;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .note--light {
+    color: var(--lu-ink-2);
+    border-color: rgb(22 29 40 / 0.28);
+    background: rgb(251 248 243 / 0.7);
+  }
+
+  .note--dark {
+    color: var(--lu-dim);
+    border-color: rgb(245 239 228 / 0.28);
+    background: rgb(245 239 228 / 0.03);
+  }
+
+  .note strong {
+    font-weight: 650;
+    color: var(--lu-ink);
+  }
+
+  .note--dark strong {
+    color: var(--lu-ivory);
+  }
+
+  .note__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-top: -0.1rem;
+    border-radius: 50%;
+    color: var(--lu-amber-ink);
+    background: rgb(242 180 90 / 0.18);
+  }
+
+  .note--dark .note__icon {
+    color: var(--lu-amber);
+    background: rgb(242 180 90 / 0.12);
+    box-shadow: 0 0 18px rgb(242 180 90 / 0.18);
+  }
+
+  .note__icon :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+</style>

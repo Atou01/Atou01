@@ -1,0 +1,51 @@
+---
+// Logo Écluse : goutte d'eau dont le niveau forme une marche (les deux biefs d'une écluse), dans un
+// carré arrondi ardoise, + mot-symbole « écluse » en minuscules, Figtree très gras.
+interface Props {
+  size?: 'md' | 'lg';
+}
+const { size = 'md' } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${size}`]}>
+  <svg class="logo__glyph" viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+    <rect x="0.5" y="0.5" width="27" height="27" rx="8" fill="var(--ec-slate)" />
+    <path d="M14 4.8c3.5 4.3 6.4 7.8 6.4 11.5a6.4 6.4 0 0 1-12.8 0c0-3.7 2.9-7.2 6.4-11.5z" fill="#fff" />
+    <path d="M7.66 17.1H14v-3.3h6.27c.09.84.13 1.67.13 2.5a6.4 6.4 0 0 1-12.8 0c0-.43.02-.83.06-1.2z" fill="var(--ec-brass)" />
+  </svg>
+  <span class="logo__word">écluse</span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    line-height: 1;
+    color: var(--ec-ink);
+  }
+
+  .logo__glyph {
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: none;
+  }
+
+  .logo__word {
+    font-family: var(--ec-sans);
+    font-size: 1.625rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    /* compense la hampe du « l » pour centrer optiquement sur le pictogramme */
+    transform: translateY(-0.04em);
+  }
+
+  .logo--lg .logo__glyph {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .logo--lg .logo__word {
+    font-size: 2.125rem;
+  }
+</style>

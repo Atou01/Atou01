@@ -1,0 +1,180 @@
+---
+// Formulaire de demande de devis (POST /api/devis).
+// Avec JavaScript (src/scripts/devis-form.ts) : envoi en arrière-plan, messages en français
+// à côté des champs, brouillon conservé pendant la session, et confirmation affichée
+// UNIQUEMENT après une réponse 200 {"ok":true}.
+// Sans JavaScript, l'envoi ne peut pas aboutir (le serveur exige le jeton Turnstile) :
+// un avis s'affiche en tête du formulaire, avec l'adresse de contact, et le bouton d'envoi est masqué.
+import './devis-form.css';
+import Icon from '../Icon.astro';
+import Todo from '../pages/Todo.astro';
+import Field from './Field.astro';
+import { CONTACT_EMAIL, NOJS, SUCCESS } from './messages';
+
+// Clé de site Turnstile, publique, lue au moment du build (voir docs/formulaire-et-fonctions.md).
+const siteKey = String(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '').trim();
+const nojsContact = CONTACT_EMAIL ? NOJS.contact.replace('{email}', CONTACT_EMAIL) : '';
+
+// Pas d'autocomplete="off" : il empêcherait le navigateur de restaurer la saisie au retour arrière.
+const oneLine = { type: 'text' } as const;
+---
+
+<div class="dv" data-devis>
+  <form class="dv-form" action="/api/devis" method="post" accept-charset="utf-8" data-devis-form>
+    <p class="dv-nojs nojs-only">
+      {NOJS.text}
+      {nojsContact && <>{' '}<a href={`mailto:${CONTACT_EMAIL}`}>{nojsContact}</a></>}
+    </p>
+
+    <p class="dv-required">Tous les champs sont obligatoires, sauf ceux marqués « facultatif ».</p>
+
+    <div class="dv-summary-region" role="alert" data-summary></div>
+
+    <div class="dv-group">
+      <h2 class="dv-group__title"><span class="dv-group__num" aria-hidden="true">01</span>Votre demande</h2>
+
+      <fieldset class="dv-field dv-field--type" data-field="type" data-label="Votre projet">
+        <legend class="dv-label">Votre projet</legend>
+        <p class="dv-help" id="devis-type-help">Pour une refonte, nous examinons d’abord votre site actuel.</p>
+        <p class="dv-error" id="devis-type-error" data-error-for="type"></p>
+        <div class="dv-choices">
+          <label class="dv-choice">
+            <input type="radio" id="devis-type-creation" name="type" value="creation" required aria-describedby="devis-type-error devis-type-help" />
+            <span class="dv-choice__body">
+              <span class="dv-choice__title">Création d’un site</span>
+              <span class="dv-choice__text">Pas encore de site</span>
+            </span>
+          </label>
+          <label class="dv-choice">
+            <input type="radio" id="devis-type-refonte" name="type" value="refonte" required aria-describedby="devis-type-error devis-type-help" />
+            <span class="dv-choice__body">
+              <span class="dv-choice__title">Refonte d’un site existant</span>
+              <span class="dv-choice__text">Votre site existe déjà</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="dv-grid">
+        <Field
+          name="activite"
+          label="Votre activité"
+          help="Votre métier, en quelques mots."
+          placeholder="Ex. : menuisier, électricien, paysagiste"
+          half
+          attrs={{ ...oneLine, required: true, minlength: 2, maxlength: 120 }}
+        />
+        <Field
+          name="zone"
+          label="Votre zone d’intervention"
+          help="Là où vous travaillez : votre commune, votre secteur ou un rayon autour de chez vous."
+          placeholder="Ex. : ma commune et 30 km autour"
+          half
+          attrs={{ ...oneLine, required: true, minlength: 2, maxlength: 120 }}
+        />
+        <Field
+          name="site"
+          label="Votre site actuel"
+          optional
+          help="Pour une refonte, indiquez son adresse."
+          placeholder="www.votre-site.fr"
+          attrs={{ type: 'text', inputmode: 'url', autocomplete: 'url', autocapitalize: 'none', spellcheck: 'false', maxlength: 300 }}
+        />
+        <Field
+          name="besoin"
+          label="Votre besoin"
+          help="Ce que le site doit faire, les pages envisagées, vos questions."
+          placeholder="Ex. : présenter mes services, montrer mes chantiers, recevoir des demandes de devis…"
+          multiline
+          counter
+          attrs={{ required: true, minlength: 10, maxlength: 2000, rows: 7 }}
+        />
+      </div>
+    </div>
+
+    <div class="dv-group">
+      <h2 class="dv-group__title"><span class="dv-group__num" aria-hidden="true">02</span>Vos coordonnées</h2>
+      <div class="dv-grid">
+        <Field
+          name="nom"
+          label="Votre nom"
+          placeholder="Prénom Nom"
+          half
+          attrs={{ type: 'text', autocomplete: 'name', required: true, minlength: 2, maxlength: 100 }}
+        />
+        <Field
+          name="email"
+          label="Votre adresse e-mail"
+          help="Pour vous répondre."
+          placeholder="vous@exemple.fr"
+          half
+          attrs={{ type: 'email', autocomplete: 'email', autocapitalize: 'none', spellcheck: 'false', required: true, maxlength: 200 }}
+        />
+        <Field
+          name="telephone"
+          label="Votre téléphone"
+          optional
+          help="Si vous préférez être rappelé."
+          half
+          attrs={{ type: 'tel', autocomplete: 'tel', maxlength: 25, pattern: '[0-9 +.\\(\\)\\-]{6,25}' }}
+        />
+      </div>
+    </div>
+
+    <!-- Pot de miel : invisible et hors du parcours clavier, doit rester vide. -->
+    <div class="dv-hp" aria-hidden="true">
+      <label for="devis-website">Ne pas remplir ce champ</label>
+      <input id="devis-website" name="website" type="text" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-bwignore data-form-type="other" />
+    </div>
+    <input type="hidden" name="market" value="" data-market-input />
+    <input type="hidden" name="started" value="" data-started />
+
+    <div class="dv-send">
+      {
+        siteKey && (
+          <div class="dv-captcha js-only">
+            <p class="dv-captcha__text">Une vérification automatique protège ce formulaire contre les envois abusifs.</p>
+            <div class="dv-captcha__widget" data-turnstile data-sitekey={siteKey}></div>
+          </div>
+        )
+      }
+      <div class="dv-alert-region" role="alert" data-form-alert></div>
+
+      <div class="dv-actions">
+        <button type="submit" class="btn btn--coral dv-submit js-only" data-submit>
+          <span class="dv-spinner" aria-hidden="true"></span>
+          <span data-submit-label>Envoyer ma demande</span>
+          <Icon name="arrow" class="dv-submit__arrow" />
+        </button>
+        {/* Repère pour le développement uniquement : jamais affiché sur le site publié. */}
+        {!siteKey && import.meta.env.DEV && <p class="dv-unconfigured">Anti-spam non configuré</p>}
+        <p class="dv-status" role="status" data-status></p>
+      </div>
+
+      <!-- Information au moment de la collecte (RGPD art. 13, nLPD art. 19) : premier niveau,
+           le détail est dans la politique de confidentialité. -->
+      <p class="dv-privacy">
+        Les informations de ce formulaire (type de projet, activité, zone d’intervention, site actuel, besoin, nom, e-mail,
+        téléphone facultatif et tarif affiché) sont traitées par Atousy <Todo>raison sociale</Todo>, France, pour répondre à
+        votre demande de devis. Elles ne sont ni vendues ni utilisées pour de la publicité. Destinataires : nos prestataires
+        d’hébergement, d’anti-spam et d’envoi d’e-mails, Cloudflare (États-Unis) et <Todo label="À CONFIRMER">Brevo (France)
+        ou Resend (États-Unis)</Todo>. Durées de conservation et vos droits :{' '}<a href="/confidentialite/">politique de
+        confidentialité</a>.
+      </p>
+    </div>
+  </form>
+
+  <div class="dv-success" hidden data-success>
+    <span class="dv-success__rule" aria-hidden="true"></span>
+    <h2 id="devis-success-title" tabindex="-1" data-success-title>{SUCCESS.title}</h2>
+    <p>{SUCCESS.text}</p>
+    <div class="dv-success__links">
+      <a class="btn btn--dark" href="/exemples/">Voir les exemples <Icon name="arrow" /></a>
+      <a class="link-arrow" href="/"><span>Retour à l’accueil</span> <Icon name="arrow" /></a>
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/devis-form';
+</script>

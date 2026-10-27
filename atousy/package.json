@@ -1,0 +1,25 @@
+{
+  "name": "atousy-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Site vitrine Atousy — export statique pour Cloudflare Pages",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test \"tests/**/*.test.js\"",
+    "cf:dev": "wrangler pages dev dist --compatibility-date=2026-10-01"
+  },
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "dependencies": {
+    "@fontsource-variable/figtree": "^5.3.0",
+    "@fontsource-variable/newsreader": "^5.3.0",
+    "astro": "^7.4.2"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.3"
+  }
+}

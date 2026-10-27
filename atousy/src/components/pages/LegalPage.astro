@@ -1,0 +1,297 @@
+---
+// Gabarit des pages légales (modèles à compléter) : non indexées tant que des éléments
+// restent à compléter, sommaire à gauche sur grand écran, texte courant à droite.
+import InnerLayout from './InnerLayout.astro';
+import PageHero from './PageHero.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  crumb: string;
+  lead: string;
+  toc: { id: string; label: string }[];
+}
+const { title, description, heading, crumb, lead, toc } = Astro.props;
+---
+
+<InnerLayout title={title} description={description} crumb={crumb} noindex>
+  <PageHero crumb={crumb} title={heading} lead={lead}>
+    <div slot="note" class="legal-meta">
+      <slot name="meta" />
+      <p class="legal-status">
+        <span class="legal-status__dot" aria-hidden="true"></span>
+        Page en cours de finalisation : les informations surlignées restent à compléter.
+      </p>
+    </div>
+  </PageHero>
+
+  <div class="container legal">
+    <nav class="legal__toc" aria-label="Sommaire">
+      <p class="legal__toc-title">Sommaire</p>
+      <ol>
+        {toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}
+      </ol>
+    </nav>
+    <div class="legal__body">
+      <slot />
+    </div>
+  </div>
+</InnerLayout>
+
+<style>
+  .legal-meta {
+    margin-top: 1.5rem;
+  }
+
+  .legal-meta :global(p) {
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+
+  .legal-status {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    max-width: 30rem;
+    margin-top: 0.75rem;
+  }
+
+  .legal-status__dot {
+    flex: none;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--coral);
+    transform: translateY(0.05rem);
+  }
+
+  .legal {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: 2rem clamp(2rem, 6vw, 6.5rem);
+    padding-top: clamp(1.75rem, 3vw, 3rem);
+    padding-bottom: clamp(3.5rem, 6vw, 6rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .legal__toc {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+  }
+
+  .legal__toc-title {
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .legal__toc ol {
+    margin-top: 0.85rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .legal__toc li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .legal__toc a {
+    display: block;
+    padding-block: 0.6rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  /* Survol : soulignement corail, le texte garde sa couleur (le corail ne contraste
+     pas assez en petit corps). */
+  .legal__toc a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+
+  /* Texte courant */
+  .legal__body {
+    max-width: 46rem;
+    /* Le tableau s'empile selon la largeur réelle de la colonne de texte (voir plus bas). */
+    container: legal-body / inline-size;
+  }
+
+  .legal__body :global(h2) {
+    margin-top: clamp(2.5rem, 4vw, 3.5rem);
+    font-size: clamp(1.6rem, 2.4vw, 2.35rem);
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    scroll-margin-top: 1.5rem;
+  }
+
+  .legal__body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .legal__body :global(h3) {
+    margin-top: 1.75rem;
+    font-size: 1.1875rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .legal__body :global(p),
+  .legal__body :global(li) {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--ink-2);
+  }
+
+  .legal__body :global(p) {
+    margin-top: 1rem;
+  }
+
+  .legal__body :global(ul) {
+    margin-top: 1rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .legal__body :global(ul > li) {
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .legal__body :global(strong) {
+    font-weight: 650;
+    color: var(--ink);
+  }
+
+  .legal__body :global(a:not(.btn)) {
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.22em;
+  }
+
+  .legal__body :global(a:not(.btn):hover) {
+    color: var(--ink);
+    text-decoration-thickness: 3px;
+  }
+
+  /* Encadré (clause à mettre en évidence) */
+  .legal__body :global(.legal-callout) {
+    margin-top: 1.25rem;
+    padding: 0.25rem 1.25rem 1.1rem;
+    border-left: 4px solid var(--coral);
+    background: var(--paper);
+  }
+
+  .legal__body :global(.legal-callout p) {
+    color: var(--ink);
+  }
+
+  /* Tableau (prestataires) : empilé en cartes sur petit écran */
+  .legal__body :global(.legal-table) {
+    width: 100%;
+    margin-top: 1.25rem;
+    border-collapse: collapse;
+  }
+
+  .legal__body :global(.legal-table caption) {
+    margin-bottom: 0.6rem;
+    font-size: 0.9375rem;
+    text-align: left;
+    color: var(--ink-2);
+  }
+
+  .legal__body :global(.legal-table th),
+  .legal__body :global(.legal-table td) {
+    padding: 0.8rem 1rem 0.8rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    text-align: left;
+    vertical-align: top;
+    color: var(--ink-2);
+  }
+
+  .legal__body :global(.legal-table thead th) {
+    border-bottom-color: var(--line-strong);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .legal__body :global(.legal-table tbody th) {
+    font-weight: 650;
+    color: var(--ink);
+  }
+
+  .legal__body :global(code) {
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+    background: var(--ivory-deep);
+    font-size: 0.92em;
+  }
+
+  @media (max-width: 52em) {
+    .legal {
+      grid-template-columns: 1fr;
+    }
+
+    .legal__toc {
+      position: static;
+    }
+  }
+
+  /* Colonne de texte étroite (téléphone, ou tablette avec le sommaire à côté) : une carte par
+     prestataire. Requête sur le conteneur et non sur l'écran : entre 52em et ~68em de large,
+     le sommaire réduit la colonne sous la largeur minimale du tableau. */
+  @container legal-body (max-width: 40rem) {
+    .legal__body :global(.legal-table thead) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .legal__body :global(.legal-table),
+    .legal__body :global(.legal-table caption),
+    .legal__body :global(.legal-table tbody),
+    .legal__body :global(.legal-table tr),
+    .legal__body :global(.legal-table th),
+    .legal__body :global(.legal-table td) {
+      display: block;
+    }
+
+    .legal__body :global(.legal-table tbody) {
+      border-top: 1px solid var(--line-strong);
+    }
+
+    .legal__body :global(.legal-table tr) {
+      padding-block: 0.8rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .legal__body :global(.legal-table tbody th),
+    .legal__body :global(.legal-table td) {
+      padding: 0.2rem 0;
+      border: 0;
+    }
+
+    .legal__body :global(.legal-table td[data-label]::before) {
+      content: attr(data-label) ' : ';
+      font-weight: 650;
+      color: var(--ink);
+    }
+  }
+</style>

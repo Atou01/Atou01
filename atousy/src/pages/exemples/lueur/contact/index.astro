@@ -1,0 +1,429 @@
+---
+// Démonstration fictive « Lueur » (électricien) — page Contact.
+// Formulaire volontairement désactivé (démonstration) : aucun envoi, aucun script.
+import LueurLayout from '../../../../components/demos/lueur/LueurLayout.astro';
+import PageHero from '../../../../components/demos/lueur/PageHero.astro';
+import RealSiteNote from '../../../../components/demos/lueur/RealSiteNote.astro';
+import LueurIcon from '../../../../components/demos/lueur/LueurIcon.astro';
+import Icon from '../../../../components/Icon.astro';
+
+const prepare = [
+  'Une photo de votre tableau électrique',
+  'L’année approximative de construction du logement',
+  'Les pièces concernées et ce qui vous gêne au quotidien',
+  'Pour une borne : l’emplacement envisagé et votre véhicule',
+];
+
+const next = [
+  { title: 'Un premier échange', text: 'Nous revenons vers vous pour préciser votre besoin.' },
+  { title: 'Une visite sur place', text: 'Pour voir l’installation et les lieux.' },
+  { title: 'Un devis détaillé', text: 'Poste par poste, avec les options possibles.' },
+];
+---
+
+<LueurLayout
+  title="Contact — Lueur, démonstration fictive | Atousy"
+  description="Contacter Lueur, électricien fictif : page de contact de démonstration réalisée par Atousy. Formulaire désactivé."
+  current="contact"
+>
+  <PageHero
+    label="Contact"
+    title="Parlons de votre projet électrique."
+    lead="Rénovation, tableau, éclairage, borne ou domotique : décrivez votre besoin en quelques lignes, nous revenons vers vous pour en discuter."
+  />
+
+  <section class="lu-section lu-light body" aria-label="Formulaire et informations de contact">
+    <div class="lu-container body__grid">
+      <!-- Formulaire (désactivé) -->
+      <div class="card">
+        <h2 id="form-title" class="card__title">Votre demande</h2>
+        <p id="form-note" class="disabled-note" role="note">
+          <LueurIcon name="lock" />
+          <span><strong>Formulaire désactivé :</strong> ceci est une démonstration.</span>
+        </p>
+
+        <form class="form" aria-labelledby="form-title" aria-describedby="form-note">
+          <fieldset disabled>
+            <legend class="lu-visually-hidden">Vos coordonnées et votre projet</legend>
+            <div class="row">
+              <div class="field">
+                <label for="lu-name">Nom et prénom</label>
+                <input id="lu-name" name="name" type="text" autocomplete="name" disabled />
+              </div>
+              <div class="field">
+                <label for="lu-email">E-mail</label>
+                <input id="lu-email" name="email" type="email" autocomplete="email" disabled />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="lu-phone">Téléphone <span class="opt">(facultatif)</span></label>
+                <input id="lu-phone" name="phone" type="tel" autocomplete="tel" disabled />
+              </div>
+              <div class="field">
+                <label for="lu-town">Commune des travaux</label>
+                <input id="lu-town" name="town" type="text" autocomplete="address-level2" disabled />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="lu-type">Votre besoin</label>
+                <div class="select">
+                  <select id="lu-type" name="type" disabled>
+                    <option>Rénovation électrique</option>
+                    <option>Tableau électrique</option>
+                    <option>Éclairage intérieur</option>
+                    <option>Éclairage extérieur</option>
+                    <option>Borne de recharge</option>
+                    <option>Domotique</option>
+                    <option>Autre demande</option>
+                  </select>
+                  <Icon name="chevron" class="select__icon" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="lu-home">Type de logement</label>
+                <div class="select">
+                  <select id="lu-home" name="home" disabled>
+                    <option>Maison</option>
+                    <option>Appartement</option>
+                    <option>Autre</option>
+                  </select>
+                  <Icon name="chevron" class="select__icon" />
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="lu-message">Décrivez votre projet</label>
+              <textarea id="lu-message" name="message" rows="6" disabled></textarea>
+            </div>
+            <div class="field">
+              <label for="lu-files">Photos <span class="opt">(facultatif)</span></label>
+              <div class="drop">
+                <input id="lu-files" class="drop__input" name="files" type="file" accept="image/*" multiple disabled />
+                <span class="drop__ui" aria-hidden="true">
+                  <LueurIcon name="upload" />
+                  <span><strong>Ajouter des photos</strong> — tableau, pièces, emplacement souhaité</span>
+                </span>
+              </div>
+            </div>
+            <div class="check">
+              <input id="lu-consent" name="consent" type="checkbox" disabled />
+              <label for="lu-consent">J’accepte que ces informations soient utilisées pour répondre à ma demande.</label>
+            </div>
+            <button class="lu-btn submit" type="submit" disabled>
+              Envoyer la demande <Icon name="arrow" />
+            </button>
+          </fieldset>
+        </form>
+      </div>
+
+      <!-- Informations -->
+      <div class="aside">
+        <div class="block">
+          <h2 class="block__title">Pour préparer votre demande</h2>
+          <ul class="lu-ticks">
+            {prepare.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+
+        <div class="block">
+          <h2 class="block__title">Et ensuite ?</h2>
+          <ol class="next">
+            {
+              next.map((n, i) => (
+                <li>
+                  <span class="next__num" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <span>
+                    <strong>{n.title}</strong>
+                    {n.text}
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="block">
+          <h2 class="block__title">Nous joindre</h2>
+          <RealSiteNote>vos coordonnées (téléphone, e-mail, adresse), vos horaires, votre zone d’intervention et vos délais habituels de réponse.</RealSiteNote>
+        </div>
+      </div>
+    </div>
+  </section>
+</LueurLayout>
+
+<style>
+  .body__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 3rem clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .card {
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background: var(--lu-card);
+    border: 1px solid var(--lu-line-light);
+    border-radius: calc(var(--lu-radius) + 4px);
+    box-shadow: 0 40px 80px -60px rgb(20 26 36 / 0.55);
+  }
+
+  .card__title {
+    font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+  }
+
+  .disabled-note {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding: 0.85rem 1rem;
+    background: #fbecd2;
+    border: 1px solid #ecc88f;
+    border-radius: 12px;
+    color: var(--lu-ink);
+    font-size: 0.9688rem;
+    line-height: 1.45;
+  }
+
+  .disabled-note :global(svg) {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--lu-amber-ink);
+  }
+
+  .disabled-note strong {
+    font-weight: 700;
+  }
+
+  .form {
+    margin-top: 1.75rem;
+  }
+
+  fieldset {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--lu-ink);
+  }
+
+  .opt {
+    font-weight: 450;
+    color: var(--lu-ink-2);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3.1rem;
+    padding: 0.75rem 0.95rem;
+    background: var(--lu-paper);
+    border: 1px solid rgb(22 29 40 / 0.26);
+    border-radius: 12px;
+    color: var(--lu-ink);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+
+  .select {
+    position: relative;
+  }
+
+  select {
+    appearance: none;
+    padding-right: 2.5rem;
+  }
+
+  .select :global(.select__icon) {
+    position: absolute;
+    right: 0.95rem;
+    top: 50%;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: -0.55rem;
+    color: var(--lu-ink-2);
+    pointer-events: none;
+  }
+
+  /* Zone de dépôt : le champ natif (désactivé) est recouvert d'un habillage en français */
+  .drop {
+    position: relative;
+    background: var(--lu-paper);
+    border: 1px dashed rgb(22 29 40 / 0.3);
+    border-radius: 12px;
+  }
+
+  .drop__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: not-allowed;
+  }
+
+  .drop__ui {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0.95rem;
+    color: var(--lu-ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  .drop__ui :global(svg) {
+    flex: none;
+    width: 1.35rem;
+    height: 1.35rem;
+    color: var(--lu-amber-ink);
+  }
+
+  .drop__ui strong {
+    font-weight: 650;
+    color: var(--lu-ink);
+  }
+
+  fieldset:disabled input:not([type='file'], [type='checkbox']),
+  fieldset:disabled select,
+  fieldset:disabled textarea {
+    cursor: not-allowed;
+    opacity: 1;
+    background-image: repeating-linear-gradient(-45deg, transparent 0 10px, rgb(22 29 40 / 0.025) 10px 20px);
+  }
+
+  .check {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .check input {
+    flex: none;
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0.2rem 0 0;
+    accent-color: var(--lu-night);
+  }
+
+  .check label {
+    font-weight: 450;
+    color: var(--lu-ink-2);
+  }
+
+  .submit {
+    justify-self: start;
+    margin-top: 0.5rem;
+  }
+
+  .submit:disabled {
+    cursor: not-allowed;
+    background: #59616e;
+    border-color: #59616e;
+    color: var(--lu-ivory);
+    box-shadow: none;
+  }
+
+  /* ——— Informations ——— */
+  .aside {
+    display: grid;
+    gap: clamp(2.25rem, 4vw, 3rem);
+  }
+
+  .block__title {
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--lu-line-light);
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.22em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--lu-amber-ink);
+  }
+
+  .lu-light .block__title {
+    color: var(--lu-amber-ink);
+  }
+
+  .next {
+    display: grid;
+    gap: 1.1rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .next li {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.85rem;
+    color: var(--lu-ink-2);
+  }
+
+  .next strong {
+    display: block;
+    font-weight: 650;
+    color: var(--lu-ink);
+  }
+
+  .next__num {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--lu-night);
+    color: var(--lu-amber);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 60em) {
+    .body__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 36em) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .submit {
+      justify-self: stretch;
+      justify-content: center;
+    }
+  }
+</style>

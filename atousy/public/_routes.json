@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/_astro/*",
+    "/brand/*",
+    "/favicon.ico",
+    "/favicon.svg",
+    "/apple-touch-icon.png",
+    "/icon-512.png",
+    "/og-image.jpg",
+    "/robots.txt",
+    "/sitemap.xml",
+    "/exemples/rivage/*",
+    "/exemples/faitage/*",
+    "/exemples/ecluse/*",
+    "/exemples/lueur/*",
+    "/exemples/moellon/*"
+  ]
+}

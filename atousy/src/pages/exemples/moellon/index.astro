@@ -1,0 +1,983 @@
+---
+// Démonstration fictive « Moellon » (maçon, rénovation) — page d'accueil.
+import { Picture } from 'astro:assets';
+import MoellonLayout from '../../../components/demos/moellon/MoellonLayout.astro';
+import ContactBand from '../../../components/demos/moellon/ContactBand.astro';
+import RealSiteNote from '../../../components/demos/moellon/RealSiteNote.astro';
+import MIcon from '../../../components/demos/moellon/MIcon.astro';
+import { moellonCrafts } from '../../../components/demos/moellon/nav';
+import moellon1 from '../../../assets/photos/moellon-1.jpg';
+import moellon2 from '../../../assets/photos/moellon-2.jpg';
+import moellon3 from '../../../assets/photos/moellon-3.jpg';
+import moellon4 from '../../../assets/photos/moellon-4.jpg';
+import moellon5 from '../../../assets/photos/moellon-5.jpg';
+import moellon6 from '../../../assets/photos/moellon-6.jpg';
+
+const materials = [
+  {
+    title: 'La pierre',
+    text: 'Réemployée dès que possible, choisie pour s’accorder à l’existant quand il faut compléter un mur.',
+  },
+  {
+    title: 'La chaux',
+    text: 'Des mortiers et des enduits qui laissent respirer les murs anciens au lieu de les enfermer.',
+  },
+  {
+    title: 'Le béton armé',
+    text: 'À sa juste place : fondations, dalles, linteaux et chaînages, dimensionnés pour l’ouvrage.',
+  },
+  {
+    title: 'Le bois',
+    text: 'Planchers, linteaux et charpentes associés à la maçonnerie, en lien avec les autres métiers.',
+  },
+];
+
+const [craftOld, craftExt, craftOpen, craftLime, craftSlab] = moellonCrafts;
+
+const steps = [
+  { title: 'La visite', text: 'Nous venons voir la maison, écouter votre projet et observer l’état des murs.' },
+  { title: 'Diagnostic et devis', text: 'Un constat clair, des solutions expliquées et un devis détaillé poste par poste.' },
+  { title: 'Le chantier', text: 'Un chantier protégé et tenu propre, avec un interlocuteur qui vous tient informé.' },
+  { title: 'La réception', text: 'Une visite de fin de travaux ensemble, et des conseils pour bien entretenir.' },
+];
+---
+
+<MoellonLayout
+  title="Moellon — démonstration fictive | Atousy"
+  description="Moellon, maçon fictif : maçonnerie, extensions, ouvertures de murs porteurs et rénovation de maisons anciennes en pierre. Site de démonstration réalisé par Atousy."
+  current="accueil"
+>
+  <!-- Ouverture -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__media">
+      <Picture
+        src={moellon1}
+        alt="Maison ancienne en pierre calcaire entièrement restaurée, menuiseries gris anthracite et cour en gravier, dans la lumière dorée du soir"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1680, 2000, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="hero__wash" aria-hidden="true"></div>
+    <div class="mo-container hero__inner">
+      <div class="hero__content">
+        <p class="mo-kicker hero__kicker">Maçonnerie &amp; rénovation</p>
+        <h1 id="hero-title">Rénover la pierre, bâtir pour durer.</h1>
+        <p class="hero__text">
+          Maçonnerie, extensions, ouvertures et rénovation de maisons anciennes, avec des matériaux qui respectent le bâti.
+        </p>
+        <a class="mo-btn hero__btn" href="/exemples/moellon/chantiers/">Voir les chantiers <MIcon name="arrow" /></a>
+      </div>
+      <p class="hero__caption mo-caption">Projet type · Maison en pierre</p>
+    </div>
+  </section>
+
+  <!-- I. L'entreprise : titre en deux assises décalées, puis photo et texte côte à côte -->
+  <section class="mo-section intro" aria-labelledby="intro-title">
+    <div class="mo-container">
+      <p class="mo-kicker"><span class="mo-kicker__num">I</span>L’entreprise</p>
+      <h2 id="intro-title" class="intro__title">
+        <span class="intro__course">La pierre a de la mémoire.</span>
+        <span class="intro__course intro__course--offset">Nous travaillons avec elle.</span>
+      </h2>
+
+      <div class="intro__grid">
+        <figure class="intro__media">
+          <Picture
+            src={moellon3}
+            alt="Gros plan sur un mur en moellons calcaires rejointoyé à la chaux, éclairé en lumière rasante"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 56em) 100vw, 40vw"
+          />
+          <figcaption class="mo-caption">Joints à la chaux, pierre apparente</figcaption>
+        </figure>
+
+        <div class="intro__body">
+          <p class="mo-lead">
+            Moellon reprend, consolide et agrandit les maisons, en particulier les maisons anciennes en pierre. Nous
+            préférons comprendre un mur avant de le toucher : sa composition, ses appuis, la façon dont il respire.
+          </p>
+          <p class="intro__text">
+            Chaque chantier commence par une visite et un diagnostic. Ensuite, une même équipe suit les travaux jusqu’à la
+            réception, et vous savez toujours ce qui se fait chez vous, et pourquoi.
+          </p>
+          <a class="mo-link" href="/exemples/moellon/approche/">Découvrir notre approche <MIcon name="arrow" /></a>
+
+          <div class="matter">
+            <h3 class="matter__title">Des matériaux choisis pour durer.</h3>
+            <ul class="matter__list">
+              {
+                materials.map((m) => (
+                  <li>
+                    <h4>{m.title}</h4>
+                    <p>{m.text}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- II. Savoir-faire : mosaïque en appareil à joints décalés -->
+  <section class="mo-section crafts" aria-labelledby="crafts-title">
+    <div class="mo-container">
+      <div class="crafts__head">
+        <div>
+          <p class="mo-kicker"><span class="mo-kicker__num">II</span>Savoir-faire</p>
+          <h2 id="crafts-title" class="mo-h2">Cinq métiers de la pierre et du bâti.</h2>
+        </div>
+        <a class="mo-link" href="/exemples/moellon/savoir-faire/">Tout notre savoir-faire <MIcon name="arrow" /></a>
+      </div>
+
+      <ul class="bond">
+        <li class="tile tile--photo tile--wide">
+          <a href={`/exemples/moellon/savoir-faire/#${craftOld.id}`}>
+            <span class="tile__img">
+              <Picture
+                src={moellon6}
+                alt="Séjour lumineux rénové, mur en pierre apparente, grande baie vitrée et parquet de chêne"
+                formats={['avif', 'webp']}
+                widths={[480, 720, 960, 1280]}
+                sizes="(max-width: 48em) 100vw, 56vw"
+              />
+            </span>
+            <span class="tile__body">
+              <span class="tile__num" aria-hidden="true">01</span>
+              <h3 class="tile__title">{craftOld.label}</h3>
+              <span class="tile__text">{craftOld.short}</span>
+              <MIcon name="arrow" class="tile__arrow" />
+            </span>
+          </a>
+        </li>
+        <li class="tile tile--photo">
+          <a href={`/exemples/moellon/savoir-faire/#${craftExt.id}`}>
+            <span class="tile__img">
+              <Picture
+                src={moellon2}
+                alt="Extension en blocs béton en cours d’élévation contre une maison, échafaudages et palettes de matériaux"
+                formats={['avif', 'webp']}
+                widths={[480, 720, 960]}
+                sizes="(max-width: 48em) 100vw, 40vw"
+              />
+            </span>
+            <span class="tile__body">
+              <span class="tile__num" aria-hidden="true">02</span>
+              <h3 class="tile__title">{craftExt.label}</h3>
+              <span class="tile__text">{craftExt.short}</span>
+              <MIcon name="arrow" class="tile__arrow" />
+            </span>
+          </a>
+        </li>
+        <li class="tile tile--earth">
+          <a href={`/exemples/moellon/savoir-faire/#${craftOpen.id}`}>
+            <span class="tile__body">
+              <span class="tile__num" aria-hidden="true">03</span>
+              <h3 class="tile__title">{craftOpen.label}</h3>
+              <span class="tile__text">{craftOpen.short}</span>
+              <MIcon name="arrow" class="tile__arrow" />
+            </span>
+          </a>
+        </li>
+        <li class="tile tile--paper">
+          <a href={`/exemples/moellon/savoir-faire/#${craftLime.id}`}>
+            <span class="tile__body">
+              <span class="tile__num" aria-hidden="true">04</span>
+              <h3 class="tile__title">{craftLime.label}</h3>
+              <span class="tile__text">{craftLime.short}</span>
+              <MIcon name="arrow" class="tile__arrow" />
+            </span>
+          </a>
+        </li>
+        <li class="tile tile--terra">
+          <a href={`/exemples/moellon/savoir-faire/#${craftSlab.id}`}>
+            <span class="tile__body">
+              <span class="tile__num" aria-hidden="true">05</span>
+              <h3 class="tile__title">{craftSlab.label}</h3>
+              <span class="tile__text">{craftSlab.short}</span>
+              <MIcon name="arrow" class="tile__arrow" />
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- III. Chantiers : un projet type mis en avant -->
+  <section class="mo-section works" aria-labelledby="works-title">
+    <div class="works__grid">
+      <figure class="works__media">
+        <Picture
+          src={moellon5}
+          alt="Large ouverture créée dans un mur porteur en pierre, poutre métallique posée sur étais, jardin visible au travers"
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1280, 1600, 2000]}
+          sizes="(max-width: 56em) 100vw, 58vw"
+        />
+      </figure>
+      <div class="works__body">
+        <p class="mo-kicker"><span class="mo-kicker__num">III</span>Chantiers</p>
+        <p class="mo-caption">Projet type · Ouverture dans un mur porteur</p>
+        <h2 id="works-title" class="mo-h2 works__title">Ouvrir un mur de pierre, sans rien brusquer.</h2>
+        <p class="works__text">
+          Pour relier une ancienne grange à la pièce de vie, une large baie est créée dans un mur porteur en moellons :
+          étaiement, pose d’une poutre métallique sur des appuis repris, puis reconstitution soignée des tableaux.
+        </p>
+        <dl class="specs">
+          <div><dt>Travaux</dt><dd>Étaiement, ouverture, linteau, reprise des jambages</dd></div>
+          <div><dt>Matériaux</dt><dd>Poutre acier, pierre de réemploi, mortier de chaux</dd></div>
+          <div><dt>Point clé</dt><dd>Étude de la descente de charges avant d’ouvrir</dd></div>
+        </dl>
+        <a class="mo-btn mo-btn--ink" href="/exemples/moellon/chantiers/">Voir les chantiers <MIcon name="arrow" /></a>
+        <RealSiteNote class="works__note">vos chantiers réels, photographiés et décrits avec l’accord de vos clients.</RealSiteNote>
+      </div>
+    </div>
+  </section>
+
+  <!-- IV. Notre approche -->
+  <section class="mo-section method mo-dark" aria-labelledby="method-title">
+    <div class="mo-container method__grid">
+      <div class="method__aside">
+        <p class="mo-kicker"><span class="mo-kicker__num">IV</span>Notre approche</p>
+        <h2 id="method-title" class="mo-h2">De la première visite à la remise des clés.</h2>
+        <p class="mo-lead">Des étapes claires et un seul interlocuteur, pour savoir à chaque moment où en est votre maison.</p>
+        <figure class="method__media">
+          <Picture
+            src={moellon4}
+            alt="Mains d’un maçon garnissant les joints d’un mur en pierre à la truelle, taloche de mortier à la main"
+            formats={['avif', 'webp']}
+            widths={[480, 720, 960, 1200]}
+            sizes="(max-width: 56em) 100vw, 38vw"
+          />
+        </figure>
+      </div>
+      <div class="method__main">
+        <ol class="steps">
+          {
+            steps.map((s, i) => (
+              <li class="step">
+                <span class="step__num" aria-hidden="true">{['I', 'II', 'III', 'IV'][i]}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <a class="mo-link" href="/exemples/moellon/approche/">Le déroulé d’un chantier <MIcon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand />
+</MoellonLayout>
+
+<style>
+  /* ——— Ouverture ——— */
+  .hero {
+    position: relative;
+    display: flex;
+    min-height: clamp(36rem, calc(100svh - 8.5rem), 50rem);
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: var(--mo-lime-deep);
+  }
+
+  .hero__media :global(picture) {
+    height: 100%;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 62% 55%;
+  }
+
+  /* Voile calcaire : la lumière du soir se fond dans la couleur du site, le texte reste lisible */
+  .hero__wash {
+    /* Le voile reste opaque jusqu'au bord droit du texte, quelle que soit la largeur d'écran */
+    --left: max(var(--mo-gutter), (100% - var(--mo-max)) / 2);
+    --edge: calc(var(--left) + min(36rem, (100% - 2 * var(--left)) * 0.54) + 2.5rem);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        90deg,
+        rgb(233 223 207 / 0.97) 0,
+        rgb(233 223 207 / 0.93) var(--edge),
+        rgb(233 223 207 / 0.55) calc(var(--edge) + 6rem),
+        rgb(233 223 207 / 0) calc(var(--edge) + 16rem)
+      ),
+      linear-gradient(0deg, rgb(233 223 207 / 0.35) 0%, rgb(233 223 207 / 0) 30%);
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(3rem, 7vw, 5.5rem) clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: min(36rem, 54%);
+    margin-block: auto;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 1.4rem + 4.4vw, 5.25rem);
+    font-weight: 360;
+    line-height: 0.97;
+    letter-spacing: -0.036em;
+  }
+
+  .hero__text {
+    max-width: 36rem;
+    margin-top: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.3rem);
+    line-height: 1.55;
+    color: var(--mo-ink-2);
+    text-wrap: balance;
+  }
+
+  .hero__btn {
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .hero__caption {
+    align-self: flex-end;
+    padding: 0.45rem 0.8rem;
+    background: rgb(250 246 239 / 0.92);
+    color: var(--mo-ink);
+  }
+
+  /* ——— I. L'entreprise ——— */
+  /* Titre-manifeste sur toute la largeur, en deux « assises » : la seconde décalée d'un joint */
+  .intro__title {
+    font-size: clamp(2.4rem, 1.2rem + 4vw, 4.9rem);
+    font-weight: 360;
+    line-height: 1.02;
+    letter-spacing: -0.034em;
+  }
+
+  .intro__course {
+    display: block;
+  }
+
+  .intro__course--offset {
+    padding-left: 17%;
+    color: var(--mo-terra-ink);
+  }
+
+  .intro__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1rem, 2.5vw, 2rem);
+    align-items: start;
+    margin-top: clamp(2.75rem, 6vw, 5rem);
+  }
+
+  .intro__media {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .intro__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 60% 50%;
+  }
+
+  .intro__body {
+    grid-column: 7 / -1;
+    display: grid;
+    justify-items: start;
+    gap: 1.15rem;
+    padding-top: 0.35rem;
+  }
+
+  .intro__text {
+    color: var(--mo-ink-2);
+  }
+
+  .matter {
+    justify-self: stretch;
+    margin-top: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+
+  .matter__title {
+    font-size: clamp(1.55rem, 1.25rem + 0.9vw, 2.1rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .matter__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--mo-line-strong);
+  }
+
+  .matter__list li {
+    padding: 1.5rem 1.5rem 1.6rem 0;
+    border-bottom: 1px solid var(--mo-line-strong);
+  }
+
+  .matter__list li:nth-child(even) {
+    padding-left: 1.5rem;
+    padding-right: 0;
+    border-left: 1px solid var(--mo-line-strong);
+  }
+
+  .matter__list h4 {
+    margin: 0;
+    font-family: var(--mo-serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--mo-terra-ink);
+  }
+
+  .matter__list p {
+    margin-top: 0.4rem;
+    font-size: 0.975rem;
+    color: var(--mo-ink-2);
+  }
+
+  /* ——— II. Savoir-faire ——— */
+  .crafts {
+    background-color: var(--mo-lime-deep);
+  }
+
+  .crafts__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+  }
+
+  .crafts__head h2 {
+    max-width: 16ch;
+  }
+
+  /* Appareil à joints décalés : 7 + 5, puis 4 + 5 + 3 sur 12 colonnes */
+  .bond {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-top: clamp(2.5rem, 5vw, 3.75rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .tile {
+    grid-column: span 4;
+    display: flex;
+  }
+
+  .tile--wide {
+    grid-column: span 7;
+  }
+
+  .tile--photo:not(.tile--wide) {
+    grid-column: span 5;
+  }
+
+  .tile--paper {
+    grid-column: span 5;
+  }
+
+  .tile--terra {
+    grid-column: span 3;
+  }
+
+  .tile a {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: var(--mo-ink);
+    text-decoration: none;
+    background: var(--mo-cream);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .tile__img {
+    display: block;
+    overflow: hidden;
+  }
+
+  .tile__img :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 0.8s var(--mo-ease);
+  }
+
+  /* La tuile photo étroite : l'image remplit la hauteur laissée libre par le texte */
+  .tile--photo:not(.tile--wide) .tile__img {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 13rem;
+  }
+
+  .tile--photo:not(.tile--wide) .tile__img :global(img) {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .tile--photo:not(.tile--wide) .tile__body {
+    flex: none;
+  }
+
+  .tile__body {
+    position: relative;
+    flex: 1;
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding: clamp(1.4rem, 2.5vw, 2rem) clamp(1.4rem, 2.5vw, 2rem) clamp(1.6rem, 3vw, 2.25rem);
+  }
+
+  .tile__num {
+    font-family: var(--mo-serif);
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--mo-terra-ink);
+  }
+
+  .tile__title {
+    padding-right: 2.5rem;
+    font-size: clamp(1.45rem, 1.2rem + 0.8vw, 1.95rem);
+    font-weight: 420;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: inherit;
+  }
+
+  .tile__text {
+    max-width: 40ch;
+    font-size: 0.975rem;
+    color: var(--mo-ink-2);
+  }
+
+  .tile :global(.tile__arrow) {
+    position: absolute;
+    top: clamp(1.4rem, 2.5vw, 2rem);
+    right: clamp(1.4rem, 2.5vw, 2rem);
+    width: 1.4rem;
+    height: 1.4rem;
+    color: var(--mo-terra-ink);
+    transition: transform 0.3s var(--mo-ease);
+  }
+
+  .tile a:hover :global(.tile__arrow) {
+    transform: translateX(4px);
+  }
+
+  .tile a:hover .tile__img :global(img) {
+    transform: scale(1.035);
+  }
+
+  .tile a:hover .tile__title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  .tile--earth a {
+    background-color: var(--mo-earth);
+    background-image: var(--mo-grain);
+    color: var(--mo-cream);
+  }
+
+  .tile--earth .tile__num,
+  .tile--earth :global(.tile__arrow) {
+    color: var(--mo-ochre-light);
+  }
+
+  .tile--earth .tile__text {
+    color: var(--mo-lime-dim);
+  }
+
+  .tile--earth a:focus-visible {
+    outline-color: var(--mo-terra-ink);
+  }
+
+  .tile--paper a {
+    background: var(--mo-paper);
+  }
+
+  .tile--terra a {
+    background-color: var(--mo-terra);
+    background-image: var(--mo-grain);
+    color: var(--mo-cream);
+  }
+
+  .tile--terra .tile__num,
+  .tile--terra .tile__text,
+  .tile--terra :global(.tile__arrow) {
+    color: var(--mo-cream);
+  }
+
+  .tile--earth .tile__body,
+  .tile--paper .tile__body,
+  .tile--terra .tile__body {
+    min-height: 15rem;
+    align-content: space-between;
+  }
+
+  .tile--earth .tile__body .tile__num,
+  .tile--paper .tile__body .tile__num,
+  .tile--terra .tile__body .tile__num {
+    margin-bottom: auto;
+  }
+
+  /* ——— III. Chantiers ——— */
+  .works__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem clamp(2.5rem, 6vw, 6rem);
+    padding-right: max(var(--mo-gutter), (100% - var(--mo-max)) / 2);
+  }
+
+  .works__media {
+    position: relative;
+  }
+
+  .works__media::after {
+    content: '';
+    position: absolute;
+    right: clamp(-2.5rem, -3vw, -1rem);
+    bottom: clamp(-2.5rem, -3vw, -1rem);
+    width: 34%;
+    height: 42%;
+    background: var(--mo-lime-shade);
+    z-index: -1;
+  }
+
+  .works__media :global(img) {
+    width: 100%;
+    aspect-ratio: 5 / 4;
+    object-fit: cover;
+    object-position: 45% 50%;
+  }
+
+  .works {
+    isolation: isolate;
+  }
+
+  .works__body {
+    display: grid;
+    justify-items: start;
+    max-width: 34rem;
+  }
+
+  .works__body .mo-kicker {
+    margin-bottom: 2rem;
+  }
+
+  .works__title {
+    margin-top: 1rem;
+    font-size: clamp(2.1rem, 1.3rem + 2.6vw, 3.4rem);
+  }
+
+  .works__text {
+    margin-top: 1.25rem;
+    color: var(--mo-ink-2);
+  }
+
+  .specs {
+    display: grid;
+    width: 100%;
+    margin: 1.75rem 0 2rem;
+    border-top: 1px solid var(--mo-line-strong);
+  }
+
+  .specs div {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.75rem;
+    border-bottom: 1px solid var(--mo-line);
+  }
+
+  .specs dt {
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mo-terra-ink);
+    padding-top: 0.15rem;
+  }
+
+  .specs dd {
+    margin: 0;
+    font-size: 0.975rem;
+  }
+
+  .works__body :global(.works__note) {
+    margin-top: 2rem;
+  }
+
+  /* ——— IV. Notre approche ——— */
+  .method__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 3.5rem clamp(3rem, 8vw, 8rem);
+    align-items: start;
+  }
+
+  .method__aside {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .method__aside .mo-kicker {
+    margin-bottom: 0.25rem;
+  }
+
+  .method__media {
+    margin-top: 1.25rem;
+  }
+
+  .method__media :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: 60% 50%;
+  }
+
+  .steps {
+    display: grid;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--mo-line-light);
+  }
+
+  /* Chaque étape est décalée d'un cran : un escalier de pierres */
+  .step {
+    display: grid;
+    grid-template-columns: 4.25rem minmax(0, 1fr);
+    column-gap: 1rem;
+    padding-block: clamp(1.5rem, 3vw, 2.25rem);
+    border-bottom: 1px solid var(--mo-line-light);
+  }
+
+  .step:nth-child(2) {
+    padding-left: clamp(0rem, 3vw, 2.5rem);
+  }
+
+  .step:nth-child(3) {
+    padding-left: clamp(0rem, 6vw, 5rem);
+  }
+
+  .step:nth-child(4) {
+    padding-left: clamp(0rem, 9vw, 7.5rem);
+  }
+
+  .step__num {
+    grid-row: span 2;
+    font-family: var(--mo-serif);
+    font-size: 2.4rem;
+    font-weight: 330;
+    line-height: 1;
+    color: var(--mo-ochre-light);
+  }
+
+  .step h3 {
+    font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.75rem);
+    font-weight: 420;
+  }
+
+  .step p {
+    margin-top: 0.4rem;
+    color: var(--mo-lime-dim);
+    font-size: 0.99rem;
+  }
+
+  .method__main .mo-link {
+    margin-top: 2rem;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 64em) {
+    .tile--wide,
+    .tile--photo:not(.tile--wide) {
+      grid-column: span 6;
+    }
+
+    .tile--earth,
+    .tile--paper,
+    .tile--terra {
+      grid-column: span 4;
+    }
+
+    /* Deux tuiles photo de même largeur : même format d'image, bas des photos alignés */
+    .tile--photo:not(.tile--wide) .tile__img {
+      flex: none;
+      min-height: 0;
+    }
+
+    .tile--photo:not(.tile--wide) .tile__img :global(img) {
+      position: static;
+      height: auto;
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  @media (max-width: 56em) {
+    .hero {
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .hero__media {
+      position: relative;
+      inset: auto;
+      order: 2;
+      z-index: 0;
+    }
+
+    .hero__media :global(img) {
+      height: auto;
+      aspect-ratio: 4 / 3;
+      object-position: 70% 50%;
+    }
+
+    .hero__wash {
+      display: none;
+    }
+
+    .hero__inner {
+      padding-block: clamp(2.25rem, 7vw, 3.5rem) 2rem;
+    }
+
+    .hero__content {
+      max-width: 36rem;
+    }
+
+    .hero__caption {
+      position: absolute;
+      right: var(--mo-gutter);
+      bottom: 1rem;
+      z-index: 1;
+    }
+
+    .intro__course--offset {
+      padding-left: clamp(1.25rem, 8vw, 4rem);
+    }
+
+    .intro__media,
+    .intro__body {
+      grid-column: 1 / -1;
+    }
+
+    .intro__media :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+
+    .intro__body {
+      margin-top: 2.25rem;
+      padding-top: 0;
+    }
+
+    .works__grid {
+      grid-template-columns: 1fr;
+      padding-right: 0;
+    }
+
+    .works__media::after {
+      display: none;
+    }
+
+    .works__body {
+      max-width: none;
+      padding-inline: var(--mo-gutter);
+    }
+
+    .method__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .tile--wide,
+    .tile--photo:not(.tile--wide),
+    .tile--earth,
+    .tile--paper,
+    .tile--terra {
+      grid-column: 1 / -1;
+    }
+
+    .tile--earth .tile__body,
+    .tile--paper .tile__body,
+    .tile--terra .tile__body {
+      min-height: 0;
+    }
+
+    .tile--earth .tile__body .tile__num,
+    .tile--paper .tile__body .tile__num,
+    .tile--terra .tile__body .tile__num {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: 36em) {
+    .matter__list {
+      grid-template-columns: 1fr;
+    }
+
+    .matter__list li,
+    .matter__list li:nth-child(even) {
+      padding: 1.25rem 0;
+      border-left: 0;
+    }
+
+    .specs div {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+
+    .step,
+    .step:nth-child(n) {
+      grid-template-columns: 3.25rem minmax(0, 1fr);
+      padding-left: 0;
+    }
+
+    .step__num {
+      font-size: 1.9rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile a:hover .tile__img :global(img),
+    .tile a:hover :global(.tile__arrow) {
+      transform: none;
+    }
+  }
+</style>

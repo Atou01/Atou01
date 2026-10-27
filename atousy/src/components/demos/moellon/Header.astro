@@ -1,0 +1,365 @@
+---
+// En-tête Moellon : logo à gauche, navigation à droite, Contact en bouton terre cuite.
+// Mobile : bouton « Menu » (aria-expanded) qui ouvre un panneau ; Échap ferme et rend le focus.
+// Sans JavaScript, la navigation reste visible (liens repliés sous le logo).
+import MIcon from './MIcon.astro';
+import Logo from './Logo.astro';
+import { moellonNav, type MoellonPage } from './nav';
+
+interface Props {
+  current: MoellonPage;
+}
+const { current } = Astro.props;
+const links = moellonNav.filter((item) => item.key !== 'contact');
+---
+
+<header class="header" data-mo-header>
+  <div class="bar mo-container">
+    <a class="brand" href="/exemples/moellon/" aria-label="Moellon, accueil" aria-current={current === 'accueil' ? 'page' : undefined}>
+      <Logo />
+    </a>
+
+    <button class="burger" type="button" aria-expanded="false" aria-controls="mo-menu" data-mo-toggle hidden>
+      <span class="burger__label">Menu</span>
+      <span class="burger__icon" aria-hidden="true">
+        <MIcon name="menu" class="i-open" />
+        <MIcon name="close" class="i-close" />
+      </span>
+    </button>
+
+    <nav id="mo-menu" class="nav" aria-label="Navigation principale">
+      <ul class="nav__list">
+        {
+          links.map((item) => (
+            <li>
+              <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                <span class="nav__text">{item.label}</span>
+                <MIcon name="arrow" class="nav__arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="mo-btn nav__cta" href="/exemples/moellon/contact/" aria-current={current === 'contact' ? 'page' : undefined}>
+        Contact <MIcon name="arrow" />
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var header = document.querySelector('[data-mo-header]');
+    if (!header) return;
+    var btn = header.querySelector('[data-mo-toggle]');
+    var panel = document.getElementById('mo-menu');
+    if (!btn || !panel) return;
+
+    header.classList.add('is-enhanced');
+    btn.hidden = false;
+
+    function isOpen() {
+      return btn.getAttribute('aria-expanded') === 'true';
+    }
+    function setOpen(open, returnFocus) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      header.classList.toggle('is-open', open);
+      if (!open && returnFocus) btn.focus();
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(!isOpen(), false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) setOpen(false, true);
+    });
+    document.addEventListener('click', function (e) {
+      if (isOpen() && !header.contains(e.target)) setOpen(false, false);
+    });
+    // Élément de l'en-tête masqué alors qu'il avait le focus (changement de taille d'écran) :
+    // le focus passe à celui qui le remplace au même endroit (premier lien du menu à la place
+    // du bouton Menu en grand écran, bouton Menu à la place d'un lien du menu en petit écran).
+    function refocus(el) {
+      if (!el || el.getClientRects().length > 0) return;
+      var target = el === btn ? panel.querySelector('a') : btn;
+      if (target && target.getClientRects().length > 0) target.focus();
+    }
+    header.addEventListener('focusout', function (e) {
+      // Sans destination : le navigateur a retiré le focus d'un élément devenu invisible.
+      if (!e.relatedTarget) refocus(e.target);
+      else if (isOpen() && !header.contains(e.relatedTarget)) setOpen(false, false);
+    });
+    // Clic sur un lien de l'en-tête (logo ou menu) : le menu se referme avant de quitter la page.
+    header.addEventListener('click', function (e) {
+      if (isOpen() && e.target.closest && e.target.closest('a')) setOpen(false, false);
+    });
+    // Retour arrière depuis le cache du navigateur : la page revient avec le menu fermé.
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted && isOpen()) setOpen(false, false);
+    });
+    // Changement de taille d'écran : le menu se referme. Les navigateurs qui laissent le focus
+    // sur l'élément masqué passent ici ; les autres le retirent et passent par « focusout ».
+    var mq = window.matchMedia('(min-width: 56.01em)');
+    var onChange = function () {
+      var active = document.activeElement;
+      setOpen(false, false);
+      if (active && header.contains(active)) refocus(active);
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  })();
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: var(--mo-lime);
+    background-image: var(--mo-grain);
+    color: var(--mo-ink);
+    /* Double trait : comme un lit de mortier sous l'assise */
+    box-shadow:
+      0 1px 0 var(--mo-line-strong),
+      0 4px 0 var(--mo-lime),
+      0 5px 0 var(--mo-line);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 5rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    margin-right: auto;
+    padding-block: 0.4rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 2.6vw, 2.5rem);
+  }
+
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.1rem, 2.4vw, 2.25rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav__list a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--mo-ink);
+    font-size: 0.975rem;
+    font-weight: 560;
+    text-decoration: none;
+    transition: color 0.2s var(--mo-ease);
+  }
+
+  .nav__list :global(.nav__arrow) {
+    display: none;
+  }
+
+  /* Page courante / survol : une petite pierre terre cuite sous le libellé */
+  .nav__list a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0.2rem;
+    width: 1.1rem;
+    height: 0.32rem;
+    margin-left: -0.55rem;
+    border-radius: 2px 3px 2px 3px;
+    background: var(--mo-terra);
+    transform: scaleX(0);
+    transition: transform 0.3s var(--mo-ease);
+  }
+
+  .nav__list a:hover {
+    color: var(--mo-terra-ink);
+  }
+
+  .nav__list a:hover::after,
+  .nav__list a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .nav__cta {
+    min-height: 2.9rem;
+    padding: 0.6rem 1.15rem;
+    font-size: 0.95rem;
+  }
+
+  .nav__cta[aria-current='page'] {
+    background: var(--mo-earth);
+    border-color: var(--mo-earth);
+  }
+
+  .burger {
+    display: none;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 2.9rem;
+    padding: 0 0.35rem 0 1rem;
+    background: var(--mo-cream);
+    border: 1px solid var(--mo-line-strong);
+    border-radius: 1px;
+    color: var(--mo-ink);
+    font-size: 0.95rem;
+    font-weight: 620;
+    cursor: pointer;
+  }
+
+  .burger__icon {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    background: var(--mo-terra);
+    color: var(--mo-cream);
+  }
+
+  .burger__icon :global(svg) {
+    grid-area: 1 / 1;
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .burger :global(.i-close),
+  .is-open .burger :global(.i-open) {
+    display: none;
+  }
+
+  .is-open .burger :global(.i-close) {
+    display: block;
+  }
+
+  @media (max-width: 56em) {
+    .bar {
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      min-height: 4.5rem;
+    }
+
+    /* Sans JavaScript : liens visibles, repliés sous le logo, en-tête non collant */
+    .header:not(.is-enhanced) {
+      position: relative;
+    }
+
+    .header:not(.is-enhanced) .bar {
+      padding-top: 0.6rem;
+    }
+
+    .nav {
+      flex-wrap: wrap;
+      width: 100%;
+      gap: 0.5rem 1.25rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .nav__list {
+      flex-wrap: wrap;
+      gap: 0.25rem 1.25rem;
+    }
+
+    /* Avec JavaScript : panneau déroulant */
+    .is-enhanced .burger:not([hidden]) {
+      display: inline-flex;
+    }
+
+    .is-enhanced .nav {
+      display: none;
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0;
+      right: 0;
+      width: auto;
+      max-height: calc(100svh - 5rem);
+      overflow-y: auto;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 0.75rem var(--mo-gutter) 2rem;
+      background-color: var(--mo-paper);
+      background-image: var(--mo-grain);
+      border-bottom: 1px solid var(--mo-line-strong);
+      box-shadow: 0 30px 40px -30px rgb(43 33 26 / 0.5);
+    }
+
+    .is-enhanced.is-open .nav {
+      display: flex;
+    }
+
+    .is-enhanced .nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .is-enhanced .nav__list li {
+      border-bottom: 1px solid var(--mo-line);
+    }
+
+    .is-enhanced .nav__list a {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+      min-height: 0;
+      padding-block: 1rem;
+      font-family: var(--mo-serif);
+      font-size: 1.85rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .is-enhanced .nav__list :global(.nav__arrow) {
+      display: block;
+      width: 1.35rem;
+      height: 1.35rem;
+      color: var(--mo-terra-ink);
+    }
+
+    .is-enhanced .nav__list a::after {
+      left: 0;
+      bottom: 0.55rem;
+      margin-left: 0;
+      width: 1.6rem;
+    }
+
+    .is-enhanced .nav__list a:focus-visible {
+      outline-offset: -2px;
+    }
+
+    .is-enhanced .nav__cta {
+      justify-content: center;
+      margin-top: 1.5rem;
+      min-height: 3.25rem;
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 56em) and (prefers-reduced-motion: no-preference) {
+    .is-enhanced.is-open .nav {
+      animation: mo-drop 0.28s var(--mo-ease);
+    }
+  }
+
+  @keyframes mo-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+  }
+</style>

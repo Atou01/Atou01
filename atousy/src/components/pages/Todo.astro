@@ -1,0 +1,25 @@
+---
+// Élément à compléter dans un modèle légal : reste visible et surligné tant qu'il n'est pas renseigné.
+// Usage : <Todo>adresse du siège</Todo> → [À COMPLÉTER : adresse du siège]
+interface Props {
+  /** Préfixe affiché (par défaut « À COMPLÉTER »). */
+  label?: string;
+}
+const { label = 'À COMPLÉTER' } = Astro.props;
+const hasText = Astro.slots.has('default');
+---
+
+<mark class="todo">[{label}{hasText && ' : '}<slot />]</mark>
+
+<style>
+  .todo {
+    padding: 0.05em 0.15em;
+    border-bottom: 1.5px dashed var(--coral-text);
+    border-radius: 2px;
+    background: #fde4dc;
+    color: var(--ink);
+    font-weight: 600;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+</style>

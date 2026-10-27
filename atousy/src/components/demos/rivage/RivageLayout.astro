@@ -1,0 +1,255 @@
+---
+// Gabarit des pages Rivage (paysagiste fictif) : DemoLayout + en-tête + pied de page
+// + jetons de couleur et utilitaires partagés, limités à html[data-demo='rivage'].
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import type { RivagePage } from './nav';
+
+interface Props {
+  title: string;
+  description: string;
+  current: RivagePage;
+}
+const { title, description, current } = Astro.props;
+---
+
+<DemoLayout title={title} description={description} brand="rivage">
+  <Header current={current} />
+  <main id="contenu" tabindex="-1">
+    <slot />
+  </main>
+  <Footer />
+</DemoLayout>
+
+<style is:global>
+  html[data-demo='rivage'] {
+    --rv-green: #1e3328;
+    --rv-green-2: #2a4637;
+    --rv-green-3: #3d5c4a;
+    --rv-ivory: #f6f1e6;
+    --rv-ivory-2: #ece4d3;
+    --rv-paper: #fbf8f1;
+    --rv-ink: #1b2620;
+    --rv-ink-2: #4a5850;
+    --rv-wheat: #d8c59a;
+    --rv-line: rgb(30 51 40 / 0.14);
+    --rv-serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+    --rv-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    --rv-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --rv-radius: 6px;
+    --rv-gutter: clamp(1.25rem, 4vw, 3rem);
+    --rv-max: 77rem;
+    background: var(--rv-ivory);
+    scroll-padding-top: 6rem;
+  }
+
+  html[data-demo='rivage'] body {
+    background: var(--rv-ivory);
+    color: var(--rv-ink);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+
+  html[data-demo='rivage'] main:focus {
+    outline: none;
+  }
+
+  html[data-demo='rivage'] ::selection {
+    background: #cfdcc6;
+    color: var(--rv-green);
+  }
+
+  html[data-demo='rivage'] :focus-visible {
+    outline: 2px solid var(--rv-green);
+    outline-offset: 3px;
+  }
+
+  html[data-demo='rivage'] .rv-dark :focus-visible {
+    outline-color: var(--rv-wheat);
+  }
+
+  html[data-demo='rivage'] h1,
+  html[data-demo='rivage'] h2,
+  html[data-demo='rivage'] h3 {
+    font-family: var(--rv-serif);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.018em;
+    color: var(--rv-green);
+    text-wrap: balance;
+  }
+
+  html[data-demo='rivage'] p {
+    text-wrap: pretty;
+  }
+
+  html[data-demo='rivage'] .rv-dark h2,
+  html[data-demo='rivage'] .rv-dark h3 {
+    color: var(--rv-ivory);
+  }
+
+  /* Utilitaires */
+  .rv-container {
+    width: min(var(--rv-max), 100% - 2 * var(--rv-gutter));
+    margin-inline: auto;
+  }
+
+  .rv-section {
+    padding-block: clamp(4.5rem, 9vw, 8rem);
+  }
+
+  /* Le lien « Aller au contenu » est fourni par DemoLayout, avant le bandeau (premier arrêt au clavier). */
+
+  .rv-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    font-family: var(--rv-sans);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--rv-green-3);
+  }
+
+  .rv-eyebrow::before {
+    content: '';
+    width: 1.75rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .rv-dark .rv-eyebrow {
+    color: var(--rv-wheat);
+  }
+
+  .rv-h2 {
+    font-size: clamp(2.15rem, 1.35rem + 2.7vw, 3.5rem);
+  }
+
+  .rv-lead {
+    font-size: clamp(1.125rem, 1.02rem + 0.35vw, 1.3125rem);
+    line-height: 1.6;
+    color: var(--rv-ink-2);
+  }
+
+  .rv-dark .rv-lead {
+    color: rgb(246 241 230 / 0.82);
+  }
+
+  .rv-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 1.45rem;
+    background: var(--rv-green);
+    color: var(--rv-ivory);
+    border: 1px solid var(--rv-green);
+    border-radius: 4px;
+    font-family: var(--rv-sans);
+    font-size: 1rem;
+    font-weight: 550;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      background-color 0.25s var(--rv-ease),
+      color 0.25s var(--rv-ease),
+      border-color 0.25s var(--rv-ease);
+  }
+
+  .rv-btn:hover {
+    background: var(--rv-green-2);
+    border-color: var(--rv-green-2);
+  }
+
+  .rv-btn svg {
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
+    transition: transform 0.3s var(--rv-ease);
+  }
+
+  .rv-btn:hover svg,
+  .rv-link:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  .rv-btn--sm {
+    padding: 0.7rem 1.15rem;
+    font-size: 0.9375rem;
+  }
+
+  .rv-btn--light {
+    background: #fff;
+    color: var(--rv-ink);
+    border-color: #fff;
+  }
+
+  .rv-btn--light:hover {
+    background: var(--rv-ivory);
+    border-color: var(--rv-ivory);
+  }
+
+  .rv-btn--ghost {
+    background: transparent;
+    color: var(--rv-green);
+    border-color: rgb(30 51 40 / 0.35);
+  }
+
+  .rv-btn--ghost:hover {
+    background: var(--rv-green);
+    color: var(--rv-ivory);
+  }
+
+  .rv-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--rv-green);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+    text-decoration-color: rgb(30 51 40 / 0.35);
+    transition: text-decoration-color 0.25s var(--rv-ease);
+  }
+
+  .rv-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .rv-link svg {
+    width: 1.05em;
+    height: 1.05em;
+    flex: none;
+    transition: transform 0.3s var(--rv-ease);
+  }
+
+  .rv-dark .rv-link {
+    color: var(--rv-ivory);
+    text-decoration-color: rgb(246 241 230 / 0.4);
+  }
+
+  .rv-visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv-btn:hover svg,
+    .rv-link:hover svg {
+      transform: none;
+    }
+  }
+</style>

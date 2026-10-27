@@ -1,0 +1,118 @@
+---
+// Encart « Et ensuite ? » : ce qui se passe après l'envoi (contenus/devis.md).
+import Icon from '../Icon.astro';
+
+type Step = { title: string; text?: string; link?: { href: string; label: string; after: string } };
+
+const steps: Step[] = [
+  { title: 'Nous lisons votre demande.' },
+  {
+    title: 'Nous revenons vers vous par e-mail',
+    text: 'pour préciser votre besoin. Pour une refonte, nous examinons votre site actuel.',
+  },
+  {
+    title: 'Vous recevez un devis clair et détaillé.',
+    text: 'Nos',
+    link: { href: '/cgv/', label: 'conditions générales de vente', after: 'y sont jointes.' },
+  },
+];
+---
+
+<aside class="next" aria-labelledby="next-title">
+  <h2 id="next-title">Et ensuite ?</h2>
+  <ol class="next__steps">
+    {
+      steps.map((step, i) => (
+        <li>
+          <span class="next__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <p>
+            <strong>{step.title}</strong>
+            {step.text && ` ${step.text}`}
+            {step.link && <>{' '}<a href={step.link.href}>{step.link.label}</a>{` ${step.link.after}`}</>}
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+  <p class="next__note">Aucun rendez-vous à réserver : tout commence par ce message.</p>
+  <ul class="next__links">
+    <li><a class="link-arrow" href="/offre/"><span>Le détail de l’offre</span> <Icon name="arrow" /></a></li>
+    <li><a class="link-arrow" href="/methode/"><span>La méthode, étape par étape</span> <Icon name="arrow" /></a></li>
+  </ul>
+</aside>
+
+<style>
+  .next {
+    padding: clamp(1.75rem, 2.6vw, 2.5rem);
+    border-radius: var(--radius);
+    background: var(--marine-band);
+    color: var(--paper);
+  }
+
+  h2 {
+    font-size: clamp(2rem, 2.8vw, 2.75rem);
+  }
+
+  .next__steps {
+    margin-top: 1.5rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid rgb(255 253 250 / 0.16);
+  }
+
+  .next__steps li {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    gap: 0.75rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid rgb(255 253 250 / 0.16);
+  }
+
+  .next__num {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--coral);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .next__steps p {
+    line-height: 1.45;
+    color: rgb(255 253 250 / 0.8);
+  }
+
+  strong {
+    font-weight: 650;
+    color: var(--paper);
+  }
+
+  .next__steps a {
+    color: var(--paper);
+    text-decoration-color: var(--coral);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  .next__steps a:hover {
+    text-decoration-thickness: 3px;
+  }
+
+  .next__note {
+    margin-top: 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: rgb(255 253 250 / 0.8);
+  }
+
+  .next__links {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 1.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .next__links a {
+    font-size: 0.9375rem;
+  }
+</style>

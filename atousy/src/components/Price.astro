@@ -1,0 +1,96 @@
+---
+// Prix du marché choisi. Sans JavaScript, les deux prix s'affichent avec leur pays.
+import { markets, priceNote } from '../data/site';
+
+interface Props {
+  /** Thème du fond : marine (bandeau) ou clair. */
+  tone?: 'dark' | 'light';
+}
+const { tone = 'dark' } = Astro.props;
+---
+
+<div class:list={['price', `price--${tone}`]}>
+  <p class="price__amounts">
+    {
+      Object.values(markets).map((m) => (
+        <span class="price__amount" data-price-market={m.id}>
+          <span class="price__country nojs-only">{m.country} : </span>
+          {m.price}
+        </span>
+      ))
+    }
+  </p>
+  <p class="price__note">{priceNote}</p>
+  <p class="price__audience">Offre réservée aux professionnels : entreprises et indépendants.</p>
+  <p class="price__tax" data-price-market="ch">
+    Prix en CHF, sans TVA suisse : prestataire établi en France, non inscrit au registre suisse de la TVA.
+    Le cas échéant, l’impôt sur les acquisitions est déclaré par le client.
+  </p>
+  <p class="price__market js-only">
+    Tarif affiché : <strong data-market-country>Europe · EUR</strong>{' '}
+    (<span data-market-status>par défaut</span>). Pays modifiable dans le menu.
+  </p>
+</div>
+
+<style>
+  .price__amounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 2rem;
+  }
+
+  .price__amount {
+    font-size: clamp(2.75rem, 5.4vw, 5.25rem);
+    font-weight: 750;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .price__country {
+    font-size: 0.4em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    vertical-align: middle;
+  }
+
+  .price__note {
+    margin-top: 0.85rem;
+    font-size: 0.9375rem;
+  }
+
+  .price__audience {
+    margin-top: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .price__tax {
+    margin-top: 0.35rem;
+    font-size: 0.8125rem;
+  }
+
+  .price__market {
+    margin-top: 0.4rem;
+    font-size: 0.8125rem;
+    opacity: 0.8;
+  }
+
+  .price__market strong {
+    font-weight: 600;
+  }
+
+
+  .price--dark .price__note,
+  .price--dark .price__tax {
+    color: rgb(255 253 250 / 0.85);
+  }
+
+  .price--light .price__note,
+  .price--light .price__tax,
+  .price--light .price__market {
+    color: var(--ink-2);
+  }
+
+
+</style>

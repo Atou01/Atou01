@@ -1,0 +1,382 @@
+---
+// Rivage — paysagiste fictif : « Votre jardin », galerie de projets types (démonstration Atousy).
+// Projets types illustrés : aucun client, aucun lieu réel.
+import { Picture } from 'astro:assets';
+import RivageLayout from '../../../../components/demos/rivage/RivageLayout.astro';
+import PageIntro from '../../../../components/demos/rivage/PageIntro.astro';
+import ContactBand from '../../../../components/demos/rivage/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/rivage/RealSiteNote.astro';
+import Icon from '../../../../components/Icon.astro';
+import pathImg from '../../../../assets/photos/rivage-1.jpg';
+import terraceImg from '../../../../assets/photos/rivage-2.jpg';
+import grassesImg from '../../../../assets/photos/rivage-3.jpg';
+import wallImg from '../../../../assets/photos/rivage-4.jpg';
+import pondImg from '../../../../assets/photos/rivage-5.jpg';
+import winterImg from '../../../../assets/photos/rivage-6.jpg';
+
+const projects = [
+  {
+    img: terraceImg,
+    caption: 'Terrasse et massifs',
+    text: 'Une terrasse en pierre tournée vers la vue, entourée de lavandes, de rosiers et de vivaces.',
+    tags: ['Terrasse', 'Massifs', 'Muret'],
+    alt: 'Terrasse en pierre avec deux fauteuils en bois, entourée de lavandes, face à un lac et des montagnes.',
+    pos: '40% 60%',
+    size: 'wide',
+  },
+  {
+    img: grassesImg,
+    caption: 'Prairie de vivaces',
+    text: 'Échinacées, sauges et graminées associées pour fleurir jusqu’à l’automne.',
+    tags: ['Plantation', 'Vivaces'],
+    alt: 'Échinacées, sauges et graminées dorées dans la lumière du soir.',
+    pos: '25% 50%',
+    size: 'tall',
+  },
+  {
+    img: pondImg,
+    caption: 'Bassin naturel',
+    text: 'Un bassin filtré par les plantes, bordé de pierres plates et d’iris.',
+    tags: ['Bassin', 'Berges plantées'],
+    alt: 'Bassin naturel aux eaux claires avec nénuphars, bordé de pierres et d’iris.',
+    pos: '45% 55%',
+    size: 'tall',
+  },
+  {
+    img: pathImg,
+    caption: 'Allée de graminées',
+    text: 'Un chemin dallé qui serpente entre les graminées, jusqu’à la terrasse de la maison.',
+    tags: ['Cheminement', 'Graminées', 'Éclairage'],
+    alt: 'Allée en pierre sinueuse entre graminées et lavandes, sous les arbres, au coucher du soleil.',
+    pos: '50% 60%',
+    size: 'wide',
+  },
+  {
+    img: wallImg,
+    caption: 'Muret en pierre sèche',
+    text: 'Un talus repris en murets plantés de thym, d’orpins et de petites fougères.',
+    tags: ['Pierre sèche', 'Pente'],
+    alt: 'Muret en pierre sèche planté de thym, de fougères et de petites fleurs.',
+    pos: '40% 50%',
+    size: 'half',
+  },
+  {
+    img: winterImg,
+    caption: 'Jardin d’hiver',
+    text: 'Des silhouettes choisies pour rester belles sous le givre, quand tout se repose.',
+    tags: ['Structure', 'Toutes saisons'],
+    alt: 'Jardin couvert de givre au lever du soleil, graminées et arbres dénudés.',
+    pos: '40% 55%',
+    size: 'half',
+  },
+];
+
+const starts = [
+  {
+    title: 'Un jardin à créer',
+    text: 'Maison neuve, terrain nu ou remué par les travaux : tout est à imaginer, et c’est une belle page blanche.',
+  },
+  {
+    title: 'Un jardin à transformer',
+    text: 'Un jardin existant qui ne vous ressemble plus : on garde ce qui a du caractère, on repense le reste.',
+  },
+  {
+    title: 'Un jardin à entretenir',
+    text: 'Votre jardin vous plaît, mais le temps manque : nous prenons le relais, au rythme des saisons.',
+  },
+];
+---
+
+<RivageLayout
+  title="Votre jardin — Rivage, démonstration fictive | Atousy"
+  description="Projets types de Rivage, paysagiste fictif : terrasse et massifs, bassin naturel, muret en pierre sèche, jardin d’hiver. Démonstration réalisée par Atousy."
+  current="jardins"
+>
+  <PageIntro
+    title="Votre jardin"
+    lead="Chaque jardin part d’un lieu et d’une façon de vivre. Ces projets types vous aident à imaginer le vôtre."
+  >
+    <p class="disclaimer">Projets types illustrés : Rivage est une entreprise fictive, ces images ne montrent pas de vrais chantiers.</p>
+  </PageIntro>
+
+  <section class="gallery-section" aria-labelledby="gallery-title">
+    <div class="rv-container">
+      <h2 id="gallery-title" class="rv-visually-hidden">Projets types</h2>
+      <ul class="gallery">
+        {
+          projects.map((p, i) => (
+            <li class={`item item--${p.size}`}>
+              <figure>
+                <div class="item__media">
+                  <Picture
+                    src={p.img}
+                    alt={p.alt}
+                    formats={['avif', 'webp']}
+                    widths={[480, 800, 1200, 1600]}
+                    sizes={
+                      p.size === 'wide'
+                        ? '(max-width: 48em) calc(100vw - 2.5rem), (max-width: 80em) 58vw, 45rem'
+                        : '(max-width: 48em) calc(100vw - 2.5rem), (max-width: 80em) 42vw, 32rem'
+                    }
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    fetchpriority={i === 0 ? 'high' : undefined}
+                    style={`object-position: ${p.pos}`}
+                  />
+                </div>
+                <figcaption>
+                  <span class="item__head">
+                    <span class="item__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="item__title">Projet type · {p.caption}</span>
+                  </span>
+                  <span class="item__text">{p.text}</span>
+                  <span class="item__tags">
+                    {p.tags.map((t) => (
+                      <span>{t}</span>
+                    ))}
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+
+      <RealSiteNote class="gallery-note">
+        vos réalisations, photographiées chez vos clients avec leur accord, avec quelques mots sur chaque projet.
+      </RealSiteNote>
+    </div>
+  </section>
+
+  <section class="rv-section starts" aria-labelledby="starts-title">
+    <div class="rv-container">
+      <div class="starts__head">
+        <p class="rv-eyebrow">Par où commencer ?</p>
+        <h2 id="starts-title" class="rv-h2">Votre jardin, aujourd’hui.</h2>
+      </div>
+      <ul class="starts__grid">
+        {
+          starts.map((s) => (
+            <li>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <a class="rv-link" href="/exemples/rivage/contact/">
+                En parler avec nous <Icon name="arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand />
+</RivageLayout>
+
+<style>
+  .disclaimer {
+    font-size: 0.875rem;
+    color: var(--rv-ink-2);
+    padding-left: 0.9rem;
+    border-left: 2px solid rgb(30 51 40 / 0.25);
+  }
+
+  .gallery-section {
+    padding-bottom: clamp(4.5rem, 9vw, 7.5rem);
+  }
+
+  /* Chaque projet occupe deux rangées (image, légende) partagées via subgrid :
+     images et légendes s'alignent d'une colonne à l'autre. */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1.25rem, 2.5vw, 2.25rem);
+    row-gap: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item,
+  .item figure {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+
+  .item--wide {
+    grid-column: span 7;
+  }
+
+  .item--tall {
+    grid-column: span 5;
+  }
+
+  .item--half {
+    grid-column: span 6;
+  }
+
+  /* Alternance : grande / haute, puis haute / grande */
+  .item:nth-child(3) {
+    grid-column: 1 / span 5;
+  }
+
+  .item__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--rv-radius);
+    background: var(--rv-ivory-2);
+  }
+
+  .item--wide .item__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .item--tall .item__media {
+    min-height: 22rem;
+  }
+
+  .item--half .item__media {
+    aspect-ratio: 3 / 2;
+  }
+
+  .item__media :global(picture) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .item__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s var(--rv-ease);
+  }
+
+  .item:hover .item__media :global(img) {
+    transform: scale(1.03);
+  }
+
+  figcaption {
+    display: grid;
+    align-content: start;
+    gap: 0.4rem;
+    padding: 1.1rem 0 clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .item__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .item__index {
+    font-family: var(--rv-serif);
+    font-style: italic;
+    color: var(--rv-green-3);
+  }
+
+  .item__title {
+    font-family: var(--rv-serif);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--rv-green);
+  }
+
+  .item__text {
+    color: var(--rv-ink-2);
+    max-width: 34rem;
+  }
+
+  .item__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+
+  .item__tags span {
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: var(--rv-ivory-2);
+    font-size: 0.8125rem;
+    font-weight: 550;
+    color: var(--rv-green-3);
+  }
+
+  :global(.gallery-note) {
+    margin-top: 0.5rem;
+    max-width: 44rem;
+  }
+
+  /* Par où commencer */
+  .starts {
+    background: var(--rv-ivory-2);
+  }
+
+  .starts__head {
+    margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+  }
+
+  .starts__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .starts__grid li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: clamp(1.75rem, 3vw, 2.5rem);
+    background: var(--rv-paper);
+    border: 1px solid var(--rv-line);
+    border-radius: var(--rv-radius);
+  }
+
+  .starts__grid h3 {
+    font-size: 1.75rem;
+  }
+
+  .starts__grid p {
+    flex: 1;
+    color: var(--rv-ink-2);
+  }
+
+  .starts__grid .rv-link {
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 56em) {
+    .starts__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 48em) {
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+
+    .item--wide,
+    .item--tall,
+    .item--half,
+    .item:nth-child(3) {
+      grid-column: auto;
+    }
+
+    .item--wide .item__media,
+    .item--tall .item__media,
+    .item--half .item__media {
+      min-height: 0;
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .item:hover .item__media :global(img) {
+      transform: none;
+    }
+  }
+</style>

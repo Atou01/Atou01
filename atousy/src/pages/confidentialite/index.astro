@@ -1,0 +1,265 @@
+---
+// Modèle RGPD + nLPD à compléter (contenus/confidentialite.md, docs/obligations-suisse.md § 3).
+// Reste en noindex tant que des éléments [À COMPLÉTER] subsistent. Les libellés de marché
+// suivent src/data/site.ts. Titre coupé après « Politique » : « de » ne finit jamais une ligne.
+import LegalPage from '../../components/pages/LegalPage.astro';
+import Todo from '../../components/pages/Todo.astro';
+import { markets } from '../../data/site';
+
+// Libellés insécables (« Europe · EUR ») pour éviter une coupure au milieu.
+const nb = (label: string) => label.replace(/ /g, ' ');
+const marketLabels = `${nb(markets.fr.label)} ou ${nb(markets.ch.label)}`;
+
+const toc = [
+  { id: 'responsable', label: 'Responsable du traitement' },
+  { id: 'donnees', label: 'Les données que nous recevons' },
+  { id: 'finalites', label: 'Pourquoi nous les utilisons' },
+  { id: 'base-legale', label: 'Base légale' },
+  { id: 'conservation', label: 'Durée de conservation' },
+  { id: 'destinataires', label: 'Destinataires et pays' },
+  { id: 'turnstile', label: 'Protection anti-spam' },
+  { id: 'audience', label: 'Mesure d’audience et publicité' },
+  { id: 'stockage', label: 'Stockage dans votre navigateur' },
+  { id: 'droits', label: 'Vos droits' },
+  { id: 'suisse', label: 'Personnes en Suisse' },
+  { id: 'prospection', label: 'Prospection' },
+  { id: 'reclamation', label: 'Réclamation' },
+  { id: 'securite', label: 'Sécurité' },
+  { id: 'modifications', label: 'Modifications' },
+];
+---
+
+<LegalPage
+  title="Politique de confidentialité | Atousy"
+  description="Comment Atousy traite les données du formulaire de devis : finalité, base légale, conservation, destinataires, stockage et vos droits (RGPD et nLPD suisse)."
+  heading={'Politique\nde confidentialité'}
+  crumb="Confidentialité"
+  lead="Cette page explique quelles données nous recevons par le site atousy.com, pourquoi, et comment exercer vos droits. Elle s’appuie sur le Règlement général sur la protection des données (RGPD) et sur la loi fédérale suisse sur la protection des données (nLPD)."
+  toc={toc}
+>
+  <p slot="meta">Dernière mise à jour : <Todo>date</Todo></p>
+
+  <h2 id="responsable">Responsable du traitement</h2>
+  <p>
+    <Todo>raison sociale ou nom et prénom de l’éditeur, forme juridique</Todo><br />
+    <Todo>adresse</Todo>, France<br />
+    Questions sur vos données : <a href="mailto:contact@atousy.com">contact@atousy.com</a>
+  </p>
+
+  <h2 id="donnees">Les données que nous recevons</h2>
+  <h3>Quand vous envoyez une demande de devis</h3>
+  <ul>
+    <li>le type de projet (création ou refonte) ;</li>
+    <li>votre activité ;</li>
+    <li>votre zone d’intervention ;</li>
+    <li>l’adresse de votre site actuel, si vous la donnez ;</li>
+    <li>la description de votre besoin ;</li>
+    <li>votre nom ;</li>
+    <li>votre adresse e-mail ;</li>
+    <li>votre téléphone, si vous le donnez ;</li>
+    <li>le tarif affiché au moment de l’envoi ({marketLabels}) ;</li>
+    <li>la date et l’heure de l’envoi.</li>
+  </ul>
+  <p>Nous ne demandons aucune donnée sensible. Merci de ne pas en indiquer dans votre message.</p>
+
+  <h3>Quand vous consultez le site</h3>
+  <p>
+    Comme pour tout site, votre adresse IP et des informations techniques sur votre navigateur sont traitées par notre hébergeur pour
+    afficher les pages et protéger le site.
+  </p>
+  <p>
+    Pour afficher le bon tarif, notre hébergeur détermine le pays associé à votre connexion au moment où il vous envoie la page. Ce pays
+    sert uniquement à choisir le tarif affiché. Nous ne l’enregistrons pas.
+  </p>
+
+  <h2 id="finalites">Pourquoi nous les utilisons</h2>
+  <ul>
+    <li>Répondre à votre demande et échanger sur votre projet.</li>
+    <li>Établir et vous envoyer un devis.</li>
+    <li>Protéger le formulaire contre les envois abusifs.</li>
+  </ul>
+  <p>Vos données ne sont ni vendues, ni louées, ni utilisées pour de la publicité.</p>
+
+  <h2 id="base-legale">Base légale</h2>
+  <ul>
+    <li><strong>Votre demande de devis :</strong> mesures précontractuelles prises à votre demande (article 6.1.b du RGPD).</li>
+    <li>
+      <strong>La protection du site et du formulaire :</strong> notre intérêt légitime à éviter les abus (article 6.1.f du RGPD).
+    </li>
+  </ul>
+  <p>
+    En Suisse, ces traitements respectent les principes de la nLPD : bonne foi, proportionnalité, finalité déterminée et transparence.
+  </p>
+
+  <h2 id="conservation">Durée de conservation</h2>
+  <ul>
+    <li>
+      Demande restée sans suite : supprimée <Todo>durée, par exemple 3 ans après le dernier échange — à valider</Todo>.
+    </li>
+    <li>
+      Demande devenue un projet : les échanges sont conservés le temps de la relation, puis selon les durées légales applicables aux
+      documents commerciaux et comptables. <Todo>durées précises</Todo>
+    </li>
+  </ul>
+  <p>Les demandes ne sont pas enregistrées dans une base de données du site : elles nous sont transmises par e-mail.</p>
+
+  <h2 id="destinataires">Destinataires et pays</h2>
+  <p>
+    Vos données sont traitées par <strong>Atousy</strong>, uniquement pour répondre à votre demande, et par les prestataires ci-dessous, qui
+    agissent pour notre compte.
+  </p>
+  <table class="legal-table" role="table">
+    <caption>Prestataires qui reçoivent vos données ou peuvent y accéder</caption>
+    <thead role="rowgroup">
+      <tr role="row">
+        <th scope="col" role="columnheader">Prestataire</th>
+        <th scope="col" role="columnheader">Rôle</th>
+        <th scope="col" role="columnheader">Pays</th>
+        <th scope="col" role="columnheader">Base du transfert</th>
+      </tr>
+    </thead>
+    <tbody role="rowgroup">
+      <tr role="row">
+        <th scope="row" role="rowheader">Cloudflare, Inc.</th>
+        <td role="cell" data-label="Rôle">Hébergement du site, exécution du formulaire, anti-spam Turnstile</td>
+        <td role="cell" data-label="Pays">États-Unis</td>
+        <td role="cell" data-label="Base du transfert">
+          Organisation certifiée Data Privacy Framework (UE–États-Unis et Suisse–États-Unis)
+          {' '}<Todo label="À VÉRIFIER">certification active sur dataprivacyframework.gov</Todo>
+        </td>
+      </tr>
+      <tr role="row">
+        <th scope="row" role="rowheader">Brevo <Todo label="SI RETENU" /></th>
+        <td role="cell" data-label="Rôle">Envoi des e-mails du formulaire</td>
+        <td role="cell" data-label="Pays">France</td>
+        <td role="cell" data-label="Base du transfert">Pays de l’Union européenne, dont le niveau de protection est reconnu adéquat par la Suisse</td>
+      </tr>
+      <tr role="row">
+        <th scope="row" role="rowheader">Resend <Todo label="SI RETENU" /></th>
+        <td role="cell" data-label="Rôle">Envoi des e-mails du formulaire</td>
+        <td role="cell" data-label="Pays">États-Unis</td>
+        <td role="cell" data-label="Base du transfert">
+          Clauses contractuelles types de l’UE, adaptées au droit suisse (accord de traitement des données de Resend)
+        </td>
+      </tr>
+      <tr role="row">
+        <th scope="row" role="rowheader"><Todo>fournisseur de la boîte contact@atousy.com</Todo></th>
+        <td role="cell" data-label="Rôle">Messagerie : réception et conservation des demandes</td>
+        <td role="cell" data-label="Pays"><Todo>pays</Todo></td>
+        <td role="cell" data-label="Base du transfert"><Todo>base du transfert</Todo></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><Todo>garder une seule ligne pour le service d’envoi d’e-mails retenu (Brevo ou Resend)</Todo></p>
+
+  <h2 id="turnstile">Protection anti-spam</h2>
+  <p>
+    Sur la page de demande de devis, nous utilisons Cloudflare Turnstile pour distinguer les humains des robots. Turnstile traite votre
+    adresse IP, des informations sur votre navigateur (dont l’empreinte TLS), l’identifiant du site et l’origine de la requête. Cloudflare
+    agit pour notre compte pour la détection des robots, et pour son propre compte pour améliorer Turnstile. Destinataire : Cloudflare,
+    Inc., États-Unis (organisation certifiée Swiss-U.S. Data Privacy Framework). En savoir plus :{' '}
+    <a href="https://www.cloudflare.com/turnstile-privacy-policy/" rel="noopener">politique de confidentialité de Turnstile</a>.
+  </p>
+  <p>
+    Turnstile n’est chargé que sur la page de demande de devis. Le formulaire contient aussi des protections simples qui ne collectent
+    aucune donnée personnelle (un champ invisible et un contrôle du temps de saisie).
+  </p>
+
+  <h2 id="audience">Mesure d’audience et publicité</h2>
+  <ul>
+    <li>Aucun traceur publicitaire.</li>
+    <li>Aucun outil de mesure d’audience au lancement du site.</li>
+  </ul>
+  <p>
+    Si un outil de mesure est ajouté plus tard, cette page sera mise à jour avant sa mise en place et votre accord sera demandé lorsque la
+    loi l’exige.
+  </p>
+
+  <h2 id="stockage">Stockage dans votre navigateur</h2>
+  <p>
+    Le site n’enregistre dans votre navigateur que des éléments nécessaires à son fonctionnement. Ils restent sur votre appareil : ils ne
+    nous sont pas transmis.
+  </p>
+  <ul>
+    <li>
+      <strong><code>atousy-market</code></strong> (stockage local, conservé jusqu’à ce que vous l’effaciez) : enregistré lorsque vous
+      choisissez un pays dans le menu ({marketLabels}), pour afficher le bon tarif à vos prochaines visites.
+    </li>
+    <li>
+      <strong><code>atousy-market-auto</code></strong> (stockage de session, effacé à la fermeture de l’onglet) : garde le résultat de la
+      détection automatique du pays pendant votre visite, pour ne pas la refaire à chaque page.
+    </li>
+    <li>
+      <strong><code>atousy-devis-draft</code></strong> (stockage de session) : garde votre saisie du formulaire de devis si la page est
+      rechargée. Il s’efface après un envoi réussi et à la fermeture de l’onglet.
+    </li>
+    <li>
+      <strong>Cookies techniques de Cloudflare :</strong> ils peuvent être déposés pour la sécurité du site et lors de la vérification
+      anti-spam. <Todo>liste réelle relevée après la mise en ligne</Todo>
+    </li>
+  </ul>
+  <p>
+    Vous pouvez refuser ou supprimer ce stockage dans les réglages de votre navigateur (données du site). Le site affichera alors le tarif
+    par défaut ({nb(markets.fr.label)}), et votre saisie du formulaire ne sera pas gardée en cas de rechargement.
+  </p>
+  <p>Le tarif affiché est joint à votre demande de devis quand vous l’envoyez (voir « Les données que nous recevons »).</p>
+
+  <h2 id="droits">Vos droits</h2>
+  <p>
+    Vous pouvez demander à accéder à vos données, les faire corriger ou effacer, vous opposer à leur traitement, en limiter l’usage ou les
+    récupérer.
+  </p>
+  <p>
+    Pour exercer vos droits, écrivez à <a href="mailto:contact@atousy.com">contact@atousy.com</a>. Nous répondons dans les meilleurs délais,
+    au plus tard dans un délai d’un mois et jamais plus de 30 jours.
+  </p>
+
+  <h2 id="suisse">Personnes en Suisse</h2>
+  <p>
+    Si vous vous trouvez en Suisse, la loi fédérale sur la protection des données (nLPD) s’applique également. Vous pouvez : demander
+    gratuitement l’accès à vos données (réponse en règle générale sous 30 jours) ; demander leur remise ou leur transmission dans un format électronique courant lorsque les
+    conditions légales sont remplies ; les faire rectifier ; demander l’arrêt d’un traitement, l’interdiction d’une communication ou
+    l’effacement ; vous opposer à un traitement, notamment à la prospection.
+  </p>
+  <p>
+    Contact : <a href="mailto:contact@atousy.com">contact@atousy.com</a>. Autorité de surveillance en Suisse : Préposé fédéral à la
+    protection des données et à la transparence (PFPDT),{' '}
+    <a href="https://www.edoeb.admin.ch" rel="noopener">edoeb.admin.ch</a>.
+  </p>
+
+  <h2 id="prospection">Prospection</h2>
+  <p>
+    Vous pouvez vous opposer à tout moment à l’utilisation de vos coordonnées pour de la prospection, en écrivant à{' '}
+    <a href="mailto:contact@atousy.com">contact@atousy.com</a>.
+  </p>
+  <p>
+    <Todo
+      >si Atousy, ou un partenaire pour son compte, contacte des professionnels qui n’ont pas fait de demande : catégories de données (nom,
+      fonction, coordonnées professionnelles), leur source (sites, annuaires), le but, la durée de conservation et la façon de s’y opposer.
+      Sinon, supprimer ce paragraphe</Todo
+    >
+  </p>
+
+  <h2 id="reclamation">Réclamation</h2>
+  <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation :</p>
+  <ul>
+    <li>en France, à la CNIL : <a href="https://www.cnil.fr" rel="noopener">www.cnil.fr</a> ;</li>
+    <li>
+      en Suisse, au Préposé fédéral à la protection des données et à la transparence (PFPDT) :{' '}
+      <a href="https://www.edoeb.admin.ch" rel="noopener">www.edoeb.admin.ch</a>.
+    </li>
+  </ul>
+
+  <h2 id="securite">Sécurité</h2>
+  <p>
+    Le site est servi en connexion chiffrée (HTTPS). Les clés secrètes des services utilisés restent côté serveur et ne sont jamais envoyées
+    à votre navigateur.
+  </p>
+
+  <h2 id="modifications">Modifications</h2>
+  <p>Cette page peut évoluer, par exemple si un prestataire change. La date de mise à jour figure en haut de la page.</p>
+  <p>
+    Voir aussi les <a href="/mentions-legales/">mentions légales</a> et les
+    {' '}<a href="/cgv/">conditions générales de vente</a>.
+  </p>
+</LegalPage>

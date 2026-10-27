@@ -1,0 +1,52 @@
+---
+// Page provisoire : structure en place, contenu en cours de rédaction / validation.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CtaBand from './CtaBand.astro';
+
+interface Props {
+  title: string;
+  heading: string;
+  lead: string;
+  description: string;
+}
+const { title, heading, lead, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} noindex>
+  <section class="placeholder">
+    <div class="container">
+      <h1>{heading}</h1>
+      <p class="placeholder__lead">{lead}</p>
+      <p class="placeholder__note">Page en cours de finalisation : son contenu est en préparation et sera validé avant la mise en ligne.</p>
+      <slot />
+    </div>
+  </section>
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .placeholder {
+    padding-block: clamp(3rem, 7vw, 7rem);
+  }
+
+  h1 {
+    max-width: 18ch;
+    font-size: var(--fs-h2);
+  }
+
+  .placeholder__lead {
+    max-width: 40rem;
+    margin-top: 1.5rem;
+    font-size: var(--fs-lead);
+    color: var(--ink-2);
+  }
+
+  .placeholder__note {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--coral);
+    background: var(--paper);
+    font-size: 0.9375rem;
+  }
+</style>

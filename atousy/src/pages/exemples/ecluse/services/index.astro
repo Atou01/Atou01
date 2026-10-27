@@ -1,0 +1,421 @@
+---
+// Démonstration fictive « Écluse » (plombier-chauffagiste) — page Services (ancres par métier).
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import EcluseLayout from '../../../../components/demos/ecluse/EcluseLayout.astro';
+import PageHead from '../../../../components/demos/ecluse/PageHead.astro';
+import Jump from '../../../../components/demos/ecluse/Jump.astro';
+import RealSiteNote from '../../../../components/demos/ecluse/RealSiteNote.astro';
+import ContactBand from '../../../../components/demos/ecluse/ContactBand.astro';
+import EIcon, { type EIconName } from '../../../../components/demos/ecluse/EIcon.astro';
+import { ecluseServices } from '../../../../components/demos/ecluse/nav';
+import ecluse1 from '../../../../assets/photos/ecluse-1.jpg';
+import ecluse2 from '../../../../assets/photos/ecluse-2.jpg';
+import ecluse3 from '../../../../assets/photos/ecluse-3.jpg';
+import ecluse4 from '../../../../assets/photos/ecluse-4.jpg';
+import ecluse5 from '../../../../assets/photos/ecluse-5.jpg';
+
+interface Service {
+  id: string;
+  icon: EIconName;
+  name: string;
+  title: string;
+  lead: string;
+  listTitle: string;
+  list: string[];
+  tip?: string;
+  note?: string;
+  image: ImageMetadata;
+  alt: string;
+  position: string;
+  caption: string;
+}
+
+const services: Service[] = [
+  {
+    id: 'depannage',
+    icon: 'wrench',
+    name: 'Dépannage',
+    title: 'Une fuite, une panne : on cherche la cause.',
+    lead: 'Une tache au plafond, un robinet qui goutte, plus d’eau chaude : nous localisons l’origine du problème, vous expliquons ce qui s’est passé et réparons proprement.',
+    listTitle: 'Nous intervenons sur',
+    list: [
+      'Fuites apparentes ou encastrées',
+      'Robinetterie et mitigeurs',
+      'WC et mécanismes de chasse',
+      'Chauffe-eau et ballons',
+      'Évacuations et canalisations bouchées',
+      'Radiateurs qui ne chauffent plus',
+    ],
+    tip: 'En cas de fuite importante, coupez l’arrivée d’eau générale, et l’électricité si l’eau approche d’une prise ou d’un appareil.',
+    note: 'vos horaires de dépannage, votre zone d’intervention et votre numéro direct.',
+    image: ecluse4,
+    alt: 'Plombier vu de dos, agenouillé sur un tapis de protection, intervenant sur le siphon d’un lavabo avec une clé',
+    position: '60% 50%',
+    caption: 'Projet type · Réparation sous un lavabo',
+  },
+  {
+    id: 'salle-de-bain',
+    icon: 'shower',
+    name: 'Salle de bain',
+    title: 'Une salle de bain pensée pour votre quotidien.',
+    lead: 'De la douche à l’italienne au remplacement d’une baignoire, nous prenons en charge la plomberie, les évacuations et la pose des équipements, pour une pièce agréable et facile à entretenir.',
+    listTitle: 'Ce que nous réalisons',
+    list: [
+      'Douches à l’italienne',
+      'Remplacement d’une baignoire par une douche',
+      'Meubles vasques et robinetterie',
+      'WC suspendus',
+      'Sèche-serviettes',
+      'Aménagements plus accessibles',
+    ],
+    tip: 'Avant de choisir les finitions, nous vérifions les évacuations et la pente disponible : c’est souvent elle qui décide si une douche de plain-pied est possible.',
+    image: ecluse1,
+    alt: 'Douche à l’italienne vitrée, carrelage gris clair, niche murale et robinetterie noire mate dans une salle de bain lumineuse',
+    position: '55% 50%',
+    caption: 'Projet type · Douche à l’italienne',
+  },
+  {
+    id: 'chauffage',
+    icon: 'flame',
+    name: 'Chauffage & chaudière',
+    title: 'Un chauffage bien dimensionné et bien réglé.',
+    lead: 'Remplacement de chaudière, ajout de radiateurs, ballon d’eau chaude : nous partons de votre logement et de vos habitudes pour proposer une installation adaptée, puis nous la réglons avec vous.',
+    listTitle: 'Ce que nous installons',
+    list: [
+      'Chaudières murales ou au sol',
+      'Radiateurs et sèche-serviettes',
+      'Ballons d’eau chaude',
+      'Désembouage et équilibrage',
+      'Thermostats et programmation',
+      'Mise en service et réglages',
+    ],
+    tip: 'Un radiateur chaud en bas mais froid en haut ? Il a souvent simplement besoin d’être purgé : nous vous montrons comment faire.',
+    image: ecluse5,
+    alt: 'Local technique avec chaudière murale blanche, ballon d’eau chaude et tuyauteries en cuivre le long du mur',
+    position: '50% 50%',
+    caption: 'Projet type · Local technique',
+  },
+  {
+    id: 'pompe-a-chaleur',
+    icon: 'heatpump',
+    name: 'Pompe à chaleur',
+    title: 'Passer à la pompe à chaleur, en connaissance de cause.',
+    lead: 'Une pompe à chaleur peut remplacer ou compléter votre chauffage actuel. Nous étudions d’abord votre logement (isolation, radiateurs, emplacement possible) pour vous dire franchement si c’est la bonne solution.',
+    listTitle: 'Notre accompagnement',
+    list: [
+      'Étude du logement et des émetteurs',
+      'Choix du matériel, expliqué',
+      'Emplacement de l’unité extérieure',
+      'Raccordement au circuit de chauffage',
+      'Mise en service et prise en main',
+      'Entretien dans la durée',
+    ],
+    note: 'vos qualifications réelles et les aides auxquelles vos installations peuvent ouvrir droit, avec un lien vers les sources officielles.',
+    image: ecluse2,
+    alt: 'Unité extérieure de pompe à chaleur grise sur un socle en béton, contre le mur clair d’une maison, entre pelouse et massifs',
+    position: '62% 50%',
+    caption: 'Projet type · Pompe à chaleur air-eau',
+  },
+];
+
+const careList = [
+  'Chaudières et pompes à chaleur',
+  'Vérification des organes de sécurité',
+  'Nettoyage et réglages',
+  'Conseils d’utilisation',
+];
+---
+
+<EcluseLayout
+  title="Services — Écluse, démonstration fictive | Atousy"
+  description="Services d’Écluse, plombier-chauffagiste fictif : dépannage, salle de bain, chauffage et chaudière, pompe à chaleur, entretien. Démonstration réalisée par Atousy."
+  current="services"
+>
+  <PageHead
+    crumb="Services"
+    title="De la fuite à la pompe à chaleur."
+    lead="Cinq métiers, une même façon de travailler : comprendre votre installation, vous expliquer les options, puis intervenir proprement."
+    image={ecluse3}
+    imageAlt="Tuyaux en cuivre et collecteur en laiton équipé de vannes à poignée noire, fixés au mur d’un local technique"
+    imagePosition="50% 50%"
+    caption="Projet type · Distribution en cuivre"
+  >
+    <Jump items={ecluseServices.map((s) => ({ href: `#${s.id}`, label: s.label }))} />
+  </PageHead>
+
+  {
+    services.map((s, i) => (
+      <section id={s.id} class:list={['svc', i % 2 === 1 && 'svc--flip']} aria-labelledby={`${s.id}-title`}>
+        <div class="ec-container svc__grid">
+          <div class="svc__body">
+            <p class="svc__name">
+              <span class="svc__icon" aria-hidden="true">
+                <EIcon name={s.icon} />
+              </span>
+              {s.name}
+            </p>
+            <h2 id={`${s.id}-title`} class="ec-h2">
+              {s.title}
+            </h2>
+            <p class="ec-lead">{s.lead}</p>
+
+            <h3 class="svc__list-title">{s.listTitle}</h3>
+            <ul class="ec-checks svc__list">
+              {s.list.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+
+            {s.tip && (
+              <div class="tip">
+                <p class="tip__label">Bon à savoir</p>
+                <p>{s.tip}</p>
+              </div>
+            )}
+            {s.note && <RealSiteNote class="svc__note">{s.note}</RealSiteNote>}
+          </div>
+
+          <figure class="svc__media">
+            <Picture
+              src={s.image}
+              alt={s.alt}
+              formats={['avif', 'webp']}
+              widths={[480, 720, 960, 1280]}
+              sizes="(max-width: 60em) calc(100vw - 2rem), 40vw"
+              style={`object-position: ${s.position}`}
+            />
+            <figcaption class="ec-caption">{s.caption}</figcaption>
+          </figure>
+        </div>
+      </section>
+    ))
+  }
+
+  <!-- Entretien -->
+  <section id="entretien" class="svc svc--care" aria-labelledby="entretien-title">
+    <div class="ec-container">
+      <div class="care">
+        <div class="care__main">
+          <p class="svc__name">
+            <span class="svc__icon" aria-hidden="true">
+              <EIcon name="calendar" />
+            </span>
+            Entretien
+          </p>
+          <h2 id="entretien-title" class="ec-h2">L’entretien, pour que tout continue de bien fonctionner.</h2>
+          <p class="ec-lead">
+            Un entretien régulier est recommandé pour les chaudières comme pour les pompes à chaleur. Nous vous
+            expliquons quand le prévoir et ce que comprend une visite.
+          </p>
+          <a class="ec-btn" href="/exemples/ecluse/entretien/">
+            Découvrir l’entretien
+            <span class="ec-btn__icon"><EIcon name="arrow" /></span>
+          </a>
+        </div>
+        <ul class="care__list">
+          {
+            careList.map((item) => (
+              <li>
+                <EIcon name="check" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand
+    title="Vous ne savez pas par où commencer ?"
+    text="Décrivez la situation avec vos mots, nous vous orientons vers la bonne solution, même si c’est une petite réparation."
+  />
+</EcluseLayout>
+
+<style>
+  .svc {
+    padding-block: clamp(4rem, 8vw, 7rem);
+    border-bottom: 1px solid var(--ec-line);
+  }
+
+  .svc__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: 3rem clamp(2.5rem, 7vw, 7rem);
+    align-items: start;
+  }
+
+  .svc--flip .svc__body {
+    order: 2;
+  }
+
+  .svc__name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    color: var(--ec-slate);
+    font-size: 0.9688rem;
+    font-weight: 700;
+  }
+
+  .svc__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--ec-radius-sm);
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    color: var(--ec-slate);
+  }
+
+  .svc__icon :global(svg) {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .svc__body h2 {
+    max-width: 18ch;
+  }
+
+  .svc__body .ec-lead {
+    max-width: 36rem;
+    margin-top: 1.25rem;
+  }
+
+  .svc__list-title {
+    margin-top: clamp(2rem, 4vw, 2.5rem);
+    font-size: 1rem;
+    color: var(--ec-ink);
+  }
+
+  .svc__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 1.5rem;
+    margin-top: 1rem;
+    color: var(--ec-ink);
+    font-size: 0.9844rem;
+  }
+
+  .tip {
+    margin-top: 2rem;
+    padding: 1.1rem 1.25rem 1.15rem;
+    background: var(--ec-brass-soft);
+    border-radius: var(--ec-radius);
+    color: var(--ec-ink);
+    font-size: 0.9688rem;
+  }
+
+  .tip__label {
+    margin-bottom: 0.3rem;
+    color: var(--ec-brass-ink);
+    font-size: 0.8125rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .svc__body :global(.svc__note) {
+    margin-top: 1.25rem;
+  }
+
+  .svc__media {
+    position: sticky;
+    top: 7rem;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .svc__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--ec-radius-lg);
+  }
+
+  /* ——— Entretien ——— */
+  .svc--care {
+    border-bottom: 0;
+  }
+
+  .care {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 2.5rem clamp(2rem, 6vw, 6rem);
+    align-items: center;
+    padding: clamp(1.75rem, 5vw, 4rem);
+    background: var(--ec-mist);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius-lg);
+  }
+
+  .care .svc__icon {
+    background: var(--ec-white);
+  }
+
+  .care .ec-lead {
+    max-width: 36rem;
+    margin-block: 1.25rem 2rem;
+  }
+
+  .care__list {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .care__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1rem 1.15rem;
+    background: var(--ec-white);
+    border: 1px solid var(--ec-line);
+    border-radius: var(--ec-radius);
+    color: var(--ec-ink);
+    font-weight: 600;
+  }
+
+  .care__list :global(svg) {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--ec-brass-ink);
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 60em) {
+    .svc__grid,
+    .care {
+      grid-template-columns: 1fr;
+    }
+
+    .svc--flip .svc__body {
+      order: 0;
+    }
+
+    .svc__media {
+      position: static;
+      order: -1;
+    }
+
+    .svc__media :global(img) {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (min-width: 40.01em) and (max-width: 60em) {
+    .svc__media :global(img) {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 36em) {
+    .svc__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

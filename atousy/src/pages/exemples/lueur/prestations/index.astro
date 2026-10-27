@@ -1,0 +1,535 @@
+---
+// Démonstration fictive « Lueur » (électricien) — page Prestations (ancres par prestation).
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import LueurLayout from '../../../../components/demos/lueur/LueurLayout.astro';
+import PageHero from '../../../../components/demos/lueur/PageHero.astro';
+import ContactBand from '../../../../components/demos/lueur/ContactBand.astro';
+import RealSiteNote from '../../../../components/demos/lueur/RealSiteNote.astro';
+import LueurIcon from '../../../../components/demos/lueur/LueurIcon.astro';
+import type { LueurIconName } from '../../../../components/demos/lueur/icons';
+import Icon from '../../../../components/Icon.astro';
+import lueur1 from '../../../../assets/photos/lueur-1.jpg';
+import lueur2 from '../../../../assets/photos/lueur-2.jpg';
+import lueur3 from '../../../../assets/photos/lueur-3.jpg';
+import lueur4 from '../../../../assets/photos/lueur-4.jpg';
+import lueur5 from '../../../../assets/photos/lueur-5.jpg';
+import lueur6 from '../../../../assets/photos/lueur-6.jpg';
+
+interface Service {
+  id: string;
+  icon: LueurIconName;
+  label: string;
+  title: string;
+  text: string;
+  items?: string[];
+  groups?: { title: string; items: string[] }[];
+  forWho: string;
+  note?: string;
+  image: ImageMetadata;
+  alt: string;
+  caption: string;
+  focus: string;
+  /** recadrage resserré en format 3:2 (tablette, mobile) pour écarter un pan de mur vide */
+  zoom?: boolean;
+}
+
+const services: Service[] = [
+  {
+    id: 'renovation',
+    icon: 'socket',
+    label: 'Rénovation électrique',
+    title: 'Remettre une installation à niveau, sans tout casser.',
+    text: 'Une installation ancienne n’est pas forcément à refaire entièrement. Nous commençons par un état des lieux, puis nous vous proposons ce qui est vraiment utile : remise en sécurité, nouveaux circuits, prises et points lumineux supplémentaires.',
+    items: [
+      'État des lieux de l’installation existante',
+      'Remplacement des circuits et appareillages fatigués',
+      'Ajout de prises, d’interrupteurs et de points lumineux',
+      'Passage des câbles en limitant les saignées',
+      'Chantier protégé et nettoyé en fin d’intervention',
+    ],
+    forWho: 'logement ancien, achat d’une maison ou d’un appartement, rénovation d’une ou plusieurs pièces.',
+    image: lueur4,
+    alt: 'Électricien vérifiant au testeur les fils d’une prise murale ouverte, outils posés sur une bâche de protection',
+    caption: 'Projet type · Contrôle d’une prise avant remplacement',
+    focus: '45% 50%',
+  },
+  {
+    id: 'tableau',
+    icon: 'panel',
+    label: 'Tableau électrique',
+    title: 'Un tableau clair, que vous savez lire.',
+    text: 'Le tableau est le cœur de l’installation. Nous le remplaçons ou le réorganisons pour qu’il protège correctement chaque circuit, qu’il reste lisible et qu’il garde de la place pour vos projets futurs.',
+    items: [
+      'Remplacement d’un tableau ancien ou saturé',
+      'Protections adaptées à chaque circuit',
+      'Repérage et étiquetage de tous les circuits',
+      'Place en réserve pour une borne, une extension, un nouvel équipement',
+      'Explication du tableau à la fin du chantier',
+    ],
+    forWho: 'disjonctions à répétition, ancien tableau à fusibles, ajout d’équipements gourmands.',
+    image: lueur2,
+    alt: 'Tableau électrique neuf encastré : trois rangées de disjoncteurs, câbles bleus, marron et vert-jaune soigneusement peignés',
+    caption: 'Projet type · Tableau électrique neuf',
+    focus: '55% 50%',
+  },
+  {
+    id: 'eclairage',
+    icon: 'bulb',
+    label: 'Éclairage intérieur et extérieur',
+    title: 'La bonne lumière, au bon endroit.',
+    text: 'Un bon éclairage se pense en couches : une lumière d’ambiance, une lumière pour les tâches, quelques touches d’accent. Dedans comme dehors, nous vous aidons à choisir et à placer chaque source.',
+    groups: [
+      { title: 'À l’intérieur', items: ['Spots encastrés et suspensions', 'Rubans LED et éclairage indirect', 'Variateurs et commandes multiples'] },
+      { title: 'À l’extérieur', items: ['Balisage des allées et des marches', 'Mise en valeur des arbres et des façades', 'Éclairage de terrasse, détecteurs de présence'] },
+    ],
+    forWho: 'pièce de vie trop sombre, cuisine à mieux éclairer, jardin ou terrasse à profiter le soir.',
+    image: lueur5,
+    alt: 'Jardin d’une maison en pierre à la nuit tombante : olivier éclairé par le bas, bornes lumineuses le long de l’allée et appliques en façade',
+    caption: 'Projet type · Jardin et terrasse à la nuit tombante',
+    focus: '40% 55%',
+  },
+  {
+    id: 'borne',
+    icon: 'charger',
+    label: 'Borne de recharge',
+    title: 'Recharger chez soi, simplement.',
+    text: 'Avant d’installer une borne, nous vérifions que votre installation peut l’accueillir. Nous vous aidons ensuite à choisir un modèle adapté à votre véhicule et à vos trajets, puis nous la posons au garage ou sur votre place de stationnement.',
+    items: [
+      'Étude de l’installation et de l’abonnement existants',
+      'Conseil sur le choix de la borne et de sa puissance',
+      'Ligne dédiée et protections depuis le tableau',
+      'Pose murale ou sur pied, câble rangé sur son support',
+      'Mise en service et prise en main',
+    ],
+    forWho: 'maison avec garage ou place de stationnement, achat d’un véhicule électrique ou hybride rechargeable.',
+    note: 'les qualifications réelles de l’entreprise pour l’installation de bornes de recharge, avec leurs références.',
+    image: lueur3,
+    alt: 'Borne de recharge murale dans un garage ouvert sur un jardin au soleil couchant, câble enroulé sur son support et voiture blanche garée à côté',
+    caption: 'Projet type · Borne de recharge en garage',
+    focus: '40% 50%',
+  },
+  {
+    id: 'domotique',
+    icon: 'home',
+    label: 'Domotique simple',
+    title: 'Une maison qui vous facilite la vie, sans devenir compliquée.',
+    text: 'Programmer le chauffage, fermer tous les volets d’un geste, retrouver une ambiance du soir en appuyant sur un seul bouton : la domotique n’a pas besoin d’être complexe. Nous installons des solutions simples, que vous pourrez faire évoluer.',
+    items: [
+      'Interrupteurs et commandes sans fil',
+      'Scénarios d’éclairage : « soirée », « départ », « nuit »',
+      'Pilotage des volets roulants',
+      'Programmation du chauffage électrique',
+      'Commande depuis un smartphone, si vous le souhaitez',
+    ],
+    forWho: 'rénovation en cours, envie de confort au quotidien, besoin de simplifier les gestes répétitifs.',
+    image: lueur1,
+    alt: 'Séjour en soirée éclairé par plusieurs sources : suspensions au-dessus de la table, spots encastrés et lampadaire près du canapé',
+    caption: 'Projet type · Scénario d’éclairage « soirée »',
+    focus: '62% 50%',
+    zoom: true,
+  },
+];
+
+const quote = [
+  { icon: 'home' as LueurIconName, title: 'Une visite sur place', text: 'Pour voir l’installation, prendre les mesures et comprendre vos usages.' },
+  { icon: 'chat' as LueurIconName, title: 'Un devis poste par poste', text: 'Chaque élément est décrit : vous savez exactement ce qui est prévu.' },
+  { icon: 'check' as LueurIconName, title: 'Des options claires', text: 'Quand plusieurs solutions existent, nous vous les présentons simplement, avec leurs avantages.' },
+];
+---
+
+<LueurLayout
+  title="Prestations — Lueur, démonstration fictive | Atousy"
+  description="Prestations de Lueur, électricien fictif : rénovation électrique, tableau électrique, éclairage intérieur et extérieur, borne de recharge et domotique simple. Démonstration réalisée par Atousy."
+  current="prestations"
+>
+  <PageHero
+    label="Prestations"
+    title="Toute l’électricité de la maison, faite avec soin."
+    lead="Rénovation, tableau, éclairage, recharge, domotique : voici ce que nous faisons, et la manière dont nous le faisons."
+    image={lueur6}
+    alt="Interrupteur double et prise murale en laiton brossé sur un mur clair, dans une lumière de fin de journée"
+    caption="Projet type · Appareillage laiton brossé"
+    focus="60% 50%"
+  >
+    <nav class="chips" aria-label="Sur cette page">
+      <ul>
+        {
+          services.map((s) => (
+            <li>
+              <a href={`#${s.id}`}>
+                <LueurIcon name={s.icon} />
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </PageHero>
+
+  {
+    services.map((s, i) => (
+      <section id={s.id} class:list={['lu-section', 'svc', i % 2 ? 'lu-dark svc--flip' : 'lu-light']} aria-labelledby={`${s.id}-title`}>
+        <div class="lu-container svc__grid">
+          <figure class="svc__media">
+            <div class:list={['lu-frame', 'svc__frame', s.zoom && 'svc__frame--zoom']}>
+              <Picture
+                src={s.image}
+                alt={s.alt}
+                formats={['avif', 'webp']}
+                widths={[480, 720, 960, 1280, 1600]}
+                sizes="(max-width: 60em) calc(100vw - 2rem), 46vw"
+                style={`object-position: ${s.focus}`}
+              />
+            </div>
+            <figcaption class="lu-caption">{s.caption}</figcaption>
+          </figure>
+
+          <div class="svc__copy">
+            <div class="svc__top">
+              <span class="svc__icon">
+                <LueurIcon name={s.icon} />
+              </span>
+              <p class="lu-label">
+                <span class="svc__num">{String(i + 1).padStart(2, '0')}</span>
+                {s.label}
+              </p>
+            </div>
+            <h2 id={`${s.id}-title`} class="svc__title">
+              {s.title}
+            </h2>
+            <p class="lu-lead">{s.text}</p>
+
+            {s.items && <ul class="lu-ticks svc__list">{s.items.map((it) => <li>{it}</li>)}</ul>}
+
+            {s.groups && (
+              <div class="svc__groups">
+                {s.groups.map((g) => (
+                  <div>
+                    <h3 class="svc__group-title">{g.title}</h3>
+                    <ul class="lu-ticks">{g.items.map((it) => <li>{it}</li>)}</ul>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <p class="svc__for">
+              <strong>Pour qui ?</strong> {s.forWho.charAt(0).toUpperCase() + s.forWho.slice(1)}
+            </p>
+
+            {s.note && (
+              <RealSiteNote tone={i % 2 ? 'dark' : 'light'} class="svc__note">
+                {s.note}
+              </RealSiteNote>
+            )}
+
+            <a class="lu-link svc__cta" href="/exemples/lueur/contact/">
+              Parler de votre projet <Icon name="arrow" />
+            </a>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <!-- Devis -->
+  <section class="lu-section lu-light quote" aria-labelledby="quote-title">
+    <div class="lu-container">
+      <div class="quote__head">
+        <div>
+          <p class="lu-label">Devis</p>
+          <h2 id="quote-title" class="lu-h2">Un devis détaillé, après une visite.</h2>
+        </div>
+        <p class="lu-lead">Chaque installation est différente : nous préférons voir les lieux avant de chiffrer, pour vous proposer une solution juste.</p>
+      </div>
+      <ul class="quote__list">
+        {
+          quote.map((q) => (
+            <li>
+              <span class="quote__icon">
+                <LueurIcon name={q.icon} />
+              </span>
+              <h3>{q.title}</h3>
+              <p>{q.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <RealSiteNote class="quote__note">vos tarifs indicatifs ou fourchettes de prix, vos conditions de devis, vos délais habituels et vos assurances professionnelles.</RealSiteNote>
+    </div>
+  </section>
+
+  <ContactBand />
+</LueurLayout>
+
+<style>
+  /* ——— Ancres de la page ——— */
+  .chips {
+    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .chips ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chips a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1rem 0 0.85rem;
+    background: rgb(245 239 228 / 0.05);
+    border: 1px solid rgb(245 239 228 / 0.18);
+    border-radius: 999px;
+    color: var(--lu-ivory);
+    font-size: 0.9063rem;
+    font-weight: 550;
+    text-decoration: none;
+    transition:
+      border-color 0.25s var(--lu-ease),
+      background-color 0.25s var(--lu-ease);
+  }
+
+  .chips a:hover {
+    background: rgb(242 180 90 / 0.1);
+    border-color: rgb(242 180 90 / 0.55);
+  }
+
+  .chips a :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--lu-amber);
+  }
+
+  /* ——— Prestations ——— */
+  .svc__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 3rem clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .svc--flip .svc__media {
+    order: 2;
+  }
+
+  .svc__frame {
+    aspect-ratio: 4 / 4.4;
+  }
+
+  .svc__media .lu-caption {
+    margin-top: 1rem;
+  }
+
+  .svc__top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.4rem;
+  }
+
+  /* bloc (et non flex) : le numéro et l'intitulé restent sur la même ligne et reviennent proprement à la ligne */
+  .svc__top .lu-label {
+    display: block;
+    margin-bottom: 0;
+  }
+
+  .svc__top .lu-label::before {
+    display: none;
+  }
+
+  .svc__num {
+    margin-right: 0.6rem;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+  }
+
+  .svc__num::after {
+    content: '—';
+    margin-left: 0.6rem;
+  }
+
+  .svc__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--lu-night);
+    color: var(--lu-amber);
+    box-shadow: 0 10px 24px -10px rgb(242 180 90 / 0.65);
+  }
+
+  .lu-dark .svc__icon {
+    background: rgb(242 180 90 / 0.1);
+    box-shadow:
+      inset 0 0 0 1px rgb(242 180 90 / 0.3),
+      0 0 30px -6px rgb(242 180 90 / 0.45);
+  }
+
+  .svc__icon :global(svg) {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .svc__title {
+    max-width: 18ch;
+    font-size: clamp(2rem, 1.35rem + 2.3vw, 3.2rem);
+  }
+
+  .svc__copy .lu-lead {
+    max-width: 38rem;
+    margin-top: 1.4rem;
+  }
+
+  .svc__list,
+  .svc__groups {
+    margin-top: 1.75rem;
+  }
+
+  .svc__groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+  }
+
+  .svc__group-title {
+    margin-bottom: 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .svc__for {
+    max-width: 38rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--lu-line-light);
+    font-size: 0.9688rem;
+    color: var(--lu-ink-2);
+  }
+
+  .svc__for strong {
+    font-weight: 650;
+    color: var(--lu-ink);
+  }
+
+  .lu-dark .svc__for {
+    border-top-color: var(--lu-line-dark);
+    color: var(--lu-dim);
+  }
+
+  .lu-dark .svc__for strong {
+    color: var(--lu-ivory);
+  }
+
+  .svc__copy :global(.svc__note) {
+    max-width: 38rem;
+    margin-top: 1.5rem;
+  }
+
+  .svc__cta {
+    margin-top: 1.5rem;
+  }
+
+  /* ——— Devis ——— */
+  .quote {
+    background: var(--lu-paper-2);
+  }
+
+  .quote__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 1.5rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+  }
+
+  .quote__head .lu-lead {
+    max-width: 32rem;
+  }
+
+  .quote__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .quote__list li {
+    padding: clamp(1.5rem, 2.5vw, 2rem);
+    background: var(--lu-card);
+    border: 1px solid var(--lu-line-light);
+    border-radius: var(--lu-radius);
+  }
+
+  .quote__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    background: var(--lu-night);
+    color: var(--lu-amber);
+  }
+
+  .quote__icon :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .quote__list h3 {
+    font-size: 1.2rem;
+  }
+
+  .quote__list p {
+    margin-top: 0.5rem;
+    color: var(--lu-ink-2);
+  }
+
+  .quote :global(.quote__note) {
+    max-width: 48rem;
+    margin-top: 2rem;
+  }
+
+  /* ——— Responsive ——— */
+  @media (max-width: 60em) {
+    .svc__grid,
+    .quote__head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .svc--flip .svc__media {
+      order: 0;
+    }
+
+    .svc__frame {
+      aspect-ratio: 3 / 2;
+    }
+
+    .svc__frame--zoom :global(img) {
+      transform: scale(1.24);
+      transform-origin: 100% 38%;
+    }
+
+    .quote__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 36em) {
+    .svc__groups {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

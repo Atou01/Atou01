@@ -1,0 +1,354 @@
+---
+// Gabarit des pages Moellon (maçon fictif, rénovation) : DemoLayout + en-tête + pied de page
+// + jetons de couleur et utilitaires partagés, limités à html[data-demo='moellon'].
+import DemoLayout from '../../../layouts/DemoLayout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import type { MoellonPage } from './nav';
+
+interface Props {
+  title: string;
+  description: string;
+  current: MoellonPage;
+}
+const { title, description, current } = Astro.props;
+---
+
+<DemoLayout title={title} description={description} brand="moellon">
+  <Header current={current} />
+  <main id="contenu" tabindex="-1">
+    <slot />
+  </main>
+  <Footer />
+</DemoLayout>
+
+<style is:global>
+  html[data-demo='moellon'] {
+    /* Pierre calcaire, terre cuite, terre sombre */
+    --mo-lime: #e9dfcf;
+    --mo-lime-deep: #ded1bc;
+    --mo-lime-shade: #d3c4ab;
+    --mo-paper: #f4eee3;
+    --mo-cream: #faf6ef;
+    --mo-ink: #2b211a;
+    --mo-ink-2: #5a4a3d;
+    --mo-earth: #2b211a;
+    --mo-earth-2: #3b2e24;
+    --mo-terra: #a4532c;
+    --mo-terra-ink: #7f3b1d;
+    --mo-terra-deep: #6e3218;
+    --mo-ochre-light: #d99a6c;
+    --mo-lime-dim: #cbbba6;
+    --mo-line: rgb(43 33 26 / 0.14);
+    --mo-line-strong: rgb(43 33 26 / 0.3);
+    --mo-line-light: rgb(250 246 239 / 0.16);
+    --mo-serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+    --mo-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+    --mo-ease: cubic-bezier(0.25, 0.7, 0.25, 1);
+    --mo-gutter: clamp(1rem, 4.5vw, 3.75rem);
+    --mo-max: 84rem;
+    --mo-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .17 0 0 0 0 .13 0 0 0 0 .1 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background: var(--mo-lime);
+    scroll-padding-top: 6.5rem;
+  }
+
+  html[data-demo='moellon'] body {
+    background-color: var(--mo-lime);
+    background-image: var(--mo-grain);
+    color: var(--mo-ink);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+
+  html[data-demo='moellon'] main:focus {
+    outline: none;
+  }
+
+  html[data-demo='moellon'] ::selection {
+    background: #e7bfa0;
+    color: var(--mo-ink);
+  }
+
+  html[data-demo='moellon'] :focus-visible {
+    outline: 2px solid var(--mo-terra-ink);
+    outline-offset: 3px;
+  }
+
+  html[data-demo='moellon'] .mo-dark :focus-visible {
+    outline-color: var(--mo-ochre-light);
+  }
+
+  html[data-demo='moellon'] h1,
+  html[data-demo='moellon'] h2,
+  html[data-demo='moellon'] h3 {
+    font-family: var(--mo-serif);
+    color: var(--mo-ink);
+    text-wrap: balance;
+  }
+
+  html[data-demo='moellon'] h1,
+  html[data-demo='moellon'] h2 {
+    font-weight: 380;
+    line-height: 1.03;
+    letter-spacing: -0.028em;
+  }
+
+  html[data-demo='moellon'] h3 {
+    font-weight: 480;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  html[data-demo='moellon'] p {
+    text-wrap: pretty;
+  }
+
+  html[data-demo='moellon'] .mo-dark,
+  html[data-demo='moellon'] .mo-dark h2,
+  html[data-demo='moellon'] .mo-dark h3 {
+    color: var(--mo-cream);
+  }
+
+  /* ——— Utilitaires ——— */
+  .mo-container {
+    width: min(var(--mo-max), 100% - 2 * var(--mo-gutter));
+    margin-inline: auto;
+  }
+
+  .mo-section {
+    padding-block: clamp(4.5rem, 9vw, 8rem);
+  }
+
+  .mo-dark {
+    background-color: var(--mo-earth);
+    background-image: var(--mo-grain);
+    color: var(--mo-cream);
+  }
+
+  .mo-paper {
+    background-color: var(--mo-paper);
+  }
+
+  /* Étiquette : petite pierre + libellé, chiffre romain facultatif */
+  .mo-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--mo-sans);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--mo-terra-ink);
+  }
+
+  .mo-kicker::before {
+    content: '';
+    flex: none;
+    width: 1.15rem;
+    height: 0.5rem;
+    border-radius: 2px 3px 2px 4px;
+    background: var(--mo-terra);
+  }
+
+  .mo-kicker__num {
+    font-family: var(--mo-serif);
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--mo-ink);
+  }
+
+  .mo-dark .mo-kicker {
+    color: var(--mo-ochre-light);
+  }
+
+  .mo-dark .mo-kicker::before {
+    background: var(--mo-ochre-light);
+  }
+
+  .mo-dark .mo-kicker__num {
+    color: var(--mo-cream);
+  }
+
+  .mo-h2 {
+    font-size: clamp(2.25rem, 1.35rem + 3vw, 4rem);
+  }
+
+  .mo-lead {
+    font-size: clamp(1.125rem, 1.03rem + 0.35vw, 1.3125rem);
+    line-height: 1.6;
+    color: var(--mo-ink-2);
+  }
+
+  .mo-dark .mo-lead {
+    color: var(--mo-lime-dim);
+  }
+
+  .mo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.5rem;
+    background: var(--mo-terra);
+    color: var(--mo-cream);
+    border: 1px solid var(--mo-terra);
+    border-radius: 1px;
+    font-family: var(--mo-sans);
+    font-size: 1rem;
+    font-weight: 620;
+    letter-spacing: 0.005em;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: inset 0 -3px 0 rgb(43 33 26 / 0.22);
+    transition:
+      background-color 0.25s var(--mo-ease),
+      border-color 0.25s var(--mo-ease),
+      color 0.25s var(--mo-ease);
+  }
+
+  .mo-btn:hover {
+    background: var(--mo-terra-deep);
+    border-color: var(--mo-terra-deep);
+  }
+
+  .mo-btn svg {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+    transition: transform 0.3s var(--mo-ease);
+  }
+
+  .mo-btn:hover svg,
+  .mo-link:hover svg {
+    transform: translateX(3px);
+  }
+
+  .mo-btn--ink {
+    background: var(--mo-earth);
+    border-color: var(--mo-earth);
+  }
+
+  .mo-btn--ink:hover {
+    background: var(--mo-terra-ink);
+    border-color: var(--mo-terra-ink);
+  }
+
+  .mo-btn--ghost {
+    background: transparent;
+    color: var(--mo-ink);
+    border-color: var(--mo-line-strong);
+    box-shadow: none;
+  }
+
+  .mo-btn--ghost:hover {
+    background: var(--mo-earth);
+    border-color: var(--mo-earth);
+    color: var(--mo-cream);
+  }
+
+  .mo-btn--light {
+    background: var(--mo-cream);
+    color: var(--mo-ink);
+    border-color: var(--mo-cream);
+  }
+
+  .mo-btn--light:hover {
+    background: var(--mo-lime);
+    border-color: var(--mo-lime);
+    color: var(--mo-ink);
+  }
+
+  .mo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding-block: 0.25rem;
+    color: var(--mo-ink);
+    font-weight: 650;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.42em;
+    text-decoration-color: var(--mo-terra);
+    transition: color 0.25s var(--mo-ease);
+  }
+
+  .mo-link:hover {
+    color: var(--mo-terra-ink);
+  }
+
+  .mo-link svg {
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
+    color: var(--mo-terra-ink);
+    transition: transform 0.3s var(--mo-ease);
+  }
+
+  .mo-dark .mo-link {
+    color: var(--mo-cream);
+    text-decoration-color: var(--mo-ochre-light);
+  }
+
+  .mo-dark .mo-link svg {
+    color: var(--mo-ochre-light);
+  }
+
+  .mo-dark .mo-link:hover {
+    color: var(--mo-ochre-light);
+  }
+
+  /* Légende « Projet type · … » : un trait de joint puis le libellé */
+  .mo-caption {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+    text-transform: uppercase;
+    color: var(--mo-ink-2);
+  }
+
+  /* Le trait reste calé sur la première ligne quand la légende passe sur deux lignes */
+  .mo-caption::before {
+    content: '';
+    flex: none;
+    width: 1.5rem;
+    height: 2px;
+    margin-top: calc(0.675em - 1px);
+    background: var(--mo-terra);
+  }
+
+  .mo-dark .mo-caption {
+    color: var(--mo-lime-dim);
+  }
+
+  .mo-dark .mo-caption::before {
+    background: var(--mo-ochre-light);
+  }
+
+  .mo-visually-hidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mo-btn:hover svg,
+    .mo-link:hover svg {
+      transform: none;
+    }
+  }
+</style>
