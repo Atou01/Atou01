@@ -9,10 +9,14 @@ interface Props {
   lead: string;
   /** Petite étiquette au-dessus du H1 (ex. « Démonstrations fictives »). */
   tag?: string;
+  /** Fin du titre mise en corail (ex. « projet. »), comme « part. » sur l'accueil. */
+  accent?: string;
 }
-const { crumb, title, lead, tag } = Astro.props;
+const { crumb, title, lead, tag, accent } = Astro.props;
 const hasMedia = Astro.slots.has('media');
 const titleLines = title.split('\n');
+const lastLine = titleLines.length - 1;
+const accented = Boolean(accent) && titleLines[lastLine].endsWith(accent!);
 ---
 
 <section class:list={['ph', hasMedia ? 'ph--media' : 'ph--split']} aria-labelledby="page-title">
@@ -26,7 +30,19 @@ const titleLines = title.split('\n');
       </nav>
       {tag && <p class="ph__tag">{tag}</p>}
       <h1 id="page-title" class:list={{ 'is-broken': titleLines.length > 1 }}>
-        {titleLines.map((line, i) => (i > 0 ? <><br />{line}</> : line))}
+        {titleLines.map((line, i) => (
+          <>
+            {i > 0 && <br />}
+            {accented && i === lastLine ? (
+              <>
+                {line.slice(0, -accent!.length)}
+                <span class="ph__accent">{accent}</span>
+              </>
+            ) : (
+              line
+            )}
+          </>
+        ))}
       </h1>
     </div>
     <div class="ph__aside">
@@ -115,6 +131,11 @@ const titleLines = title.split('\n');
 
   h1.is-broken {
     max-width: none;
+  }
+
+  /* Corail du titre : contraste ≥ 3:1 sur ivoire, admis pour un texte de cette taille */
+  .ph__accent {
+    color: var(--coral-text);
   }
 
   .ph__tag + h1 {

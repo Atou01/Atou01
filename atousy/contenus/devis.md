@@ -9,7 +9,7 @@ statut: brouillon à valider
 
 # Parlons de votre projet.
 
-*Sur la page, le titre passe à la ligne après « Parlons » : « de » ne finit jamais une ligne.*
+*Sur la page, le titre passe à la ligne après « Parlons » (« de » ne finit jamais une ligne) et « projet. » est en corail, comme « part. » sur l’accueil.*
 
 Quelques questions pour comprendre votre besoin. Nous revenons vers vous par e-mail avec les prochaines étapes.
 
